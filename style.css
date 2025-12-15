@@ -1,8 +1,20 @@
+/* --- 洛天依主题 - 明亮风格 --- */
+
+:root {
+    --tianyi-blue: #66CCFF;
+    --tianyi-blue-dark: #55bbee;
+    --text-color: #333333;
+    --bg-color: #f4f8ff;
+    --section-bg: #ffffff;
+    --light-gray: #dddddd;
+    --card-bg: #fdfdfd;
+}
+
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-    line-height: 1.6;
-    background-color: #121212;
-    color: #e0e0e0;
+    font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.8;
+    background: linear-gradient(to top, var(--bg-color), #ffffff);
+    color: var(--text-color);
     margin: 0;
     padding: 20px;
     display: flex;
@@ -13,33 +25,35 @@ body {
 }
 
 .container {
-    max-width: 800px; /* 增加最大宽度 */
+    max-width: 800px;
     width: 100%;
-    margin: auto; /* 确保居中 */
+    margin: auto;
 }
 
 header h1 {
     font-size: 2.5em;
-    color: #ffffff;
+    color: var(--text-color);
     margin-bottom: 0.5em;
 }
 
 h1 .highlight {
-    color: #bb86fc;
+    color: var(--tianyi-blue);
+    font-weight: 600;
 }
 
 .tagline {
     font-size: 1.2em;
-    color: #a0a0a0;
+    color: #777777;
     margin-bottom: 20px;
 }
 
 h2 {
-    color: #bb86fc;
-    border-bottom: 2px solid #bb86fc;
+    color: var(--tianyi-blue);
+    border-bottom: 2px solid var(--tianyi-blue);
     padding-bottom: 5px;
     display: inline-block;
     margin-bottom: 20px;
+    font-weight: 600;
 }
 
 h2 i {
@@ -47,21 +61,17 @@ h2 i {
 }
 
 section {
-    background-color: #1e1e1e;
-    padding: 30px; /* 增加内边距 */
-    border-radius: 12px; /* 更大的圆角 */
-    margin-bottom: 30px; /* 增加底部外边距 */
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 更明显的阴影 */
-    transition: transform 0.3s ease;
+    background-color: var(--section-bg);
+    padding: 30px;
+    border-radius: 12px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 16px rgba(102, 204, 255, 0.15);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 section:hover {
-    transform: translateY(-5px); /* 悬浮效果 */
-}
-
-p {
-    font-size: 1.1em;
-    margin-bottom: 15px;
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(102, 204, 255, 0.25);
 }
 
 .skills {
@@ -70,21 +80,23 @@ p {
 
 .skill-tag {
     display: inline-block;
-    background-color: #3a3a3a;
-    color: #e0e0e0;
+    background-color: #eaf6ff;
+    color: #5599cc;
     padding: 8px 15px;
     border-radius: 20px;
     margin: 5px;
     font-size: 0.9em;
-    border: 1px solid #555;
+    border: 1px solid #cceeff;
+    font-weight: 500;
 }
 
 .project-card {
-    background-color: #2a2a2a;
+    background-color: var(--card-bg);
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 20px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    border: 1px solid #eef6ff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     text-align: left;
     transition: transform 0.2s ease;
 }
@@ -94,47 +106,39 @@ p {
 }
 
 .project-card h3 {
-    color: #bb86fc;
+    color: var(--tianyi-blue);
     margin-top: 0;
     margin-bottom: 10px;
 }
 
 .project-card p {
     font-size: 1em;
-    color: #cccccc;
+    color: #555555;
 }
 
-.project-link {
+.project-link, .button {
     display: inline-block;
-    background-color: #bb86fc;
-    color: #121212;
-    padding: 8px 15px;
-    border-radius: 5px;
-    text-decoration: none;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-}
-
-.project-link:hover {
-    background-color: #a764fa;
-}
-
-.button {
-    display: inline-block;
-    background-color: #bb86fc;
-    color: #121212;
-    padding: 12px 25px;
-    border-radius: 5px;
+    background-color: var(--tianyi-blue);
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 25px;
     text-decoration: none;
     font-weight: bold;
     font-size: 1.1em;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+    border: none;
+    box-shadow: 0 4px 10px rgba(102, 204, 255, 0.4);
 }
 
-.button:hover {
-    background-color: #a764fa;
+.project-link {
+    padding: 8px 15px;
+    font-size: 1em;
+}
+
+.project-link:hover, .button:hover {
+    background-color: var(--tianyi-blue-dark);
     transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(85, 187, 238, 0.5);
 }
 
 .social-links {
@@ -144,103 +148,110 @@ p {
 .social-btn {
     display: inline-flex;
     align-items: center;
-    background-color: #3a3a3a;
-    color: #e0e0e0;
+    background-color: #f0f0f0;
+    color: #555;
     padding: 10px 20px;
-    border-radius: 5px;
+    border-radius: 20px;
     text-decoration: none;
     margin: 0 10px;
-    transition: background-color 0.3s ease, transform 0.2s ease;
+    transition: all 0.3s ease;
 }
 
 .social-btn i {
     margin-right: 8px;
+    color: var(--tianyi-blue);
 }
 
 .social-btn:hover {
-    background-color: #555555;
+    background-color: #e0e0e0;
     transform: translateY(-2px);
 }
 
 .social-btn.github:hover {
-    background-color: #6e5494; /* GitHub品牌色 */
+    background-color: #333;
+    color: #fff;
 }
 
-/* Email hover effect */
+.social-btn.github:hover i {
+    color: #fff;
+}
+
 .email-tooltip {
     position: relative;
     cursor: pointer;
 }
 
 .email-tooltip span {
-    transition: opacity 0.3s ease, transform 0.3s ease;
-    /* 初始状态：不透明度为0，并稍微向下移动 */
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.email-tooltip:hover span {
-    /* 悬浮状态：不透明度为0，并稍微向上移动，隐藏原始文本 */
-    opacity: 0;
-    transform: translateY(-10px);
+    transition: opacity 0.3s ease;
 }
 
 .email-tooltip::after {
-    content: attr(data-email); /* 从data-email属性获取内容 */
+    content: attr(data-email);
     position: absolute;
-    top: 50%;
+    bottom: 125%;
     left: 50%;
-    transform: translate(-50%, -50%);
-    background-color: #bb86fc; /* 提示框背景色 */
-    color: #121212; /* 提示框文字颜色 */
+    transform: translateX(-50%);
+    background-color: var(--tianyi-blue);
+    color: #ffffff;
     padding: 5px 10px;
     border-radius: 5px;
     font-size: 0.9em;
     white-space: nowrap;
-    opacity: 0; /* 初始隐藏 */
-    pointer-events: none; /* 不阻止鼠标事件 */
+    opacity: 0;
+    pointer-events: none;
     transition: opacity 0.3s ease, transform 0.3s ease;
-    /* 初始状态：稍微向下移动 */
-    transform: translate(-50%, 0);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
 .email-tooltip:hover::after {
-    opacity: 1; /* 悬浮时显示 */
-    /* 悬浮状态：回到中心位置 */
-    transform: translate(-50%, -50%);
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
 }
 
 footer {
     margin-top: 40px;
     font-size: 0.9em;
-    color: #757575;
+    color: #888888;
 }
 
 .footer-note {
     font-size: 0.8em;
     margin-top: 5px;
-    color: #555;
+    color: #aaaaaa;
 }
 
 .avatar-container {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 .avatar {
-    font-size: 4em;
-    color: #bb86fc;
-    margin-bottom: 10px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    box-shadow: 0 0 20px rgba(102, 204, 255, 0.5);
     animation: pulse 2s infinite;
+    background-color: white; /* Add a background color in case the image is transparent */
+}
+
+.avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 @keyframes pulse {
     0% {
+        box-shadow: 0 0 20px rgba(102, 204, 255, 0.4);
         transform: scale(1);
     }
     50% {
+        box-shadow: 0 0 30px rgba(102, 204, 255, 0.7);
         transform: scale(1.05);
     }
     100% {
+        box-shadow: 0 0 20px rgba(102, 204, 255, 0.4);
         transform: scale(1);
     }
 }
