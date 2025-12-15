@@ -13,8 +13,9 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 800px; /* 增加最大宽度 */
     width: 100%;
+    margin: auto; /* 确保居中 */
 }
 
 header h1 {
@@ -23,33 +24,111 @@ header h1 {
     margin-bottom: 0.5em;
 }
 
+h1 .highlight {
+    color: #bb86fc;
+}
+
+.tagline {
+    font-size: 1.2em;
+    color: #a0a0a0;
+    margin-bottom: 20px;
+}
+
 h2 {
     color: #bb86fc;
     border-bottom: 2px solid #bb86fc;
     padding-bottom: 5px;
     display: inline-block;
+    margin-bottom: 20px;
+}
+
+h2 i {
+    margin-right: 10px;
 }
 
 section {
     background-color: #1e1e1e;
-    padding: 20px;
-    border-radius: 8px;
-    margin-bottom: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    padding: 30px; /* 增加内边距 */
+    border-radius: 12px; /* 更大的圆角 */
+    margin-bottom: 30px; /* 增加底部外边距 */
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3); /* 更明显的阴影 */
+    transition: transform 0.3s ease;
+}
+
+section:hover {
+    transform: translateY(-5px); /* 悬浮效果 */
 }
 
 p {
     font-size: 1.1em;
+    margin-bottom: 15px;
+}
+
+.skills {
+    margin-top: 20px;
+}
+
+.skill-tag {
+    display: inline-block;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    padding: 8px 15px;
+    border-radius: 20px;
+    margin: 5px;
+    font-size: 0.9em;
+    border: 1px solid #555;
+}
+
+.project-card {
+    background-color: #2a2a2a;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    text-align: left;
+    transition: transform 0.2s ease;
+}
+
+.project-card:hover {
+    transform: translateY(-3px);
+}
+
+.project-card h3 {
+    color: #bb86fc;
+    margin-top: 0;
+    margin-bottom: 10px;
+}
+
+.project-card p {
+    font-size: 1em;
+    color: #cccccc;
+}
+
+.project-link {
+    display: inline-block;
+    background-color: #bb86fc;
+    color: #121212;
+    padding: 8px 15px;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: bold;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.project-link:hover {
+    background-color: #a764fa;
 }
 
 .button {
     display: inline-block;
     background-color: #bb86fc;
     color: #121212;
-    padding: 10px 20px;
+    padding: 12px 25px;
     border-radius: 5px;
     text-decoration: none;
     font-weight: bold;
+    font-size: 1.1em;
     transition: background-color 0.3s ease, transform 0.2s ease;
 }
 
@@ -58,8 +137,110 @@ p {
     transform: translateY(-2px);
 }
 
+.social-links {
+    margin-top: 20px;
+}
+
+.social-btn {
+    display: inline-flex;
+    align-items: center;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 0 10px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+.social-btn i {
+    margin-right: 8px;
+}
+
+.social-btn:hover {
+    background-color: #555555;
+    transform: translateY(-2px);
+}
+
+.social-btn.github:hover {
+    background-color: #6e5494; /* GitHub品牌色 */
+}
+
+/* Email hover effect */
+.email-tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.email-tooltip span {
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* 初始状态：不透明度为0，并稍微向下移动 */
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.email-tooltip:hover span {
+    /* 悬浮状态：不透明度为0，并稍微向上移动，隐藏原始文本 */
+    opacity: 0;
+    transform: translateY(-10px);
+}
+
+.email-tooltip::after {
+    content: attr(data-email); /* 从data-email属性获取内容 */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #bb86fc; /* 提示框背景色 */
+    color: #121212; /* 提示框文字颜色 */
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    opacity: 0; /* 初始隐藏 */
+    pointer-events: none; /* 不阻止鼠标事件 */
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    /* 初始状态：稍微向下移动 */
+    transform: translate(-50%, 0);
+}
+
+.email-tooltip:hover::after {
+    opacity: 1; /* 悬浮时显示 */
+    /* 悬浮状态：回到中心位置 */
+    transform: translate(-50%, -50%);
+}
+
 footer {
     margin-top: 40px;
     font-size: 0.9em;
     color: #757575;
+}
+
+.footer-note {
+    font-size: 0.8em;
+    margin-top: 5px;
+    color: #555;
+}
+
+.avatar-container {
+    margin-bottom: 30px;
+}
+
+.avatar {
+    font-size: 4em;
+    color: #bb86fc;
+    margin-bottom: 10px;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
 }

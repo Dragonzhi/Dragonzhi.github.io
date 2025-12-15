@@ -3,27 +3,78 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dragonzhi 的主页</title>
+    <title>Dragonzhi | 游戏开发爱好者</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <header>
-        <h1>你好，我是 Dragonzhi</h1>
-    </header>
-    <main>
-        <section id="about">
-            <h2>关于我</h2>
-            <p>在校大学生，喜欢捣鼓游戏开发。</p>
-        </section>
-        <section id="projects">
-            <h2>我的作品</h2>
-            <p>欢迎访问我的 GitHub 查看我的项目！</p>
-            <a href="https://github.com/Dragonzhi" target="_blank" class="button">访问 GitHub</a>
-        </section>
-    </main>
-    <footer>
-        <p>&copy; 2025 Dragonzhi</p>
-    </footer>
+    <div class="container">
+        <header>
+            <div class="avatar-container">
+                <div class="avatar">
+                    <i class="fas fa-dragon"></i>
+                </div>
+                <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
+                <p class="tagline">游戏开发爱好者 | 在校大学生</p>
+            </div>
+        </header>
+        
+        <main>
+            <section id="about">
+                <h2><i class="fas fa-user"></i> 关于我</h2>
+                <p>我是一名热爱游戏开发的在校大学生，喜欢探索游戏引擎的奥秘，创造有趣的互动体验。目前正在学习 Unity 和 C++ 游戏开发。</p>
+                <div class="skills">
+                    <span class="skill-tag">Unity</span>         
+                    <span class="skill-tag">Godot</span>
+                    <span class="skill-tag">C++</span>
+                    <span class="skill-tag">C#</span>
+                    <span class="skill-tag">游戏设计</span>
+                    <span class="skill-tag">像素艺术</span>
+                </div>
+            </section>
+            
+            <section id="projects">
+                <h2><i class="fas fa-code-branch"></i> 我的作品</h2>
+                <p>这里展示我的一些游戏开发项目和实验作品：</p>
+                
+                <div class="project-card">
+                    <h3><i class="fas fa-gamepad"></i> 免疫联结</h3>
+                    <p>一款基于Godot开发的塔防游戏，强调桥梁的防御与经济双重作用。</p>
+                    <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" class="project-link">查看项目</a>
+                </div>
+                
+                <div class="project-card">
+                    <h3><i class="fas fa-cube"></i> Shut Up & Brick!</h3>
+                    <p>基于easyX开发的一个有趣的打砖块小游戏。</p>
+                    <a href="https://github.com/Dragonzhi/Shut-Up-Brick" target="_blank" class="project-link">查看项目</a>
+                </div>
+                
+                <p class="visit-github">访问我的GitHub查看更多项目：</p>
+                <a href="https://github.com/Dragonzhi" target="_blank" class="button">
+                    <i class="fab fa-github"></i> 访问 GitHub
+                </a>
+            </section>
+            
+            <section id="contact">
+                <h2><i class="fas fa-envelope"></i> 联系我</h2>
+                <p>如果你也对游戏开发感兴趣，欢迎交流！</p>
+                <div class="social-links">
+                    <a href="https://github.com/Dragonzhi" target="_blank" class="social-btn github">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="#" class="social-btn email email-tooltip" data-email="3248569738@qq.com">
+                        <i class="fas fa-envelope"></i> <span>邮箱</span>
+                    </a>
+                </div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>© 2025 Dragonzhi · 用代码创造有趣的世界</p>
+            <p class="footer-note">最后更新: <span id="current-date"></span></p>
+        </footer>
+    </div>
+    
     <script src="script.js"></script>
 </body>
 </html>
