@@ -1,0 +1,2 @@
+<br>title: Dragonzhi 的个人主页<br>description: 前端开发者的技术笔记与项目展示<br>
+url: "https://dragonzhi.github.io" # 你的 Pages 地址<br>theme: minima # 先用水印官方主题，后续可换<br>markdown: kramdown # 支持 Markdown 语法<br>
