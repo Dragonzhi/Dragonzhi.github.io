@@ -7,6 +7,7 @@
     <link rel="icon" href="images/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
 <body>
     <div id="particles-js"></div>
@@ -25,7 +26,7 @@
         </header>
         
         <main>
-            <section id="about">
+            <section id="about" data-aos="fade-up">
                 <h2><i class="fas fa-user"></i> 关于我</h2>
                 <p>我是一名热爱程序开发的大学生。目前正在学习 Unity 和 C++ 程序开发，以及制作《Minecraft》Java的1.20.1forge版本的Mod。</p>
                 <div class="skills">
@@ -38,33 +39,33 @@
                 </div>
             </section>
             
-            <section id="projects">
+            <section id="projects" data-aos="fade-up">
                 <h2><i class="fas fa-code-branch"></i> 我的作品</h2>
                 <p>这里展示我的一些开发项目：</p>
                 
-                <div class="project-card">
+                <div class="project-card" data-aos="fade-right">
                     <h3><i class="fas fa-gamepad"></i> 免疫联结</h3>
                     <p>一款基于Godot开发的塔防游戏，强调桥梁的防御与经济双重作用。</p>
                     <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" class="project-link">查看项目</a>
                     <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" class="project-link">在线游玩</a>
                 </div>
                 
-                <div class="project-card">
+                <div class="project-card" data-aos="fade-left">
                     <h3><i class="fas fa-cube"></i> 我的世界 CS 投掷物模组</h3>
                     <p>为 Minecraft 添加了《CS:GO》中的高爆、闪光、烟雾等多种经典投掷物。</p>
                     <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" class="project-link">查看项目</a>
                 </div>
                 
-                <p class="visit-github">访问我的GitHub查看更多项目：</p>
-                <a href="https://github.com/Dragonzhi" target="_blank" class="button">
+                <p class="visit-github" data-aos="zoom-in">访问我的GitHub查看更多项目：</p>
+                <a href="https://github.com/Dragonzhi" target="_blank" class="button" data-aos="zoom-in" data-aos-delay="100">
                     <i class="fab fa-github"></i> 访问 GitHub
                 </a>
             </section>
             
-            <section id="contact">
+            <section id="contact" data-aos="fade-up">
                 <h2><i class="fas fa-envelope"></i> 联系我</h2>
                 <p>如果你也对程序开发感兴趣，欢迎交流！</p>
-                <div class="social-links">
+                <div class="social-links" data-aos="fade-up" data-aos-delay="150">
                     <a href="https://github.com/Dragonzhi" target="_blank" class="social-btn github">
                         <i class="fab fa-github"></i> GitHub
                     </a>
@@ -84,5 +85,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script src="app.js"></script>
     <script src="script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 </body>
 </html>

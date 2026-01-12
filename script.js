@@ -26,6 +26,13 @@ document.addEventListener('DOMContentLoaded', () => {
             localStorage.setItem('theme', 'light');
         }
     });
+
+    // 4. 初始化 AOS 滚动动画库
+    AOS.init({
+        duration: 800, // 动画持续时间
+        once: true, // 动画只播放一次
+        offset: 50 // 触发动画的偏移量
+    });
     
     // 获取当前日期并显示在页脚
     const dateSpan = document.getElementById('current-date');
