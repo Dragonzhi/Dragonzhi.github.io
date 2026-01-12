@@ -259,3 +259,69 @@ footer {
         transform: scale(1);
     }
 }
+
+/* --- Theme Toggle Button --- */
+.theme-toggle-button {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: var(--section-bg);
+    border: 1px solid var(--border-color);
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    z-index: 1000;
+    font-size: 20px;
+    color: var(--tianyi-blue);
+    transition: all 0.3s ease;
+    backdrop-filter: blur(5px);
+}
+
+.theme-toggle-button:hover {
+    transform: scale(1.1) rotate(15deg);
+    box-shadow: 0 4px 12px rgba(102, 204, 255, 0.3);
+}
+
+
+/* --- Dark Mode Styles --- */
+body.dark-mode {
+    --text-color: #e0e0e0;
+    --section-bg: rgba(25, 30, 40, 0.75);
+    --card-bg: rgba(35, 40, 50, 0.8);
+    --border-color: rgba(102, 204, 255, 0.2);
+
+    background-image: linear-gradient(rgba(10, 15, 25, 0.8), rgba(10, 15, 25, 0.9)), url('images/A星.webp');
+}
+
+body.dark-mode h1,
+body.dark-mode .tagline,
+body.dark-mode .project-card p,
+body.dark-mode .social-btn {
+    color: #c5c5c5;
+}
+
+body.dark-mode .avatar {
+    background-color: #333;
+}
+
+body.dark-mode .skill-tag {
+    background-color: rgba(102, 204, 255, 0.1);
+    color: var(--tianyi-blue);
+    border-color: rgba(102, 204, 255, 0.3);
+}
+
+body.dark-mode .social-btn {
+    background-color: rgba(50, 55, 65, 0.9);
+}
+
+body.dark-mode .social-btn:hover {
+    background-color: rgba(60, 65, 75, 1);
+}
+
+body.dark-mode footer {
+    color: #999;
+}
