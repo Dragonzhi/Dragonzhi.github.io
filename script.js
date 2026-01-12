@@ -46,8 +46,23 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchGitHubProjects();
 });
 
+const CACHE_KEY = 'github_projects_cache';
+const TIMESTAMP_KEY = 'github_projects_timestamp';
+const CACHE_DURATION_MS = 3600 * 1000; // 1 小时
+
 async function fetchGitHubProjects() {
     const container = document.getElementById('projects-container');
+    const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
+    const cachedData = localStorage.getItem(CACHE_KEY);
+
+    // 1. 检查是否存在有效缓存
+    if (cachedTimestamp && cachedData && (new Date().getTime() - cachedTimestamp < CACHE_DURATION_MS)) {
+        console.log('从缓存加载 GitHub 项目。');
+        renderProjects(JSON.parse(cachedData), container);
+        return;
+    }
+
+    console.log('从 API 获取新的 GitHub 项目。');
     const username = 'Dragonzhi';
     const orgRepoPath = 'ThePiSquad/CounterStrikeGrenades';
 
@@ -64,45 +79,58 @@ async function fetchGitHubProjects() {
         const userRepos = await userReposRes.json();
         const orgRepo = await orgRepoRes.json();
 
-        // 合并并去重
         const allRepos = [...userRepos, orgRepo];
         const uniqueRepos = Array.from(new Map(allRepos.map(repo => [repo.id, repo])).values());
 
-        // 筛选和排序
         const filteredAndSortedRepos = uniqueRepos
-            .filter(repo => !repo.fork && repo.description) // 过滤掉fork的项目和没有描述的
-            .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)); // 按最近推送时间排序
+            .filter(repo => !repo.fork && repo.description)
+            .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
 
-        if (filteredAndSortedRepos.length === 0) {
-            container.innerHTML = '<p>在 GitHub 上没有找到符合条件的项目。</p>';
-            return;
-        }
+        // 2. 成功获取后，存入缓存
+        localStorage.setItem(CACHE_KEY, JSON.stringify(filteredAndSortedRepos));
+        localStorage.setItem(TIMESTAMP_KEY, new Date().getTime());
 
-        let projectsHtml = '';
-        filteredAndSortedRepos.forEach((repo, index) => {
-            let iconClass = 'fa-code'; // 默认图标
-            if (repo.name.toLowerCase().includes('immunelink')) {
-                iconClass = 'fa-gamepad';
-            } else if (repo.name.toLowerCase().includes('counterstrikegrenades')) {
-                iconClass = 'fa-cube';
-            }
-
-            const animation = index % 2 === 0 ? 'fade-right' : 'fade-left';
-
-            projectsHtml += `
-                <div class="project-card" data-aos="${animation}">
-                    <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
-                    <p>${repo.description}</p>
-                    <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
-                    ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
-                </div>
-            `;
-        });
-
-        container.innerHTML = projectsHtml;
+        // 3. 渲染项目
+        renderProjects(filteredAndSortedRepos, container);
 
     } catch (error) {
         console.error('获取 GitHub 项目失败:', error);
-        container.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
+        // 如果获取失败，也尝试使用旧缓存（如果存在），避免在API失效时页面完全空白
+        if(cachedData) {
+            console.warn('API 获取失败，回退到使用旧缓存。');
+            renderProjects(JSON.parse(cachedData), container);
+        } else {
+            container.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
+        }
     }
+}
+
+function renderProjects(repos, container) {
+    if (!repos || repos.length === 0) {
+        container.innerHTML = '<p>在 GitHub 上没有找到符合条件的项目。</p>';
+        return;
+    }
+
+    let projectsHtml = '';
+    repos.forEach((repo, index) => {
+        let iconClass = 'fa-code';
+        if (repo.name.toLowerCase().includes('immunelink')) {
+            iconClass = 'fa-gamepad';
+        } else if (repo.name.toLowerCase().includes('counterstrikegrenades')) {
+            iconClass = 'fa-cube';
+        }
+
+        const animation = index % 2 === 0 ? 'fade-right' : 'fade-left';
+
+        projectsHtml += `
+            <div class="project-card" data-aos="${animation}">
+                <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
+                <p>${repo.description}</p>
+                <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
+                ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
+            </div>
+        `;
+    });
+
+    container.innerHTML = projectsHtml;
 }
