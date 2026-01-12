@@ -1,7 +1,7 @@
 # 你好，我是 Dragonzhi
 
 ## 关于我
-在校大学生，喜欢程序开发。
+大学生，喜欢程序开发。
 
 ## 我的项目
 [查看我的 GitHub 项目](https://github.com/Dragonzhi)
