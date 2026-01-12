@@ -49,17 +49,27 @@ document.addEventListener('DOMContentLoaded', () => {
 async function fetchGitHubProjects() {
     const container = document.getElementById('projects-container');
     const username = 'Dragonzhi';
-    const apiUrl = `https://api.github.com/users/${username}/repos`;
+    const orgRepoPath = 'ThePiSquad/CounterStrikeGrenades';
 
     try {
-        const response = await fetch(apiUrl);
-        if (!response.ok) {
-            throw new Error(`网络响应错误: ${response.status}`);
+        const [userReposRes, orgRepoRes] = await Promise.all([
+            fetch(`https://api.github.com/users/${username}/repos`),
+            fetch(`https://api.github.com/repos/${orgRepoPath}`)
+        ]);
+
+        if (!userReposRes.ok || !orgRepoRes.ok) {
+            throw new Error(`网络响应错误: User: ${userReposRes.status}, Org: ${orgRepoRes.status}`);
         }
-        const repos = await response.json();
+
+        const userRepos = await userReposRes.json();
+        const orgRepo = await orgRepoRes.json();
+
+        // 合并并去重
+        const allRepos = [...userRepos, orgRepo];
+        const uniqueRepos = Array.from(new Map(allRepos.map(repo => [repo.id, repo])).values());
 
         // 筛选和排序
-        const filteredAndSortedRepos = repos
+        const filteredAndSortedRepos = uniqueRepos
             .filter(repo => !repo.fork && repo.description) // 过滤掉fork的项目和没有描述的
             .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)); // 按最近推送时间排序
 
