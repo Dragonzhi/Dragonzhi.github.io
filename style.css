@@ -260,6 +260,13 @@ footer {
     }
 }
 
+.loading-message {
+    text-align: center;
+    font-size: 1.1em;
+    color: var(--text-color);
+    padding: 40px 0;
+}
+
 /* --- Theme Toggle Button --- */
 .theme-toggle-button {
     position: absolute;

@@ -41,4 +41,58 @@ document.addEventListener('DOMContentLoaded', () => {
         const today = new Date();
         dateSpan.textContent = today.toLocaleDateString('zh-CN', options);
     }
+
+    // 5. 从 GitHub API 获取项目
+    fetchGitHubProjects();
 });
+
+async function fetchGitHubProjects() {
+    const container = document.getElementById('projects-container');
+    const username = 'Dragonzhi';
+    const apiUrl = `https://api.github.com/users/${username}/repos`;
+
+    try {
+        const response = await fetch(apiUrl);
+        if (!response.ok) {
+            throw new Error(`网络响应错误: ${response.status}`);
+        }
+        const repos = await response.json();
+
+        // 筛选和排序
+        const filteredAndSortedRepos = repos
+            .filter(repo => !repo.fork && repo.description) // 过滤掉fork的项目和没有描述的
+            .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)); // 按最近推送时间排序
+
+        if (filteredAndSortedRepos.length === 0) {
+            container.innerHTML = '<p>在 GitHub 上没有找到符合条件的项目。</p>';
+            return;
+        }
+
+        let projectsHtml = '';
+        filteredAndSortedRepos.forEach((repo, index) => {
+            let iconClass = 'fa-code'; // 默认图标
+            if (repo.name.toLowerCase().includes('immunelink')) {
+                iconClass = 'fa-gamepad';
+            } else if (repo.name.toLowerCase().includes('counterstrikegrenades')) {
+                iconClass = 'fa-cube';
+            }
+
+            const animation = index % 2 === 0 ? 'fade-right' : 'fade-left';
+
+            projectsHtml += `
+                <div class="project-card" data-aos="${animation}">
+                    <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
+                    <p>${repo.description}</p>
+                    <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
+                    ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
+                </div>
+            `;
+        });
+
+        container.innerHTML = projectsHtml;
+
+    } catch (error) {
+        console.error('获取 GitHub 项目失败:', error);
+        container.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
+    }
+}
