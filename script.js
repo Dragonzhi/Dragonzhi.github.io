@@ -62,27 +62,34 @@ async function fetchGitHubProjects() {
         return;
     }
 
-    console.log('从 API 获取新的 GitHub 项目。');
-    const username = 'Dragonzhi';
+    console.log('从本地和API获取新的 GitHub 项目。');
     const orgRepoPath = 'ThePiSquad/CounterStrikeGrenades';
 
     try {
-        
+        // 并行获取本地的 repos.json 和特定组织的仓库信息
         const [userReposRes, orgRepoRes] = await Promise.all([
-            fetch(`https://api.github.com/users/${username}/repos`),
-            fetch(`https://api.github.com/repos/${orgRepoPath}`)
+            fetch('repos.json'), // 从工作流生成的本地文件获取
+            fetch(`https://api.github.com/repos/${orgRepoPath}`) // 继续获取组织仓库
         ]);
 
-        if (!userReposRes.ok || !orgRepoRes.ok) {
-            throw new Error(`网络响应错误: User: ${userReposRes.status}, Org: ${orgRepoRes.status}`);
+        if (!userReposRes.ok) {
+            throw new Error(`加载本地 repos.json 失败: ${userReposRes.status}`);
         }
 
         const userRepos = await userReposRes.json();
-        const orgRepo = await orgRepoRes.json();
+        let allRepos = [...userRepos];
 
-        const allRepos = [...userRepos, orgRepo];
+        // 优雅地处理组织仓库的获取结果
+        if (orgRepoRes.ok) {
+            const orgRepo = await orgRepoRes.json();
+            allRepos.push(orgRepo);
+            console.log(`成功获取组织仓库: ${orgRepoPath}`);
+        } else {
+            console.warn(`无法从 API 获取组织仓库 ${orgRepoPath}，状态: ${orgRepoRes.status}。将仅显示用户仓库。`);
+        }
+
+        // 去重、过滤和排序
         const uniqueRepos = Array.from(new Map(allRepos.map(repo => [repo.id, repo])).values());
-
         const filteredAndSortedRepos = uniqueRepos
             .filter(repo => !repo.fork && repo.description)
             .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
@@ -97,7 +104,7 @@ async function fetchGitHubProjects() {
     } catch (error) {
         console.error('获取 GitHub 项目失败:', error);
         // 如果获取失败，也尝试使用旧缓存（如果存在），避免在API失效时页面完全空白
-        if(cachedData) {
+        if (cachedData) {
             console.warn('API 获取失败，回退到使用旧缓存。');
             renderProjects(JSON.parse(cachedData), container);
         } else {
