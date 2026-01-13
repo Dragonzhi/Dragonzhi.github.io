@@ -65,16 +65,12 @@ async function fetchGitHubProjects() {
     console.log('从 API 获取新的 GitHub 项目。');
     const username = 'Dragonzhi';
     const orgRepoPath = 'ThePiSquad/CounterStrikeGrenades';
-    const TOKEN = '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';
 
     try {
-        const headers = {
-            'Authorization': `token ${TOKEN}`
-        };
         
         const [userReposRes, orgRepoRes] = await Promise.all([
-            fetch(`https://api.github.com/users/${username}/repos`, { headers }),
-            fetch(`https://api.github.com/repos/${orgRepoPath}`, { headers })
+            fetch(`https://api.github.com/users/${username}/repos`),
+            fetch(`https://api.github.com/repos/${orgRepoPath}`)
         ]);
 
         if (!userReposRes.ok || !orgRepoRes.ok) {
