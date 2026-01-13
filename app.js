@@ -40,7 +40,7 @@ particlesJS("particles-js", {
       "value": 20, // 泡泡的大小
       "random": true,
       "anim": {
-        "enable": false,
+        "enable": true, // 开启尺寸动画，实现大小脉动
         "speed": 4,
         "size_min": 10,
         "sync": false
@@ -55,7 +55,7 @@ particlesJS("particles-js", {
       "direction": "top", // 向上移动
       "random": true, // 移动方向带点随机性
       "straight": false, // 非直线移动，模拟漂浮
-      "out_mode": "out", // 飘出屏幕
+      "out_mode": "bounce", // 粒子在边缘反弹
       "bounce": false,
       "attract": {
         "enable": false
@@ -67,7 +67,7 @@ particlesJS("particles-js", {
     "events": {
       "onhover": {
         "enable": true,
-        "mode": "repulse" // 鼠标悬浮时排斥
+        "mode": "bubble" // 鼠标悬浮时气泡膨胀
       },
       "onclick": {
         "enable": true,
