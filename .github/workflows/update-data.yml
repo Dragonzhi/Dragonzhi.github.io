@@ -10,6 +10,8 @@ on:
 jobs:
   update:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write # 授予工作流写入仓库内容的权限
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
