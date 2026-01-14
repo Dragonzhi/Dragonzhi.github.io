@@ -2,9 +2,7 @@ name: Update Project Data
 
 on:
   schedule:
-    - cron: '0 */6 * * *' # 每6小时自动运行一次
-  push:
-    branches: [ main ] # 主分支有推送时也运行
+    - cron: '0 0 * * *' # 每天UTC时间0点自动运行一次
   workflow_dispatch: # 允许手动触发
 
 jobs:
