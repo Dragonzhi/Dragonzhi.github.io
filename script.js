@@ -114,8 +114,15 @@ async function fetchGitHubProjects() {
 }
 
 function renderProjects(repos, container) {
+    const swiperWrapper = container.querySelector('.swiper-wrapper');
+    if (!swiperWrapper) {
+        console.error('Swiper wrapper not found!');
+        container.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
+        return;
+    }
+    
     if (!repos || repos.length === 0) {
-        container.innerHTML = '<p>在 GitHub 上没有找到符合条件的项目。</p>';
+        swiperWrapper.innerHTML = '<p class="swiper-slide">在 GitHub 上没有找到符合条件的项目。</p>';
         return;
     }
 
@@ -128,17 +135,49 @@ function renderProjects(repos, container) {
             iconClass = 'fa-cube';
         }
 
-        const animation = index % 2 === 0 ? 'fade-right' : 'fade-left';
+        const animation = 'fade-up'; // Use a consistent animation for carousel items
 
         projectsHtml += `
-            <div class="project-card" data-aos="${animation}">
-                <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
-                <p>${repo.description}</p>
-                <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
-                ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
+            <div class="swiper-slide" data-aos="${animation}">
+                <div class="project-card">
+                    <div>
+                        <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
+                        <p>${repo.description}</p>
+                    </div>
+                    <div class="project-links-container">
+                        <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
+                        ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
+                    </div>
+                </div>
             </div>
         `;
     });
 
-    container.innerHTML = projectsHtml;
+    swiperWrapper.innerHTML = projectsHtml;
+
+    // Initialize Swiper
+    new Swiper('.swiper-container', {
+        loop: true,
+        slidesPerView: 1,
+        spaceBetween: 30,
+        pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+        },
+        navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+        },
+        autoplay: {
+            delay: 5000,
+            disableOnInteraction: false,
+        },
+        breakpoints: {
+            // when window width is >= 768px
+            768: {
+                slidesPerView: 2,
+                spaceBetween: 30
+            }
+        }
+    });
 }
