@@ -6,7 +6,6 @@
     <title>Dragonzhi | 程序开发爱好者</title>
     <link rel="icon" href="images/favicon.png">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.min.css" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
 </head>
@@ -42,17 +41,11 @@
                 <h2><i class="fas fa-code-branch"></i> 我的作品</h2>
                 <p>这里展示我的一些开发项目：</p>
                 
-                <div id="projects-container" class="swiper-container">
-                    <div class="swiper-wrapper">
-                        <!-- Projects will be inserted here by script.js -->
-                    </div>
-                    <!-- Add Pagination -->
-                    <div class="swiper-pagination"></div>
-                    <!-- Add Navigation -->
-                    <div class="swiper-button-next"></div>
-                    <div class="swiper-button-prev"></div>
+                <div id="projects-container">
+                    <!-- Projects will be inserted here by script.js -->
                 </div>
-                
+                <div id="show-more-container"></div>
+
                 <p class="visit-github" data-aos="zoom-in">访问我的GitHub查看更多项目：</p>
                 <a href="https://github.com/Dragonzhi" target="_blank" class="button" data-aos="zoom-in" data-aos-delay="100">
                     <i class="fab fa-github"></i> 访问 GitHub
@@ -79,7 +72,6 @@
         </footer>
     </div>
     
-    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script src="app.js"></script>
     <script src="script.js"></script>

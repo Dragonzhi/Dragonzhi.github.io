@@ -113,21 +113,16 @@ async function fetchGitHubProjects() {
     }
 }
 
+const REPOS_TO_SHOW_INITIALLY = 4;
+
 function renderProjects(repos, container) {
-    const swiperWrapper = container.querySelector('.swiper-wrapper');
-    if (!swiperWrapper) {
-        console.error('Swiper wrapper not found!');
-        container.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
-        return;
-    }
-    
     if (!repos || repos.length === 0) {
-        swiperWrapper.innerHTML = '<p class="swiper-slide">在 GitHub 上没有找到符合条件的项目。</p>';
+        container.innerHTML = '<p>在 GitHub 上没有找到符合条件的项目。</p>';
         return;
     }
 
-    let projectsHtml = '';
-    repos.forEach((repo, index) => {
+    // 1. 生成所有项目卡片的 HTML
+    let projectsHtml = repos.map((repo, index) => {
         let iconClass = 'fa-code';
         if (repo.name.toLowerCase().includes('immunelink')) {
             iconClass = 'fa-gamepad';
@@ -135,49 +130,59 @@ function renderProjects(repos, container) {
             iconClass = 'fa-cube';
         }
 
-        const animation = 'fade-up'; // Use a consistent animation for carousel items
+        // Add 'hidden' class to projects that should be initially hidden
+        const isHidden = index >= REPOS_TO_SHOW_INITIALLY ? 'hidden' : '';
+        const animation = 'fade-up';
 
-        projectsHtml += `
-            <div class="swiper-slide" data-aos="${animation}">
-                <div class="project-card">
-                    <div>
-                        <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
-                        <p>${repo.description}</p>
-                    </div>
-                    <div class="project-links-container">
-                        <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
-                        ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
-                    </div>
+        return `
+            <div class="project-card ${isHidden}" data-aos="${animation}">
+                 <div>
+                    <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
+                    <p>${repo.description}</p>
+                </div>
+                <div class="project-links-container">
+                    <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
+                    ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
                 </div>
             </div>
         `;
-    });
+    }).join('');
 
-    swiperWrapper.innerHTML = projectsHtml;
+    container.innerHTML = projectsHtml;
 
-    // Initialize Swiper
-    new Swiper('.swiper-container', {
-        loop: true,
-        slidesPerView: 1,
-        spaceBetween: 30,
-        pagination: {
-            el: '.swiper-pagination',
-            clickable: true,
-        },
-        navigation: {
-            nextEl: '.swiper-button-next',
-            prevEl: '.swiper-button-prev',
-        },
-        autoplay: {
-            delay: 5000,
-            disableOnInteraction: false,
-        },
-        breakpoints: {
-            // when window width is >= 768px
-            768: {
-                slidesPerView: 2,
-                spaceBetween: 30
+    // 2. 如果项目总数超过初始显示数，则添加“显示更多”按钮
+    if (repos.length > REPOS_TO_SHOW_INITIALLY) {
+        const showMoreContainer = document.getElementById('show-more-container');
+        const showMoreBtn = document.createElement('button');
+        showMoreBtn.textContent = '显示更多';
+        showMoreBtn.classList.add('show-more-btn');
+        showMoreContainer.appendChild(showMoreBtn);
+
+        let isShowingAll = false;
+
+        showMoreBtn.addEventListener('click', () => {
+            isShowingAll = !isShowingAll;
+            const hiddenCards = container.querySelectorAll('.project-card.hidden');
+            
+            hiddenCards.forEach(card => {
+                // We just toggle display, a CSS transition can make it smooth
+                if (isShowingAll) {
+                    card.style.display = 'block';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+            
+            showMoreBtn.textContent = isShowingAll ? '收起' : '显示更多';
+
+            // Re-initialize AOS on the newly displayed items
+            if(isShowingAll) {
+                AOS.refresh();
             }
-        }
-    });
+        });
+    }
+
+    // Since we dynamically add 'hidden' which sets display:none, we need to adjust how AOS is fired.
+    // Let's hide the elements via JS first after AOS has animated them.
+    // A simpler way is to just refresh AOS after showing, which is what is done above.
 }

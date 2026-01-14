@@ -333,73 +333,46 @@ body.dark-mode footer {
     color: #999;
 }
 
-/* --- Swiper Carousel Styles --- */
-#projects-container.swiper-container {
-    padding-bottom: 50px; /* Space for pagination */
-    overflow: hidden; /* Prevent content from overflowing */
+/* --- Project Grid Styles --- */
+#projects-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
 }
 
-.swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: stretch; /* Stretch to fill height */
-    height: auto;
-    padding: 10px;
-    /* Removed padding: 5px; to let Swiper handle spacing */
+.project-card.hidden {
+    display: none;
 }
 
-.swiper-slide .project-card {
-    width: 100%;
-    height: 100%; /* Ensure cards fill the slide height */
-    margin-bottom: 0; /* Remove original margin */
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+#show-more-container {
+    text-align: center;
+    margin-top: 20px;
 }
 
-.project-links-container {
-    margin-top: 15px;
-    display: flex;
-    flex-wrap: wrap; /* Allow buttons to wrap on smaller screens */
-    gap: 10px; /* Add space between buttons */
-}
-
-.project-card .project-link {
-    margin: 0; /* Reset margin as gap is used now */
-    padding: 6px 14px; /* Slightly reduce padding */
-    flex-shrink: 0; /* Prevent buttons from shrinking */
-}
-
-.swiper-pagination-bullet {
-    background: rgba(0, 0, 0, 0.5);
-}
-
-.swiper-pagination-bullet-active {
-    background: var(--tianyi-blue);
-}
-
-.swiper-button-next,
-.swiper-button-prev {
+.show-more-btn {
+    background-color: transparent;
+    border: 2px solid var(--tianyi-blue);
     color: var(--tianyi-blue);
-    transition: transform 0.2s ease, color 0.2s ease;
+    padding: 10px 25px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1em;
+    font-weight: 500;
+    transition: all 0.3s ease;
 }
 
-.swiper-button-next:hover,
-.swiper-button-prev:hover {
-    transform: scale(1.2);
-    color: var(--tianyi-blue-dark);
+.show-more-btn:hover {
+    background-color: var(--tianyi-blue);
+    color: #fff;
+    transform: translateY(-2px);
 }
 
-.swiper-button-next::after,
-.swiper-button-prev::after {
-    font-size: 30px !important;
-    font-weight: bold;
+body.dark-mode .show-more-btn {
+    border-color: var(--tianyi-blue);
+    color: var(--tianyi-blue);
 }
 
-body.dark-mode .swiper-pagination-bullet {
-    background: rgba(255, 255, 255, 0.5);
-}
-
-body.dark-mode .swiper-pagination-bullet-active {
-    background: var(--tianyi-blue);
+body.dark-mode .show-more-btn:hover {
+    background-color: var(--tianyi-blue);
+    color: var(--card-bg);
 }
