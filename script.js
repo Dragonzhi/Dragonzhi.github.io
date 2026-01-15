@@ -69,7 +69,7 @@ async function fetchGitHubProjects() {
         // 并行获取本地的 repos.json 和特定组织的仓库信息
         const [userReposRes, orgRepoRes] = await Promise.all([
             fetch('repos.json'), // 从工作流生成的本地文件获取
-            fetch(`https://api.github.com/repos/${orgRepoPath}`) // 继续获取组织仓库
+            fetch('org-repo.json') // 从工作流生成的本地文件获取组织仓库
         ]);
 
         if (!userReposRes.ok) {

@@ -21,10 +21,13 @@ jobs:
           curl -H "Authorization: token $GH_TOKEN" \
                -H "Accept: application/vnd.github.v3+json" \
                "https://api.github.com/users/Dragonzhi/repos" > repos.json
+          curl -H "Authorization: token $GH_TOKEN" \
+               -H "Accept: application/vnd.github.v3+json" \
+               "https://api.github.com/repos/ThePiSquad/CounterStrikeGrenades" > org-repo.json
 
       - name: Commit and Push if changed
         run: |
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
-          git add repos.json
+          git add repos.json org-repo.json
           git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update project data" && git push)
