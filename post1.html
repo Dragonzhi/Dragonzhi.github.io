@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>如何用纯静态文件搭建这个博客 | Dragonzhi</title>
+    <link rel="icon" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog.css"> <!-- 博客专属样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <header>
+            <div class="avatar-container">
+                 <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <div class="avatar">
+                        <img src="images/avatar.png" alt="Dragonzhi 的头像">
+                    </div>
+                    <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
+                    <p class="tagline">程序开发爱好者</p>
+                </a>
+            </div>
+            <div id="theme-toggle" class="theme-toggle-button">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+        
+        <main>
+            <article class="post-content">
+                <a href="blog.html" class="back-link"><i class="fas fa-arrow-left"></i> 返回博客列表</a>
+                <h1>如何用纯静态文件搭建这个博客</h1>
+                <p class="post-meta">发布于 2026年1月16日</p>
+
+                <p>为个人主页添加一个博客是分享知识和记录成长的好方法。但很多时候，我们不需要一个像 WordPress 或 Ghost 那样复杂的动态博客系统。对于一个开发者来说，一个纯静态、用 HTML 和 CSS 构建的博客不仅维护简单、加载飞快，而且完全免费（托管在 GitHub Pages 上）。</p>
+
+                <h2>第一步：规划文件结构</h2>
+                <p>我们的目标是简洁。所以我们只需要几个核心文件：</p>
+                <ul>
+                    <li><code>index.html</code> - 你的主页。</li>
+                    <li><code>blog.html</code> - 新的博客文章列表页。</li>
+                    <li><code>post1.html</code>, <code>post2.html</code>... - 每一篇文章都是一个独立的HTML文件。</li>
+                    <li><code>style.css</code> - 主样式表。</li>
+                    <li><code>blog.css</code> - 博客页面的专属样式。</li>
+                </ul>
+
+                <h2>第二步：创建文章列表页 (blog.html)</h2>
+                <p>这个页面的作用是作为博客的入口，展示所有文章。每个条目包含标题、日期、摘要和一个“阅读全文”的链接。</p>
+                <pre><code>&lt;div class="post-entry"&gt;
+    &lt;h3&gt;文章标题&lt;/h3&gt;
+    &lt;p class="post-meta"&gt;发布日期&lt;/p&gt;
+    &lt;p&gt;文章摘要...&lt;/p&gt;
+    &lt;a href="post1.html" class="button"&gt;阅读全文&lt;/a&gt;
+&lt;/div&gt;</code></pre>
+                
+                <h2>第三步：创建文章内容页</h2>
+                <p>这是最简单的部分。你只需要从 <code>blog.html</code> 复制基础结构，然后把主要内容区域换成你的文章。为了格式美观，我们需要为代码块 <code>&lt;pre&gt;&lt;code&gt;</code> 和其他元素添加一些样式。</p>
+
+                <p>这就是全部了！通过这个简单的方法，你就有了一个可以随时扩展的静态博客。要发布新文章，只需要复制一份文章模板，修改内容，然后在 <code>blog.html</code> 里添加一个新的链接条目即可。</p>
+
+            </article>
+        </main>
+        
+        <footer>
+            <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="app.js"></script>
+    <script src="script.js"></script>
+    <!-- 文章页面通常不需要 AOS 动画，所以这里不引入 -->
+</body>
+</html>

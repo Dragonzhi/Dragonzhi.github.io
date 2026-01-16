@@ -1,0 +1,112 @@
+/* 博客列表页样式 */
+.post-entry {
+    background-color: var(--card-bg-color);
+    padding: 25px;
+    border-radius: 8px;
+    margin-bottom: 25px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.post-entry:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+.post-entry h3 {
+    margin-top: 0;
+    color: var(--highlight-color);
+}
+
+.post-meta {
+    font-size: 0.9em;
+    color: var(--text-secondary-color);
+    margin-bottom: 15px;
+}
+
+.post-entry .button {
+    display: inline-block;
+    margin-top: 15px;
+}
+
+
+/* 文章内容页样式 */
+.post-content {
+    background-color: var(--card-bg-color);
+    padding: 30px 40px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    max-width: 800px;
+    margin: 20px auto; /* 居中显示 */
+    line-height: 1.8;
+}
+
+.post-content h1 {
+    color: var(--highlight-color);
+    border-bottom: 2px solid var(--highlight-color);
+    padding-bottom: 10px;
+}
+
+.post-content h2 {
+    color: var(--text-primary-color);
+    margin-top: 40px;
+    margin-bottom: 20px;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 8px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 30px;
+    text-decoration: none;
+    color: var(--text-secondary-color);
+    transition: color 0.3s ease;
+}
+
+.back-link:hover {
+    color: var(--highlight-color);
+}
+
+.back-link .fas {
+    margin-right: 8px;
+}
+
+/* 代码块样式 */
+.post-content pre {
+    background-color: var(--code-bg-color);
+    color: var(--code-text-color);
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
+    border: 1px solid var(--border-color);
+}
+
+.post-content code {
+    font-family: 'Courier New', Courier, monospace;
+}
+
+/* 行内代码 */
+.post-content p > code, .post-content li > code {
+    background-color: var(--code-inline-bg-color);
+    color: var(--highlight-color);
+    padding: 3px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+/* 列表样式 */
+.post-content ul {
+    padding-left: 20px;
+}
+.post-content li {
+    margin-bottom: 10px;
+}
+
+/* 响应式调整 */
+@media (max-width: 768px) {
+    .post-content {
+        padding: 20px;
+    }
+}

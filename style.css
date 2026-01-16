@@ -4,9 +4,16 @@
     --tianyi-blue: #66CCFF;
     --tianyi-blue-dark: #55bbee;
     --text-color: #333333;
+    --text-secondary-color: #666666; /* 新增次要文本颜色 */
     --section-bg: rgba(255, 255, 255, 0.7); /* 更低的透明度，让背景更明显 */
     --card-bg: rgba(253, 253, 253, 0.7); /* 更低的透明度 */
     --border-color: rgba(102, 204, 255, 0.3);
+    --highlight-color: #66CCFF; /* 主强调色 */
+
+    /* 博客代码块颜色 */
+    --code-bg-color: #f5f5f5;
+    --code-text-color: #333333;
+    --code-inline-bg-color: rgba(0, 0, 0, 0.08);
 }
 
 body {
@@ -297,9 +304,16 @@ footer {
 /* --- Dark Mode Styles --- */
 body.dark-mode {
     --text-color: #e0e0e0;
+    --text-secondary-color: #aaaaaa; /* 暗色模式下次要文本颜色 */
+    --highlight-color: #88EEFF; /* 暗色模式下强调色 */
     --section-bg: rgba(25, 30, 40, 0.75);
     --card-bg: rgba(35, 40, 50, 0.8);
     --border-color: rgba(102, 204, 255, 0.2);
+
+    /* 博客代码块颜色 */
+    --code-bg-color: #2b2b2b;
+    --code-text-color: #dcdcdc;
+    --code-inline-bg-color: rgba(255, 255, 255, 0.1);
 
     background-image: linear-gradient(rgba(10, 15, 25, 0.8), rgba(10, 15, 25, 0.9)), url('images/A星.webp');
 }

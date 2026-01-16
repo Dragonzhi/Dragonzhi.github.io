@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>博客 | Dragonzhi</title>
+    <link rel="icon" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="blog.css"> <!-- 博客专属样式 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+</head>
+<body>
+    <div id="particles-js"></div>
+    <div class="container">
+        <header>
+            <div class="avatar-container">
+                <a href="index.html" style="text-decoration: none; color: inherit;">
+                    <div class="avatar">
+                        <img src="images/avatar.png" alt="Dragonzhi 的头像">
+                    </div>
+                    <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
+                    <p class="tagline">程序开发爱好者</p>
+                </a>
+            </div>
+            <div id="theme-toggle" class="theme-toggle-button">
+                <i class="fas fa-moon"></i>
+            </div>
+        </header>
+        
+        <main>
+            <section id="blog-list" data-aos="fade-up">
+                <h2><i class="fas fa-book-open"></i> 开发博客</h2>
+                <div class="post-entry">
+                    <h3>如何用纯静态文件搭建这个博客</h3>
+                    <p class="post-meta">发布于 2026年1月16日</p>
+                    <p>这是我的第一篇博客文章，记录了如何为我的个人主页添加一个简单的、无需数据库或后端服务器的静态博客系统。我们将探讨HTML结构、CSS样式以及如何让它看起来和主页浑然一体。</p>
+                    <a href="post1.html" class="button">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <!-- 更多文章条目可以加在这里 -->
+            </section>
+        </main>
+        
+        <footer>
+            <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
+            <p class="footer-note">最后更新: <span id="current-date"></span></p>
+        </footer>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+    <script src="app.js"></script>
+    <script src="script.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+</body>
+</html>
