@@ -32,13 +32,16 @@
 
 /* 文章内容页样式 */
 .post-content {
-    background-color: var(--card-bg-color);
+    background-color: var(--section-bg); /* 与主页section统一，以支持透明度 */
     padding: 30px 40px;
-    border-radius: 8px;
+    border-radius: 12px; /* 与主页section统一 */
     border: 1px solid var(--border-color);
     max-width: 800px;
     margin: 20px auto; /* 居中显示 */
     line-height: 1.8;
+    backdrop-filter: blur(10px); /* 毛玻璃效果 */
+    -webkit-backdrop-filter: blur(10px); /* 兼容 Safari */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.07); /* 添加阴影以增强层次感 */
 }
 
 .post-content h1 {
