@@ -1,22 +1,21 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeToggle = document.getElementById('theme-toggle');
-    const body = document.body;
     const themeIcon = themeToggle.querySelector('i');
+    const docElement = document.documentElement;
 
-    // 1. 检查本地存储中用户的偏好
-    const currentTheme = localStorage.getItem('theme');
-    if (currentTheme === 'dark') {
-        body.classList.add('dark-mode');
+    // 1. 同步初始图标状态
+    // 根据 html 元素上是否已有 dark-mode 类来决定初始图标
+    if (docElement.classList.contains('dark-mode')) {
         themeIcon.classList.remove('fa-moon');
         themeIcon.classList.add('fa-sun');
     }
 
     // 2. 为切换按钮添加点击事件
     themeToggle.addEventListener('click', () => {
-        body.classList.toggle('dark-mode');
+        docElement.classList.toggle('dark-mode');
 
         // 3. 更新图标并保存偏好到本地存储
-        if (body.classList.contains('dark-mode')) {
+        if (docElement.classList.contains('dark-mode')) {
             themeIcon.classList.remove('fa-moon');
             themeIcon.classList.add('fa-sun');
             localStorage.setItem('theme', 'dark');

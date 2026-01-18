@@ -302,7 +302,7 @@ footer {
 
 
 /* --- Dark Mode Styles --- */
-body.dark-mode {
+.dark-mode {
     --text-color: #e0e0e0;
     --text-secondary-color: #aaaaaa; /* 暗色模式下次要文本颜色 */
     --highlight-color: #88EEFF; /* 暗色模式下强调色 */
@@ -314,36 +314,38 @@ body.dark-mode {
     --code-bg-color: #2b2b2b;
     --code-text-color: #dcdcdc;
     --code-inline-bg-color: rgba(255, 255, 255, 0.1);
+}
 
+html.dark-mode body {
     background-image: linear-gradient(rgba(10, 15, 25, 0.8), rgba(10, 15, 25, 0.9)), url('../images/A星.webp');
 }
 
-body.dark-mode h1,
-body.dark-mode .tagline,
-body.dark-mode .project-card p,
-body.dark-mode .social-btn {
+.dark-mode h1,
+.dark-mode .tagline,
+.dark-mode .project-card p,
+.dark-mode .social-btn {
     color: #c5c5c5;
 }
 
-body.dark-mode .avatar {
+.dark-mode .avatar {
     background-color: #333;
 }
 
-body.dark-mode .skill-tag {
+.dark-mode .skill-tag {
     background-color: rgba(102, 204, 255, 0.1);
     color: var(--tianyi-blue);
     border-color: rgba(102, 204, 255, 0.3);
 }
 
-body.dark-mode .social-btn {
+.dark-mode .social-btn {
     background-color: rgba(50, 55, 65, 0.9);
 }
 
-body.dark-mode .social-btn:hover {
+.dark-mode .social-btn:hover {
     background-color: rgba(60, 65, 75, 1);
 }
 
-body.dark-mode footer {
+.dark-mode footer {
     color: #999;
 }
 
@@ -381,12 +383,12 @@ body.dark-mode footer {
     transform: translateY(-2px);
 }
 
-body.dark-mode .show-more-btn {
+.dark-mode .show-more-btn {
     border-color: var(--tianyi-blue);
     color: var(--tianyi-blue);
 }
 
-body.dark-mode .show-more-btn:hover {
+.dark-mode .show-more-btn:hover {
     background-color: var(--tianyi-blue);
     color: var(--card-bg);
 }

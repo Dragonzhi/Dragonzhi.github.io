@@ -3,6 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
     <title>如何用纯静态文件搭建这个博客 | Dragonzhi</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="stylesheet" href="../css/blog.css"> <!-- 博客专属样式 -->
