@@ -24,6 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
             themeIcon.classList.add('fa-moon');
             localStorage.setItem('theme', 'light');
         }
+        // 当切换主题时，重新渲染图表以更新颜色
+        if (typeof renderLanguageChart === 'function') {
+            renderLanguageChart();
+        }
     });
 
     // 4. 初始化 AOS 滚动动画库
@@ -153,6 +157,7 @@ function setupFiltersAndRender() {
     });
 
     renderProjects(allFetchedRepos);
+    renderLanguageChart(); // 新增调用
 }
 
 const REPOS_TO_SHOW_INITIALLY = 4;
@@ -167,7 +172,6 @@ function renderProjects(repos) {
         return;
     }
 
-    // 1. 仅生成卡片 HTML，暂不添加到 DOM
     const projectCards = repos.map((repo, index) => {
         let iconClass = 'fa-code';
         if (repo.name.toLowerCase().includes('immunelink')) iconClass = 'fa-gamepad';
@@ -198,11 +202,8 @@ function renderProjects(repos) {
         return card;
     });
 
-    // 2. 将所有卡片一次性添加到容器
     projectCards.forEach(card => projectsContainer.appendChild(card));
 
-
-    // 3. 如果项目总数超过初始显示数，则添加“显示更多”按钮
     if (repos.length > REPOS_TO_SHOW_INITIALLY) {
         const showMoreBtn = document.createElement('button');
         showMoreBtn.textContent = '显示更多';
@@ -212,11 +213,10 @@ function renderProjects(repos) {
         showMoreBtn.addEventListener('click', () => {
             const hiddenCards = projectsContainer.querySelectorAll('.project-card.hidden');
             
-            // 如果按钮是“显示更多”状态，则显示所有隐藏卡片
             if (showMoreBtn.textContent === '显示更多') {
                 hiddenCards.forEach(card => card.classList.remove('hidden'));
                 showMoreBtn.textContent = '收起';
-            } else { // 否则，隐藏超出初始数量的卡片
+            } else { 
                 projectCards.forEach((card, index) => {
                     if (index >= REPOS_TO_SHOW_INITIALLY) {
                         card.classList.add('hidden');
@@ -224,9 +224,87 @@ function renderProjects(repos) {
                 });
                 showMoreBtn.textContent = '显示更多';
             }
-             // 刷新 AOS 以应用动画到新显示的项目上
             AOS.refresh();
         });
     }
-
 }
+
+let languageChartInstance = null;
+
+// 设置 Chart.js 全局字体, 让图表字体与网站其他部分保持一致
+Chart.defaults.font.family = "'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif";
+
+
+// 设置 Chart.js 全局字体
+Chart.defaults.font.family = "'Microsoft YaHei', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica', 'Arial', sans-serif";
+
+function renderLanguageChart() {
+    const ctx = document.getElementById('language-chart');
+    if (!ctx) return;
+
+    const langCount = allFetchedRepos.reduce((acc, repo) => {
+        if (repo.language) {
+            acc[repo.language] = (acc[repo.language] || 0) + 1;
+        }
+        return acc;
+    }, {});
+
+    const sortedLangs = Object.entries(langCount).sort((a, b) => b[1] - a[1]);
+    const labels = sortedLangs.map(entry => entry[0]);
+    const data = sortedLangs.map(entry => entry[1]);
+
+    if (languageChartInstance) {
+        languageChartInstance.destroy();
+    }
+
+    const isDarkMode = document.documentElement.classList.contains('dark-mode');
+    const legendColor = isDarkMode ? '#e0e0e0' : '#4a4a4a';
+    // 动态获取背景色以用作边框，产生“浮动”效果
+    const sectionBgColor = getComputedStyle(document.documentElement).getPropertyValue('--section-bg').trim();
+
+    // 新的蓝色主题调色板
+    const colorPalette = [
+        '#66CCFF', '#88D6FF', '#AADDFF', '#44BBEE', '#22AADD',
+        '#B2E1FF', '#0099CC', '#77C3E1', '#50B3D9', '#9ED8F0'
+    ];
+
+    languageChartInstance = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            labels: labels,
+            datasets: [{
+                label: '项目语言分布',
+                data: data,
+                backgroundColor: colorPalette,
+                borderColor: sectionBgColor,
+                borderWidth: 4,
+                hoverOffset: 8,
+                hoverBorderColor: sectionBgColor
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            cutout: '75%', // 使环形更细
+            plugins: {
+                legend: {
+                    position: 'bottom', // 图例置于底部
+                    labels: {
+                        color: legendColor,
+                        padding: 20,
+                        usePointStyle: true,
+                        pointStyle: 'rectRounded'
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                    titleColor: '#ffffff',
+                    bodyColor: '#ffffff',
+                    padding: 10,
+                    cornerRadius: 4
+                }
+            }
+        }
+    });
+}
+

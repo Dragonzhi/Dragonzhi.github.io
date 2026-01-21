@@ -109,6 +109,13 @@ section:hover {
     font-weight: 500;
 }
 
+#language-chart {
+    max-height: 300px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
 .project-card {
     background-color: var(--card-bg);
     padding: 20px;
