@@ -407,6 +407,38 @@ html.dark-mode body {
     transform: translateY(-2px);
 }
 
+.project-filters {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 25px; /* 与下方项目的间距 */
+}
+
+.filter-btn {
+    background-color: transparent;
+    border: 1px solid var(--border-color);
+    color: var(--text-secondary-color);
+    padding: 8px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 0.9em;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.filter-btn:hover {
+    color: #fff;
+    background-color: var(--tianyi-blue-dark);
+    border-color: var(--tianyi-blue-dark);
+}
+
+.filter-btn.active {
+    color: #fff;
+    background-color: var(--tianyi-blue);
+    border-color: var(--tianyi-blue);
+}
+
 .dark-mode .show-more-btn {
     border-color: var(--tianyi-blue);
     color: var(--tianyi-blue);
@@ -416,3 +448,16 @@ html.dark-mode body {
     background-color: var(--tianyi-blue);
     color: var(--card-bg);
 }
+
+.dark-mode .filter-btn {
+    color: var(--text-secondary-color);
+    border-color: var(--border-color);
+}
+
+.dark-mode .filter-btn.active,
+.dark-mode .filter-btn:hover {
+    background-color: var(--highlight-color);
+    border-color: var(--highlight-color);
+    color: #1a1a1a; /* 在高亮背景上使用深色文字以保证对比度 */
+}
+

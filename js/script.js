@@ -72,144 +72,161 @@ const CACHE_KEY = 'github_projects_cache';
 const TIMESTAMP_KEY = 'github_projects_timestamp';
 const CACHE_DURATION_MS = 3600 * 1000; // 1 小时
 
+let allFetchedRepos = []; // 全局变量，用作“唯一数据源”
+const projectsContainer = document.getElementById('projects-container');
+const filtersContainer = document.getElementById('project-filters');
+
 async function fetchGitHubProjects() {
-    const container = document.getElementById('projects-container');
     const cachedTimestamp = localStorage.getItem(TIMESTAMP_KEY);
     const cachedData = localStorage.getItem(CACHE_KEY);
 
     // 1. 检查是否存在有效缓存
     if (cachedTimestamp && cachedData && (new Date().getTime() - cachedTimestamp < CACHE_DURATION_MS)) {
         console.log('从缓存加载 GitHub 项目。');
-        renderProjects(JSON.parse(cachedData), container);
+        allFetchedRepos = JSON.parse(cachedData);
+        setupFiltersAndRender();
         return;
     }
 
     console.log('从本地和API获取新的 GitHub 项目。');
-    const orgRepoPath = 'ThePiSquad/CounterStrikeGrenades';
-
+    
     try {
-        // 并行获取本地的 repos.json 和特定组织的仓库信息
         const [userReposRes, orgRepoRes] = await Promise.all([
-            fetch('data/repos.json'), // 从工作流生成的本地文件获取
-            fetch('data/org-repo.json') // 从工作流生成的本地文件获取组织仓库
+            fetch('data/repos.json'),
+            fetch('data/org-repo.json')
         ]);
 
-        if (!userReposRes.ok) {
-            throw new Error(`加载本地 repos.json 失败: ${userReposRes.status}`);
-        }
+        if (!userReposRes.ok) throw new Error(`加载本地 repos.json 失败: ${userReposRes.status}`);
 
         const userRepos = await userReposRes.json();
-        let allRepos = [...userRepos];
+        let combinedRepos = [...userRepos];
 
-        // 优雅地处理组织仓库的获取结果
         if (orgRepoRes.ok) {
             const orgRepo = await orgRepoRes.json();
-            allRepos.push(orgRepo);
-            console.log(`成功获取组织仓库: ${orgRepoPath}`);
+            combinedRepos.push(orgRepo);
         } else {
-            console.warn(`无法从 API 获取组织仓库 ${orgRepoPath}，状态: ${orgRepoRes.status}。将仅显示用户仓库。`);
+            console.warn(`无法获取组织仓库，状态: ${orgRepoRes.status}。`);
         }
 
-        // 去重、过滤和排序
-        const uniqueRepos = Array.from(new Map(allRepos.map(repo => [repo.id, repo])).values());
-        const filteredAndSortedRepos = uniqueRepos
+        const uniqueRepos = Array.from(new Map(combinedRepos.map(repo => [repo.id, repo])).values());
+        allFetchedRepos = uniqueRepos
             .filter(repo => !repo.fork && repo.description)
             .sort((a, b) => new Date(b.pushed_at) - new Date(a.pushed_at));
 
-        // 2. 成功获取后，存入缓存
-        localStorage.setItem(CACHE_KEY, JSON.stringify(filteredAndSortedRepos));
+        localStorage.setItem(CACHE_KEY, JSON.stringify(allFetchedRepos));
         localStorage.setItem(TIMESTAMP_KEY, new Date().getTime());
 
-        // 3. 渲染项目
-        renderProjects(filteredAndSortedRepos, container);
+        setupFiltersAndRender();
 
     } catch (error) {
         console.error('获取 GitHub 项目失败:', error);
-        // 如果获取失败，也尝试使用旧缓存（如果存在），避免在API失效时页面完全空白
         if (cachedData) {
             console.warn('API 获取失败，回退到使用旧缓存。');
-            renderProjects(JSON.parse(cachedData), container);
+            allFetchedRepos = JSON.parse(cachedData);
+            setupFiltersAndRender();
         } else {
-            container.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
+            projectsContainer.innerHTML = '<p>无法加载 GitHub 项目。请稍后刷新重试。</p>';
         }
     }
 }
 
+function setupFiltersAndRender() {
+    const languages = ['All', ...new Set(allFetchedRepos.map(repo => repo.language).filter(Boolean))];
+    
+    filtersContainer.innerHTML = languages.map(lang => 
+        `<button class="filter-btn ${lang === 'All' ? 'active' : ''}" data-lang="${lang}">${lang}</button>`
+    ).join('');
+
+    filtersContainer.addEventListener('click', (e) => {
+        if (e.target.tagName !== 'BUTTON') return;
+
+        const selectedLang = e.target.dataset.lang;
+
+        filtersContainer.querySelector('.active').classList.remove('active');
+        e.target.classList.add('active');
+
+        const filteredRepos = selectedLang === 'All' 
+            ? allFetchedRepos 
+            : allFetchedRepos.filter(repo => repo.language === selectedLang);
+        
+        renderProjects(filteredRepos);
+    });
+
+    renderProjects(allFetchedRepos);
+}
+
 const REPOS_TO_SHOW_INITIALLY = 4;
 
-function renderProjects(repos, container) {
+function renderProjects(repos) {
+    const showMoreContainer = document.getElementById('show-more-container');
+    projectsContainer.innerHTML = ''; // 清空现有项目
+    showMoreContainer.innerHTML = ''; // 清空“显示更多”按钮
+
     if (!repos || repos.length === 0) {
-        container.innerHTML = '<p>在 GitHub 上没有找到符合条件的项目。</p>';
+        projectsContainer.innerHTML = '<p>没有找到符合条件的项目。</p>';
         return;
     }
 
-    // 1. 生成所有项目卡片的 HTML
-    let projectsHtml = repos.map((repo, index) => {
+    // 1. 仅生成卡片 HTML，暂不添加到 DOM
+    const projectCards = repos.map((repo, index) => {
         let iconClass = 'fa-code';
-        if (repo.name.toLowerCase().includes('immunelink')) {
-            iconClass = 'fa-gamepad';
-        } else if (repo.name.toLowerCase().includes('counterstrikegrenades')) {
-            iconClass = 'fa-cube';
+        if (repo.name.toLowerCase().includes('immunelink')) iconClass = 'fa-gamepad';
+        else if (repo.name.toLowerCase().includes('counterstrikegrenades')) iconClass = 'fa-cube';
+
+        const card = document.createElement('div');
+        card.className = 'project-card';
+        card.setAttribute('data-aos', 'fade-up');
+        if (index >= REPOS_TO_SHOW_INITIALLY) {
+            card.classList.add('hidden');
         }
 
-        // Add 'hidden' class to projects that should be initially hidden
-        const isHidden = index >= REPOS_TO_SHOW_INITIALLY ? 'hidden' : '';
-        const animation = 'fade-up';
-
-        return `
-            <div class="project-card ${isHidden}" data-aos="${animation}">
-                 <div>
-                    <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
-                    <p>${repo.description}</p>
-                </div>
-                <div class="project-meta">
-                    ${repo.language ? `<span class="language">${repo.language}</span>` : ''}
-                    <span class="stars"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
-                    <span class="forks"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
-                </div>
-                <div class="project-links-container">
-                    <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
-                    ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
-                </div>
+        card.innerHTML = `
+            <div>
+                <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
+                <p>${repo.description}</p>
+            </div>
+            <div class="project-meta">
+                ${repo.language ? `<span class="language">${repo.language}</span>` : ''}
+                <span class="stars"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+                <span class="forks"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
+            </div>
+            <div class="project-links-container">
+                <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
+                ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
             </div>
         `;
-    }).join('');
+        return card;
+    });
 
-    container.innerHTML = projectsHtml;
+    // 2. 将所有卡片一次性添加到容器
+    projectCards.forEach(card => projectsContainer.appendChild(card));
 
-    // 2. 如果项目总数超过初始显示数，则添加“显示更多”按钮
+
+    // 3. 如果项目总数超过初始显示数，则添加“显示更多”按钮
     if (repos.length > REPOS_TO_SHOW_INITIALLY) {
-        const showMoreContainer = document.getElementById('show-more-container');
         const showMoreBtn = document.createElement('button');
         showMoreBtn.textContent = '显示更多';
         showMoreBtn.classList.add('show-more-btn');
         showMoreContainer.appendChild(showMoreBtn);
 
-        let isShowingAll = false;
-
         showMoreBtn.addEventListener('click', () => {
-            isShowingAll = !isShowingAll;
-            const hiddenCards = container.querySelectorAll('.project-card.hidden');
+            const hiddenCards = projectsContainer.querySelectorAll('.project-card.hidden');
             
-            hiddenCards.forEach(card => {
-                // We just toggle display, a CSS transition can make it smooth
-                if (isShowingAll) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
-            
-            showMoreBtn.textContent = isShowingAll ? '收起' : '显示更多';
-
-            // Re-initialize AOS on the newly displayed items
-            if(isShowingAll) {
-                AOS.refresh();
+            // 如果按钮是“显示更多”状态，则显示所有隐藏卡片
+            if (showMoreBtn.textContent === '显示更多') {
+                hiddenCards.forEach(card => card.classList.remove('hidden'));
+                showMoreBtn.textContent = '收起';
+            } else { // 否则，隐藏超出初始数量的卡片
+                projectCards.forEach((card, index) => {
+                    if (index >= REPOS_TO_SHOW_INITIALLY) {
+                        card.classList.add('hidden');
+                    }
+                });
+                showMoreBtn.textContent = '显示更多';
             }
+             // 刷新 AOS 以应用动画到新显示的项目上
+            AOS.refresh();
         });
     }
 
-    // Since we dynamically add 'hidden' which sets display:none, we need to adjust how AOS is fired.
-    // Let's hide the elements via JS first after AOS has animated them.
-    // A simpler way is to just refresh AOS after showing, which is what is done above.
 }
