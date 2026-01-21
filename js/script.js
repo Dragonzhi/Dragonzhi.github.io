@@ -260,7 +260,13 @@ function renderLanguageChart() {
     const isDarkMode = document.documentElement.classList.contains('dark-mode');
     const legendColor = isDarkMode ? '#e0e0e0' : '#4a4a4a';
     // 动态获取背景色以用作边框，产生“浮动”效果
-    const sectionBgColor = getComputedStyle(document.documentElement).getPropertyValue('--section-bg').trim();
+    let sectionBgColor = getComputedStyle(document.documentElement).getPropertyValue('--section-bg').trim();
+
+    // 增加备用方案，防止因CSS加载时序问题导致变量读取失败
+    if (!sectionBgColor) {
+        console.warn('无法读取 --section-bg 变量，使用备用颜色。');
+        sectionBgColor = isDarkMode ? 'rgba(25, 30, 40, 0.75)' : 'rgba(255, 255, 255, 0.7)';
+    }
 
     // 新的蓝色主题调色板
     const colorPalette = [
