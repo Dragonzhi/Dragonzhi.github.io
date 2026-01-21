@@ -118,6 +118,13 @@ section:hover {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.05);
     text-align: left;
     transition: transform 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.project-card > div:first-child {
+    flex-grow: 1;
 }
 
 .project-card:hover {
@@ -133,7 +140,37 @@ section:hover {
 .project-card p {
     font-size: 1em;
     color: #555555;
+    margin-bottom: 0; /* 移除原有p标签的下边距，由meta统一控制 */
 }
+
+.project-meta {
+    display: flex;
+    align-items: center;
+    gap: 15px; /* 项目间的间距 */
+    margin-top: 15px; /* 上边距 */
+    margin-bottom: 15px; /* 下边距 */
+    color: var(--text-secondary-color);
+    font-size: 0.9em;
+}
+
+.project-meta .language {
+    background-color: var(--code-inline-bg-color);
+    padding: 3px 8px;
+    border-radius: 5px;
+    font-weight: 500;
+}
+
+.project-meta .stars,
+.project-meta .forks {
+    display: flex;
+    align-items: center;
+    gap: 5px; /* 图标和数字的间距 */
+}
+
+.project-meta i {
+    color: var(--tianyi-blue);
+}
+
 
 .project-link, .button {
     display: inline-block;
@@ -322,32 +359,19 @@ html.dark-mode body {
 
 .dark-mode h1,
 .dark-mode .tagline,
-.dark-mode .project-card p,
+.dark-mode footer {
+    color: #999;
+}
+
+.dark-mode .project-card p {
+    color: var(--text-secondary-color);
+}
+
 .dark-mode .social-btn {
     color: #c5c5c5;
 }
 
-.dark-mode .avatar {
-    background-color: #333;
-}
 
-.dark-mode .skill-tag {
-    background-color: rgba(102, 204, 255, 0.1);
-    color: var(--tianyi-blue);
-    border-color: rgba(102, 204, 255, 0.3);
-}
-
-.dark-mode .social-btn {
-    background-color: rgba(50, 55, 65, 0.9);
-}
-
-.dark-mode .social-btn:hover {
-    background-color: rgba(60, 65, 75, 1);
-}
-
-.dark-mode footer {
-    color: #999;
-}
 
 /* --- Project Grid Styles --- */
 #projects-container {

@@ -162,6 +162,11 @@ function renderProjects(repos, container) {
                     <h3><i class="fas ${iconClass}"></i> ${repo.name}</h3>
                     <p>${repo.description}</p>
                 </div>
+                <div class="project-meta">
+                    ${repo.language ? `<span class="language">${repo.language}</span>` : ''}
+                    <span class="stars"><i class="fas fa-star"></i> ${repo.stargazers_count}</span>
+                    <span class="forks"><i class="fas fa-code-branch"></i> ${repo.forks_count}</span>
+                </div>
                 <div class="project-links-container">
                     <a href="${repo.html_url}" target="_blank" class="project-link">查看项目</a>
                     ${repo.homepage ? `<a href="${repo.homepage}" target="_blank" class="project-link">在线游玩</a>` : ''}
