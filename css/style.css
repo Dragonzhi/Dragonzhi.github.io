@@ -367,9 +367,25 @@ html.dark-mode body {
     color: var(--text-secondary-color);
 }
 
+.dark-mode .avatar {
+    background-color: #333;
+}
+
+.dark-mode .skill-tag {
+    background-color: rgba(102, 204, 255, 0.1);
+    color: var(--tianyi-blue);
+    border-color: rgba(102, 204, 255, 0.3);
+}
+
 .dark-mode .social-btn {
+    background-color: rgba(50, 55, 65, 0.9);
     color: #c5c5c5;
 }
+
+.dark-mode .social-btn:hover {
+    background-color: rgba(60, 65, 75, 1);
+}
+
 
 
 
