@@ -40,13 +40,49 @@
         <main>
             <section id="blog-list" data-aos="fade-up">
                 <h2><i class="fas fa-book-open"></i> 开发博客</h2>
-                <div class="post-entry">
-                    <h3>如何用纯静态文件搭建这个博客</h3>
-                    <p class="post-meta">发布于 2026年1月16日</p>
-                    <p>这是我的第一篇博客文章，记录了如何为我的个人主页添加一个简单的、无需数据库或后端服务器的静态博客系统。我们将探讨HTML结构、CSS样式以及如何让它看起来和主页浑然一体。</p>
-                    <a href="post1.html" class="button">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                <div id="dynamic-post-list">
+                    <!-- 文章列表将动态加载于此 -->
                 </div>
-                <!-- 更多文章条目可以加在这里 -->
+                
+                <script>
+                    document.addEventListener('DOMContentLoaded', async () => {
+                        const postListContainer = document.getElementById('dynamic-post-list');
+                        try {
+                            const response = await fetch('../data/posts.json');
+                            if (!response.ok) throw new Error('Could not fetch posts.json');
+                            const posts = await response.json();
+
+                            if (posts.length === 0) {
+                                postListContainer.innerHTML = '<p>暂无文章。</p>';
+                                return;
+                            }
+                            
+                            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                            posts.forEach(post => {
+                                const postElement = document.createElement('div');
+                                postElement.className = 'post-entry';
+
+                                const postDate = new Date(post.date);
+                                // 修正 UTC 日期问题，确保日期正确
+                                const adjustedDate = new Date(postDate.valueOf() + postDate.getTimezoneOffset() * 60 * 1000);
+                                const dateString = `${adjustedDate.getFullYear()}年${adjustedDate.getMonth() + 1}月${adjustedDate.getDate()}日`;
+                                
+                                postElement.innerHTML = `
+                                    <h3>${post.title}</h3>
+                                    <p class="post-meta">发布于 ${dateString}</p>
+                                    <p>${post.summary}</p>
+                                    <a href="post-template.html?slug=${post.slug}" class="button">阅读全文 <i class="fas fa-arrow-right"></i></a>
+                                `;
+                                postListContainer.appendChild(postElement);
+                            });
+
+                        } catch (error) {
+                            console.error('Error loading blog posts:', error);
+                            postListContainer.innerHTML = '<p>加载文章列表时出错。</p>';
+                        }
+                    });
+                </script>
             </section>
         </main>
         
