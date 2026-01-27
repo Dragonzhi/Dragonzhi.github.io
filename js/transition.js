@@ -1,7 +1,11 @@
 // js/transition.js
 document.addEventListener('DOMContentLoaded', () => {
-    // 初始加载时淡入页面
-    document.body.classList.add('page-fade-in');
+    const container = document.querySelector('.container');
+
+    // 初始加载时淡入内容
+    if (container) {
+        container.classList.add('fade-in');
+    }
 
     // 拦截所有内部链接的点击事件
     document.body.addEventListener('click', e => {
@@ -13,20 +17,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // 排除特殊的非页面跳转链接
-        if (link.href.includes('#') || link.hasAttribute('data-email')) {
+        if (link.href.includes('#') || link.hasAttribute('data-email') || link.closest('.project-tag') || link.closest('#show-more-container')) {
             return;
         }
 
         e.preventDefault();
         const destination = link.href;
 
-        // 页面淡出
-        document.body.classList.remove('page-fade-in');
-        document.body.classList.add('page-fade-out');
+        // 内容淡出
+        if (container) {
+            container.classList.remove('fade-in');
+            container.classList.add('fade-out');
+        }
 
         // 在动画结束后加载新页面
         setTimeout(() => {
             window.location.href = destination;
         }, 500); // 匹配CSS中的动画时间
+    });
+
+    // 监听 pageshow 事件，用于处理浏览器后退时的淡入
+    window.addEventListener('pageshow', (event) => {
+        // event.persisted 表示页面是否从缓存中加载
+        if (event.persisted && container) {
+            container.classList.remove('fade-out');
+            container.classList.add('fade-in');
+        }
     });
 });
