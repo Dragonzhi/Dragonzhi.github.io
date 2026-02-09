@@ -70,6 +70,28 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
     }
+
+    // Initialize Cal-Heatmap with actual GitHub contributions
+    const cal = new CalHeatmap();
+    cal.paint({
+        domain: { type: 'year', gutter: 10 },
+        subDomain: { type: 'day', width: 11, height: 11, gutter: 4 },
+        range: 1, // Display one year
+        data: {
+            source: 'data/Dragonzhi_contributions_2026.json', // <-- Using actual generated data
+            type: 'json',
+            mimeType: 'application/json',
+        },
+        itemSelector: '.github-calendar',
+        legend: [1, 5, 10], // Adjust these values based on actual contributions
+        label: {
+            position: 'top'
+        },
+        date: {
+            start: new Date(new Date().getFullYear() - 1, 11, 31) // Display from end of last year to cover full current year
+        },
+        theme: 'dark' // Keep theme setting
+    });
 });
 
 const CACHE_KEY = 'github_projects_cache';

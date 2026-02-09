@@ -515,3 +515,61 @@ html.dark-mode body::after {
     color: #1a1a1a; /* 在高亮背景上使用深色文字以保证对比度 */
 }
 
+/* Cal-Heatmap specific styles */
+.cal-heatmap {
+    display: flex; /* Use flexbox to center content */
+    justify-content: center;
+    overflow-x: auto; /* Allow horizontal scrolling if needed */
+    padding: 10px 0;
+}
+
+.cal-heatmap .graph-domain svg.graph {
+    /* Adjust as needed for overall graph sizing */
+    /* width: 100%; */
+}
+
+/* Default light mode colors for heatmap cells */
+.cal-heatmap .ch-subdomain {
+    fill: #ebedef; /* default background for no contributions */
+}
+.cal-heatmap .ch-subdomain-level-1 {
+    fill: #9be9a8; /* low contributions */
+}
+.cal-heatmap .ch-subdomain-level-2 {
+    fill: #40c463;
+}
+.cal-heatmap .ch-subdomain-level-3 {
+    fill: #30a14e;
+}
+.cal-heatmap .ch-subdomain-level-4 {
+    fill: #216e39; /* high contributions */
+}
+
+/* Dark mode colors for heatmap cells */
+.dark-mode .cal-heatmap .ch-subdomain {
+    fill: #161b22; /* default background for no contributions */
+}
+.dark-mode .cal-heatmap .ch-subdomain-level-1 {
+    fill: #0e4429; /* low contributions */
+}
+.dark-mode .cal-heatmap .ch-subdomain-level-2 {
+    fill: #006d32;
+}
+.dark-mode .cal-heatmap .ch-subdomain-level-3 {
+    fill: #26a641;
+}
+.dark-mode .cal-heatmap .ch-subdomain-level-4 {
+    fill: #39d353; /* high contributions */
+}
+
+/* Cal-Heatmap text/label colors */
+.cal-heatmap text {
+    fill: var(--text-secondary-color); /* Use secondary text color for labels */
+    font-size: 0.8em;
+}
+
+.dark-mode .cal-heatmap text {
+    fill: var(--text-secondary-color);
+}
+
+
