@@ -20,21 +20,39 @@
 </head>
 <body>
     <div id="particles-js"></div>
-    <div class="container">
-        <header>
-            <div class="avatar-container">
-                <div class="avatar">
-                    <img src="images/avatar.png" alt="Dragonzhi 的头像">
-                </div>
-                <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
-                <p class="tagline">程序开发爱好者</p>
+    <div class="overall-wrapper">
+        <aside class="left-sidebar">
+            <div class="top-left-profile">
+                <header>
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="images/avatar.png" alt="Dragonzhi 的头像">
+                        </div>
+                        <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
+                        <p class="tagline">程序开发爱好者</p>
+                    </div>
+                    <div id="theme-toggle" class="theme-toggle-button">
+                        <i class="fas fa-moon"></i>
+                    </div>
+                </header>
             </div>
-            <div id="theme-toggle" class="theme-toggle-button">
-                <i class="fas fa-moon"></i>
+            <div class="bottom-left-contact-display">
+                <section id="contact" data-aos="fade-up">
+                    <h2><i class="fas fa-envelope"></i> 联系我</h2>
+                    <p>如果你也对程序开发感兴趣，欢迎交流！</p>
+                    <div class="social-links" data-aos="fade-up" data-aos-delay="150">
+                        <a href="https://github.com/Dragonzhi" target="_blank" class="social-btn github">
+                            <i class="fab fa-github"></i> GitHub
+                        </a>
+                        <a href="#" class="social-btn email email-tooltip" data-email="dzloong@foxmail.com">
+                            <i class="fas fa-envelope"></i> <span>邮箱</span>
+                        </a>
+                    </div>
+                </section>
             </div>
-        </header>
+        </aside>
         
-        <main>
+        <main class="right-main-content">
             <section id="about" data-aos="fade-up">
                 <h2><i class="fas fa-user"></i> 关于我</h2>
                 <p>我是一名热爱程序开发的大学生。目前正在学习 游戏引擎 和 C++ 程序开发，以及开发《Minecraft》的Mod。</p>
@@ -71,26 +89,13 @@
                     <i class="fas fa-arrow-right"></i> 进入博客
                 </a>
             </section>
-            
-            <section id="contact" data-aos="fade-up">
-                <h2><i class="fas fa-envelope"></i> 联系我</h2>
-                <p>如果你也对程序开发感兴趣，欢迎交流！</p>
-                <div class="social-links" data-aos="fade-up" data-aos-delay="150">
-                    <a href="https://github.com/Dragonzhi" target="_blank" class="social-btn github">
-                        <i class="fab fa-github"></i> GitHub
-                    </a>
-                    <a href="#" class="social-btn email email-tooltip" data-email="dzloong@foxmail.com">
-                        <i class="fas fa-envelope"></i> <span>邮箱</span>
-                    </a>
-                </div>
-            </section>
         </main>
-        
-        <footer>
-            <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
-            <p class="footer-note">最后更新: <span id="current-date"></span></p>
-        </footer>
     </div>
+    
+    <footer>
+        <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
+        <p class="footer-note">最后更新: <span id="current-date"></span></p>
+    </footer>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
     <script src="js/transition.js"></script>

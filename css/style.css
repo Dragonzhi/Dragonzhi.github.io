@@ -64,13 +64,100 @@ h1, h2, h3, .tagline, .project-card p, .skill-tag, footer {
     z-index: 0; /* 置于最底层 */
 }
 
-.container {
-    max-width: 800px;
+.overall-wrapper {
+    display: flex;
+    max-width: 1200px; /* Adjust as needed */
     width: 100%;
-    margin: auto;
-    position: relative; /* 确保内容在粒子层之上 */
+    margin: 20px auto; /* Add vertical margin */
+    position: relative;
     z-index: 1;
+    gap: 30px; /* Space between columns */
+    padding: 0 20px; /* Horizontal padding for smaller screens */
 }
+
+/* Left Sidebar */
+.left-sidebar {
+    width: 300px; /* Fixed width for left sidebar */
+    display: flex;
+    flex-direction: column;
+    gap: 20px; /* Space between top-left and bottom-left */
+    position: sticky;
+    top: 20px; /* Distance from top of viewport */
+    height: fit-content; /* Only take content height */
+}
+
+/* Top Left Profile */
+.top-left-profile {
+    background-color: var(--section-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(102, 204, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    text-align: center; /* Center content like avatar */
+    position: relative; /* Add position relative for theme-toggle absolute positioning */
+}
+
+.top-left-profile header { /* Adjust original header styling */
+    all: unset; /* Remove all default header styles */
+    display: block; /* Make it a block element again */
+}
+
+.top-left-profile .avatar-container {
+    margin-bottom: 20px;
+}
+
+.top-left-profile #theme-toggle {
+    position: absolute; /* Keep absolute position relative to top-left-profile */
+    top: 20px;
+    right: 20px;
+    margin: 0; /* Remove auto margins */
+}
+
+
+/* Bottom Left Contact Display */
+.bottom-left-contact-display {
+    background-color: var(--section-bg);
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(102, 204, 255, 0.15);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--border-color);
+    flex-grow: 1; /* Allow it to grow and fill vertical space */
+}
+
+/* Right Main Content */
+.right-main-content {
+    flex-grow: 1;
+}
+
+/* Responsive adjustments */
+@media (max-width: 900px) { /* Adjust breakpoint as needed */
+    .overall-wrapper {
+        flex-direction: column;
+        margin: 10px auto;
+        gap: 20px;
+        padding: 0 10px; /* Adjust padding for smaller screens */
+    }
+
+    .left-sidebar {
+        width: 100%;
+        position: static; /* Disable sticky on small screens */
+        gap: 20px;
+    }
+
+    .right-main-content {
+        max-width: 100%;
+    }
+    
+    .top-left-profile #theme-toggle {
+        top: 15px; /* Slightly adjust for smaller overall padding */
+        right: 15px;
+    }
+}
+
 
 header h1 {
     font-size: 2.5em;
