@@ -108,12 +108,7 @@ h1, h2, h3, .tagline, .project-card p, .skill-tag, footer {
     margin-bottom: 20px;
 }
 
-.top-left-profile #theme-toggle {
-    position: absolute; /* Keep absolute position relative to top-left-profile */
-    top: 20px;
-    right: 20px;
-    margin: 0; /* Remove auto margins */
-}
+
 
 
 /* Bottom Left Contact Display */
@@ -152,10 +147,7 @@ h1, h2, h3, .tagline, .project-card p, .skill-tag, footer {
         max-width: 100%;
     }
     
-    .top-left-profile #theme-toggle {
-        top: 15px; /* Slightly adjust for smaller overall padding */
-        right: 15px;
-    }
+
 }
 
 
@@ -327,10 +319,11 @@ section:hover {
     align-items: center;
     background-color: rgba(240, 240, 240, 0.9);
     color: #555;
-    padding: 10px 20px;
+    padding: 8px 15px; /* Smaller padding */
     border-radius: 20px;
     text-decoration: none;
-    margin: 0 10px;
+    margin: 5px; /* Smaller margin */
+    font-size: 0.9em; /* Slightly smaller font size */
     transition: all 0.5s ease;
 }
 
@@ -434,7 +427,7 @@ footer {
 
 /* --- Theme Toggle Button --- */
 .theme-toggle-button {
-    position: absolute;
+    position: fixed; /* Changed to fixed */
     top: 20px;
     right: 20px;
     background-color: var(--section-bg);
@@ -446,7 +439,7 @@ footer {
     justify-content: center;
     align-items: center;
     cursor: pointer;
-    z-index: 1000;
+    z-index: 9999; /* Increased z-index to ensure it's on top */
     font-size: 20px;
     color: var(--tianyi-blue);
     transition: all 0.5s ease;
