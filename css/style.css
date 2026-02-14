@@ -369,6 +369,38 @@ section:hover {
     transform: translateX(-50%) translateY(-5px);
 }
 
+.qq-tooltip {
+    position: relative;
+    cursor: pointer;
+}
+
+.qq-tooltip span {
+    transition: opacity 0.5s ease;
+}
+
+.qq-tooltip::after {
+    content: attr(data-qq);
+    position: absolute;
+    bottom: 125%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: var(--tianyi-blue);
+    color: #ffffff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 0.9em;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.qq-tooltip:hover::after {
+    opacity: 1;
+    transform: translateX(-50%) translateY(-5px);
+}
+
 footer {
     margin-top: 40px;
     font-size: 0.9em;

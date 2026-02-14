@@ -53,20 +53,39 @@ document.addEventListener('DOMContentLoaded', () => {
     if (emailButton) {
         const originalText = emailButton.querySelector('span').textContent;
         emailButton.addEventListener('click', (event) => {
-            event.preventDefault(); // 阻止 <a> 标签的默认跳转行为
+            event.preventDefault();
             const email = emailButton.getAttribute('data-email');
             navigator.clipboard.writeText(email).then(() => {
                 const span = emailButton.querySelector('span');
                 if (span) {
                     span.textContent = '已复制!';
-                    // 2秒后恢复原来的文本
                     setTimeout(() => {
                         span.textContent = originalText;
                     }, 2000);
                 }
             }).catch(err => {
                 console.error('复制邮箱失败: ', err);
-                // 可以在这里给用户一个失败的提示
+            });
+        });
+    }
+
+    // 7. 添加QQ点击复制功能
+    const qqButton = document.querySelector('.qq-tooltip');
+    if (qqButton) {
+        const originalText = qqButton.querySelector('span').textContent;
+        qqButton.addEventListener('click', (event) => {
+            event.preventDefault();
+            const qq = qqButton.getAttribute('data-qq');
+            navigator.clipboard.writeText(qq).then(() => {
+                const span = qqButton.querySelector('span');
+                if (span) {
+                    span.textContent = '已复制!';
+                    setTimeout(() => {
+                        span.textContent = originalText;
+                    }, 2000);
+                }
+            }).catch(err => {
+                console.error('复制QQ失败: ', err);
             });
         });
     }
