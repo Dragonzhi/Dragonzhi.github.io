@@ -99,6 +99,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -183,14 +185,14 @@
     "releases_url": "https://api.github.com/repos/Dragonzhi/CounterStrikeGrenades/releases{/id}",
     "deployments_url": "https://api.github.com/repos/Dragonzhi/CounterStrikeGrenades/deployments",
     "created_at": "2025-12-15T15:07:45Z",
-    "updated_at": "2026-02-07T14:14:00Z",
-    "pushed_at": "2026-02-07T14:13:56Z",
+    "updated_at": "2026-02-14T07:36:40Z",
+    "pushed_at": "2026-02-14T07:36:36Z",
     "git_url": "git://github.com/Dragonzhi/CounterStrikeGrenades.git",
     "ssh_url": "git@github.com:Dragonzhi/CounterStrikeGrenades.git",
     "clone_url": "https://github.com/Dragonzhi/CounterStrikeGrenades.git",
     "svn_url": "https://github.com/Dragonzhi/CounterStrikeGrenades",
     "homepage": "",
-    "size": 55236,
+    "size": 55329,
     "stargazers_count": 1,
     "watchers_count": 1,
     "language": "Kotlin",
@@ -215,6 +217,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -325,6 +329,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -409,17 +415,17 @@
     "releases_url": "https://api.github.com/repos/Dragonzhi/Dragonzhi.github.io/releases{/id}",
     "deployments_url": "https://api.github.com/repos/Dragonzhi/Dragonzhi.github.io/deployments",
     "created_at": "2025-08-11T08:29:36Z",
-    "updated_at": "2026-02-07T07:32:21Z",
-    "pushed_at": "2026-02-07T07:32:18Z",
+    "updated_at": "2026-02-14T16:56:37Z",
+    "pushed_at": "2026-02-14T16:56:34Z",
     "git_url": "git://github.com/Dragonzhi/Dragonzhi.github.io.git",
     "ssh_url": "git@github.com:Dragonzhi/Dragonzhi.github.io.git",
     "clone_url": "https://github.com/Dragonzhi/Dragonzhi.github.io.git",
     "svn_url": "https://github.com/Dragonzhi/Dragonzhi.github.io",
     "homepage": null,
-    "size": 9360,
+    "size": 9289,
     "stargazers_count": 0,
     "watchers_count": 0,
-    "language": "JavaScript",
+    "language": "CSS",
     "has_issues": true,
     "has_projects": true,
     "has_downloads": true,
@@ -441,6 +447,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -551,6 +559,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -661,6 +671,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -777,6 +789,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
       "godot-engine"
     ],
@@ -887,6 +901,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -997,6 +1013,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -1107,6 +1125,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -1223,6 +1243,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -1339,6 +1361,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
       "socialnetwork"
     ],
@@ -1449,6 +1473,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
@@ -1559,6 +1585,8 @@
     "allow_forking": true,
     "is_template": false,
     "web_commit_signoff_required": false,
+    "has_pull_requests": true,
+    "pull_request_creation_policy": "all",
     "topics": [
 
     ],
