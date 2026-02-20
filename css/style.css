@@ -435,6 +435,47 @@ footer {
     object-fit: cover;
 }
 
+.typing-container {
+    margin-top: 25px;
+    padding: 15px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    font-family: 'Press Start 2P', cursive;
+    min-height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid var(--tianyi-blue);
+    box-shadow: 0 4px 8px rgba(102, 204, 255, 0.2);
+}
+
+.typing-text {
+    font-size: 0.8em;
+    color: var(--tianyi-blue);
+    margin-right: 5px;
+}
+
+.cursor {
+    font-size: 0.8em;
+    color: var(--tianyi-blue);
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0%, 50% { opacity: 1; }
+    51%, 100% { opacity: 0; }
+}
+
+.dark-mode .typing-container {
+    background-color: rgba(102, 204, 255, 0.1);
+    border-color: var(--highlight-color);
+}
+
+.dark-mode .typing-text,
+.dark-mode .cursor {
+    color: var(--highlight-color);
+}
+
 @keyframes pulse {
     0% {
         box-shadow: 0 0 20px rgba(102, 204, 255, 0.4);
