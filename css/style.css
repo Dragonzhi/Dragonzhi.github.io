@@ -668,3 +668,63 @@ html.dark-mode body::after {
     color: #1a1a1a; /* 在高亮背景上使用深色文字以保证对比度 */
 }
 
+/* --- Back to Top Button --- */
+.back-to-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background-color: var(--tianyi-blue);
+    color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 4px 12px rgba(102, 204, 255, 0.4);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.back-to-top.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.back-to-top:hover {
+    background-color: var(--tianyi-blue-dark);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(85, 187, 238, 0.5);
+}
+
+.back-to-top:active {
+    transform: translateY(-1px);
+}
+
+.dark-mode .back-to-top {
+    background-color: var(--highlight-color);
+    box-shadow: 0 4px 12px rgba(136, 238, 255, 0.4);
+}
+
+.dark-mode .back-to-top:hover {
+    background-color: #66CCFF;
+    box-shadow: 0 6px 16px rgba(102, 204, 255, 0.5);
+}
+
+@media (max-width: 768px) {
+    .back-to-top {
+        bottom: 20px;
+        right: 20px;
+        width: 45px;
+        height: 45px;
+        font-size: 18px;
+    }
+}
+
