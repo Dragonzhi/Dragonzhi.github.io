@@ -1,5 +1,4 @@
 [
-<<<<<<< HEAD
     {
         "id": 1,
         "name": "TriHorny4Link",
@@ -18,7 +17,7 @@
         "id": 2,
         "name": "ImmuneLink",
         "full_name": "Dragonzhi/ImmuneLink",
-        "description": "《免疫联结》2D塔防游戏，为卡赢杯公益游戏开发大赛开发，主题为"桥"。Godot 引擎，获最佳创意游戏奖",
+        "description": "《免疫联结》2D塔防游戏，为卡赢杯公益游戏开发大赛开发，主题为「桥」。Godot 引擎，获最佳创意游戏奖",
         "language": "GDScript",
         "stargazers_count": 3,
         "forks_count": 0,
@@ -139,8 +138,7 @@
         "pushed_at": "2025-08-11T00:00:00Z",
         "fork": false,
         "topics": ["web", "museum"]
-    }
-=======
+    },
   {
     "id": 928955240,
     "node_id": "R_kgDON167aA",
@@ -1745,5 +1743,4 @@
       "pull": true
     }
   }
->>>>>>> 04c59d7b3a207e3ec52a0b36a1837f7165b9d92c
 ]
