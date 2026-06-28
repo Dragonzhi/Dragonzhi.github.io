@@ -110,7 +110,7 @@
   "watchers": 5,
   "default_branch": "main",
   "permissions": {
-    "admin": false,
+    "admin": true,
     "maintain": true,
     "push": true,
     "triage": true,
