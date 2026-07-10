@@ -1,0 +1,33 @@
+.legacy-switch {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    z-index: 9999;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 14px;
+    color: var(--text-color);
+    background: var(--section-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 22px;
+    box-shadow: 0 4px 12px rgba(102, 204, 255, 0.18);
+    backdrop-filter: blur(8px);
+    font-size: 0.82rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.legacy-switch:hover {
+    color: #fff;
+    background: var(--tianyi-blue);
+}
+
+@media (max-width: 768px) {
+    .legacy-switch {
+        top: 14px;
+        left: 14px;
+        padding: 7px 11px;
+        font-size: 0.72rem;
+    }
+}

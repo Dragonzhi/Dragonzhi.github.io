@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <base href="../">
+    <script>
+        (function() {
+            const theme = localStorage.getItem('theme');
+            if (theme === 'dark') {
+                document.documentElement.classList.add('dark-mode');
+            }
+        })();
+    </script>
+    <title>Dragonzhi | 旧版主页</title>
+    <link rel="icon" href="images/favicon.png">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/transition.css">
+    <link rel="stylesheet" href="legacy/legacy.css">
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap" rel="stylesheet">
+</head>
+<body>
+    <a class="legacy-switch" href="index.html"><i class="fas fa-arrow-left"></i> 返回新版</a>
+
+    <div id="theme-toggle" class="theme-toggle-button">
+        <i class="fas fa-moon"></i>
+    </div>
+    <div class="overall-wrapper">
+        <aside class="left-sidebar">
+            <div class="top-left-profile">
+                <header>
+                    <div class="avatar-container">
+                        <div class="avatar">
+                            <img src="images/avatar.png" alt="Dragonzhi 的头像">
+                        </div>
+                        <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
+                        <p class="tagline">程序开发爱好者</p>
+                        <div class="typing-container">
+                            <span class="typing-text"></span>
+                            <span class="cursor">|</span>
+                        </div>
+                    </div>
+                </header>
+            </div>
+            <div class="bottom-left-contact-display" data-aos="fade-up">
+                <h2><i class="fas fa-envelope"></i> 联系我</h2>
+                <p>如果你也对程序开发感兴趣，欢迎交流！</p>
+                <div class="social-links" data-aos="fade-up" data-aos-delay="150">
+                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="social-btn github">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                    <a href="#" class="social-btn email email-tooltip" data-email="dzloong@foxmail.com">
+                        <i class="fas fa-envelope"></i> <span>邮箱</span>
+                    </a>
+                    <a href="#" class="social-btn qq qq-tooltip" data-qq="3248569738">
+                        <i class="fab fa-qq"></i> <span>QQ</span>
+                    </a>
+                </div>
+            </div>
+        </aside>
+
+        <main class="right-main-content">
+            <section id="about" data-aos="fade-up">
+                <h2><i class="fas fa-user"></i> 关于我</h2>
+                <p>我是一名热爱程序开发的大学生。目前正在学习游戏引擎和 C++ 程序开发，以及开发《Minecraft》的 Mod。</p>
+                <div class="skills">
+                    <span class="skill-tag">Godot</span>
+                    <span class="skill-tag">C++</span>
+                    <span class="skill-tag">像素艺术</span>
+                    <span class="skill-tag">Minecraft</span>
+                </div>
+                <canvas id="language-chart" style="margin-top: 20px;"></canvas>
+            </section>
+
+            <section id="projects" data-aos="fade-up">
+                <h2><i class="fas fa-code-branch"></i> 我的作品</h2>
+                <p>这里展示我的一些开发项目：</p>
+
+                <div class="featured-section" style="margin-bottom: 40px; text-align: center; padding: 30px; background: var(--card-bg); border-radius: 12px; border: 1px solid var(--border-color);">
+                    <h3 style="color: var(--highlight-color); font-size: 1.3rem; margin-bottom: 10px;">
+                        <i class="fas fa-star"></i> 作品精选
+                    </h3>
+                    <p style="color: var(--text-secondary-color); margin-bottom: 20px;">塔防游戏、像素火影与 Minecraft 模组等项目</p>
+                    <a href="pages/portfolio.html" class="button">
+                        <i class="fas fa-arrow-right"></i> 查看完整作品集
+                    </a>
+                </div>
+
+                <div id="project-filters"></div>
+                <div id="projects-container"></div>
+                <div id="show-more-container"></div>
+
+                <p class="visit-github" data-aos="zoom-in">访问我的 GitHub 查看更多项目：</p>
+                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="button" data-aos="zoom-in" data-aos-delay="100">
+                    <i class="fab fa-github"></i> 访问 GitHub
+                </a>
+            </section>
+        </main>
+    </div>
+
+    <footer>
+        <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
+        <p class="footer-note">最后更新：<span id="current-date"></span></p>
+    </footer>
+
+    <button id="back-to-top" class="back-to-top" aria-label="回到顶部">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <script src="js/transition.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="js/script.js"></script>
+</body>
+</html>
