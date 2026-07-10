@@ -2,6 +2,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const year = document.querySelector('[data-current-year]');
     if (year) year.textContent = new Date().getFullYear();
 
+    const scrollReadout = document.querySelector('[data-scroll-readout]');
+    const updateScrollReadout = () => {
+        if (!scrollReadout) return;
+        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+        const progress = scrollable > 0 ? Math.round((window.scrollY / scrollable) * 100) : 0;
+        scrollReadout.textContent = String(progress).padStart(3, '0');
+    };
+    updateScrollReadout();
+    window.addEventListener('scroll', updateScrollReadout, { passive: true });
+
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealItems = document.querySelectorAll('.reveal');
 
@@ -59,4 +69,46 @@ document.addEventListener('DOMContentLoaded', () => {
         });
         stage.addEventListener('pointerleave', () => { stage.style.transform = ''; });
     }
+
+    const easterEgg = document.querySelector('[data-easter-egg]');
+    const easterTriggers = document.querySelectorAll('[data-easter-trigger]');
+    const easterCloseButtons = document.querySelectorAll('[data-easter-close]');
+    let lastFocusedElement = null;
+
+    const openEasterEgg = () => {
+        if (!easterEgg || easterEgg.classList.contains('is-open')) return;
+        lastFocusedElement = document.activeElement;
+        easterEgg.classList.add('is-open');
+        easterEgg.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('signal-open');
+        easterTriggers.forEach(trigger => trigger.setAttribute('aria-expanded', 'true'));
+        easterEgg.querySelector('[data-easter-close]')?.focus();
+    };
+
+    const closeEasterEgg = () => {
+        if (!easterEgg || !easterEgg.classList.contains('is-open')) return;
+        easterEgg.classList.remove('is-open');
+        easterEgg.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('signal-open');
+        easterTriggers.forEach(trigger => trigger.setAttribute('aria-expanded', 'false'));
+        lastFocusedElement?.focus();
+    };
+
+    easterTriggers.forEach(trigger => trigger.addEventListener('click', openEasterEgg));
+    easterCloseButtons.forEach(button => button.addEventListener('click', closeEasterEgg));
+
+    if (window.location.hash.toLowerCase() === '#66ccff') {
+        openEasterEgg();
+    }
+
+    let secretBuffer = '';
+    document.addEventListener('keydown', event => {
+        if (event.key === 'Escape') {
+            closeEasterEgg();
+            return;
+        }
+        if (event.ctrlKey || event.metaKey || event.altKey || event.key.length !== 1) return;
+        secretBuffer = `${secretBuffer}${event.key.toLowerCase()}`.slice(-6);
+        if (secretBuffer === '66ccff') openEasterEgg();
+    });
 });

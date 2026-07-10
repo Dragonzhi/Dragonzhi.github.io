@@ -14,6 +14,8 @@
 </head>
 <body>
     <a class="skip-link" href="#work">跳到作品</a>
+    <div class="side-telemetry side-telemetry--left" aria-hidden="true">DZ.OS / PORTFOLIO_BUILD_02</div>
+    <div class="side-telemetry side-telemetry--right" aria-hidden="true">SCROLL / <span data-scroll-readout>000</span></div>
 
     <header class="site-header" data-site-header>
         <a class="brand" href="#top" aria-label="返回首页">
@@ -33,7 +35,7 @@
     <main id="top">
         <section class="hero" aria-labelledby="hero-title">
             <div class="hero-copy reveal">
-                <p class="status-line"><span></span> 寻找游戏开发相关实习机会</p>
+                <p class="status-line"><span></span> STATUS / 正在做能玩的东西</p>
                 <p class="kicker">GAME SYSTEMS / INTERACTION / TOOLS</p>
                 <h1 id="hero-title"><span>BUILD.</span><span>PLAY.</span><span class="accent-word">TUNE.</span></h1>
                 <p class="hero-intro">你好，我是 Dragonzhi。<br>我把游戏机制写成代码，再把代码调成手感。</p>
@@ -148,8 +150,8 @@
         </section>
 
         <section class="contact" id="contact" aria-labelledby="contact-title">
-            <p class="kicker reveal">CONTACT / AVAILABLE FOR INTERNSHIP</p>
-            <h2 id="contact-title" class="reveal">如果你在找一个<br><span>愿意把问题追到底</span>的开发者。</h2>
+            <p class="kicker reveal">CHANNEL OPEN / SAY HELLO</p>
+            <h2 id="contact-title" class="reveal">有游戏、代码，<br>或者奇怪的想法？<br><span>欢迎来交换信号。</span></h2>
             <div class="contact-row reveal">
                 <a href="mailto:dzloong@foxmail.com">dzloong@foxmail.com ↗</a>
                 <button type="button" data-copy-email data-email="dzloong@foxmail.com">复制邮箱</button>
@@ -160,9 +162,32 @@
 
     <footer class="site-footer">
         <p>© <span data-current-year></span> Dragonzhi</p>
-        <p>RAW HTML / CSS / JAVASCRIPT</p>
+        <button class="signal-trigger" type="button" data-easter-trigger aria-controls="hidden-signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
         <a href="#top">回到顶部 ↑</a>
     </footer>
+
+    <!-- SIDE CHANNEL 01: 不是所有信息都会出现在主导航里。 -->
+    <div class="signal-layer" id="hidden-signal" data-easter-egg aria-hidden="true">
+        <button class="signal-backdrop" type="button" data-easter-close aria-label="关闭隐藏信号"></button>
+        <aside class="signal-console" role="dialog" aria-modal="true" aria-labelledby="signal-title">
+            <div class="signal-console__bar">
+                <span>RECEIVER://SIDE_CHANNEL_01</span>
+                <button type="button" data-easter-close aria-label="关闭">[ ESC ]</button>
+            </div>
+            <div class="signal-console__content">
+                <div class="signal-avatar">
+                    <img src="images/pic_lty.png" alt="洛天依像素线稿小图标">
+                </div>
+                <div class="signal-wave" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <p class="signal-code">VOICEPRINT / #66CCFF / VSINGER</p>
+                <h2 id="signal-title">捕获到一段<br>来自 66.00 MHz 的歌声。</h2>
+                <p>洛天依，小爱好频道。没有主题皮肤，也没有自动播放——你只是找到了本站第一个隐藏信号。</p>
+                <code>ALT_TRIGGER: TYPE "66CCFF"</code>
+            </div>
+        </aside>
+    </div>
 
     <script src="js/portfolio-demo.js"></script>
 </body>
