@@ -2,16 +2,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const year = document.querySelector('[data-current-year]');
     if (year) year.textContent = new Date().getFullYear();
 
-    const scrollReadout = document.querySelector('[data-scroll-readout]');
-    const updateScrollReadout = () => {
-        if (!scrollReadout) return;
-        const scrollable = document.documentElement.scrollHeight - window.innerHeight;
-        const progress = scrollable > 0 ? Math.round((window.scrollY / scrollable) * 100) : 0;
-        scrollReadout.textContent = String(progress).padStart(3, '0');
-    };
-    updateScrollReadout();
-    window.addEventListener('scroll', updateScrollReadout, { passive: true });
-
     const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const revealItems = document.querySelectorAll('.reveal');
 
