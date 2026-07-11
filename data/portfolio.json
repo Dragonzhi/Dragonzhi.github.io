@@ -1,0 +1,94 @@
+[
+  {
+    "id": "trihorny",
+    "order": 1,
+    "title": "TriHorny4Link",
+    "badge": "GAME JAM",
+    "theme": "blue",
+    "image": "images/projects/tri.png",
+    "imageAlt": "TriHorny4Link 游戏截图",
+    "type": "Godot 塔防游戏 · Gameplay Programming",
+    "summary": "这是一次塔防玩法练习。我主要实现了动态路径重规划、敌人对象池和事件驱动系统，并针对单位较多时的运行情况做了一些优化。",
+    "responsibility": ["核心玩法", "系统架构", "性能优化"],
+    "tech": ["Godot", "GDScript", "A*", "Object Pool"],
+    "links": [
+      {
+        "label": "观看演示",
+        "url": "https://b23.tv/EZKZQSl"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Dragonzhi"
+      }
+    ],
+    "published": true
+  },
+  {
+    "id": "immune-link",
+    "order": 2,
+    "title": "ImmuneLink",
+    "badge": "PLAYABLE",
+    "theme": "immune",
+    "image": "images/projects/immune-link.png",
+    "imageAlt": "免疫联结游戏标题画面",
+    "type": "Godot 4 · 2D Tower Defense",
+    "summary": "这是为 2025 卡赢杯公益游戏开发大赛制作的 2D 塔防游戏，主题是“桥”。玩法围绕绘制桥梁网络、连接资源节点和升级防御设施展开，也加入了自定义关卡的导入与导出。",
+    "responsibility": ["游戏设计", "编程", "美术"],
+    "tech": ["Godot 4", "GDScript", "Pixel Art", "JSON"],
+    "links": [
+      {
+        "label": "在线游玩",
+        "url": "https://dragonzhi.github.io/ImmuneLink/"
+      },
+      {
+        "label": "查看源码",
+        "url": "https://github.com/Dragonzhi/ImmuneLink"
+      },
+      {
+        "label": "演示视频",
+        "url": "https://www.bilibili.com/video/BV1Z8mFBUEk2/"
+      }
+    ],
+    "published": true
+  },
+  {
+    "id": "naruto-hashirama",
+    "order": 3,
+    "title": "像素火影 · 秽土柱间",
+    "badge": "COMBAT",
+    "theme": "red",
+    "image": "images/projects/秽土.avif",
+    "imageAlt": "像素火影秽土柱间角色画面",
+    "type": "Unity 2D 同人项目 · Combat System",
+    "summary": "这是一个 Unity 2D 角色练习。我主要负责技能、动画状态切换、攻击判定和伤害逻辑，也尝试调整动作与命中反馈。",
+    "responsibility": ["角色技能", "动画状态机", "战斗判定"],
+    "tech": ["Unity", "C#", "FSM", "Hit Detection"],
+    "links": [
+      {
+        "label": "观看演示",
+        "url": "https://b23.tv/EZKZQSl"
+      }
+    ],
+    "published": true
+  },
+  {
+    "id": "counter-strike-grenades",
+    "order": 4,
+    "title": "CounterStrike Grenades",
+    "badge": "OPEN SOURCE",
+    "theme": "ink",
+    "image": "images/projects/csg.png",
+    "imageAlt": "CounterStrikeGrenades Minecraft 模组画面",
+    "type": "Minecraft Forge Mod · Systems & Integration",
+    "summary": "这是一个 Minecraft Forge 模组项目，尝试还原 CS2 的投掷物机制。工作包括行为逻辑、简单的 3D 资产，以及与 TACZ 枪械模组的兼容。",
+    "responsibility": ["投掷物机制", "3D 资产", "跨模组兼容"],
+    "tech": ["Forge", "Kotlin", "Blockbench", "TACZ"],
+    "links": [
+      {
+        "label": "查看源码",
+        "url": "https://github.com/ThePiSquad/CounterStrikeGrenades"
+      }
+    ],
+    "published": true
+  }
+]
