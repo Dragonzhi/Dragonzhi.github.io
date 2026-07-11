@@ -320,6 +320,7 @@ img { display: block; max-width: 100%; }
 .case--blue .case-body { background: var(--blue-light); }
 .case--red .case-body { background: #e9b5a7; }
 .case--ink .case-body { color: var(--paper-light); background: var(--ink); }
+.case--immune .case-body { background: #d6e2e3; }
 
 .case-index { margin-bottom: auto; font-family: var(--mono); font-size: 0.72rem; font-weight: 700; }
 .case h3 { margin: 60px 0 8px; max-width: 100%; overflow-wrap: anywhere; font-size: clamp(2.4rem, 5vw, 5.5rem); font-weight: 900; letter-spacing: -0.06em; line-height: 0.94; }
