@@ -66,14 +66,14 @@
   "releases_url": "https://api.github.com/repos/ThePiSquad/CounterStrikeGrenades/releases{/id}",
   "deployments_url": "https://api.github.com/repos/ThePiSquad/CounterStrikeGrenades/deployments",
   "created_at": "2024-08-07T16:32:26Z",
-  "updated_at": "2026-07-20T15:24:03Z",
-  "pushed_at": "2026-07-25T07:08:55Z",
+  "updated_at": "2026-07-30T08:36:36Z",
+  "pushed_at": "2026-07-30T08:34:49Z",
   "git_url": "git://github.com/ThePiSquad/CounterStrikeGrenades.git",
   "ssh_url": "git@github.com:ThePiSquad/CounterStrikeGrenades.git",
   "clone_url": "https://github.com/ThePiSquad/CounterStrikeGrenades.git",
   "svn_url": "https://github.com/ThePiSquad/CounterStrikeGrenades",
   "homepage": "https://thepisquad.github.io/CounterStrikeGrenades/",
-  "size": 65370,
+  "size": 65413,
   "stargazers_count": 5,
   "watchers_count": 5,
   "language": "Kotlin",
@@ -83,7 +83,7 @@
   "has_wiki": false,
   "has_pages": true,
   "has_discussions": false,
-  "forks_count": 3,
+  "forks_count": 4,
   "mirror_url": null,
   "archived": false,
   "disabled": false,
@@ -105,7 +105,7 @@
     "minecraft-mod"
   ],
   "visibility": "public",
-  "forks": 3,
+  "forks": 4,
   "open_issues": 12,
   "watchers": 5,
   "default_branch": "main",
@@ -141,6 +141,6 @@
     "user_view_type": "public",
     "site_admin": false
   },
-  "network_count": 3,
+  "network_count": 4,
   "subscribers_count": 2
 }
