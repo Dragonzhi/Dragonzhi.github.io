@@ -3,93 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dragonzhi 的个人小站：游戏开发、Minecraft Mod、vibe coding 的一点记录。">
-    <meta name="theme-color" content="#eeeeee">
-    <title>dz.wiki · Dragonzhi 的小站</title>
+    <meta name="description" content="ZLOONG 的工房：游戏开发、Mod、vibe coding 的工作台。">
+    <meta name="theme-color" content="#f3eee4">
+    <title>ZLOONG 工房 · Hanako箱庭</title>
     <link rel="icon" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.cn">
-    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
     <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/site.css">
+    <link rel="stylesheet" href="css/workshop.css">
 </head>
 <body>
 
-    <!-- 背景模糊色块：玻璃方块的颜色透出来自这里 -->
-    <div class="blobs" aria-hidden="true">
-        <i class="blob blob--teal"></i>
-        <i class="blob blob--cyan"></i>
-        <i class="blob blob--mint"></i>
+<div class="wrap">
+
+    <!-- 门牌（报眉语法） -->
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 与箱庭同院 <span class="live">● 常开</span></span>
+        <span id="today">2026年8月30日 · 星期日</span>
+        <span>编辑：ZLOONG · 排印：Hanako</span>
     </div>
 
-    <header class="site-header">
-        <a class="wordmark" href="#top">dz<span class="wordmark-dot">.</span>wiki</a>
-        <nav class="site-nav" aria-label="站内导航">
-            <a href="pages/blog.html">blog</a>
-            <a href="pages/gallery.html">gallery</a>
-            <a href="pages/portfolio.html">portfolio</a>
-            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
-        </nav>
+    <!-- 报头墙 -->
+    <header class="wall">
+        <span class="seal samp">验收中<br>WORKSHOP</span>
+        <h1>ZLOONG 工房</h1>
+        <div class="sub">THE WORKSHOP · 手作与代码的台面</div>
     </header>
+    <div class="rule-double"></div>
 
-    <!-- 玻璃方块网格（bento） -->
-    <main id="top" class="bento">
+    <!-- 今日一言 -->
+    <div class="daily">
+        <div class="quote">「 make games, have fun, and ship it someday. 」</div>
+        <div class="who">— 钉在墙上的话 · 手机电量与动力同步下降中 (˶ᵔ ᵕ ᵔ˶)</div>
+    </div>
 
-        <!-- 首屏问候 -->
-        <section class="tile tile--hero t-2w t-2h reveal">
-            <p class="hero-hello samp">~/home/dragonzhi <span class="blink">▌</span></p>
-            <h1 class="hero-title"><span id="typed">Hi, I'm Dragonzhi.</span><span class="caret" aria-hidden="true"></span></h1>
-            <p class="hero-sub">一个喜欢做游戏的学生。这里是我的小站，<br>记一点 gameplay、Mod 和 vibe coding 的东西。</p>
+    <!-- ===== 台面一：欢迎 + 机器 ===== -->
+    <div class="bench-label">
+        <span class="no">台 · 01</span>
+        <span class="t">进门</span>
+        <span class="en">HELLO &amp; MACHINE</span>
+    </div>
+    <main class="bento">
+
+        <!-- hero 胶带卡 -->
+        <section class="tile tile--hero t-2w t-2h taped">
+            <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
+            <h2 class="hero-title"><span id="typed">Hi, I'm Dragonzhi.</span><span class="caret" aria-hidden="true"></span></h2>
+            <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
             <p class="hero-links samp">
                 <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
-                <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">ImmuneLink ↗</a>
+                <a href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">隔壁箱庭 ↗</a> ·
+                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
             </p>
         </section>
 
-        <!-- 终端卡（全站唯一深色块，像一枚深色 app 图标） -->
-        <section class="tile tile--term t-2w t-2h reveal" role="img" aria-label="终端里的 neofetch 个人信息卡">
+        <!-- 琥珀屏终端卡（全站唯一深色块） -->
+        <section class="tile tile--term t-2w t-2h" role="img" aria-label="终端里的 neofetch 个人信息卡">
             <div class="term-bar">
                 <i></i><i></i><i></i>
-                <span class="term-title samp">dragonzhi@dz-wiki — zsh</span>
+                <span class="term-title samp">dragonzhi@workshop — zsh</span>
             </div>
             <pre class="term-body"><span class="c-brand">➜  ~</span> neofetch
 <span class="c-brand"> ██████╗ ███████╗
  ██╔══██╗╚══███╔╝
  ██║  ██║  ███╔╝
- ██║  ██║ ███╔╝ 
+ ██║  ██║ ███╔╝
  ██████╔╝███████╗
- ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">dz-wiki</span>
+ ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">workshop</span>
                    ─────────────────
                    <span class="c-key">OS</span>      Godot 4 · Unity
                    <span class="c-key">Shell</span>   GDScript · C# · C++
                    <span class="c-key">Uptime</span>  learning game dev
                    <span class="c-key">Agents</span>  DeepSeek Harness · Codex
                    <span class="c-key">Focus</span>   gameplay · tools · mods
-                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span></pre>
+                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span> <span class="c-dim"># 成稿自校</span></pre>
         </section>
 
         <!-- about.md：文案在 data/content.js 里改 -->
-        <section class="tile t-2w reveal">
+        <section class="tile t-2w">
             <h2 class="tile-title samp">about.md</h2>
             <div id="about-body"><!-- 由 data/content.js 填充 --></div>
         </section>
 
         <!-- now.md：文案在 data/content.js 里改 -->
-        <section class="tile t-2w reveal">
+        <section class="tile t-2w">
             <h2 class="tile-title samp">now.md</h2>
             <ul class="now-list" id="now-list"><!-- 由 data/content.js 填充 --></ul>
-            <p class="tile-foot samp">updated: <span data-current-year>2026</span> · 持续学习中</p>
+            <p class="tile-foot samp">updated: <span data-current-year>2026</span> · 台面常乱，东西都在</p>
         </section>
 
-        <!-- 项目索引 -->
-        <section class="tile t-4w reveal" id="projects">
+        <!-- ===== 台面三：作品档案（静态四件，照 v5 定稿） ===== -->
+        <section class="tile t-4w" id="projects">
             <div class="tile-head">
-                <h2 class="tile-title samp">projects/</h2>
-                <span class="tile-count samp">04 entries</span>
+                <h2 class="tile-title samp">projects/ 档案架</h2>
+                <span class="tile-count samp">共肆件 · 壹件在制</span>
             </div>
             <ol class="proj-list">
                 <li class="proj">
-                    <span class="proj-index samp">01</span>
+                    <span class="proj-index">第壹件</span>
+                    <div class="proj-main">
+                        <h3>免疫联结 ImmuneLink <span class="state">获奖</span></h3>
+                        <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
+                        <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
+                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩 ↗</a>
+                        <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index">第贰件</span>
+                    <div class="proj-main">
+                        <h3>棱镜：碧芙洛斯 <span class="state">在制</span></h3>
+                        <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
+                        <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
+                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">源码 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index">第叁件</span>
                     <div class="proj-main">
                         <h3>TriHorny4Link</h3>
                         <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
@@ -101,32 +137,7 @@
                     </div>
                 </li>
                 <li class="proj">
-                    <span class="proj-index samp">02</span>
-                    <div class="proj-main">
-                        <h3>ImmuneLink</h3>
-                        <p class="proj-type samp">Godot 4 · 2D Tower Defense</p>
-                        <p class="proj-desc">2025 卡赢杯公益赛作品，主题是「桥」：画桥连资源点的塔防，支持关卡导入导出。</p>
-                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
-                    </div>
-                    <div class="proj-links samp">
-                        <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">游玩 ↗</a>
-                        <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码 ↗</a>
-                    </div>
-                </li>
-                <li class="proj">
-                    <span class="proj-index samp">03</span>
-                    <div class="proj-main">
-                        <h3>像素火影 · 秽土柱间</h3>
-                        <p class="proj-type samp">Unity 2D 同人 · combat system</p>
-                        <p class="proj-desc">技能、动画状态切换、攻击判定和伤害逻辑的练习，调动作和命中反馈。</p>
-                        <p class="proj-tags"><code class="tag">Unity</code><code class="tag">C#</code><code class="tag">FSM</code></p>
-                    </div>
-                    <div class="proj-links samp">
-                        <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示 ↗</a>
-                    </div>
-                </li>
-                <li class="proj">
-                    <span class="proj-index samp">04</span>
+                    <span class="proj-index">第肆件</span>
                     <div class="proj-main">
                         <h3>CounterStrikeGrenades</h3>
                         <p class="proj-type samp">Minecraft Forge Mod · systems</p>
@@ -141,8 +152,7 @@
             <p class="tile-foot samp">完整旧版作品集: <a href="legacy/portfolio.html">legacy/portfolio.html ↗</a></p>
         </section>
 
-        <!-- links -->
-        <section class="tile t-2w reveal" id="links">
+        <section class="tile t-2w" id="links">
             <h2 class="tile-title samp">links.md</h2>
             <ul class="link-list samp">
                 <li><a href="pages/blog.html">blog <span class="dim">/ 博客</span> ↗</a></li>
@@ -156,41 +166,69 @@
             </ul>
         </section>
 
-        <!-- motto -->
-        <section class="tile tile--quote t-2w reveal">
+        <section class="tile tile--quote t-2w">
             <h2 class="tile-title samp">motto.txt</h2>
-            <blockquote>make games, have fun,<br>and ship it someday.</blockquote>
-            <p class="tile-foot samp">— 手机电量与动力同步下降中 (˶ᵔ ᵕ ᵔ˶)</p>
+            <blockquote>台面常乱，<br>ship 不停。</blockquote>
+            <p class="tile-foot samp">— 便签 · 原句钉在进门墙上</p>
         </section>
     </main>
 
-    <footer class="site-footer samp">
-        <p>© <span data-current-year>2026</span> Dragonzhi · built with ♥ &amp; vibe coding</p>
-        <button type="button" class="signal-trigger" data-signal-trigger aria-controls="signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
-        <a href="#top">top ↑</a>
+    <!-- ===== 导览牌（箱庭菜单语法） ===== -->
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="pages/blog.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="pages/gallery.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="pages/portfolio.html">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">旧版作品集</span><span class="d">legacy 版式存档</span></span>
+            <span class="state calm">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅 · dragonzhi.xyz/hanako</span></span>
+            <span class="state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会<br>
+            <button type="button" class="signal-trigger" data-signal-trigger aria-controls="signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
+        </div>
     </footer>
+</div>
 
-    <!-- 隐藏信号：点按钮或输入 66CCFF 唤出 -->
-    <div class="signal-layer" id="signal" data-signal aria-hidden="true">
-        <button type="button" class="signal-backdrop" data-signal-close aria-label="关闭隐藏信号"></button>
-        <aside class="signal-console" role="dialog" aria-modal="true" aria-labelledby="signal-title">
-            <div class="signal-bar samp">
-                <span>RECEIVER://SIDE_CHANNEL_01</span>
-                <button type="button" class="signal-close" data-signal-close>[ ESC ]</button>
-            </div>
-            <div class="signal-body">
-                <div class="signal-wave" aria-hidden="true">
-                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
-                </div>
-                <p class="signal-code samp">VOICEPRINT / #66CCFF / VSINGER</p>
-                <h2 id="signal-title">捕获到一段<br>来自 66.00 MHz 的歌声。</h2>
-                <p>洛天依，小爱好频道。既然找到了这里，别忘了去 <a href="pages/gallery.html" style="color:#4fe0c4">画廊</a> 看看她。</p>
-                <code class="samp">ALT_TRIGGER: TYPE "66CCFF"</code>
-            </div>
-        </aside>
-    </div>
+<!-- 彩蛋：工房角落的收音机 -->
+<div class="signal-layer" id="signal" data-signal aria-hidden="true">
+    <button type="button" class="signal-backdrop" data-signal-close aria-label="关闭"></button>
+    <aside class="signal-console" role="dialog" aria-modal="true" aria-labelledby="signal-title">
+        <div class="signal-bar">
+            <span>RECEIVER://SIDE_CHANNEL_01</span>
+            <button type="button" data-signal-close>[ ESC ]</button>
+        </div>
+        <p class="signal-code">VOICEPRINT / #66CCFF / VSINGER</p>
+        <h2 id="signal-title">工房角落的收音机响了。<br>66.00 MHz，一段歌声。</h2>
+        <p>洛天依，编辑的小爱好频道。去 <a href="pages/gallery.html">画廊版</a> 看看她。</p>
+    </aside>
+</div>
 
-    <script src="data/content.js"></script>
-    <script src="js/site.js"></script>
+<script src="data/content.js"></script>
+<script src="js/workshop.js"></script>
 </body>
 </html>
