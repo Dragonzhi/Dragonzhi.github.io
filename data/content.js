@@ -13,9 +13,21 @@ window.SITE_CONTENT = {
         "vibe coding…"
     ],
 
+    /* 今日一言：按日期轮选 —— 同一天所有人看到同一句，次日自动换下一句。
+       q = 正文，w = 落款。这里用 textContent 渲染，只写纯文本，不要放 HTML。
+       数组顺序即轮选顺序，从第 1 条开始。 */
+    dailyQuotes: [
+        { q: "「 make games, have fun, and ship it someday. 」", w: "— 钉在墙上的话 · 手机电量与动力同步下降中 (˶ᵔ ᵕ ᵔ˶)" },
+        { q: "「 the best way to predict the future is to build it. 」", w: "— 墙上的英文课 · 所以我在敲代码" },
+        { q: "「 bug 不是错误，是还没读完的文档。 」", w: "— 台面笔记 · 用 console.log 审讯它" },
+        { q: "「 把自己的兴趣做成能摸到的作品。 」", w: "— now.md 的注脚 · 在制中" },
+        { q: "「 ship it someday — someday is today. 」", w: "— 便签 · 尽量让 someday 早一点" },
+        { q: "「 add oil，今天也要开工。 」", w: "— 刻在桌面的一句 · 给今天也给自己" }
+    ],
+
     /* about.md 卡片：一段一个字符串 */
     about: [
-        "我是一名对游戏开发感兴趣的大学生，目前主要在学习游戏引擎和 C++ 相关内容。平时做一些玩法、战斗系统、寻路和 Mod 练习，也会用 AI Agent（DeepSeek Harness、Codex）辅助拆任务、查代码、验证方案，重要逻辑还是自己检查和测试。"
+        "我是一名对游戏开发感兴趣的大学生，目前主要在学习游戏引擎和AI开发相关内容。常用 AI Agent（DeepSeek Harness、Codex）辅助拆任务、查代码、验证方案，重要逻辑还是自己检查和测试。"
     ],
 
     /* now.md 卡片：一行一个字符串 */

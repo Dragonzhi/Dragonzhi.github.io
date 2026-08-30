@@ -34,7 +34,7 @@
 | `index.html` | 工房首页：报头墙 → 今日一言 → bento 台面 → 本区导览 → 报尾 |
 | `css/workshop.css` | 首页样式（自 workshop v5 设计定稿抽取） |
 | `js/workshop.js` | 打字机、门牌日期、about/now 渲染、复制邮箱、SIGNAL 彩蛋 |
-| `data/content.js` | 站点文案配置：打字机 phrases / about.md / now.md |
+| `data/content.js` | 站点文案配置：打字机 phrases / 今日一言 dailyQuotes / about.md / now.md |
 | `pages/` | 旧主题子页面（博客、画廊、作品集），从首页导览牌进入 |
 | `posts/` + `data/posts.json` | 博客文章（Markdown + JSON 索引，marked.js 渲染） |
 | `legacy/` | 旧版主页与作品集存档（legacy 作品集仍由 `data/portfolio.json` 驱动） |
@@ -44,7 +44,7 @@
 
 ## 主要功能
 
-* **工房首页**：报头墙 + 「验收中」印章、今日一言、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about.md / now.md / projects 档案架 / links 门牌 / motto 便签）。
+* **工房首页**：报头墙 + 「常开 OPEN」印章、今日一言（按日期轮选，同一天所有人看到同一句）、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about.md / now.md / projects 档案架 / links 门牌 / motto 便签）。
 * **本区导览**：箱庭菜单语法的目录牌（壹贰叁肆），通向博客版、画廊版、旧版作品集与隔壁箱庭。
 * **隐藏信号**：点页脚 `SIGNAL / 66.00 MHz`，或在任意位置键入 `66CCFF`，唤出工房角落的收音机。
 * **渐进增强**：核心内容纯静态即可完整显示；所有 fetch 容忍失败，绝不白屏。
@@ -57,6 +57,8 @@
 ### 改文案（about / now / 打字机句子）
 
 全部在 [`data/content.js`](data/content.js) 里改，不用动 HTML。字符串里可以写行内 HTML（如 `<code class="tag">`、`<span class="state">`）。
+
+今日一言在 `dailyQuotes` 里改（`q` = 正文，`w` = 落款）：按日期轮选，同一天所有访客看到同一句，次日自动换下一句；它用 `textContent` 渲染，**只写纯文本**，不要放 HTML。无 JS 时显示 `index.html` 里的原始句子作兜底。
 
 ### 改作品档案架
 

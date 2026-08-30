@@ -23,6 +23,17 @@
         el.textContent = String(new Date().getFullYear());
     });
 
+    /* ---------- 今日一言：按日期轮选（同一天所有人同一句，次日自动换） ---------- */
+    var dailyQuote = document.querySelector(".daily .quote");
+    var dailyWho = document.querySelector(".daily .who");
+    var dailies = Array.isArray(content.dailyQuotes) ? content.dailyQuotes : [];
+    if ((dailyQuote || dailyWho) && dailies.length) {
+        /* 用 UTC 天序号做索引：全球同一天看到同一句，且不受访客时区影响 */
+        var item = dailies[Math.floor(new Date().getTime() / 86400000) % dailies.length] || {};
+        if (dailyQuote && item.q) { dailyQuote.textContent = item.q; }
+        if (dailyWho && item.w) { dailyWho.textContent = item.w; }
+    }
+
     /* ---------- about.md / now.md：文案统一在 data/content.js 里改 ---------- */
     var aboutBody = document.getElementById("about-body");
     if (aboutBody && Array.isArray(content.about)) {
