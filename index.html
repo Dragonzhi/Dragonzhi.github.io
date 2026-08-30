@@ -88,7 +88,7 @@
         <section class="tile t-2w">
             <h2 class="tile-title samp">now.md</h2>
             <ul class="now-list" id="now-list"><!-- 由 data/content.js 填充 --></ul>
-            <p class="tile-foot samp">updated: <span data-current-year>2026</span> · 台面常乱，东西都在</p>
+            <p class="tile-foot samp">updated: <span data-current-year>2026</span> · Make Continually</p>
         </section>
 
         <!-- ===== 台面三：作品档案（静态四件，照 v5 定稿） ===== -->
@@ -167,9 +167,12 @@
 
         <section class="tile tile--quote t-2w">
             <h2 class="tile-title samp">motto.txt</h2>
-            <blockquote>台面常乱，<br>ship 不停。</blockquote>
-            <p class="tile-foot samp">— 便签 · 原句钉在进门墙上</p>
+            <blockquote id="motto-quote">台面常乱，<br>ship 不断。</blockquote>
+            <p class="tile-foot samp" id="motto-foot">— 便签 · 原句钉在进门墙上</p>
         </section>
+
+        <!-- ===== 自发现档案架：由 data/files-manifest.json + files/ 驱动 ===== -->
+        <div id="auto-shelf" aria-label="档案架"></div>
     </main>
 
     <!-- ===== 导览牌（箱庭菜单语法） ===== -->

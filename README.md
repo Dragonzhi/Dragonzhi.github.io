@@ -33,8 +33,11 @@
 |---|---|
 | `index.html` | 工房首页：报头墙 → 今日一言 → bento 台面 → 本区导览 → 报尾 |
 | `css/workshop.css` | 首页样式（自 workshop v5 设计定稿抽取） |
-| `js/workshop.js` | 打字机、门牌日期、about/now 渲染、复制邮箱、SIGNAL 彩蛋 |
-| `data/content.js` | 站点文案配置：打字机 phrases / about.md / now.md |
+| `js/workshop.js` | 打字机、门牌日期、迷你 Markdown 解析 + files/ 读取、复制邮箱、SIGNAL 彩蛋 |
+| `data/content.js` | 打字机 phrases（其余卡片文案在 `files/`） |
+| `files/` | 卡片文案源文件：`about.md` / `now.md` / `links.md` / `motto.txt` / `daily.txt`；新增 `.md` 自动成为档案架卡片 |
+| `scripts/` | 本地生成脚本：`generate_manifest.py`（files/ 索引）、`generate_gallery_json.py`（画廊索引） |
+| `data/files-manifest.json` | `files/` 目录索引：丢新文件后跑 `python scripts/generate_manifest.py` 重新生成 |
 | `pages/` | 旧主题子页面（博客、画廊、作品集），从首页导览牌进入 |
 | `posts/` + `data/posts.json` | 博客文章（Markdown + JSON 索引，marked.js 渲染） |
 | `legacy/` | 旧版主页与作品集存档（legacy 作品集仍由 `data/portfolio.json` 驱动） |
@@ -44,7 +47,7 @@
 
 ## 主要功能
 
-* **工房首页**：报头墙 + 「验收中」印章、今日一言、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about.md / now.md / projects 档案架 / links 门牌 / motto 便签）。
+* **工房首页**：报头墙 + 「常开 OPEN」印章、今日一言（按日期轮选，同一天所有人看到同一句）、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about / now / projects 档案架 / links / motto / 自发现档案架）。about / now / links / motto / 今日一言 的文案是 `files/` 下的真实 .md/.txt，页面自动读取渲染；`files/` 里新增的任意 `.md` 文件会自动变成一张档案架卡片。
 * **本区导览**：箱庭菜单语法的目录牌（壹贰叁肆），通向博客版、画廊版、旧版作品集与隔壁箱庭。
 * **隐藏信号**：点页脚 `SIGNAL / 66.00 MHz`，或在任意位置键入 `66CCFF`，唤出工房角落的收音机。
 * **渐进增强**：核心内容纯静态即可完整显示；所有 fetch 容忍失败，绝不白屏。
@@ -54,9 +57,42 @@
 
 ## 常用改动
 
-### 改文案（about / now / 打字机句子）
+### 改卡片文案（about / now / links / motto / 今日一言）
 
-全部在 [`data/content.js`](data/content.js) 里改，不用动 HTML。字符串里可以写行内 HTML（如 `<code class="tag">`、`<span class="state">`）。
+改 `files/` 下的源文件即可，不用动 HTML（HTML 里的静态内容只是无 JS 兜底，可不同步）：
+
+| 文件 | 对应卡片 | 格式 |
+|---|---|---|
+| `files/about.md` | about 卡片 | 段落，空行分隔 |
+| `files/now.md` | now 卡片 | `- ` 无序列表 |
+| `files/links.md` | links 卡片 | `- [文字](链接)`；邮箱行末尾加 `{copy}` 生成复制按钮 |
+| `files/motto.txt` | motto 便签 | 第一段进正文（行内自动换行），空行后第二段进落款 |
+| `files/daily.txt` | 今日一言 | 每条 2 行（正文 + 落款），条目间空行分隔；按日期轮选，次日自动换 |
+
+首页用自带的迷你 Markdown 解析器（无第三方依赖），支持：`` `code` `` → 等宽标签、`**粗体**`、`[[在制]]` → 朱砂状态徽章、`[文字](链接)`。**其余一律按纯文本显示，不解析原始 HTML**（规避 XSS）。改完推送后，Fastly CDN 最多缓存 10 分钟，稍候即生效。
+
+### 新增档案架卡片
+
+在 `files/` 里新建一个 `.md` 文件（如 `工具箱.md`），然后运行：
+
+```bash
+python scripts/generate_manifest.py
+```
+
+推送到仓库后，首页 bento 网格会自动多一张卡片，**样式按内容自动匹配**，不用记任何约定：
+
+| 文件内容 | 渲染成 |
+|---|---|
+| 全部是 `- ` 列表且每行含 `[文字](链接)` 或以 `{copy}` 结尾 | links 风格链接列表卡（外链自动新窗口） |
+| 全部是 `- ` 列表 | now 风格圆点列表卡 |
+| 全部以 `> ` 开头 | motto 风格便签卡（空行后的引用块作落款） |
+| 其他（段落、混合） | 段落卡 |
+
+**dim 灰字约定**：链接后的尾部文字自动变灰并补 ↗，写法 `- [blog](pages/blog.html) / 博客`。卡片标题即文件名（带扩展名）。`about` / `now` / `links` / `motto` / `daily` 是内置卡片名，不会被重复生成。
+
+### 改打字机句子
+
+在 [`data/content.js`](data/content.js) 的 `phrases` 里改。
 
 ### 改作品档案架
 
@@ -72,7 +108,7 @@
 把图片放进 `images/画廊/`，然后运行：
 
 ```bash
-python generate_gallery_json.py
+python scripts/generate_gallery_json.py
 ```
 
 ### 本地预览
