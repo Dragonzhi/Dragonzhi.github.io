@@ -287,6 +287,17 @@ img { display: block; max-width: 100%; }
 
 .section-count { margin: 0; padding: 8px 12px; border: var(--line); font-family: var(--mono); font-size: 0.7rem; font-weight: 700; }
 
+.project-loading,
+.project-error {
+    margin: 0 0 80px;
+    padding: 24px;
+    border: var(--line);
+    background: var(--paper-light);
+    font: 700 0.78rem var(--mono);
+}
+
+.project-error { color: var(--red); }
+
 .case {
     display: grid;
     grid-template-columns: minmax(0, 1.25fr) minmax(320px, 0.75fr);

@@ -3,214 +3,194 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Dragonzhi 的游戏开发作品集，展示 gameplay programming、游戏系统、工具开发与 Minecraft Mod 项目。">
-    <meta name="theme-color" content="#dbe0e1">
-    <title>Dragonzhi — Gameplay Programmer</title>
+    <meta name="description" content="Dragonzhi 的个人小站：游戏开发、Minecraft Mod、vibe coding 的一点记录。">
+    <meta name="theme-color" content="#eeeeee">
+    <title>dz.wiki · Dragonzhi 的小站</title>
     <link rel="icon" href="images/favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Noto+Sans+SC:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/portfolio-demo.css">
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link rel="preconnect" href="https://fonts.gstatic.cn" crossorigin>
+    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="css/site.css">
 </head>
 <body>
-    <a class="skip-link" href="#work">跳到作品</a>
 
-    <header class="site-header" data-site-header>
-        <a class="brand" href="#top" aria-label="返回首页">
-            <span class="brand-mark">DZ</span>
-            <span class="brand-copy">Dragonzhi<br><small>Gameplay Programmer</small></span>
-        </a>
+    <!-- 背景模糊色块：玻璃方块的颜色透出来自这里 -->
+    <div class="blobs" aria-hidden="true">
+        <i class="blob blob--teal"></i>
+        <i class="blob blob--cyan"></i>
+        <i class="blob blob--mint"></i>
+    </div>
 
-        <nav class="site-nav" aria-label="主导航">
-            <a href="#work">01 / 作品</a>
-            <a href="#profile">02 / 关于</a>
-            <a href="#contact">03 / 联系</a>
+    <header class="site-header">
+        <a class="wordmark" href="#top">dz<span class="wordmark-dot">.</span>wiki</a>
+        <nav class="site-nav" aria-label="站内导航">
+            <a href="pages/blog.html">blog</a>
+            <a href="pages/gallery.html">gallery</a>
+            <a href="pages/portfolio.html">portfolio</a>
+            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
         </nav>
-
-        <a class="header-link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
     </header>
 
-    <main id="top">
-        <section class="hero" aria-labelledby="hero-title">
-            <div class="hero-copy reveal">
-                <p class="status-line"><span></span> STATUS / 持续学习中</p>
-                <p class="kicker">GAME SYSTEMS / INTERACTION / TOOLS</p>
-                <h1 id="hero-title"><span>GAME.</span><span>DEV.</span><span class="accent-word">LOG.</span></h1>
-                <p class="hero-intro">你好，我是 Dragonzhi。<br>平时主要学习游戏玩法和工具相关的开发。</p>
-                <div class="hero-actions">
-                    <a class="action action--primary" href="#work">查看精选作品 ↓</a>
-                    <a class="action" href="mailto:dzloong@foxmail.com">联系我 ↗</a>
-                </div>
-            </div>
+    <!-- 玻璃方块网格（bento） -->
+    <main id="top" class="bento">
 
-            <div class="hero-stage reveal" data-tilt>
-                <div class="stage-label stage-label--top">CURRENT FOCUS / GAMEPLAY</div>
-                <img src="images/projects/tri.png" alt="TriHorny4Link 塔防游戏画面">
-                <div class="stage-overlay">
-                    <span>01</span>
-                    <p>PATHFINDING<br>OBJECT POOL<br>EVENT SYSTEM</p>
-                </div>
-                <div class="stage-label stage-label--bottom">SCREEN_1920×1080 / GODOT</div>
-            </div>
-
-            <dl class="hero-facts reveal">
-                <div><dt>方向</dt><dd>Gameplay / Tools</dd></div>
-                <div><dt>引擎</dt><dd>Godot / Unity</dd></div>
-                <div><dt>语言</dt><dd>C++ / C# / GDScript</dd></div>
-                <div><dt>也在做</dt><dd>Minecraft Mod</dd></div>
-            </dl>
+        <!-- 首屏问候 -->
+        <section class="tile tile--hero t-2w t-2h reveal">
+            <p class="hero-hello samp">~/home/dragonzhi <span class="blink">▌</span></p>
+            <h1 class="hero-title"><span id="typed">Hi, I'm Dragonzhi.</span><span class="caret" aria-hidden="true"></span></h1>
+            <p class="hero-sub">一个喜欢做游戏的学生。这里是我的小站，<br>记一点 gameplay、Mod 和 vibe coding 的东西。</p>
+            <p class="hero-links samp">
+                <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
+                <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">ImmuneLink ↗</a>
+            </p>
         </section>
 
-        <section class="work" id="work" aria-labelledby="work-title">
-            <div class="section-heading reveal">
-                <p class="kicker">SELECTED WORK / 2022—2026</p>
-                <h2 id="work-title">一些做过的项目，<br>以及简单的记录。</h2>
-                <p class="section-count">04 CASE FILES</p>
+        <!-- 终端卡（全站唯一深色块，像一枚深色 app 图标） -->
+        <section class="tile tile--term t-2w t-2h reveal" role="img" aria-label="终端里的 neofetch 个人信息卡">
+            <div class="term-bar">
+                <i></i><i></i><i></i>
+                <span class="term-title samp">dragonzhi@dz-wiki — zsh</span>
             </div>
-
-            <article class="case case--blue reveal" id="project-trihorny">
-                <div class="case-media">
-                    <img src="images/projects/tri.png" alt="TriHorny4Link 游戏截图">
-                    <span class="case-stamp">GAME JAM</span>
-                </div>
-                <div class="case-body">
-                    <div class="case-index">CASE / 01</div>
-                    <h3 class="case-title--long">TriHorny<wbr>4Link</h3>
-                    <p class="case-type">Godot 塔防游戏 · Gameplay Programming</p>
-                    <p class="case-summary">这是一次塔防玩法练习。我主要实现了动态路径重规划、敌人对象池和事件驱动系统，并针对单位较多时的运行情况做了一些优化。</p>
-                    <dl class="case-meta">
-                        <div><dt>负责</dt><dd>核心玩法 / 系统架构 / 性能优化</dd></div>
-                        <div><dt>技术</dt><dd>Godot · GDScript · A* · Object Pool</dd></div>
-                    </dl>
-                    <div class="case-links">
-                        <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">观看演示 ↗</a>
-                        <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="case case--immune case--reverse reveal" id="project-immune-link">
-                <div class="case-media">
-                    <img src="images/projects/immune-link.png" alt="免疫联结游戏标题画面" loading="lazy">
-                    <span class="case-stamp">PLAYABLE</span>
-                </div>
-                <div class="case-body">
-                    <div class="case-index">CASE / 02</div>
-                    <h3 class="case-title--long">Immune<wbr>Link</h3>
-                    <p class="case-type">Godot 4 · 2D Tower Defense</p>
-                    <p class="case-summary">这是为 2025 卡赢杯公益游戏开发大赛制作的 2D 塔防游戏，主题是“桥”。玩法围绕绘制桥梁网络、连接资源节点和升级防御设施展开，也加入了自定义关卡的导入与导出。</p>
-                    <dl class="case-meta">
-                        <div><dt>负责</dt><dd>游戏设计 / 编程 / 美术</dd></div>
-                        <div><dt>技术</dt><dd>Godot 4 · GDScript · Pixel Art · JSON</dd></div>
-                    </dl>
-                    <div class="case-links">
-                        <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩 ↗</a>
-                        <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">查看源码 ↗</a>
-                        <a href="https://www.bilibili.com/video/BV1Z8mFBUEk2/" target="_blank" rel="noreferrer">演示视频 ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="case case--red reveal" id="project-naruto">
-                <div class="case-media">
-                    <img src="images/projects/秽土.avif" alt="像素火影秽土柱间角色画面" loading="lazy">
-                    <span class="case-stamp">COMBAT</span>
-                </div>
-                <div class="case-body">
-                    <div class="case-index">CASE / 03</div>
-                    <h3>像素火影 · 秽土柱间</h3>
-                    <p class="case-type">Unity 2D 同人项目 · Combat System</p>
-                    <p class="case-summary">这是一个 Unity 2D 角色练习。我主要负责技能、动画状态切换、攻击判定和伤害逻辑，也尝试调整动作与命中反馈。</p>
-                    <dl class="case-meta">
-                        <div><dt>负责</dt><dd>角色技能 / 动画状态机 / 战斗判定</dd></div>
-                        <div><dt>技术</dt><dd>Unity · C# · FSM · Hit Detection</dd></div>
-                    </dl>
-                    <div class="case-links">
-                        <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">观看演示 ↗</a>
-                    </div>
-                </div>
-            </article>
-
-            <article class="case case--ink case--reverse reveal" id="project-csg">
-                <div class="case-media">
-                    <img src="images/projects/csg.png" alt="CounterStrikeGrenades Minecraft 模组画面" loading="lazy">
-                    <span class="case-stamp">OPEN SOURCE</span>
-                </div>
-                <div class="case-body">
-                    <div class="case-index">CASE / 04</div>
-                    <h3 class="case-title--long">Counter<wbr>Strike Grenades</h3>
-                    <p class="case-type">Minecraft Forge Mod · Systems & Integration</p>
-                    <p class="case-summary">这是一个 Minecraft Forge 模组项目，尝试还原 CS2 的投掷物机制。工作包括行为逻辑、简单的 3D 资产，以及与 TACZ 枪械模组的兼容。</p>
-                    <dl class="case-meta">
-                        <div><dt>负责</dt><dd>投掷物机制 / 3D 资产 / 跨模组兼容</dd></div>
-                        <div><dt>技术</dt><dd>Forge · Kotlin · Blockbench · TACZ</dd></div>
-                    </dl>
-                    <div class="case-links">
-                        <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer">查看源码 ↗</a>
-                    </div>
-                </div>
-            </article>
+            <pre class="term-body"><span class="c-brand">➜  ~</span> neofetch
+<span class="c-brand"> ██████╗ ███████╗
+ ██╔══██╗╚══███╔╝
+ ██║  ██║  ███╔╝
+ ██║  ██║ ███╔╝ 
+ ██████╔╝███████╗
+ ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">dz-wiki</span>
+                   ─────────────────
+                   <span class="c-key">OS</span>      Godot 4 · Unity
+                   <span class="c-key">Shell</span>   GDScript · C# · C++
+                   <span class="c-key">Uptime</span>  learning game dev
+                   <span class="c-key">Agents</span>  DeepSeek Harness · Codex
+                   <span class="c-key">Focus</span>   gameplay · tools · mods
+                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span></pre>
         </section>
 
-        <section class="profile" id="profile" aria-labelledby="profile-title">
-            <div class="profile-title reveal">
-                <p class="kicker">PLAYER PROFILE / DRAGONZHI</p>
-                <h2 id="profile-title">关于我，<br>和一些正在学习的方向。</h2>
-            </div>
-            <div class="profile-copy reveal">
-                <p>我是一名对游戏开发感兴趣的大学生，目前主要在学习游戏引擎和 C++ 相关内容。</p>
-                <p>平时会做一些玩法、战斗系统、寻路和 Mod 开发练习。这里记录的是其中相对完整的几个项目，还有不少地方正在继续学习。</p>
-                <p>开发时也会使用 AI Agent 辅助工作，包括 Claude Code、Codex 等工具。我会用它们帮助检索代码、拆分任务、验证方案、处理重复性修改和整理文档，重要逻辑仍会自己检查和测试。</p>
-            </div>
-            <div class="capability-list reveal" aria-label="能力列表">
-                <div><span>01</span><strong>Gameplay Systems</strong><small>玩法机制与状态管理</small></div>
-                <div><span>02</span><strong>Performance</strong><small>对象池、路径与运行时优化</small></div>
-                <div><span>03</span><strong>Game Feel</strong><small>动画、判定与反馈调优</small></div>
-                <div><span>04</span><strong>Modding</strong><small>Forge 生态与跨模组集成</small></div>
-                <div><span>05</span><strong>AI Agent Workflow</strong><small>Claude Code / Codex / Vibe Coding</small></div>
-            </div>
+        <!-- about.md：文案在 data/content.js 里改 -->
+        <section class="tile t-2w reveal">
+            <h2 class="tile-title samp">about.md</h2>
+            <div id="about-body"><!-- 由 data/content.js 填充 --></div>
         </section>
 
-        <section class="contact" id="contact" aria-labelledby="contact-title">
-            <p class="kicker reveal">CHANNEL OPEN / SAY HELLO</p>
-            <h2 id="contact-title" class="reveal">如果想聊聊项目，<br>或者游戏开发，<br><span>欢迎联系我。</span></h2>
-            <div class="contact-row reveal">
-                <a href="mailto:dzloong@foxmail.com">dzloong@foxmail.com ↗</a>
-                <button type="button" data-copy-email data-email="dzloong@foxmail.com">复制邮箱</button>
-                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
+        <!-- now.md：文案在 data/content.js 里改 -->
+        <section class="tile t-2w reveal">
+            <h2 class="tile-title samp">now.md</h2>
+            <ul class="now-list" id="now-list"><!-- 由 data/content.js 填充 --></ul>
+            <p class="tile-foot samp">updated: <span data-current-year>2026</span> · 持续学习中</p>
+        </section>
+
+        <!-- 项目索引 -->
+        <section class="tile t-4w reveal" id="projects">
+            <div class="tile-head">
+                <h2 class="tile-title samp">projects/</h2>
+                <span class="tile-count samp">04 entries</span>
             </div>
+            <ol class="proj-list">
+                <li class="proj">
+                    <span class="proj-index samp">01</span>
+                    <div class="proj-main">
+                        <h3>TriHorny4Link</h3>
+                        <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
+                        <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
+                        <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index samp">02</span>
+                    <div class="proj-main">
+                        <h3>ImmuneLink</h3>
+                        <p class="proj-type samp">Godot 4 · 2D Tower Defense</p>
+                        <p class="proj-desc">2025 卡赢杯公益赛作品，主题是「桥」：画桥连资源点的塔防，支持关卡导入导出。</p>
+                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">游玩 ↗</a>
+                        <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index samp">03</span>
+                    <div class="proj-main">
+                        <h3>像素火影 · 秽土柱间</h3>
+                        <p class="proj-type samp">Unity 2D 同人 · combat system</p>
+                        <p class="proj-desc">技能、动画状态切换、攻击判定和伤害逻辑的练习，调动作和命中反馈。</p>
+                        <p class="proj-tags"><code class="tag">Unity</code><code class="tag">C#</code><code class="tag">FSM</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index samp">04</span>
+                    <div class="proj-main">
+                        <h3>CounterStrikeGrenades</h3>
+                        <p class="proj-type samp">Minecraft Forge Mod · systems</p>
+                        <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
+                        <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer">源码 ↗</a>
+                    </div>
+                </li>
+            </ol>
+            <p class="tile-foot samp">完整旧版作品集: <a href="legacy/portfolio.html">legacy/portfolio.html ↗</a></p>
+        </section>
+
+        <!-- links -->
+        <section class="tile t-2w reveal" id="links">
+            <h2 class="tile-title samp">links.md</h2>
+            <ul class="link-list samp">
+                <li><a href="pages/blog.html">blog <span class="dim">/ 博客</span> ↗</a></li>
+                <li><a href="pages/gallery.html">gallery <span class="dim">/ 洛天依画廊</span> ↗</a></li>
+                <li><a href="pages/portfolio.html">portfolio <span class="dim">/ 作品集</span> ↗</a></li>
+                <li><a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub <span class="dim">/ @Dragonzhi</span> ↗</a></li>
+                <li class="link-mail">
+                    <span>dzloong@foxmail.com</span>
+                    <button type="button" class="copy-btn samp" data-copy-email data-email="dzloong@foxmail.com">copy</button>
+                </li>
+            </ul>
+        </section>
+
+        <!-- motto -->
+        <section class="tile tile--quote t-2w reveal">
+            <h2 class="tile-title samp">motto.txt</h2>
+            <blockquote>make games, have fun,<br>and ship it someday.</blockquote>
+            <p class="tile-foot samp">— 手机电量与动力同步下降中 (˶ᵔ ᵕ ᵔ˶)</p>
         </section>
     </main>
 
-    <footer class="site-footer">
-        <p>© <span data-current-year></span> Dragonzhi · <a href="legacy/">旧版</a></p>
-        <button class="signal-trigger" type="button" data-easter-trigger aria-controls="hidden-signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
-        <a href="#top">回到顶部 ↑</a>
+    <footer class="site-footer samp">
+        <p>© <span data-current-year>2026</span> Dragonzhi · built with ♥ &amp; vibe coding</p>
+        <button type="button" class="signal-trigger" data-signal-trigger aria-controls="signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
+        <a href="#top">top ↑</a>
     </footer>
 
-    <!-- SIDE CHANNEL 01: 不是所有信息都会出现在主导航里。 -->
-    <div class="signal-layer" id="hidden-signal" data-easter-egg aria-hidden="true">
-        <button class="signal-backdrop" type="button" data-easter-close aria-label="关闭隐藏信号"></button>
+    <!-- 隐藏信号：点按钮或输入 66CCFF 唤出 -->
+    <div class="signal-layer" id="signal" data-signal aria-hidden="true">
+        <button type="button" class="signal-backdrop" data-signal-close aria-label="关闭隐藏信号"></button>
         <aside class="signal-console" role="dialog" aria-modal="true" aria-labelledby="signal-title">
-            <div class="signal-console__bar">
+            <div class="signal-bar samp">
                 <span>RECEIVER://SIDE_CHANNEL_01</span>
-                <button type="button" data-easter-close aria-label="关闭">[ ESC ]</button>
+                <button type="button" class="signal-close" data-signal-close>[ ESC ]</button>
             </div>
-            <div class="signal-console__content">
-                <div class="signal-avatar">
-                    <img src="images/pic_lty.png" alt="洛天依像素线稿小图标">
-                </div>
+            <div class="signal-body">
                 <div class="signal-wave" aria-hidden="true">
                     <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
                 </div>
-                <p class="signal-code">VOICEPRINT / #66CCFF / VSINGER</p>
+                <p class="signal-code samp">VOICEPRINT / #66CCFF / VSINGER</p>
                 <h2 id="signal-title">捕获到一段<br>来自 66.00 MHz 的歌声。</h2>
-                <p>洛天依，小爱好频道。没有主题皮肤，也没有自动播放——你只是找到了本站第一个隐藏信号。</p>
-                <code>ALT_TRIGGER: TYPE "66CCFF"</code>
+                <p>洛天依，小爱好频道。既然找到了这里，别忘了去 <a href="pages/gallery.html" style="color:#4fe0c4">画廊</a> 看看她。</p>
+                <code class="samp">ALT_TRIGGER: TYPE "66CCFF"</code>
             </div>
         </aside>
     </div>
 
-    <script src="js/portfolio-demo.js"></script>
+    <script src="data/content.js"></script>
+    <script src="js/site.js"></script>
 </body>
 </html>
