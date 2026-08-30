@@ -5,9 +5,10 @@
 
 ## 项目速览
 
-- `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`）。
+- `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/` + `data/files-manifest.json`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`，`files/` 新增 `.md` 通过 `scripts/generate_manifest.py` 生成的索引自动成为档案架卡片，样式按内容自动判型：链接列表/圆点列表/便签/段落）。
 - `posts/` + `data/posts.json`：博客文章（Markdown + JSON 索引）。
-- `images/画廊/`：画廊图片，索引由 `python generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
+- `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
+- `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
 - `pages/`、`legacy/`、`data/portfolio.json`：旧主题子页面与存档，改动需谨慎。
 - 合规红线：`<title>` 固定为「ZLOONG 工房 · Hanako箱庭」，页脚备案号「闽ICP备20260330551号-1」不得删改。
 

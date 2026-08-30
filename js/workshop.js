@@ -210,6 +210,86 @@
         for (i = 0; i < lis.length; i += 1) { out.push(lis[i].outerHTML); }
         return out;
     }
+
+    /* ---------- 自发现卡片：按内容判型，复用现有卡片 DOM 结构 ----------
+       links 型：全部是列表行且每行含 [文字](链接) 或以 {copy} 结尾
+       list  型：全部是列表行（无链接）
+       quote 型：全部行以 > 开头
+       doc   型：其他（段落、混合内容） */
+    function detectCardType(text) {
+        var ls = String(text).replace(/\r\n?/g, "\n").split("\n")
+            .map(function (l) { return l.trim(); })
+            .filter(function (l) { return l; });
+        if (!ls.length) { return null; }
+        var allList = ls.every(function (l) { return /^-\s+/.test(l); });
+        if (allList) {
+            var allLink = ls.every(function (l) {
+                return /\[[^\]]+\]\([^)\s]+\)/.test(l) || /\{copy\}\s*$/.test(l);
+            });
+            return allLink ? "links" : "list";
+        }
+        if (ls.every(function (l) { return /^>\s?/.test(l); })) { return "quote"; }
+        return "doc";
+    }
+
+    /* links 型列表行：- [label](url) 尾部文字 / 邮箱 {copy} */
+    function linksItemHtml(line) {
+        var text = line.replace(/^\s*-\s+/, "").trim();
+        var copy = /\{copy\}\s*$/.test(text);
+        var body = text.replace(/\{copy\}\s*$/, "").trim();
+        var m = body.match(/^\[([^\]]+)\]\(([^)\s]+)\)\s*(.*)$/);
+        if (m) {
+            var url = m[2];
+            var dim = m[3] ? ' <span class="dim">' + escHtml(m[3]) + "</span>" : "";
+            return "<li><a href=\"" + url + "\"" + (/^https?:/i.test(url) ? " target=\"_blank\" rel=\"noreferrer\"" : "") + ">"
+                + escHtml(m[1]) + dim + " ↗</a></li>";
+        }
+        if (copy && /^\S+@\S+$/.test(body)) {
+            return '<li class="link-mail"><span>' + escHtml(body) + '</span><button type="button" class="copy-btn samp" data-copy-email data-email="' + escHtml(body) + '">copy</button></li>';
+        }
+        return "<li>" + inlineMd(body) + "</li>";
+    }
+
+    /* 组装自发现卡片：返回 section 元素，复用现有卡片样式类 */
+    function buildAutoCard(filename, body) {
+        if (!body || !String(body).trim()) { return null; }
+        var type = detectCardType(body);
+        if (!type) { return null; }
+        var title = "<h2 class=\"tile-title samp\">" + escHtml(filename) + "</h2>";
+        var cls = "tile t-2w", inner = title;
+        if (type === "links") {
+            var items = String(body).replace(/\r\n?/g, "\n").split("\n")
+                .map(function (l) { return l.trim(); })
+                .filter(function (l) { return l; })
+                .map(linksItemHtml);
+            inner = title + '<ul class="link-list samp">' + items.join("") + "</ul>";
+        } else if (type === "list") {
+            var lis = String(body).replace(/\r\n?/g, "\n").split("\n")
+                .map(function (l) { return l.replace(/^\s*-\s+/, ""); })
+                .filter(function (l) { return l.trim(); })
+                .map(function (l) { return '<li><span class="now-dot"></span>' + inlineMd(l) + "</li>"; });
+            inner = title + '<ul class="now-list">' + lis.join("") + "</ul>";
+        } else if (type === "quote") {
+            cls = "tile tile--quote t-2w";
+            var blocks = String(body).replace(/\r\n?/g, "\n").split(/\n\s*\n/);
+            var quote = [], foot = [];
+            blocks.forEach(function (b, i) {
+                var ls = b.split("\n")
+                    .map(function (l) { return l.replace(/^>\s?/, ""); })
+                    .filter(function (l) { return l.trim(); });
+                if (!ls.length) { return; }
+                if (i === 0) { quote = ls; } else { foot = foot.concat(ls); }
+            });
+            inner = title + "<blockquote>" + quote.map(escHtml).join("<br>") + "</blockquote>";
+            if (foot.length) { inner += '<p class="tile-foot samp">' + escHtml(foot.join(" ")) + "</p>"; }
+        } else {
+            inner = title + '<div class="tile-body">' + blockMd(body) + "</div>";
+        }
+        var card = document.createElement("section");
+        card.className = cls;
+        card.innerHTML = inner;
+        return card;
+    }
     function bootFiles() {
         loadText("files/about.md").then(function (t) {
             if (aboutBody && t) { aboutBody.innerHTML = blockMd(t); }
@@ -262,6 +342,22 @@
                     if (dailyWho && it.w) { dailyWho.textContent = it.w; }
                 }
             }
+        });
+        /* ---------- 自发现档案架：读取 manifest，按内容自动判型渲染卡片 ---------- */
+        loadText("data/files-manifest.json").then(function (t) {
+            if (!t) return;
+            var manifest;
+            try { manifest = JSON.parse(t); } catch (e) { return; }
+            if (!Array.isArray(manifest)) return;
+            var shelf = document.getElementById("auto-shelf");
+            if (!shelf) return;
+            manifest.filter(function (e) { return e.auto; }).forEach(function (entry) {
+                loadText("files/" + entry.filename).then(function (body) {
+                    if (!body) return;
+                    var card = buildAutoCard(entry.filename, body);
+                    if (card) { shelf.appendChild(card); }
+                });
+            });
         });
     }
     bindCopyButtons();

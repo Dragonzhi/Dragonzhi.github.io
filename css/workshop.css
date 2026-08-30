@@ -231,6 +231,12 @@ a:hover { color: var(--red); }
 .copy-btn:hover, .copy-btn.copied { background: var(--red); color: var(--card); }
 
 /* motto 便签 */
+/* 自发现档案架：容器不产生盒子，子卡片直接参与 bento 网格排布 */
+#auto-shelf { display: contents; }
+.tile-body { font-size: 13.5px; line-height: 1.7; }
+.tile-body p { margin: 0 0 6px; }
+.tile-body ul { margin: 0 0 6px; padding-left: 18px; }
+
 .tile--quote { background: #fdf9ee; transform: rotate(-.8deg); }
 .tile--quote:hover { transform: rotate(-.8deg) translateY(-3px); }
 .tile--quote::before {
