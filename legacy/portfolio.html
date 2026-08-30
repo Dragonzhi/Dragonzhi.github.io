@@ -1,0 +1,138 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <base href="../">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Dragonzhi 的游戏开发作品集，展示 gameplay programming、游戏系统、工具开发与 Minecraft Mod 项目。">
+    <meta name="theme-color" content="#dbe0e1">
+    <title>Dragonzhi — Gameplay Programmer</title>
+    <link rel="icon" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Noto+Sans+SC:wght@400;500;700;900&family=Roboto+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/portfolio-demo.css">
+</head>
+<body>
+    <a class="skip-link" href="#work">跳到作品</a>
+
+    <header class="site-header" data-site-header>
+        <a class="brand" href="#top" aria-label="返回首页">
+            <span class="brand-mark">DZ</span>
+            <span class="brand-copy">Dragonzhi<br><small>Gameplay Programmer</small></span>
+        </a>
+
+        <nav class="site-nav" aria-label="主导航">
+            <a href="#work">01 / 作品</a>
+            <a href="#profile">02 / 关于</a>
+            <a href="#contact">03 / 联系</a>
+        </nav>
+
+        <a class="header-link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
+    </header>
+
+    <main id="top">
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy reveal">
+                <p class="status-line"><span></span> STATUS / 持续学习中</p>
+                <p class="kicker">GAME SYSTEMS / INTERACTION / TOOLS</p>
+                <h1 id="hero-title"><span>GAME.</span><span>DEV.</span><span class="accent-word">LOG.</span></h1>
+                <p class="hero-intro">你好，我是 Dragonzhi。<br>平时主要学习游戏玩法和工具相关的开发。</p>
+                <div class="hero-actions">
+                    <a class="action action--primary" href="#work">查看精选作品 ↓</a>
+                    <a class="action" href="mailto:dzloong@foxmail.com">联系我 ↗</a>
+                </div>
+            </div>
+
+            <div class="hero-stage reveal" data-tilt>
+                <div class="stage-label stage-label--top">CURRENT FOCUS / GAMEPLAY</div>
+                <img src="images/projects/tri.png" alt="TriHorny4Link 塔防游戏画面">
+                <div class="stage-overlay">
+                    <span>01</span>
+                    <p>PATHFINDING<br>OBJECT POOL<br>EVENT SYSTEM</p>
+                </div>
+                <div class="stage-label stage-label--bottom">SCREEN_1920×1080 / GODOT</div>
+            </div>
+
+            <dl class="hero-facts reveal">
+                <div><dt>方向</dt><dd>Gameplay / Tools</dd></div>
+                <div><dt>引擎</dt><dd>Godot / Unity</dd></div>
+                <div><dt>语言</dt><dd>C++ / C# / GDScript</dd></div>
+                <div><dt>也在做</dt><dd>Minecraft Mod</dd></div>
+            </dl>
+        </section>
+
+        <section class="work" id="work" aria-labelledby="work-title">
+            <div class="section-heading reveal">
+                <p class="kicker">SELECTED WORK / 2022—2026</p>
+                <h2 id="work-title">一些做过的项目，<br>以及简单的记录。</h2>
+                <p class="section-count" data-project-count>-- CASE FILES</p>
+            </div>
+
+            <div id="project-list" aria-live="polite">
+                <p class="project-loading">正在读取项目数据……</p>
+            </div>
+        </section>
+
+        <section class="profile" id="profile" aria-labelledby="profile-title">
+            <div class="profile-title reveal">
+                <p class="kicker">PLAYER PROFILE / DRAGONZHI</p>
+                <h2 id="profile-title">关于我，<br>和一些正在学习的方向。</h2>
+            </div>
+            <div class="profile-copy reveal">
+                <p>我是一名对游戏开发感兴趣的大学生，目前主要在学习游戏引擎和 C++ 相关内容。</p>
+                <p>平时会做一些玩法、战斗系统、寻路和 Mod 开发练习。这里记录的是其中相对完整的几个项目，还有不少地方正在继续学习。</p>
+                <p>开发时也会使用 AI Agent 辅助工作，包括 Claude Code、Codex 等工具。我会用它们帮助检索代码、拆分任务、验证方案、处理重复性修改和整理文档，重要逻辑仍会自己检查和测试。</p>
+            </div>
+            <div class="capability-list reveal" aria-label="能力列表">
+                <div><span>01</span><strong>Gameplay Systems</strong><small>玩法机制与状态管理</small></div>
+                <div><span>02</span><strong>Performance</strong><small>对象池、路径与运行时优化</small></div>
+                <div><span>03</span><strong>Game Feel</strong><small>动画、判定与反馈调优</small></div>
+                <div><span>04</span><strong>Modding</strong><small>Forge 生态与跨模组集成</small></div>
+                <div><span>05</span><strong>AI Agent Workflow</strong><small>Claude Code / Codex / Vibe Coding</small></div>
+            </div>
+        </section>
+
+        <section class="contact" id="contact" aria-labelledby="contact-title">
+            <p class="kicker reveal">CHANNEL OPEN / SAY HELLO</p>
+            <h2 id="contact-title" class="reveal">如果想聊聊项目，<br>或者游戏开发，<br><span>欢迎联系我。</span></h2>
+            <div class="contact-row reveal">
+                <a href="mailto:dzloong@foxmail.com">dzloong@foxmail.com ↗</a>
+                <button type="button" data-copy-email data-email="dzloong@foxmail.com">复制邮箱</button>
+                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <p>© <span data-current-year></span> Dragonzhi · <a href="legacy/">旧版</a></p>
+        <button class="signal-trigger" type="button" data-easter-trigger aria-controls="hidden-signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
+        <a href="#top">回到顶部 ↑</a>
+    </footer>
+
+    <!-- SIDE CHANNEL 01: 不是所有信息都会出现在主导航里。 -->
+    <div class="signal-layer" id="hidden-signal" data-easter-egg aria-hidden="true">
+        <button class="signal-backdrop" type="button" data-easter-close aria-label="关闭隐藏信号"></button>
+        <aside class="signal-console" role="dialog" aria-modal="true" aria-labelledby="signal-title">
+            <div class="signal-console__bar">
+                <span>RECEIVER://SIDE_CHANNEL_01</span>
+                <button type="button" data-easter-close aria-label="关闭">[ ESC ]</button>
+            </div>
+            <div class="signal-console__content">
+                <div class="signal-avatar">
+                    <img src="images/pic_lty.png" alt="洛天依像素线稿小图标">
+                </div>
+                <div class="signal-wave" aria-hidden="true">
+                    <i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i>
+                </div>
+                <p class="signal-code">VOICEPRINT / #66CCFF / VSINGER</p>
+                <h2 id="signal-title">捕获到一段<br>来自 66.00 MHz 的歌声。</h2>
+                <p>洛天依，小爱好频道。没有主题皮肤，也没有自动播放——你只是找到了本站第一个隐藏信号。</p>
+                <code>ALT_TRIGGER: TYPE "66CCFF"</code>
+            </div>
+        </aside>
+    </div>
+
+    <script src="js/portfolio-demo.js"></script>
+</body>
+</html>
