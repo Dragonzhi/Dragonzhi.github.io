@@ -1,8 +1,9 @@
 # ZLOONG 个人主站改造方案
 
-> 状态：**已定稿** · 2026-08-30
+> 状态：**已定稿 · 主站已部署上线** · 2026-08-30
 > 背景：看到 lvy010（GitHub: lvy010）的 GitHub 主页与个人网站，触发对自身 GitHub 主页、个人主站、箱庭关系的重新规划。
 > 设计定稿：`preview-workshop-v5.html`（与本文件同目录树，见下）
+> 部署状态：主站已上线 https://dragonzhi.xyz/（腾讯云 nginx，git clone 部署），箱庭互链完成
 
 ## 〇、交接实施说明（给 Harness）
 
@@ -101,16 +102,28 @@
 - 页脚挂备案号 + 链接 `https://beian.miit.gov.cn/`（v5 已挂）
 - 箱庭现状合规，不动
 
-## 六、部署管线
+## 六、部署管线（已落地）
 
 ```
 Dragonzhi/Dragonzhi.github.io（一份源码）
-  ├─ GitHub Actions → GitHub Pages（静态镜像）
-  └─ GitHub Actions → 同步腾讯云 → systemd 服务（根路径，nginx）
+  ├─ GitHub Actions → GitHub Pages（静态镜像，可选）
+  └─ 腾讯云 nginx：git clone 到 /var/www/dragonzhi，属主 ubuntu
 ```
 
-- 工房 = `dragonzhi.xyz/`（根路径）
+- 工房 = `dragonzhi.xyz/`（/var/www/dragonzhi，nginx 静态）
 - 箱庭 = `dragonzhi.xyz/hanako/`（systemd 端口 8421，不动）
+
+### 日常更新流程（本地改 → push → 服务器 pull）
+
+1. 本地/云端改代码，push 到 GitHub `Dragonzhi/Dragonzhi.github.io`
+2. 服务器执行：`cd /var/www/dragonzhi && git pull`
+3. 属主已是 ubuntu，普通用户可直接 pull（无需 sudo）；仅首次部署需要 sudo
+4. nginx 无需 reload（静态文件直接生效），仅在改 nginx 配置时才 `sudo nginx -t && sudo systemctl reload nginx`
+
+### 已完成的互链
+
+- 工房 → 箱庭：首页 hero「隔壁箱庭 ↗」+ 导览牌肆（dragonzhi.xyz/hanako）
+- 箱庭 → 工房：报尾新增「隔壁：ZLOONG 工房 · dragonzhi.xyz」（已 push 至 hanako-diorama 仓库）
 
 ## 七、GitHub 个人页（已完成项）
 
@@ -118,18 +131,18 @@ Dragonzhi/Dragonzhi.github.io（一份源码）
 
 ## 八、实施清单
 
-- [ ] index.html 按 v5 重写（结构 + 文案）
-- [ ] v5 内联样式抽取为 css/workshop.css
-- [ ] `<title>` 确认为「ZLOONG 工房 · Hanako箱庭」
-- [ ] 页脚备案号 + 工信部链接
-- [ ] content.js 数据流接入（phrases 打字机必接；about/now 可静态可数据化）
-- [ ] projects 恢复 portfolio.json 数据驱动（渐进增强方式）或保持静态
-- [ ] GitHub Pages 管线验证（现有 workflow 应兼容）
-- [ ] 腾讯云部署管线：Actions → 同步服务器 → systemd（新增，参考箱庭 hanako-news.service 模式）
-- [ ] nginx 根路径指向工房静态目录（/hanako/ 保持反代 8421）
-- [ ] 箱庭首页「本版目录」加一条「隔壁：ZLOONG 工房」互链
-- [ ] Dragonzhi/Dragonzhi README 更新 Home 链接与定位语
-- [ ] 全部上线后：四个 preview-*.html 从仓库删除（留在本地存档即可）
+- [x] index.html 按 v5 重写（Harness 施工完成，已验收）
+- [x] v5 内联样式抽取为 css/workshop.css
+- [x] `<title>` 确认为「ZLOONG 工房 · Hanako箱庭」
+- [x] 页脚备案号 + 工信部链接
+- [x] content.js 数据流接入（phrases 打字机必接；about/now 可静态可数据化）
+- [x] projects 静态四件（免疫联结/棱镜/TriHorny/CSG）
+- [x] 腾讯云部署：git clone 到 /var/www/dragonzhi，属主 ubuntu
+- [x] nginx 根路径指向工房静态目录（/hanako/ 保持反代 8421）
+- [x] 互链：工房→箱庭（已内置）+ 箱庭→工房（已 push）
+- [ ] 箱庭首页「本版目录」加一条「隔壁：ZLOONG 工房」互链（已放报尾，如需菜单项再加）
+- [x] Dragonzhi/Dragonzhi README 更新 Home 链接与定位语（如需再补）
+- [x] 全部上线后：四个 preview-*.html 从仓库删除（Harness 已清理）
 
 ## 附：过程版本存档（已否决，仅供参考）
 
