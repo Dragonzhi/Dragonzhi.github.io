@@ -5,7 +5,7 @@
 
 ## 项目速览
 
-- `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js`：工房首页及其数据流。
+- `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`）。
 - `posts/` + `data/posts.json`：博客文章（Markdown + JSON 索引）。
 - `images/画廊/`：画廊图片，索引由 `python generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
 - `pages/`、`legacy/`、`data/portfolio.json`：旧主题子页面与存档，改动需谨慎。
@@ -14,7 +14,7 @@
 ## 工作约定
 
 1. 遵循现有「工房 Workshop」设计定稿：暖纸台面 + 朱砂点缀 + 双轨编号；发光效果只允许出现在 SIGNAL 彩蛋一处，不要新增。
-2. 改文案（about / now / 打字机句子）只动 `data/content.js`，不要改 HTML。
+2. 改文案：about / now / links / motto / 今日一言改 `files/` 下的源文件（`about.md` / `now.md` / `links.md` / `motto.txt` / `daily.txt`），打字机句子改 `data/content.js` 的 `phrases`；不要直接改 HTML（HTML 里的静态内容只是无 JS 兜底，可不同步）。
 3. 发新博客：在 `posts/` 建 Markdown，并在 `data/posts.json` 登记记录。
 4. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
 5. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。

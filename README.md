@@ -33,8 +33,9 @@
 |---|---|
 | `index.html` | 工房首页：报头墙 → 今日一言 → bento 台面 → 本区导览 → 报尾 |
 | `css/workshop.css` | 首页样式（自 workshop v5 设计定稿抽取） |
-| `js/workshop.js` | 打字机、门牌日期、about/now 渲染、复制邮箱、SIGNAL 彩蛋 |
-| `data/content.js` | 站点文案配置：打字机 phrases / 今日一言 dailyQuotes / about.md / now.md |
+| `js/workshop.js` | 打字机、门牌日期、迷你 Markdown 解析 + files/ 读取、复制邮箱、SIGNAL 彩蛋 |
+| `data/content.js` | 打字机 phrases（其余卡片文案在 `files/`） |
+| `files/` | 卡片文案源文件：`about.md` / `now.md` / `links.md` / `motto.txt` / `daily.txt` |
 | `pages/` | 旧主题子页面（博客、画廊、作品集），从首页导览牌进入 |
 | `posts/` + `data/posts.json` | 博客文章（Markdown + JSON 索引，marked.js 渲染） |
 | `legacy/` | 旧版主页与作品集存档（legacy 作品集仍由 `data/portfolio.json` 驱动） |
@@ -44,7 +45,7 @@
 
 ## 主要功能
 
-* **工房首页**：报头墙 + 「常开 OPEN」印章、今日一言（按日期轮选，同一天所有人看到同一句）、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about.md / now.md / projects 档案架 / links 门牌 / motto 便签）。
+* **工房首页**：报头墙 + 「常开 OPEN」印章、今日一言（按日期轮选，同一天所有人看到同一句）、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about / now / projects 档案架 / links / motto）。about / now / links / motto / 今日一言 的文案是 `files/` 下的真实 .md/.txt，页面自动读取渲染。
 * **本区导览**：箱庭菜单语法的目录牌（壹贰叁肆），通向博客版、画廊版、旧版作品集与隔壁箱庭。
 * **隐藏信号**：点页脚 `SIGNAL / 66.00 MHz`，或在任意位置键入 `66CCFF`，唤出工房角落的收音机。
 * **渐进增强**：核心内容纯静态即可完整显示；所有 fetch 容忍失败，绝不白屏。
@@ -54,11 +55,23 @@
 
 ## 常用改动
 
-### 改文案（about / now / 打字机句子）
+### 改卡片文案（about / now / links / motto / 今日一言）
 
-全部在 [`data/content.js`](data/content.js) 里改，不用动 HTML。字符串里可以写行内 HTML（如 `<code class="tag">`、`<span class="state">`）。
+改 `files/` 下的源文件即可，不用动 HTML（HTML 里的静态内容只是无 JS 兜底，可不同步）：
 
-今日一言在 `dailyQuotes` 里改（`q` = 正文，`w` = 落款）：按日期轮选，同一天所有访客看到同一句，次日自动换下一句；它用 `textContent` 渲染，**只写纯文本**，不要放 HTML。无 JS 时显示 `index.html` 里的原始句子作兜底。
+| 文件 | 对应卡片 | 格式 |
+|---|---|---|
+| `files/about.md` | about 卡片 | 段落，空行分隔 |
+| `files/now.md` | now 卡片 | `- ` 无序列表 |
+| `files/links.md` | links 卡片 | `- [文字](链接)`；邮箱行末尾加 `{copy}` 生成复制按钮 |
+| `files/motto.txt` | motto 便签 | 第一段进正文（行内自动换行），空行后第二段进落款 |
+| `files/daily.txt` | 今日一言 | 每条 2 行（正文 + 落款），条目间空行分隔；按日期轮选，次日自动换 |
+
+首页用自带的迷你 Markdown 解析器（无第三方依赖），支持：`` `code` `` → 等宽标签、`**粗体**`、`[[在制]]` → 朱砂状态徽章、`[文字](链接)`。**其余一律按纯文本显示，不解析原始 HTML**（规避 XSS）。改完推送后，Fastly CDN 最多缓存 10 分钟，稍候即生效。
+
+### 改打字机句子
+
+在 [`data/content.js`](data/content.js) 的 `phrases` 里改。
 
 ### 改作品档案架
 
