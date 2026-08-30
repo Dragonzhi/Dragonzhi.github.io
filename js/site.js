@@ -1,26 +1,40 @@
 /* ============================================================
-   dz-neko · main.js
-   打字机 / 复制邮箱 / 66CCFF 隐藏信号 / 入场动画
+   dz.wiki · site.js
+   打字机 / 文案渲染 / 复制邮箱 / 66CCFF 隐藏信号 / 入场动画
    ============================================================ */
 (function () {
     "use strict";
 
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var content = window.SITE_CONTENT || {};
 
     /* ---------- 当前年份 ---------- */
     document.querySelectorAll("[data-current-year]").forEach(function (el) {
         el.textContent = String(new Date().getFullYear());
     });
 
-    /* ---------- 首屏打字机（lvy 的 typing svg 思路） ---------- */
+    /* ---------- about.md / now.md：文案统一在 data/content.js 里改 ---------- */
+    var aboutBody = document.getElementById("about-body");
+    if (aboutBody && Array.isArray(content.about)) {
+        aboutBody.innerHTML = content.about
+            .map(function (p) { return "<p>" + p + "</p>"; })
+            .join("");
+    }
+
+    var nowList = document.getElementById("now-list");
+    if (nowList && Array.isArray(content.now)) {
+        nowList.innerHTML = content.now
+            .map(function (item) { return '<li><span class="now-dot"></span>' + item + "</li>"; })
+            .join("");
+    }
+
+    /* ---------- 首屏打字机 ---------- */
     var typedEl = document.getElementById("typed");
     if (typedEl) {
-        var phrases = [
-            "Hi, I'm Dragonzhi.",
-            "make games, have fun.",
-            "vibe coding…"
-        ];
-        if (reduceMotion) {
+        var phrases = (Array.isArray(content.phrases) && content.phrases.length)
+            ? content.phrases
+            : ["Hi, I'm Dragonzhi."];
+        if (reduceMotion || phrases.length === 1) {
             typedEl.textContent = phrases[0];
         } else {
             var pi = 0, ci = phrases[0].length, deleting = false;
@@ -127,7 +141,7 @@
     }
     document.addEventListener("keydown", function (e) {
         if (e.key === "Escape") { closeSignal(); return; }
-        /* 任意页面输入 66ccff 唤出（老站的彩蛋，保留） */
+        /* 任意页面输入 66ccff 唤出 */
         if (/^[a-zA-Z0-9]$/.test(e.key)) {
             buffer = (buffer + e.key.toLowerCase()).slice(-6);
             if (buffer === "66ccff") {
