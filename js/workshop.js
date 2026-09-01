@@ -89,8 +89,8 @@
         if (reduceMotion || phrases.length === 1) {
             typedEl.textContent = phrases[0];
         } else {
-            var pi = 0, ci = phrases[0].length, deleting = false;
-            typedEl.textContent = phrases[0];
+            var pi = 0, ci = 0, deleting = false;
+            typedEl.textContent = "";
             setTimeout(function tick() {
                 var word = phrases[pi];
                 if (!deleting) {

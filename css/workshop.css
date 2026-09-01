@@ -210,7 +210,7 @@ a:hover { color: var(--red); }
 .proj:first-child { border-top: none; }
 .proj-index { font-size: 13px; color: var(--red); font-weight: 700; padding-top: 4px; letter-spacing: 1px; }
 .proj-main h3 { margin: 0 0 2px; font-family: var(--display); font-size: 19px; color: var(--ink); }
-.proj-type { margin: 0 0 6px; font-size: 12px; color: var(--red); }
+.proj-type { margin: 0 0 6px; font-size: 12px; color: var(--ink-soft); }
 .proj-desc { margin: 0 0 8px; font-size: var(--fs-md); color: var(--ink-soft); max-width: var(--prose); }
 .proj-tags { margin: 0; }
 .tag {
@@ -245,7 +245,7 @@ a:hover { color: var(--red); }
 .tile-body p { margin: 0 0 6px; }
 .tile-body ul { margin: 0 0 6px; padding-left: 18px; }
 
-.tile--quote { background: #fdf9ee; transform: rotate(-.8deg); }
+.tile--quote { background: #fdf3dd; transform: rotate(-.8deg); }
 .tile--quote:hover { transform: rotate(-.8deg) translateY(-3px); }
 .tile--quote::before {
   content: ""; position: absolute; top: -9px; left: 50%; transform: translateX(-50%) rotate(1.5deg);
@@ -276,7 +276,7 @@ a:hover { color: var(--red); }
   padding: 13px 0; border-bottom: 1px dotted var(--line); color: var(--ink);
 }
 .dir-item:last-child { border-bottom: none; }
-.dir-item .no { font-size: 13px; font-weight: 700; color: var(--red); font-style: italic; min-width: 34px; }
+.dir-item .no { font-size: 13px; font-weight: 700; color: var(--red); min-width: 34px; }
 .dir-item .info { flex: 1; min-width: 0; }
 .dir-item .t { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
 .dir-item .d { font-size: var(--fs-sm); color: var(--ink-soft); margin-left: 10px; }
