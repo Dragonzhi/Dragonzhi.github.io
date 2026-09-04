@@ -9,6 +9,22 @@
 
     var reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     var content = window.SITE_CONTENT || {};
+    /* 台面长宽配置：读 data/desk-config.js 的 window.DESK_CONFIG。
+       缺省/缺字段一律回默认（与旧行为一致），绝不报错白屏。 */
+    var deskCfg = window.DESK_CONFIG || {};
+    function cfgNum(name, fallback) {
+        var v = Number(deskCfg[name]);
+        return (v === v && v > 0) ? v : fallback;   /* NaN/0/非数回默认 */
+    }
+    var cfgMinH = cfgNum("minHeight", 1180);
+    var cfgPadBottom = cfgNum("padBottom", 60);
+    var cfgPadRight = cfgNum("padRight", 24);
+    var cfgPad = cfgNum("padding", 24);
+    /* minWidth 允许 0（=自动随 .wrap 版心），单独读取 */
+    var cfgMinW = (function () {
+        var v = Number(deskCfg.minWidth);
+        return (v === v && v >= 0) ? v : 0;
+    })();
 
     /* ---------- 门牌日期 ---------- */
     var todayEl = document.getElementById("today");
@@ -290,39 +306,130 @@
         card.innerHTML = inner;
         return card;
     }
-    /* ---------- 台面自适应撑高：档案架是异步长高的，台面必须跟着长，
-       否则架子底部会冒出 `.desk`（高度写死），一拖就被 bounds 夹回顶部。
-       高度 = 所有卡片底部最大值 + 留白；只取最大值，导览牌自然被顶下去。
-       移动端是单列流式布局，不需要撑高。 */
-    function fitDeskHeight() {
+    /* 台面存档键：与 initDeskDrag 内共用，fitDesk 读它做"按存档预撑"。 */
+    var DESK_LS_KEY = "zloong-desk-v1";
+    /* 存档落位句柄：initDeskDrag 初始化后挂上，fitDesk 撑大台面后重落位，
+       避免"存档位置先被自然尺寸误夹、台面后撑大却回不去"。 */
+    var deskRestore = null;
+    /* ---------- 台面自适应撑大：档案架异步长高、书签探出右沿，
+       台面必须跟着长和宽，否则卡片底部/右沿冒出 `.desk`，
+       一拖就被 bounds 夹回（纵向跳顶、横向跳左）。
+       高 = 所有卡片底部最大值 + 60 留白（撑大把导览牌顶下去）；
+       宽 = 所有卡片右沿最大值 + 右沿留白（台面透明，只放宽横向拖拽范围）。
+       重载时把存档位置也计入，台面一次撑到位；撑大后重跑一次存档落位。
+       移动端是单列流式布局，不需要撑。 */
+    function fitDesk() {
         var desk = document.querySelector(".desk");
         if (!desk) { return; }
         if (!window.matchMedia("(min-width: 901px)").matches) {
             desk.style.removeProperty("min-height");
+            desk.style.removeProperty("min-width");
+            desk.style.removeProperty("margin-left");   /* 移动端单列布局，清掉居中偏移 */
+            desk.style.removeProperty("--desk-shift");   /* 清掉卡片群右移偏移 */
             return;
         }
-        var base = 1180;
+        var baseH = cfgMinH, baseW = 0, i, el, bottom, right, key, s;
+        /* 先转 left/top 锚定：about/now/links/motto 都是依 right 锚定的
+           （right:0 / right:-15px），desk 一撑宽它们会跟着右移。
+           若不先锚定成 left，fitDesk 量出来的 needW 永远慢一拍（棘轮）。
+           幂等：已有 inline left 的卡跳过。 */
+        var anchors = desk.querySelectorAll(".paper[data-desk-card]");
+        for (i = 0; i < anchors.length; i += 1) {
+            el = anchors[i];
+            if (!el.style.left) {
+                el.style.left = el.offsetLeft + "px";
+                el.style.top = el.offsetTop + "px";
+            }
+        }
         try {
-            var v = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--desk-height"), 10);
-            if (!isNaN(v)) { base = v; }
-        } catch (e) { /* noop */ }
-        var need = base, i, el, bottom;
+            var wrap = desk.parentElement;
+            var ws = getComputedStyle(wrap);
+            baseW = cfgMinW > 0 ? cfgMinW : (wrap.clientWidth - parseFloat(ws.paddingLeft) - parseFloat(ws.paddingRight));
+        } catch (e) { baseW = cfgMinW > 0 ? cfgMinW : desk.clientWidth; }
+        /* 目标 = max(配置地板, 内容几何+余量)。直接取最大值，不再用递增判断——
+           否则配置的 minHeight/minWidth 若大于内容，needH 恒等于 baseH，
+           needH > baseH 恒 false，会永远走 else 清空、配置永不生效。 */
+        var needH = baseH, needW = baseW;
         var cards = desk.querySelectorAll(".paper[data-desk-card]");
         for (i = 0; i < cards.length; i += 1) {
             el = cards[i];
             bottom = el.offsetTop + el.offsetHeight;
-            if (bottom > need - 60) { need = bottom + 60; }
+            if (bottom + cfgPadBottom > needH) { needH = bottom + cfgPadBottom; }
+            right = el.offsetLeft + el.offsetWidth;
+            if (right + cfgPadRight > needW) { needW = right + cfgPadRight; }
         }
-        if (need > base) {
-            desk.style.minHeight = need + "px";
+        /* 存档预撑：重载时 init 的 restore 先于内容加载执行，
+           把存档里的低位/右位也计入，台面一次撑到位。 */
+        try {
+            var saved = JSON.parse(localStorage.getItem(DESK_LS_KEY) || "null");
+            if (saved) {
+                for (i = 0; i < cards.length; i += 1) {
+                    el = cards[i];
+                    key = el.dataset ? el.dataset.deskCard : null;
+                    s = key && saved[key];
+                    if (s && typeof s.x === "number" && typeof s.y === "number") {
+                        right = s.x + el.offsetWidth;
+                        if (right + cfgPadRight > needW) { needW = right + cfgPadRight; }
+                        bottom = s.y + el.offsetHeight;
+                        if (bottom + cfgPadBottom > needH) { needH = bottom + cfgPadBottom; }
+                    }
+                }
+            }
+        } catch (e) { /* noop */ }
+        if (needH > baseH) {
+            desk.style.minHeight = needH + "px";
         } else {
-            desk.style.removeProperty("min-height");
+            desk.style.minHeight = baseH + "px";   /* 内容矮时用配置地板，不再清空 */
         }
+        if (needW > baseW) {
+            desk.style.minWidth = needW + "px";
+        } else {
+            desk.style.minWidth = baseW + "px";   /* 内容窄时用配置/版心宽，不再清空 */
+        }
+        /* 居中：显式扩宽(minWidth>0)且台面比版心内容宽时，
+           给 .desk 左侧加负 margin，让台面整体在版心内居中(左右对称探出)。
+           版心内容宽 = .wrap.clientWidth - 左右 padding。
+           同时把「卡片群整体居中偏移」写进 --desk-shift，
+           让左锚卡把卡片群推向台面中心(左右留白均衡)。 */
+        try {
+            var wrapContentW = desk.parentElement.clientWidth
+                - parseFloat(getComputedStyle(desk.parentElement).paddingLeft)
+                - parseFloat(getComputedStyle(desk.parentElement).paddingRight);
+            if (cfgMinW > 0 && needW > wrapContentW) {
+                var over = needW - wrapContentW;        /* 超出版心的量 */
+                desk.style.marginLeft = (-(over / 2)) + "px";
+                /* 卡片群居中偏移：使「左锚卡群(hero/projects/shelf)中心」贴近台面中心。
+                   —— 右锚卡(about/now/links/motto)是 right 定位，offsetLeft 会随台面
+                   撑宽而变，混入会让 spanCenter 偏右、shift 偏小(卡片群反而偏左)。
+                   所以只统计左锚卡(会用 margin-left 右移的)。 */
+                var minOL = Infinity, maxOR = -Infinity, j, c, cl, cr, id;
+                for (j = 0; j < cards.length; j += 1) {
+                    c = cards[j];
+                    id = c.dataset ? c.dataset.deskCard : null;
+                    if (id !== "hero" && id !== "projects" && id !== "shelf") { continue; }
+                    cl = c.offsetLeft;
+                    cr = c.offsetLeft + c.offsetWidth;
+                    if (cl < minOL) { minOL = cl; }
+                    if (cr > maxOR) { maxOR = cr; }
+                }
+                var spanCenter = (minOL + maxOR) / 2;
+                var shift = Math.round(needW / 2 - spanCenter);
+                if (shift < 0) { shift = 0; }
+                desk.style.setProperty("--desk-shift", shift + "px");
+            } else {
+                desk.style.removeProperty("margin-left");   /* 恢复常规 */
+                desk.style.removeProperty("--desk-shift");
+            }
+        } catch (e) {
+            desk.style.removeProperty("margin-left");
+            desk.style.removeProperty("--desk-shift");
+        }
+        if (deskRestore) { deskRestore(); }
     }
     function bootFiles() {
         loadText("files/about.md").then(function (t) {
             if (aboutBody && t) { aboutBody.innerHTML = blockMd(t); }
-            fitDeskHeight();
+            fitDesk();
         });
         loadText("files/now.md").then(function (t) {
             if (nowList && t) {
@@ -333,7 +440,7 @@
                     }).join("");
                 }
             }
-            fitDeskHeight();
+            fitDesk();
         });
         loadText("files/links.md").then(function (t) {
             if (linksList && t) {
@@ -349,7 +456,7 @@
                 if (lis.length) { linksList.innerHTML = lis.join(""); }
                 bindCopyButtons(); /* 新按钮需要重新绑定 */
             }
-            fitDeskHeight();
+            fitDesk();
         });
         loadText("files/motto.txt").then(function (t) {
             if (mottoQuote && t) {
@@ -389,10 +496,10 @@
                     if (!body) return;
                     var card = buildAutoCard(entry.filename, body);
                     if (card) { shelf.appendChild(card); }
-                    fitDeskHeight();
+                    fitDesk();
                 });
             });
-            if (!pending.length) { fitDeskHeight(); }
+            if (!pending.length) { fitDesk(); }
         });
     }
     bindCopyButtons();
@@ -422,7 +529,7 @@
         var cards = Array.prototype.slice.call(document.querySelectorAll(".paper[data-desk-card]"));
         var resetBtn = document.getElementById("desk-reset");
         var hintEl = document.getElementById("drag-hint");
-        var LS_KEY = "zloong-desk-v1";
+        var LS_KEY = DESK_LS_KEY;   /* 与顶层 fitDesk 共用同一存档键 */
         var HINT_KEY = "zloong-desk-hint-dismissed";
         var THRESHOLD = 6;   /* px：超过才算拖动，避免吞点击 */
         var cssVar = function (name, fallback) {   /* 读取 workshop.css 顶部的台面拖拽配置 */
@@ -430,7 +537,7 @@
             var p = parseInt(v, 10);
             return isNaN(p) ? fallback : p;
         };
-        var pad = cssVar("--desk-padding", 24);    /* 活动空间边界留白 */
+        var pad = cfgPad;    /* 活动空间边界留白（desk-config.js 的 padding，读不到回 24） */
         var topZ = cssVar("--desk-z-stack", 10);   /* 拖拽栈起点：拖一张 +1，最后拖的在最上 */
         var start = null;
 
@@ -571,9 +678,14 @@
                     el.style.removeProperty("top");
                     el.style.removeProperty("z-index");
                 });
+                /* 先把台面 inline 尺寸清掉回到自然尺寸：
+                   右锚卡片（about right:0 / links right:-15px…）是相对台面宽定位的，
+                   若留着旧 min-width，它们会先被顶偏，fitDesk 就永远慢一拍（棘轮）。 */
+                desk.style.removeProperty("min-height");
+                desk.style.removeProperty("min-width");
                 topZ = cssVar("--desk-z-stack", 10);
                 dismissHint();
-                fitDeskHeight();
+                fitDesk();
             });
         }
 
@@ -590,5 +702,7 @@
 
         anchorAll();
         restore();
+        deskRestore = restore;   /* fitDesk 撑大台面后会重跑一次落位 */
+        fitDesk();               /* 内容已全就位：按最终几何（含存档）撑一次台面 */
     }
 })();

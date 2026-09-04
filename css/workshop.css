@@ -30,8 +30,11 @@
      改下面这些即可，JS 会自动读取，无需动脚本。
      悬浮只保留动效、不抬升层级；仅点按拖拽才压入栈顶。
      层级顺序：基础 3~7 < 拖拽栈 ≥10 < 拖拽中恒顶 1000 */
-  --desk-height: 1180px;   /* 台面高度：最小活动空间，档案架长高后由 JS 自动撑大 */
-  --desk-padding: 24px;    /* 卡片活动空间边界留白（px）：贴贴距桌沿的最小距离 */
+  /* 台面范围：数值由 data/desk-config.js 决定，此处是无 JS/初始渲染的兜底。
+     想调长宽范围 → 改 data/desk-config.js（minHeight / minWidth / padding / padBottom / padRight），
+     不要改这里的两行——JS 以配置文件为准，改这里会被覆盖（无 JS 时才生效）。 */
+  --desk-height: 1180px;   /* 兜底最小高度（desk-config.js 的 minHeight 覆盖） */
+  --desk-padding: 24px;    /* 兜底边界留白（desk-config.js 的 padding 覆盖） */
   --desk-z-stack: 10;      /* 拖拽栈起点：拖一张 +1，最后拖过的贴贴保持在最上 */
   --desk-z-drag: 1000;     /* 拖拽中的层级：恒顶（压到栈顶） */
 }
@@ -148,6 +151,7 @@ a:hover { color: var(--red); }
 .paper--hero {
   top: 0;
   left: 0;
+  margin-left: var(--desk-shift, 0px);   /* 台面撑宽后卡片群右移居中 */
   width: 600px;
   background: #fdfaf3;
   background-image:
@@ -279,6 +283,7 @@ a:hover { color: var(--red); }
 .paper--projects {
   top: 380px;
   left: 50px;
+  margin-left: var(--desk-shift, 0px);   /* 台面撑宽后卡片群右移居中 */
   width: 860px;
   background: #faf5ea;
   background-image:
@@ -500,6 +505,7 @@ a:hover { color: var(--red); }
 .paper--shelf {
   top: 780px;
   left: 50px;
+  margin-left: var(--desk-shift, 0px);   /* 台面撑宽后卡片群右移居中 */
   width: 860px;
   background: transparent;
   border: 0;
