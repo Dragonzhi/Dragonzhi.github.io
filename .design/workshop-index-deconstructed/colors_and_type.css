@@ -1,0 +1,64 @@
+/* ============================================================
+   ZLOONG 工房 · 设计令牌（台面解构变体共用）
+   与 workshop.css / tokens.css 同谱系
+   ============================================================ */
+
+:root {
+  /* ===== 语义化别名（Design Library 兼容 / Tailwind 桥接） ===== */
+  --workshop-background: #f5f0e6;
+  --workshop-foreground: #26221c;
+  --workshop-card: #fbf8f2;
+  --workshop-card-foreground: #26221c;
+  --workshop-primary: #8b2c1f;
+  --workshop-primary-foreground: #fbf8f2;
+  --workshop-border: rgba(38,34,28,.18);
+  --workshop-muted: rgba(38,34,28,.08);
+  --workshop-muted-foreground: rgba(38,34,28,.68);
+  --workshop-accent: #2f5d8a;
+  --workshop-radius-sm: 4px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 10px;
+
+  /* 基底色 */
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+
+  /* 强调色 */
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --green: #4a6b4a;
+  --screen: #2b2620;
+  --tape: rgba(255,252,242,.75);
+
+  /* 材质 */
+  --paper-texture:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+
+  /* 字体四轨 */
+  --workshop-font-display: "Averia Gruesa Libre", "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-kai: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* 兼容别名：页面内联样式用短名 */
+  --font-display: var(--workshop-font-display);
+  --font-kai: var(--workshop-font-kai);
+  --font-serif: var(--workshop-font-serif);
+  --font-mono: var(--workshop-font-mono);
+
+  /* 字号阶梯 */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+  --prose: 65ch;
+
+  /* 间距与圆角 */
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+}

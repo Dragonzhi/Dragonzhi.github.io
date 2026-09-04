@@ -1,0 +1,1166 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · 融合版</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 设计令牌（台面解构变体共用）
+   与 workshop.css / tokens.css 同谱系
+   ============================================================ */
+
+:root {
+  /* ===== 语义化别名（Design Library 兼容 / Tailwind 桥接） ===== */
+  --workshop-background: #f5f0e6;
+  --workshop-foreground: #26221c;
+  --workshop-card: #fbf8f2;
+  --workshop-card-foreground: #26221c;
+  --workshop-primary: #8b2c1f;
+  --workshop-primary-foreground: #fbf8f2;
+  --workshop-border: rgba(38,34,28,.18);
+  --workshop-muted: rgba(38,34,28,.08);
+  --workshop-muted-foreground: rgba(38,34,28,.68);
+  --workshop-accent: #2f5d8a;
+  --workshop-radius-sm: 4px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 10px;
+
+  /* 基底色 */
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+
+  /* 强调色 */
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --green: #4a6b4a;
+  --screen: #2b2620;
+  --tape: rgba(255,252,242,.75);
+
+  /* 材质 */
+  --paper-texture:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+
+  /* 字体四轨 */
+  --workshop-font-display: "Averia Gruesa Libre", "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-kai: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* 兼容别名：页面内联样式用短名 */
+  --font-display: var(--workshop-font-display);
+  --font-kai: var(--workshop-font-kai);
+  --font-serif: var(--workshop-font-serif);
+  --font-mono: var(--workshop-font-mono);
+
+  /* 字号阶梯 */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+  --prose: 65ch;
+
+  /* 间距与圆角 */
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-accent: var(--workshop-accent);
+    --color-border: var(--workshop-border);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-accent { background-color: var(--workshop-accent); }
+      .text-accent { color: var(--workshop-accent); }
+      .border-accent { border-color: var(--workshop-accent); }
+      .ring-accent { --tw-ring-color: var(--workshop-accent); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- 报头 -->
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 与箱庭同院 <span class="live">● 常开</span></span>
+        <span>2026年9月4日 · 星期五</span>
+        <span>编辑：ZLOONG · 排印：Hanako</span>
+    </div>
+
+    <header class="wall">
+        <span class="seal samp">常开<br>OPEN</span>
+        <h1>ZLOONG 工房</h1>
+        <div class="sub">THE WORKSHOP · 手作与代码的台面</div>
+    </header>
+    <div class="rule-double"></div>
+
+    <!-- 今日一言 -->
+    <div class="daily">
+        <div class="quote">「 make games, have fun, and ship it someday. 」</div>
+        <div class="who">— 钉在墙上的话 · 手机电量与动力同步下降中</div>
+    </div>
+
+    <!-- 台面标注 -->
+    <div class="bench-label">
+        <span class="t">进门</span>
+        <span class="en">HELLO &amp; MACHINE</span>
+    </div>
+
+    <!-- 融合版 v2 台面 -->
+    <main class="desk">
+
+        <!-- "重要"印章 -->
+        <div class="stamp-important" aria-hidden="true">
+            <svg viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="35" cy="35" r="32" fill="none" stroke="#8b2c1f" stroke-width="3"/>
+                <circle cx="35" cy="35" r="27" fill="none" stroke="#8b2c1f" stroke-width="1"/>
+                <text x="35" y="28" text-anchor="middle" fill="#8b2c1f" font-family="serif" font-size="14" font-weight="bold" letter-spacing="2">重要</text>
+                <text x="35" y="46" text-anchor="middle" fill="#8b2c1f" font-family="monospace" font-size="9" letter-spacing="1">IMPORTANT</text>
+                <path d="M10 35 L60 35" stroke="#8b2c1f" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+            </svg>
+        </div>
+
+        <!-- ===== 上段 · 进门区 ===== -->
+
+        <!-- Hero 便签纸 -->
+        <section class="paper paper--hero">
+            <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
+            <h2 class="hero-title">Hi, I'm Dragonzhi.</h2>
+            <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
+            <p class="hero-links samp">
+                <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
+                <a href="#">隔壁箱庭 ↗</a> ·
+                <a href="#">GitHub ↗</a>
+            </p>
+        </section>
+
+        <!-- about.md -->
+        <section class="paper paper--about">
+            <h2 class="paper-title samp">about.md</h2>
+            <p>做游戏的学生，主要用 Godot 4，也写 Unity 和 C++。喜欢像素美术、vibe coding 和把想法变成能玩的东西。</p>
+            <p>这间工房是我堆作品、记笔记、放练习的地方——东西有点乱，但每一样都在干活。</p>
+        </section>
+
+        <!-- now.md -->
+        <section class="paper paper--now">
+            <h2 class="paper-title samp">now.md</h2>
+            <ul class="now-list">
+                <li><span class="now-dot"></span>打磨「棱镜：碧芙洛斯」卡牌核心玩法</li>
+                <li><span class="now-dot"></span>学 Godot 4 的渲染管线和 shader</li>
+                <li><span class="now-dot"></span>每天早上出一份 Hanako 箱庭日报</li>
+            </ul>
+            <p class="paper-foot samp">updated: 2026 · Make Continually</p>
+        </section>
+
+        <!-- ===== 中段 · 档案区 ===== -->
+
+        <!-- projects 档案册 -->
+        <section class="paper paper--projects" id="projects">
+            <div class="binding-edge" aria-hidden="true"></div>
+            <div class="paper-head">
+                <h2 class="paper-title samp">projects/ 档案架</h2>
+                <span class="paper-count samp">共肆件 · 壹件在制</span>
+            </div>
+            <ol class="proj-list">
+                <li class="proj">
+                    <div class="proj-inner">
+                        <span class="proj-index">第壹件</span>
+                        <div class="proj-main">
+                            <h3>免疫联结 ImmuneLink <span class="state">获奖</span></h3>
+                            <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
+                            <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
+                            <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="#">在线游玩 ↗</a>
+                            <a href="#">源码 ↗</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="proj">
+                    <div class="proj-inner">
+                        <span class="proj-index">第贰件</span>
+                        <div class="proj-main">
+                            <h3>棱镜：碧芙洛斯 <span class="state">在制</span></h3>
+                            <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
+                            <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
+                            <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="#">源码 ↗</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="proj">
+                    <div class="proj-inner">
+                        <span class="proj-index">第叁件</span>
+                        <div class="proj-main">
+                            <h3>TriHorny4Link</h3>
+                            <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
+                            <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
+                            <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="#">演示 ↗</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="proj">
+                    <div class="proj-inner">
+                        <span class="proj-index">第肆件</span>
+                        <div class="proj-main">
+                            <h3>CounterStrikeGrenades</h3>
+                            <p class="proj-type samp">Minecraft Forge Mod · systems</p>
+                            <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
+                            <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="#">源码 ↗</a>
+                        </div>
+                    </div>
+                </li>
+            </ol>
+            <p class="paper-foot samp">完整旧版作品集: <a href="#">legacy/portfolio.html ↗</a></p>
+        </section>
+
+        <!-- links.md 书签 -->
+        <section class="paper paper--links" id="links">
+            <h2 class="paper-title samp">links.md</h2>
+            <ul class="link-list samp">
+                <li><a href="#">blog <span class="dim">/ 博客</span> ↗</a></li>
+                <li><a href="#">gallery <span class="dim">/ 洛天依画廊</span> ↗</a></li>
+                <li><a href="#">portfolio <span class="dim">/ 作品集</span> ↗</a></li>
+                <li><a href="#">GitHub <span class="dim">/ @Dragonzhi</span> ↗</a></li>
+                <li>dzloong@foxmail.com</li>
+            </ul>
+        </section>
+
+        <!-- motto 黄色便签 -->
+        <section class="paper paper--motto">
+            <div class="motto-title">motto.txt</div>
+            <blockquote>台面常乱，<br>ship 不断。</blockquote>
+            <p class="motto-foot">— 便签 · 原句钉在进门墙上</p>
+        </section>
+
+    </main>
+
+    <!-- 导览牌 -->
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="#">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
+            <span class="state calm">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅</span></span>
+            <span class="state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            闽ICP备20260330551号-1 · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+
+    <style>
+    /* ===== 基础重置 ===== */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    ::selection { background: var(--red); color: var(--card); }
+
+    body {
+        font-family: var(--font-kai);
+        background: var(--desk);
+        background-image: var(--paper-texture);
+        background-size: 26px 26px;
+        color: var(--ink);
+        font-size: 16px;
+        line-height: 1.75;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+        text-rendering: optimizeLegibility;
+    }
+
+    h1, h2, h3 { text-wrap: balance; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--red); }
+    .samp { font-family: var(--font-mono); }
+    .dim { color: var(--ink-soft); }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+    /* ===== 报头区（报纸仪式感） ===== */
+    .eyebrow {
+        font-size: var(--fs-xs);
+        color: var(--ink-soft);
+        letter-spacing: 2px;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+        flex-wrap: wrap;
+        border-bottom: 1px solid var(--line);
+        padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
+        font-family: var(--font-mono);
+    }
+    .eyebrow .live { color: var(--red); }
+
+    .wall {
+        text-align: center;
+        padding: calc(var(--gap)*2) 0 calc(var(--gap)*1.5);
+        position: relative;
+    }
+    .wall h1 {
+        font-size: clamp(40px, 7vw, 62px);
+        font-weight: 800;
+        color: var(--red);
+        letter-spacing: 18px;
+        line-height: 1.15;
+        text-indent: 18px;
+        font-family: var(--font-serif);
+    }
+    .wall .sub {
+        margin-top: 8px;
+        font-size: 12px;
+        color: var(--ink-soft);
+        letter-spacing: 7px;
+        text-indent: 7px;
+        font-family: var(--font-display);
+    }
+    .wall .seal {
+        position: absolute;
+        right: 4%;
+        top: 30px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--red);
+        border: 2px solid var(--red);
+        border-radius: 3px;
+        padding: 3px 9px;
+        letter-spacing: 3px;
+        transform: rotate(7deg);
+        opacity: .85;
+    }
+    .rule-double {
+        border-top: 3px solid var(--ink);
+        border-bottom: 1px solid var(--ink);
+        height: 5px;
+        margin-bottom: 24px;
+    }
+
+    /* 今日一言 */
+    .daily {
+        text-align: center;
+        padding: calc(var(--gap)*.5) 0 var(--gap);
+        border-bottom: 1px solid var(--line);
+        margin-bottom: calc(var(--gap)*1.75);
+    }
+    .daily .quote {
+        font-size: 16.5px;
+        letter-spacing: 2px;
+        font-family: var(--font-kai);
+    }
+    .daily .who {
+        margin-top: 6px;
+        font-size: var(--fs-xs);
+        color: var(--ink-soft);
+        letter-spacing: 3px;
+        font-family: var(--font-kai);
+    }
+
+    /* 台面标注 */
+    .bench-label {
+        display: flex;
+        align-items: baseline;
+        gap: 12px;
+        margin: 0 0 14px;
+    }
+    .bench-label .t {
+        font-size: 17px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+    .bench-label .en {
+        margin-left: auto;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ink-soft);
+        letter-spacing: 2px;
+    }
+
+    /* ========== 融合版 v2 台面 ========== */
+    .desk {
+        position: relative;
+        min-height: 1080px;
+        margin-bottom: calc(var(--gap)*1.5);
+    }
+
+    /* 卡片通用基础 */
+    .paper {
+        position: absolute;
+        background: var(--card);
+        transition: transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease;
+    }
+    .paper:hover {
+        z-index: 50 !important;
+        box-shadow: 0 18px 40px rgba(38,34,28,.18);
+    }
+
+    .paper-title {
+        margin: 0 0 10px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        letter-spacing: .5px;
+    }
+    .paper-title::before { content: "▤ "; color: var(--red); }
+    .paper p { margin: 0 0 10px; }
+    .paper-foot {
+        font-size: 12px;
+        color: var(--ink-soft);
+        margin: 10px 0 0 !important;
+        font-family: var(--font-mono);
+    }
+
+    /* ===== 上段 · 进门区 ===== */
+
+    /* Hero 便签纸 — 最大的一张，横线纸，撕边底部，左上角胶带 */
+    .paper--hero {
+        top: 0;
+        left: 0;
+        width: 600px;
+        background: #fdfaf3;
+        background-image:
+            repeating-linear-gradient(transparent, transparent 27px, rgba(139,44,31,.06) 28px),
+            linear-gradient(135deg, rgba(255,255,255,.5), transparent 60%);
+        border-left: 2px solid rgba(139,44,31,.15);
+        padding: 28px 32px 38px;
+        transform: rotate(-1deg);
+        box-shadow: 2px 4px 12px rgba(38,34,28,.10), -1px 1px 3px rgba(38,34,28,.05);
+        clip-path: polygon(
+            0% 0%, 100% 0%, 100% 96%,
+            97% 98%, 94% 95%, 91% 98%, 88% 95%, 85% 98%, 82% 95%, 79% 98%, 76% 95%,
+            73% 98%, 70% 95%, 67% 98%, 64% 95%, 61% 98%, 58% 95%, 55% 98%, 52% 95%,
+            49% 98%, 46% 95%, 43% 98%, 40% 95%, 37% 98%, 34% 95%, 31% 98%, 28% 95%,
+            25% 98%, 22% 95%, 19% 98%, 16% 95%, 13% 98%, 10% 95%, 7% 98%, 4% 95%,
+            1% 97%, 0% 95%
+        );
+        z-index: 5;
+    }
+    .paper--hero:hover {
+        transform: rotate(-1deg) translateY(-5px);
+    }
+    /* 左上角胶带（卡片本身的一部分） */
+    .paper--hero::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 28px;
+        width: 72px;
+        height: 22px;
+        background: rgba(255, 240, 200, .72);
+        transform: rotate(-5deg);
+        border-left: 1px dashed rgba(38,34,28,.10);
+        border-right: 1px dashed rgba(38,34,28,.10);
+        box-shadow: 0 1px 3px rgba(38,34,28,.08);
+        z-index: 2;
+    }
+    .hero-hello {
+        color: var(--ink-soft);
+        font-size: 13px;
+        margin: 0 0 6px;
+        font-family: var(--font-mono);
+    }
+    .hero-hello .mark { color: var(--red); }
+    .hero-title {
+        margin: 0 0 10px;
+        font-family: var(--font-display);
+        font-size: 38px;
+        line-height: 1.15;
+        color: var(--ink);
+    }
+    .hero-sub {
+        margin: 0 0 12px;
+        color: var(--ink-soft);
+        font-size: 15px;
+    }
+    .hero-links {
+        margin: 8px 0 0;
+        font-size: 14px;
+        font-family: var(--font-mono);
+    }
+    .hero-links a::before { content: "> "; color: var(--red); }
+
+    /* about.md — 右上小纸片，两个角胶带贴住 */
+    .paper--about {
+        top: 0;
+        right: 0;
+        width: 350px;
+        background: #fdfaf3;
+        background-image: linear-gradient(160deg, rgba(255,255,255,.4), transparent 50%);
+        border: 1px solid rgba(38,34,28,.10);
+        border-radius: 2px;
+        padding: 20px 22px;
+        transform: rotate(0.6deg);
+        box-shadow: 2px 3px 10px rgba(38,34,28,.08);
+        z-index: 4;
+        font-size: 14.5px;
+    }
+    .paper--about:hover {
+        transform: rotate(0.6deg) translateY(-4px);
+    }
+    /* 左上角胶带 */
+    .paper--about::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 18px;
+        width: 52px;
+        height: 18px;
+        background: rgba(255, 240, 200, .68);
+        transform: rotate(-4deg);
+        border-left: 1px dashed rgba(38,34,28,.10);
+        border-right: 1px dashed rgba(38,34,28,.10);
+        box-shadow: 0 1px 2px rgba(38,34,28,.08);
+        z-index: 2;
+    }
+    /* 右上角胶带 */
+    .paper--about::after {
+        content: "";
+        position: absolute;
+        top: -8px;
+        right: 18px;
+        width: 52px;
+        height: 18px;
+        background: rgba(255, 240, 200, .68);
+        transform: rotate(5deg);
+        border-left: 1px dashed rgba(38,34,28,.10);
+        border-right: 1px dashed rgba(38,34,28,.10);
+        box-shadow: 0 1px 2px rgba(38,34,28,.08);
+        z-index: 2;
+    }
+
+    /* now.md — 下方，压在 about 下面露出上边一点点 */
+    .paper--now {
+        top: 165px;
+        right: 25px;
+        width: 340px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 18px 20px;
+        transform: rotate(-0.4deg);
+        box-shadow: 2px 4px 12px rgba(38,34,28,.10);
+        z-index: 3;
+    }
+    .paper--now:hover {
+        transform: rotate(-0.4deg) translateY(-4px);
+    }
+    .now-list { list-style: none; }
+    .now-list li {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        flex-wrap: wrap;
+        padding: 6px 0;
+        border-bottom: 1px dashed var(--line);
+        font-size: 14.5px;
+    }
+    .now-list li:last-child { border-bottom: none; }
+    .now-dot {
+        flex: none;
+        width: 8px;
+        height: 8px;
+        border-radius: 2px;
+        background: var(--red);
+        transform: rotate(45deg);
+        margin-top: 2px;
+    }
+    .state {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--red);
+        border: 1px solid rgba(139,44,31,.45);
+        border-radius: 999px;
+        padding: 0 8px;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+    .state.calm {
+        color: var(--ink-soft);
+        border-color: var(--line);
+    }
+
+    /* ===== 中段 · 档案区 ===== */
+
+    /* projects 档案册 — 活页档案册质感 */
+    .paper--projects {
+        top: 380px;
+        left: 50px;
+        width: 860px;
+        background: #faf5ea;
+        background-image:
+            linear-gradient(180deg, rgba(139,44,31,.03) 0%, transparent 40px),
+            linear-gradient(180deg, transparent 0, rgba(139,44,31,.025) 100%);
+        border: 1px solid rgba(38,34,28,.12);
+        border-radius: 0 4px 4px 0;
+        padding: 34px 28px 24px 48px;
+        box-shadow: 3px 6px 20px rgba(38,34,28,.14), 0 1px 2px rgba(38,34,28,.06);
+        z-index: 5;
+    }
+    .paper--projects:hover {
+        transform: translateY(-4px);
+    }
+    /* 活页纸顶部打孔边 */
+    .paper--projects::before {
+        content: "";
+        position: absolute;
+        top: -1px;
+        left: 0;
+        right: 0;
+        height: 22px;
+        background: #faf5ea;
+        border: 1px solid rgba(38,34,28,.12);
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+    }
+    /* 打孔圆孔 */
+    .paper--projects::after {
+        content: "";
+        position: absolute;
+        top: 6px;
+        left: 30px;
+        right: 30px;
+        height: 10px;
+        background:
+            radial-gradient(circle at 8% 50%, var(--desk) 4px, transparent 5px),
+            radial-gradient(circle at 24% 50%, var(--desk) 4px, transparent 5px),
+            radial-gradient(circle at 40% 50%, var(--desk) 4px, transparent 5px),
+            radial-gradient(circle at 56% 50%, var(--desk) 4px, transparent 5px),
+            radial-gradient(circle at 72% 50%, var(--desk) 4px, transparent 5px),
+            radial-gradient(circle at 88% 50%, var(--desk) 4px, transparent 5px);
+        z-index: 1;
+    }
+    /* 左侧装订边 */
+    .paper--projects .binding-edge {
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 32px;
+        background: linear-gradient(90deg, rgba(139,44,31,.08), transparent);
+        border-right: 1px dashed rgba(139,44,31,.15);
+        border-radius: 0 0 0 4px;
+    }
+    .paper-head {
+        display: flex;
+        align-items: baseline;
+        justify-content: space-between;
+        position: relative;
+        z-index: 2;
+    }
+    .paper-count {
+        font-size: 11px;
+        color: var(--ink-soft);
+        font-family: var(--font-mono);
+    }
+    .proj-list {
+        list-style: none;
+        margin-top: 6px;
+        position: relative;
+        z-index: 2;
+    }
+    .proj {
+        position: relative;
+        background: var(--card);
+        border: 1px solid rgba(38,34,28,.14);
+        border-radius: 3px;
+        padding: 14px 18px;
+        margin-bottom: -8px;
+        box-shadow: 2px 3px 8px rgba(38,34,28,.08);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .proj:last-child { margin-bottom: 0; }
+    .proj:hover {
+        box-shadow: 3px 6px 16px rgba(38,34,28,.15);
+        z-index: 10;
+    }
+    /* 错落叠放 — 偏移量很小，档案册里抽出几张的感觉 */
+    .proj:nth-child(1) {
+        transform: translateX(-4px) rotate(-0.3deg);
+        z-index: 4;
+    }
+    .proj:nth-child(2) {
+        transform: translateX(5px) rotate(0.2deg);
+        z-index: 3;
+    }
+    .proj:nth-child(3) {
+        transform: translateX(-3px) rotate(-0.15deg);
+        z-index: 2;
+    }
+    .proj:nth-child(4) {
+        transform: translateX(6px) rotate(0.3deg);
+        z-index: 1;
+        margin-top: 2px;
+    }
+    .proj:nth-child(1):hover { transform: translateX(-4px) rotate(-0.3deg) translateY(-4px); }
+    .proj:nth-child(2):hover { transform: translateX(5px) rotate(0.2deg) translateY(-4px); }
+    .proj:nth-child(3):hover { transform: translateX(-3px) rotate(-0.15deg) translateY(-4px); }
+    .proj:nth-child(4):hover { transform: translateX(6px) rotate(0.3deg) translateY(-4px); }
+
+    .proj-inner {
+        display: grid;
+        grid-template-columns: 64px 1fr auto;
+        gap: 16px;
+    }
+    .proj-index {
+        font-size: 13px;
+        color: var(--red);
+        font-weight: 700;
+        padding-top: 4px;
+        letter-spacing: 1px;
+        font-family: var(--font-mono);
+    }
+    .proj-main h3 {
+        margin: 0 0 2px;
+        font-family: var(--font-display);
+        font-size: 18px;
+        color: var(--ink);
+    }
+    .proj-type {
+        margin: 0 0 5px;
+        font-size: 12px;
+        color: var(--ink-soft);
+        font-family: var(--font-mono);
+    }
+    .proj-desc {
+        margin: 0 0 7px;
+        font-size: var(--fs-md);
+        color: var(--ink-soft);
+        max-width: var(--prose);
+    }
+    .tag {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-style: normal;
+        color: var(--ink-soft);
+        background: rgba(139,44,31,.04);
+        border: 1px solid var(--line);
+        border-radius: 3px;
+        padding: 1px 9px;
+        margin: 0 6px 6px 0;
+    }
+    .proj-links {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 8px;
+        font-size: 13px;
+        white-space: nowrap;
+        font-family: var(--font-mono);
+    }
+    .proj-links a::before { content: "→ "; color: var(--red); }
+
+    /* motto 黄色便签 — 贴在档案册右上角，伸出册外 */
+    .paper--motto {
+        top: 360px;
+        right: 70px;
+        width: 170px;
+        background: #fff3b8;
+        background-image:
+            linear-gradient(135deg, rgba(255,255,255,.5), transparent 60%),
+            linear-gradient(45deg, transparent 48%, rgba(0,0,0,.03) 50%, transparent 52%);
+        padding: 22px 16px 18px;
+        transform: rotate(-3deg);
+        box-shadow: 2px 4px 10px rgba(38,34,28,.12);
+        z-index: 7;
+    }
+    .paper--motto:hover {
+        transform: rotate(-3deg) translateY(-5px);
+    }
+    /* 居中胶带 */
+    .paper--motto::before {
+        content: "";
+        position: absolute;
+        top: -9px;
+        left: 50%;
+        transform: translateX(-50%) rotate(1deg);
+        width: 68px;
+        height: 18px;
+        background: rgba(255, 240, 200, .72);
+        border-left: 1px dashed rgba(38,34,28,.10);
+        border-right: 1px dashed rgba(38,34,28,.10);
+        box-shadow: 0 1px 2px rgba(38,34,28,.08);
+    }
+    .motto-title {
+        margin: 0 0 8px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        letter-spacing: .5px;
+        text-align: center;
+    }
+    .paper--motto blockquote {
+        margin: 4px 0 8px;
+        font-family: var(--font-display);
+        font-size: 18px;
+        line-height: 1.5;
+        color: var(--ink);
+        text-align: center;
+    }
+    .paper--motto blockquote::before { content: "“"; color: var(--red); }
+    .paper--motto blockquote::after { content: "”"; color: var(--red); }
+    .motto-foot {
+        font-size: 10px;
+        color: var(--ink-soft);
+        font-family: var(--font-mono);
+        text-align: center;
+    }
+
+    /* links.md 书签 — 夹在档案册右侧边缘，露出一半 */
+    .paper--links {
+        top: 450px;
+        right: -15px;
+        width: 240px;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: 2px 4px 4px 2px;
+        padding: 16px 18px 16px 20px;
+        transform: rotate(0.5deg);
+        box-shadow: 2px 3px 10px rgba(38,34,28,.10);
+        z-index: 6;
+    }
+    .paper--links:hover {
+        transform: rotate(0.5deg) translateY(-4px);
+    }
+    /* 红色书脊边 */
+    .paper--links::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        width: 4px;
+        background: var(--red);
+        border-radius: 2px 0 0 2px;
+        opacity: 0.65;
+    }
+    /* 顶部回形针 */
+    .paper--links::after {
+        content: "";
+        position: absolute;
+        top: -10px;
+        right: 28px;
+        width: 14px;
+        height: 36px;
+        border: 2px solid #a89e92;
+        border-radius: 8px 8px 4px 4px;
+        border-bottom: none;
+        z-index: 5;
+        transform: rotate(6deg);
+        box-shadow: 1px 2px 3px rgba(38,34,28,.15);
+    }
+    .link-list {
+        list-style: none;
+        font-size: 13px;
+        font-family: var(--font-mono);
+    }
+    .link-list li {
+        padding: 7px 0;
+        border-bottom: 1px dashed var(--line);
+    }
+    .link-list li:last-child { border-bottom: none; }
+    .link-list a::before { content: "→ "; color: var(--red); }
+
+    /* ===== 装饰物件（仅 2 个） ===== */
+
+    /* "重要"印章 — 档案册左侧装订边旁边 */
+    .stamp-important {
+        position: absolute;
+        top: 420px;
+        left: 12px;
+        width: 60px;
+        height: 60px;
+        z-index: 6;
+        opacity: 0.38;
+        pointer-events: none;
+        transform: rotate(-10deg);
+    }
+    .stamp-important svg { width: 100%; height: 100%; }
+
+    /* ===== 导览牌 ===== */
+    .directory {
+        border: 1px solid var(--ink);
+        background: var(--card);
+        padding: 4px 24px;
+        margin: calc(var(--gap)*1.5) 0 0;
+    }
+    .directory .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 12px 0 8px;
+        border-bottom: 2px solid var(--ink);
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 3px;
+    }
+    .directory .head .en {
+        font-size: 10.5px;
+        font-weight: 400;
+        color: var(--ink-soft);
+        letter-spacing: 2px;
+        font-family: var(--font-display);
+    }
+    .dir-item {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        padding: 13px 0;
+        border-bottom: 1px dotted var(--line);
+        color: var(--ink);
+    }
+    .dir-item:last-child { border-bottom: none; }
+    .dir-item .no {
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--red);
+        min-width: 34px;
+    }
+    .dir-item .info { flex: 1; min-width: 0; }
+    .dir-item .t {
+        font-size: 16px;
+        font-weight: 700;
+        letter-spacing: 1px;
+    }
+    .dir-item .d {
+        font-size: var(--fs-sm);
+        color: var(--ink-soft);
+        margin-left: 10px;
+    }
+    .dir-item .arrow {
+        font-size: 15px;
+        color: var(--ink-soft);
+        transition: transform .15s;
+    }
+    .dir-item:hover .t { color: var(--red); }
+    .dir-item:hover .arrow {
+        transform: translateX(4px);
+        color: var(--red);
+    }
+
+    /* ===== 报尾 ===== */
+    .colophon {
+        margin-top: calc(var(--gap)*2);
+        padding: 18px 0 8px;
+        text-align: center;
+        border-top: 2px solid var(--ink);
+    }
+    .colophon .end {
+        font-size: 13px;
+        letter-spacing: 6px;
+        margin-bottom: 8px;
+    }
+    .colophon .meta {
+        font-size: var(--fs-xs);
+        color: var(--ink-soft);
+        line-height: 2;
+        font-family: var(--font-mono);
+    }
+    .colophon .meta a {
+        color: var(--ink-soft);
+        text-decoration: underline;
+    }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 900px) {
+        .wrap {
+            max-width: 100%;
+            padding: 0 16px;
+        }
+        .wall h1 {
+            letter-spacing: 10px;
+            text-indent: 10px;
+        }
+        .wall .seal { display: none; }
+
+        /* 台面变单列堆叠，顺序：hero → about → now → projects → links → motto */
+        .desk {
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+        }
+        .paper {
+            position: static;
+            width: 100%;
+            transform: none !important;
+            box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
+            border-radius: var(--radius);
+            border: 1px solid var(--line);
+            background: var(--card);
+            clip-path: none;
+        }
+        .paper::before,
+        .paper::after { display: none; }
+
+        .paper--hero { padding: 22px 24px; }
+        .paper--about { font-size: 15px; }
+        .paper--now { padding: 18px 20px; }
+
+        .paper--links {
+            padding: 16px 20px;
+            order: 5;
+        }
+
+        .paper--motto {
+            background: #fdf3dd;
+            padding: 18px 20px;
+            order: 6;
+        }
+        .paper--motto .motto-title { text-align: left; }
+        .paper--motto blockquote {
+            text-align: left;
+            font-size: 21px;
+        }
+        .paper--motto .motto-foot { text-align: left; }
+
+        .paper--projects {
+            padding: 22px 20px;
+            order: 4;
+        }
+        .paper--projects .binding-edge { display: none; }
+        .paper--projects::before,
+        .paper--projects::after { display: none; }
+
+        .proj {
+            position: static;
+            transform: none !important;
+            margin-bottom: 10px;
+        }
+        .proj:last-child { margin-bottom: 0; }
+        .proj-inner {
+            grid-template-columns: 50px 1fr;
+            gap: 12px;
+        }
+        .proj-links {
+            grid-column: 2;
+            flex-direction: row;
+            gap: 16px;
+        }
+
+        /* 隐藏装饰物件 */
+        .stamp-important { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .paper, .paper:hover, .proj, .proj:hover { transition: none; }
+    }
+    </style>
+</body>
+</html>

@@ -1,0 +1,1177 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · 墙与台</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 设计令牌（台面解构变体共用）
+   与 workshop.css / tokens.css 同谱系
+   ============================================================ */
+
+:root {
+  /* ===== 语义化别名（Design Library 兼容 / Tailwind 桥接） ===== */
+  --workshop-background: #f5f0e6;
+  --workshop-foreground: #26221c;
+  --workshop-card: #fbf8f2;
+  --workshop-card-foreground: #26221c;
+  --workshop-primary: #8b2c1f;
+  --workshop-primary-foreground: #fbf8f2;
+  --workshop-border: rgba(38,34,28,.18);
+  --workshop-muted: rgba(38,34,28,.08);
+  --workshop-muted-foreground: rgba(38,34,28,.68);
+  --workshop-accent: #2f5d8a;
+  --workshop-radius-sm: 4px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 10px;
+
+  /* 基底色 */
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+
+  /* 强调色 */
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --green: #4a6b4a;
+  --screen: #2b2620;
+  --tape: rgba(255,252,242,.75);
+
+  /* 材质 */
+  --paper-texture:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+
+  /* 字体四轨 */
+  --workshop-font-display: "Averia Gruesa Libre", "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-kai: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* 兼容别名：页面内联样式用短名 */
+  --font-display: var(--workshop-font-display);
+  --font-kai: var(--workshop-font-kai);
+  --font-serif: var(--workshop-font-serif);
+  --font-mono: var(--workshop-font-mono);
+
+  /* 字号阶梯 */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+  --prose: 65ch;
+
+  /* 间距与圆角 */
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-accent: var(--workshop-accent);
+    --color-border: var(--workshop-border);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-accent { background-color: var(--workshop-accent); }
+      .text-accent { color: var(--workshop-accent); }
+      .border-accent { border-color: var(--workshop-accent); }
+      .ring-accent { --tw-ring-color: var(--workshop-accent); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- 报头 -->
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 与箱庭同院 <span class="live">● 常开</span></span>
+        <span>2026年9月4日 · 星期五</span>
+        <span>编辑：ZLOONG · 排印：Hanako</span>
+    </div>
+
+    <header class="masthead">
+        <span class="seal samp">常开<br>OPEN</span>
+        <h1>ZLOONG 工房</h1>
+        <div class="sub">THE WORKSHOP · 手作与代码的台面</div>
+    </header>
+    <div class="rule-double"></div>
+
+    <div class="daily">
+        <div class="quote">「 make games, have fun, and ship it someday. 」</div>
+        <div class="who">— 钉在墙上的话 · 手机电量与动力同步下降中</div>
+    </div>
+
+    <!-- 墙与台主体 -->
+    <main>
+
+        <!-- 软木板墙面 -->
+        <div class="zone-label">
+            <span class="t">墙 · 软木板</span>
+            <span class="en">ON THE WALL</span>
+        </div>
+        <section class="cork-wall" aria-label="墙面区">
+            <div class="wall-grid">
+
+                <!-- Hero 名片（左上，图钉） -->
+                <div class="wall-card wall-hero">
+                    <span class="pushpin"></span>
+                    <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
+                    <h2 class="hero-title">Hi, I'm Dragonzhi.</h2>
+                    <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
+                    <p class="hero-links samp">
+                        <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
+                        <a href="#">隔壁箱庭 ↗</a> ·
+                        <a href="#">GitHub ↗</a>
+                    </p>
+                </div>
+
+                <!-- Motto 便签（右上，双图钉） -->
+                <div class="wall-card wall-motto">
+                    <span class="pushpin pin1"></span>
+                    <span class="pushpin pin2"></span>
+                    <p class="wall-card-title">motto.txt</p>
+                    <blockquote>台面常乱，<br>ship 不断。</blockquote>
+                    <p class="motto-foot">— 便签 · 原句钉在进门墙上</p>
+                </div>
+
+                <!-- about.md（左中，胶带） -->
+                <div class="wall-card wall-about">
+                    <span class="tape tl"></span>
+                    <span class="tape tr"></span>
+                    <h2 class="wall-card-title samp">about.md</h2>
+                    <p>做游戏的学生，主要用 Godot 4，也写 Unity 和 C++。喜欢像素美术、vibe coding 和把想法变成能玩的东西。</p>
+                    <p>这间工房是我堆作品、记笔记、放练习的地方——东西有点乱，但每一样都在干活。</p>
+                </div>
+
+                <!-- links 悬挂卡（右侧） -->
+                <div class="wall-links">
+                    <div class="hang-string"></div>
+                    <h2 class="wall-card-title samp" style="text-align:center; margin-bottom:14px;">links.md</h2>
+                    <ul class="hang-cards">
+                        <li class="hang-card"><a href="#">blog <span class="dim">/ 博客</span> ↗</a></li>
+                        <li class="hang-card"><a href="#">gallery <span class="dim">/ 洛天依画廊</span> ↗</a></li>
+                        <li class="hang-card"><a href="#">portfolio <span class="dim">/ 作品集</span> ↗</a></li>
+                        <li class="hang-card"><a href="#">GitHub <span class="dim">/ @Dragonzhi</span> ↗</a></li>
+                        <li class="hang-card"><span>dzloong@foxmail.com</span></li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- 桌沿 -->
+        <div class="desk-edge" role="presentation" aria-hidden="true"></div>
+
+        <!-- 桌面 -->
+        <div class="zone-label" style="margin-top: 0;">
+            <span class="t">台 · 工作台</span>
+            <span class="en">ON THE DESK</span>
+        </div>
+        <section class="desk-surface" aria-label="台面区">
+            <div class="desk-grid">
+
+                <!-- 终端窗口（左侧，立起来的设备） -->
+                <div class="desk-terminal desk-item">
+                    <div class="term-device">
+                        <div class="term-bar">
+                            <i></i><i></i><i></i>
+                            <span class="term-title samp">dragonzhi@workshop — zsh</span>
+                        </div>
+                        <pre class="term-body"><span class="c-brand">➜  ~</span> neofetch
+<span class="c-brand"> ██████╗ ███████╗
+ ██╔══██╗╚══███╔╝
+ ██║  ██║  ███╔╝
+ ██║  ██║ ███╔╝
+ ██████╔╝███████╗
+ ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">workshop</span>
+                   ─────────────────
+                   <span class="c-key">OS</span>      Godot 4 · Unity
+                   <span class="c-key">Shell</span>   GDScript · C# · C++
+                   <span class="c-key">Uptime</span>  learning game dev
+                   <span class="c-key">Agents</span>  DeepSeek Harness · Codex
+                   <span class="c-key">Focus</span>   gameplay · tools · mods
+                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span> <span class="c-dim"># 成稿自校</span></pre>
+                    </div>
+                </div>
+
+                <!-- now.md 便签本（右上） -->
+                <div class="desk-now desk-item">
+                    <div class="notebook">
+                        <p class="nb-title">now.md</p>
+                        <ul class="now-list">
+                            <li><span class="now-dot"></span>打磨「棱镜：碧芙洛斯」卡牌核心玩法</li>
+                            <li><span class="now-dot"></span>学 Godot 4 的渲染管线和 shader</li>
+                            <li><span class="now-dot"></span>每天早上出一份 Hanako 箱庭日报</li>
+                        </ul>
+                        <p class="nb-foot">updated: 2026 · Make Continually</p>
+                    </div>
+                </div>
+
+                <!-- projects 档案盒（桌面中央） -->
+                <div class="desk-projects desk-item">
+                    <div class="archive-box">
+                        <ol class="proj-cards">
+                            <li class="proj-card">
+                                <div class="proj-top">
+                                    <span class="proj-index">第壹件</span>
+                                    <span class="state">获奖</span>
+                                </div>
+                                <h3>免疫联结 ImmuneLink</h3>
+                                <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
+                                <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
+                                <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
+                                <p class="proj-links samp">
+                                    <a href="#">在线游玩 ↗</a>
+                                    <a href="#">源码 ↗</a>
+                                </p>
+                            </li>
+                            <li class="proj-card">
+                                <div class="proj-top">
+                                    <span class="proj-index">第贰件</span>
+                                    <span class="state">在制</span>
+                                </div>
+                                <h3>棱镜：碧芙洛斯</h3>
+                                <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
+                                <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
+                                <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
+                                <p class="proj-links samp">
+                                    <a href="#">源码 ↗</a>
+                                </p>
+                            </li>
+                            <li class="proj-card">
+                                <div class="proj-top">
+                                    <span class="proj-index">第叁件</span>
+                                </div>
+                                <h3>TriHorny4Link</h3>
+                                <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
+                                <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
+                                <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
+                                <p class="proj-links samp">
+                                    <a href="#">演示 ↗</a>
+                                </p>
+                            </li>
+                            <li class="proj-card">
+                                <div class="proj-top">
+                                    <span class="proj-index">第肆件</span>
+                                </div>
+                                <h3>CounterStrikeGrenades</h3>
+                                <p class="proj-type samp">Minecraft Forge Mod · systems</p>
+                                <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
+                                <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
+                                <p class="proj-links samp">
+                                    <a href="#">源码 ↗</a>
+                                </p>
+                            </li>
+                        </ol>
+                        <p class="archive-foot samp">完整旧版作品集: <a href="#">legacy/portfolio.html ↗</a></p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 导览牌 -->
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="#">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
+            <span class="state calm">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅</span></span>
+            <span class="state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            闽ICP备20260330551号-1 · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+
+    <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    ::selection { background: var(--red); color: var(--card); }
+    body {
+        font-family: var(--font-kai);
+        background: var(--desk);
+        background-image: var(--paper-texture);
+        background-size: 26px 26px;
+        color: var(--ink); font-size: 16px; line-height: 1.75;
+        min-height: 100vh; overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+        text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3 { text-wrap: balance; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--red); }
+    .samp { font-family: var(--font-mono); }
+    .dim { color: var(--ink-soft); }
+    .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    /* ===== 报头区（保持报纸仪式感） ===== */
+    .eyebrow {
+        font-size: var(--fs-xs); color: var(--ink-soft); letter-spacing: 2px;
+        display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+        border-bottom: 1px solid var(--line); padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
+        font-family: var(--font-mono);
+    }
+    .eyebrow .live { color: var(--red); }
+
+    .masthead { text-align: center; padding: calc(var(--gap)*2) 0 calc(var(--gap)*1.5); position: relative; }
+    .masthead h1 {
+        font-size: clamp(40px, 7vw, 62px); font-weight: 800; color: var(--red);
+        letter-spacing: 18px; line-height: 1.15; text-indent: 18px;
+        font-family: var(--font-serif);
+    }
+    .masthead .sub {
+        margin-top: 8px; font-size: 12px; color: var(--ink-soft);
+        letter-spacing: 7px; text-indent: 7px;
+        font-family: var(--font-display);
+    }
+    .masthead .seal {
+        position: absolute; right: 4%; top: 30px;
+        font-family: var(--font-mono); font-size: 11px; color: var(--red);
+        border: 2px solid var(--red); border-radius: 3px;
+        padding: 3px 9px; letter-spacing: 3px;
+        transform: rotate(7deg); opacity: .85;
+    }
+    .rule-double {
+        border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink);
+        height: 5px; margin-bottom: 24px;
+    }
+
+    .daily {
+        text-align: center; padding: calc(var(--gap)*.5) 0 var(--gap);
+        border-bottom: 1px solid var(--line); margin-bottom: calc(var(--gap)*1.5);
+    }
+    .daily .quote { font-size: 16.5px; letter-spacing: 2px; font-family: var(--font-kai); }
+    .daily .who { margin-top: 6px; font-size: var(--fs-xs); color: var(--ink-soft); letter-spacing: 3px; font-family: var(--font-kai); }
+
+    /* ===== 区隔标签 ===== */
+    .zone-label {
+        display: flex; align-items: baseline; gap: 12px;
+        margin: 0 0 12px;
+    }
+    .zone-label .t { font-size: 17px; font-weight: 700; letter-spacing: 3px; }
+    .zone-label .en { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); letter-spacing: 2px; }
+
+    /* ===== 软木板墙面 ===== */
+    .cork-wall {
+        position: relative;
+        background-color: #cfb48e;
+        background-image:
+            radial-gradient(circle at 20% 30%, rgba(120, 80, 40, 0.35) 1.5px, transparent 1.5px),
+            radial-gradient(circle at 70% 60%, rgba(160, 120, 70, 0.3) 1px, transparent 1px),
+            radial-gradient(circle at 40% 80%, rgba(100, 65, 30, 0.25) 1.2px, transparent 1.2px),
+            radial-gradient(circle at 85% 20%, rgba(140, 100, 60, 0.2) 1px, transparent 1px),
+            radial-gradient(circle at 10% 65%, rgba(130, 90, 50, 0.3) 1px, transparent 1px);
+        background-size: 14px 14px, 20px 20px, 16px 16px, 22px 22px, 18px 18px;
+        border-radius: var(--radius) var(--radius) 0 0;
+        border: 1px solid rgba(100, 65, 30, 0.3);
+        border-bottom: none;
+        padding: 32px 28px;
+        min-height: 520px;
+        box-shadow: inset 0 2px 8px rgba(0,0,0,0.08);
+    }
+    /* 图钉孔痕迹 */
+    .cork-wall::before {
+        content: "";
+        position: absolute;
+        top: 0; left: 0; right: 0; bottom: 0;
+        pointer-events: none;
+        background-image:
+            radial-gradient(circle, rgba(80, 50, 20, 0.15) 1px, transparent 1.5px);
+        background-size: 60px 60px;
+        background-position: 30px 30px;
+        opacity: 0.6;
+    }
+
+    .wall-grid {
+        display: grid;
+        grid-template-columns: 1.3fr 1fr;
+        grid-template-rows: auto auto;
+        gap: 24px 28px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ===== 图钉 ===== */
+    .pushpin {
+        position: absolute;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 35% 30%, #d45445, var(--red) 55%, #5c1d15 100%);
+        box-shadow: 0 2px 4px rgba(0,0,0,0.35), inset 0 -1px 2px rgba(0,0,0,0.3);
+        z-index: 5;
+    }
+    .pushpin::after {
+        content: "";
+        position: absolute;
+        top: 2px;
+        left: 3.5px;
+        width: 6px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(255,255,255,0.55);
+        filter: blur(0.3px);
+    }
+
+    /* ===== 胶带 ===== */
+    .tape {
+        position: absolute;
+        width: 72px;
+        height: 20px;
+        background: rgba(255, 252, 240, 0.72);
+        border-left: 1px dashed rgba(38,34,28,.12);
+        border-right: 1px dashed rgba(38,34,28,.12);
+        box-shadow: 0 1px 3px rgba(38,34,28,.1);
+        z-index: 4;
+    }
+
+    /* ===== 墙上卡片通用 ===== */
+    .wall-card {
+        position: relative;
+        background: var(--card);
+        border: 1px solid rgba(38,34,28,.15);
+        padding: 22px 24px;
+        box-shadow: 2px 3px 8px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.08);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .wall-card:hover {
+        box-shadow: 3px 5px 14px rgba(0,0,0,0.18);
+    }
+    .wall-card-title {
+        font-family: var(--font-mono);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        letter-spacing: .5px;
+        margin-bottom: 10px;
+    }
+    .wall-card-title::before { content: "▤ "; color: var(--red); }
+
+    /* Hero 名片（左上） */
+    .wall-hero {
+        grid-column: 1;
+        grid-row: 1;
+        transform: rotate(-1.8deg);
+        border-radius: 2px;
+    }
+    .wall-hero:hover { transform: rotate(-1.8deg) translateY(-2px); }
+    .wall-hero .pushpin { top: -7px; left: 14px; }
+    .hero-hello { color: var(--ink-soft); font-size: 12.5px; margin: 0 0 6px; font-family: var(--font-mono); }
+    .hero-hello .mark { color: var(--red); }
+    .hero-title {
+        margin: 0 0 10px; font-family: var(--font-display);
+        font-size: clamp(26px, 2.8vw, 36px); line-height: 1.15; color: var(--ink);
+    }
+    .hero-sub { margin: 0 0 12px; color: var(--ink-soft); font-size: 14.5px; }
+    .hero-links { font-size: 13px; font-family: var(--font-mono); }
+    .hero-links a::before { content: "> "; color: var(--red); }
+
+    /* Motto 便签（右上） */
+    .wall-motto {
+        grid-column: 2;
+        grid-row: 1;
+        background: #fff3b8;
+        background-image: linear-gradient(135deg, rgba(255,255,255,.3) 0%, transparent 50%);
+        transform: rotate(2deg);
+        padding: 26px 20px 20px;
+        border: none;
+        box-shadow: 2px 4px 10px rgba(0,0,0,0.15), inset 0 -2px 4px rgba(0,0,0,0.04);
+        position: relative;
+    }
+    .wall-motto:hover { transform: rotate(2deg) translateY(-2px); }
+    .wall-motto .pushpin.pin1 { top: -6px; left: 28px; }
+    .wall-motto .pushpin.pin2 { top: -6px; right: 28px; }
+    .wall-motto .wall-card-title { color: rgba(38,34,28,.55); }
+    .wall-motto .wall-card-title::before { color: rgba(139,44,31,.6); }
+    .wall-motto blockquote {
+        margin: 4px 0 8px;
+        font-family: var(--font-display);
+        font-size: 22px;
+        line-height: 1.5;
+        color: var(--ink);
+        text-align: center;
+    }
+    .wall-motto blockquote::before { content: "“"; color: var(--red); }
+    .wall-motto blockquote::after { content: "”"; color: var(--red); }
+    .wall-motto .motto-foot {
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: rgba(38,34,28,.5);
+    }
+    /* 便签纸折角 */
+    .wall-motto::after {
+        content: "";
+        position: absolute;
+        bottom: 0; right: 0;
+        width: 22px; height: 22px;
+        background: linear-gradient(135deg, transparent 50%, rgba(0,0,0,0.08) 50%, rgba(0,0,0,0.06) 100%);
+        border-radius: 0 0 2px 0;
+    }
+
+    /* about.md（左中，胶带两角） */
+    .wall-about {
+        grid-column: 1;
+        grid-row: 2;
+        transform: rotate(0.8deg);
+        border-radius: 2px;
+    }
+    .wall-about:hover { transform: rotate(0.8deg) translateY(-2px); }
+    .wall-about .tape.tl { top: -9px; left: 18px; transform: rotate(-4deg); }
+    .wall-about .tape.tr { top: -9px; right: 18px; transform: rotate(3deg); }
+    .wall-about p { margin: 0 0 10px; font-size: 14.5px; }
+    .wall-about p:last-child { margin-bottom: 0; }
+
+    /* links 悬挂卡（右侧） */
+    .wall-links {
+        grid-column: 2;
+        grid-row: 2;
+        position: relative;
+    }
+    /* 挂绳 */
+    .hang-string {
+        position: absolute;
+        top: -16px;
+        left: 5%;
+        right: 5%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, rgba(60,40,20,0.5) 10%, rgba(60,40,20,0.5) 90%, transparent);
+        z-index: 2;
+    }
+    .hang-string::before,
+    .hang-string::after {
+        content: "";
+        position: absolute;
+        top: -4px;
+        width: 8px; height: 8px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #d45445, var(--red) 60%, #5c1d15);
+        box-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+    .hang-string::before { left: -2px; }
+    .hang-string::after { right: -2px; }
+
+    .hang-cards {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding-top: 8px;
+    }
+    .hang-card {
+        position: relative;
+        background: var(--card);
+        border: 1px solid rgba(38,34,28,.15);
+        padding: 12px 16px 12px 14px;
+        font-family: var(--font-mono);
+        font-size: 13px;
+        box-shadow: 1px 2px 6px rgba(0,0,0,0.1);
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .hang-card:hover {
+        transform: translateX(3px);
+        box-shadow: 2px 3px 10px rgba(0,0,0,0.15);
+    }
+    .hang-card:nth-child(1) { transform: rotate(-1deg); margin-left: 4px; }
+    .hang-card:nth-child(2) { transform: rotate(0.8deg); margin-right: 6px; }
+    .hang-card:nth-child(3) { transform: rotate(-0.5deg); margin-left: 2px; }
+    .hang-card:nth-child(4) { transform: rotate(1.2deg); margin-right: 4px; }
+    .hang-card:nth-child(5) { transform: rotate(-0.3deg); margin-left: 6px; }
+    .hang-card:nth-child(1):hover { transform: rotate(-1deg) translateX(3px); }
+    .hang-card:nth-child(2):hover { transform: rotate(0.8deg) translateX(3px); }
+    .hang-card:nth-child(3):hover { transform: rotate(-0.5deg) translateX(3px); }
+    .hang-card:nth-child(4):hover { transform: rotate(1.2deg) translateX(3px); }
+    .hang-card:nth-child(5):hover { transform: rotate(-0.3deg) translateX(3px); }
+    .hang-card a { display: block; color: var(--ink); }
+    .hang-card a::before { content: "→ "; color: var(--red); }
+    .hang-card .dim { color: var(--ink-soft); font-size: 11.5px; margin-left: 4px; }
+    /* 回形针 */
+    .hang-card::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 14px;
+        height: 16px;
+        border: 2px solid #999;
+        border-bottom: none;
+        border-radius: 4px 4px 0 0;
+        z-index: 3;
+    }
+    .hang-card::after {
+        content: "";
+        position: absolute;
+        top: -6px;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 8px;
+        height: 8px;
+        border: 1.5px solid #999;
+        border-top: none;
+        border-radius: 0 0 3px 3px;
+        z-index: 3;
+    }
+
+    /* ===== 桌沿分隔 ===== */
+    .desk-edge {
+        height: 26px;
+        position: relative;
+        background: linear-gradient(180deg,
+            #7a5a32 0%,
+            #9c7a4a 15%,
+            #b8956a 40%,
+            #a67c52 65%,
+            #7a5a32 85%,
+            #5c4220 100%);
+        border-left: 1px solid rgba(60,40,20,0.4);
+        border-right: 1px solid rgba(60,40,20,0.4);
+        box-shadow:
+            0 6px 16px rgba(0,0,0,0.25),
+            inset 0 1px 0 rgba(255,255,255,0.1);
+        z-index: 3;
+    }
+    .desk-edge::before {
+        content: "";
+        position: absolute;
+        top: 3px;
+        left: 0; right: 0;
+        height: 1px;
+        background: rgba(255,255,255,0.15);
+    }
+    .desk-edge::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0; right: 0;
+        height: 3px;
+        background: linear-gradient(180deg, rgba(0,0,0,0.15), transparent);
+    }
+
+    /* ===== 桌面区域 ===== */
+    .desk-surface {
+        position: relative;
+        background-color: #b8956a;
+        background-image:
+            repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                transparent 55px,
+                rgba(80, 50, 20, 0.08) 55px,
+                rgba(80, 50, 20, 0.08) 57px
+            ),
+            repeating-linear-gradient(
+                90deg,
+                transparent 0px,
+                transparent 120px,
+                rgba(60, 35, 10, 0.05) 120px,
+                rgba(60, 35, 10, 0.05) 122px
+            ),
+            linear-gradient(180deg, rgba(0,0,0,0.12) 0%, rgba(0,0,0,0.04) 40px, transparent 100px);
+        border-radius: 0 0 var(--radius) var(--radius);
+        border: 1px solid rgba(60,40,20,0.35);
+        border-top: none;
+        padding: 36px 28px 40px;
+        min-height: 480px;
+        box-shadow: inset 0 -2px 6px rgba(0,0,0,0.08);
+    }
+
+    .desk-grid {
+        display: grid;
+        grid-template-columns: minmax(280px, 1fr) 1.3fr;
+        grid-template-rows: auto auto;
+        gap: 28px 32px;
+        position: relative;
+        z-index: 1;
+    }
+
+    /* ===== 桌上物品通用阴影 ===== */
+    .desk-item {
+        filter: drop-shadow(4px 8px 14px rgba(0,0,0,0.25));
+    }
+
+    /* 终端窗口（左侧，立起来的设备） */
+    .desk-terminal {
+        grid-column: 1;
+        grid-row: 1 / span 2;
+        position: relative;
+        perspective: 1000px;
+    }
+    .term-device {
+        background: var(--screen);
+        border-radius: 6px 6px 2px 2px;
+        overflow: hidden;
+        transform: rotateY(-6deg) rotateX(2deg);
+        transform-origin: bottom left;
+        box-shadow:
+            inset 0 1px 0 rgba(255,255,255,0.06),
+            0 0 0 1px rgba(255,255,255,0.05);
+        position: relative;
+    }
+    /* 设备底座 */
+    .term-device::after {
+        content: "";
+        position: absolute;
+        bottom: -12px;
+        left: 50%;
+        transform: translateX(-50%) rotateY(-6deg);
+        width: 70%;
+        height: 12px;
+        background: linear-gradient(180deg, #3a332b, #25201a);
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+    }
+    /* 底部投射阴影 */
+    .desk-terminal::after {
+        content: "";
+        position: absolute;
+        bottom: -18px;
+        left: 10%;
+        right: 15%;
+        height: 16px;
+        background: radial-gradient(ellipse at center, rgba(0,0,0,0.35) 0%, transparent 70%);
+        filter: blur(4px);
+        z-index: -1;
+    }
+    .term-bar {
+        display: flex; align-items: center; gap: 6px; padding: 11px 16px;
+        background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #4a4238; }
+    .term-bar i:first-child { background: var(--red); }
+    .term-title { margin-left: 8px; font-family: var(--font-mono); font-size: 11px; color: rgba(232,221,200,.5); }
+    .term-body {
+        margin: 0; padding: 14px 16px 18px;
+        font-family: var(--font-mono); font-size: 11.5px; line-height: 1.55; color: #e8ddc8;
+        overflow-x: auto;
+    }
+    .c-brand { color: var(--amber); }
+    .c-key { color: #c9a86a; }
+    .c-dim { color: rgba(232,221,200,.45); }
+
+    /* now.md 便签本（右上） */
+    .desk-now {
+        grid-column: 2;
+        grid-row: 1;
+        position: relative;
+    }
+    .notebook {
+        position: relative;
+        background: #faf6ee;
+        background-image:
+            repeating-linear-gradient(
+                180deg,
+                transparent 0px,
+                transparent 27px,
+                rgba(38,34,28,0.08) 27px,
+                rgba(38,34,28,0.08) 28px
+            );
+        border-radius: 0 3px 3px 0;
+        padding: 18px 20px 18px 28px;
+        box-shadow: 3px 5px 12px rgba(0,0,0,0.2);
+        margin-left: 14px;
+    }
+    /* 线圈装订边 */
+    .notebook::before {
+        content: "";
+        position: absolute;
+        top: 4px; bottom: 4px;
+        left: -14px;
+        width: 18px;
+        background: linear-gradient(90deg, #c9a06a, #d4b07a, #c9a06a);
+        border-radius: 2px 0 0 2px;
+        box-shadow: -2px 2px 4px rgba(0,0,0,0.15);
+    }
+    /* 线圈环 */
+    .notebook::after {
+        content: "";
+        position: absolute;
+        top: 8px; bottom: 8px;
+        left: -10px;
+        width: 10px;
+        background-image: repeating-linear-gradient(
+            180deg,
+            transparent 0px,
+            transparent 8px,
+            rgba(80,60,30,0.5) 8px,
+            rgba(80,60,30,0.5) 10px
+        );
+        border-radius: 50% 0 0 50% / 30% 0 0 30%;
+    }
+    .notebook .nb-title {
+        font-family: var(--font-mono);
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--ink-soft);
+        margin-bottom: 8px;
+        letter-spacing: .5px;
+    }
+    .notebook .nb-title::before { content: "▤ "; color: var(--red); }
+    .now-list { list-style: none; }
+    .now-list li {
+        display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+        padding: 5px 0 6px; font-size: 14.5px;
+        min-height: 28px;
+    }
+    .now-dot {
+        flex: none; width: 7px; height: 7px; border-radius: 2px;
+        background: var(--red); transform: rotate(45deg); margin-top: 3px;
+    }
+    .nb-foot {
+        margin-top: 10px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--ink-soft);
+    }
+
+    /* projects 档案盒（右下，桌面中央） */
+    .desk-projects {
+        grid-column: 2;
+        grid-row: 2;
+        position: relative;
+    }
+    .archive-box {
+        position: relative;
+        padding: 14px 18px 6px;
+    }
+    /* 档案盒背景 */
+    .archive-box::before {
+        content: "";
+        position: absolute;
+        bottom: 0; left: 0; right: 0;
+        height: 40px;
+        background: linear-gradient(180deg, #8b6b42, #6b5030);
+        border-radius: 0 0 4px 4px;
+        box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        z-index: 0;
+    }
+    /* 档案盒标签 */
+    .archive-box::after {
+        content: "projects / 档案架";
+        position: absolute;
+        bottom: 10px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: rgba(255,240,210,0.8);
+        letter-spacing: 2px;
+        z-index: 1;
+        background: rgba(0,0,0,0.2);
+        padding: 2px 14px;
+        border-radius: 2px;
+    }
+    .proj-cards {
+        position: relative;
+        list-style: none;
+        z-index: 2;
+        margin-bottom: 30px;
+    }
+    .proj-card {
+        position: relative;
+        background: var(--card);
+        border: 1px solid rgba(38,34,28,.18);
+        border-radius: 3px;
+        padding: 14px 18px;
+        box-shadow: 2px 3px 8px rgba(0,0,0,0.15);
+        transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .proj-card:hover {
+        transform: translateY(-3px) !important;
+        box-shadow: 3px 6px 16px rgba(0,0,0,0.22);
+    }
+    /* 每张卡错开叠放 */
+    .proj-card:nth-child(1) {
+        transform: translateX(-4px) rotate(-1deg);
+        z-index: 4;
+        margin-bottom: -10px;
+    }
+    .proj-card:nth-child(2) {
+        transform: translateX(6px) rotate(0.6deg);
+        z-index: 3;
+        margin-bottom: -10px;
+    }
+    .proj-card:nth-child(3) {
+        transform: translateX(-2px) rotate(-0.4deg);
+        z-index: 2;
+        margin-bottom: -10px;
+    }
+    .proj-card:nth-child(4) {
+        transform: translateX(4px) rotate(0.8deg);
+        z-index: 1;
+    }
+    .proj-card:nth-child(1):hover { transform: translateX(-4px) rotate(-1deg) translateY(-4px); }
+    .proj-card:nth-child(2):hover { transform: translateX(6px) rotate(0.6deg) translateY(-4px); }
+    .proj-card:nth-child(3):hover { transform: translateX(-2px) rotate(-0.4deg) translateY(-4px); }
+    .proj-card:nth-child(4):hover { transform: translateX(4px) rotate(0.8deg) translateY(-4px); }
+
+    .proj-top {
+        display: flex; align-items: baseline; justify-content: space-between;
+        margin-bottom: 4px;
+    }
+    .proj-index {
+        font-size: 11.5px; color: var(--red); font-weight: 700;
+        font-family: var(--font-mono); letter-spacing: 1px;
+    }
+    .state {
+        font-family: var(--font-mono); font-size: 10px; color: var(--red);
+        border: 1px solid rgba(139,44,31,.45); border-radius: 999px;
+        padding: 0 8px; letter-spacing: 1px; white-space: nowrap;
+    }
+    .state.calm { color: var(--ink-soft); border-color: var(--line); }
+    .proj-card h3 {
+        font-family: var(--font-display);
+        font-size: 17px;
+        color: var(--ink);
+        margin-bottom: 2px;
+    }
+    .proj-type {
+        font-size: 11.5px;
+        color: var(--ink-soft);
+        font-family: var(--font-mono);
+        margin-bottom: 6px;
+    }
+    .proj-desc {
+        font-size: 13.5px;
+        color: var(--ink-soft);
+        line-height: 1.6;
+        margin-bottom: 6px;
+    }
+    .proj-tags { margin-bottom: 4px; }
+    .tag {
+        display: inline-block; font-family: var(--font-mono); font-size: 10px; font-style: normal;
+        color: var(--ink-soft); background: var(--desk);
+        border: 1px solid var(--line); border-radius: 2px; padding: 1px 7px; margin: 0 4px 4px 0;
+    }
+    .proj-links {
+        font-size: 12px;
+        font-family: var(--font-mono);
+    }
+    .proj-links a { margin-right: 10px; }
+    .proj-links a::before { content: "→ "; color: var(--red); }
+
+    .archive-foot {
+        text-align: center;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: rgba(255,240,210,0.7);
+        position: relative;
+        z-index: 1;
+        padding-bottom: 4px;
+    }
+    .archive-foot a { color: rgba(255,240,210,0.85); text-decoration: underline; }
+
+    /* ===== 导览牌 ===== */
+    .directory {
+        border: 1px solid var(--ink); background: var(--card);
+        padding: 4px 24px; margin: calc(var(--gap)*2) 0 0;
+    }
+    .directory .head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 12px 0 8px; border-bottom: 2px solid var(--ink);
+        font-size: 15px; font-weight: 700; letter-spacing: 3px;
+    }
+    .directory .head .en { font-size: 10.5px; font-weight: 400; color: var(--ink-soft); letter-spacing: 2px; font-family: var(--font-display); }
+    .dir-item {
+        display: flex; align-items: baseline; gap: 16px;
+        padding: 13px 0; border-bottom: 1px dotted var(--line); color: var(--ink);
+    }
+    .dir-item:last-child { border-bottom: none; }
+    .dir-item .no { font-size: 13px; font-weight: 700; color: var(--red); min-width: 34px; }
+    .dir-item .info { flex: 1; min-width: 0; }
+    .dir-item .t { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+    .dir-item .d { font-size: var(--fs-sm); color: var(--ink-soft); margin-left: 10px; }
+    .dir-item .arrow { font-size: 15px; color: var(--ink-soft); transition: transform .15s; }
+    .dir-item:hover .t { color: var(--red); }
+    .dir-item:hover .arrow { transform: translateX(4px); color: var(--red); }
+
+    /* ===== 报尾 ===== */
+    .colophon {
+        margin-top: calc(var(--gap)*2); padding: 18px 0 8px; text-align: center; border-top: 2px solid var(--ink);
+    }
+    .colophon .end { font-size: 13px; letter-spacing: 6px; margin-bottom: 8px; }
+    .colophon .meta { font-size: var(--fs-xs); color: var(--ink-soft); line-height: 2; font-family: var(--font-mono); }
+    .colophon .meta a { color: var(--ink-soft); text-decoration: underline; }
+
+    /* ===== 响应式 ===== */
+    @media (max-width: 900px) {
+        .wrap { max-width: 100%; padding: 0 16px; }
+
+        .masthead h1 { letter-spacing: 10px; text-indent: 10px; }
+        .masthead .seal { display: none; }
+
+        /* 墙和台变成上下两段 */
+        .cork-wall {
+            padding: 24px 16px;
+            min-height: auto;
+        }
+        .wall-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            gap: 20px;
+        }
+        .wall-hero, .wall-motto, .wall-about, .wall-links {
+            grid-column: 1;
+            grid-row: auto;
+            transform: none;
+        }
+        .wall-hero:hover, .wall-motto:hover, .wall-about:hover {
+            transform: translateY(-2px);
+        }
+        .hang-card:nth-child(n) { transform: none; margin: 0; }
+        .hang-card:nth-child(n):hover { transform: translateX(3px); }
+
+        .desk-surface {
+            padding: 28px 16px 32px;
+            min-height: auto;
+        }
+        .desk-grid {
+            grid-template-columns: 1fr;
+            grid-template-rows: auto;
+            gap: 24px;
+        }
+        .desk-terminal, .desk-now, .desk-projects {
+            grid-column: 1;
+            grid-row: auto;
+        }
+        .term-device {
+            transform: none;
+        }
+        .desk-terminal::after {
+            bottom: -14px;
+            left: 15%;
+            right: 15%;
+        }
+        .proj-card:nth-child(n) {
+            transform: none;
+            margin-bottom: 10px;
+        }
+        .proj-card:nth-child(n):hover {
+            transform: translateY(-3px) !important;
+        }
+        .archive-box::before {
+            height: 30px;
+        }
+        .proj-cards {
+            margin-bottom: 20px;
+        }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .wall-card, .wall-card:hover,
+        .hang-card, .hang-card:hover,
+        .proj-card, .proj-card:hover {
+            transform: none !important;
+        }
+    }
+    </style>
+</body>
+</html>

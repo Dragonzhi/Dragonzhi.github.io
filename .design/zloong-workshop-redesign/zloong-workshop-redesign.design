@@ -9,7 +9,14 @@
       "canvasData": {
         "x": 0,
         "y": 0,
-        "group": 0
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 1642,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-4dd3d552",
+          "measuredAt": 1788511792620
+        }
       },
       "devMetadata": {
         "htmlSrc": "pages/blog-list.html",
@@ -25,7 +32,14 @@
       "canvasData": {
         "x": 480,
         "y": 0,
-        "group": 0
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 3950,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-912a6603",
+          "measuredAt": 1788511792620
+        }
       },
       "devMetadata": {
         "htmlSrc": "pages/blog-post.html",
@@ -41,7 +55,14 @@
       "canvasData": {
         "x": 960,
         "y": 0,
-        "group": 0
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 2479,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-6e8b10ae",
+          "measuredAt": 1788511792620
+        }
       },
       "devMetadata": {
         "htmlSrc": "pages/gallery.html",
@@ -57,7 +78,14 @@
       "canvasData": {
         "x": 1440,
         "y": 0,
-        "group": 0
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 2445,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-72bfa0ac",
+          "measuredAt": 1788511792620
+        }
       },
       "devMetadata": {
         "htmlSrc": "pages/portfolio.html",

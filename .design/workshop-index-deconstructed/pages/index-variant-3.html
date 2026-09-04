@@ -1,0 +1,1648 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · 手账本</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 设计令牌（台面解构变体共用）
+   与 workshop.css / tokens.css 同谱系
+   ============================================================ */
+
+:root {
+  /* ===== 语义化别名（Design Library 兼容 / Tailwind 桥接） ===== */
+  --workshop-background: #f5f0e6;
+  --workshop-foreground: #26221c;
+  --workshop-card: #fbf8f2;
+  --workshop-card-foreground: #26221c;
+  --workshop-primary: #8b2c1f;
+  --workshop-primary-foreground: #fbf8f2;
+  --workshop-border: rgba(38,34,28,.18);
+  --workshop-muted: rgba(38,34,28,.08);
+  --workshop-muted-foreground: rgba(38,34,28,.68);
+  --workshop-accent: #2f5d8a;
+  --workshop-radius-sm: 4px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 10px;
+
+  /* 基底色 */
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+
+  /* 强调色 */
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --green: #4a6b4a;
+  --screen: #2b2620;
+  --tape: rgba(255,252,242,.75);
+
+  /* 材质 */
+  --paper-texture:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+
+  /* 字体四轨 */
+  --workshop-font-display: "Averia Gruesa Libre", "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-kai: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* 兼容别名：页面内联样式用短名 */
+  --font-display: var(--workshop-font-display);
+  --font-kai: var(--workshop-font-kai);
+  --font-serif: var(--workshop-font-serif);
+  --font-mono: var(--workshop-font-mono);
+
+  /* 字号阶梯 */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+  --prose: 65ch;
+
+  /* 间距与圆角 */
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-accent: var(--workshop-accent);
+    --color-border: var(--workshop-border);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-accent { background-color: var(--workshop-accent); }
+      .text-accent { color: var(--workshop-accent); }
+      .border-accent { border-color: var(--workshop-accent); }
+      .ring-accent { --tw-ring-color: var(--workshop-accent); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- ========== 封面 / 报头 ========== -->
+    <header class="notebook-cover">
+        <div class="cover-eyebrow">
+            <span>ZLOONG 工房 · 与箱庭同院 <span class="live">● 常开</span></span>
+            <span>2026年9月4日 · 星期五</span>
+            <span class="samp">编辑：ZLOONG · 排印：Hanako</span>
+        </div>
+
+        <div class="cover-title">
+            <h1>ZLOONG 工房</h1>
+            <div class="cover-sub">手作与代码的台面 · THE WORKSHOP</div>
+            <div class="cover-stamp">
+                常开
+                <span>OPEN</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 今日一言 -->
+    <div class="daily-quote">
+        <div class="quote-line">make games, have fun, and ship it someday.</div>
+        <div class="quote-who">— 钉在墙上的话 · 手机电量与动力同步下降中</div>
+    </div>
+
+    <!-- ========== 手账本主体 · 双页展开 ========== -->
+    <div class="notebook" role="main">
+
+        <!-- ===== 左页 ===== -->
+        <div class="page page--left">
+            <div class="page-corner"></div>
+
+            <!-- 页头 -->
+            <div class="page-header">
+                <span class="page-num">— 01 —</span>
+                <span class="samp">2026.09.04 / FRI</span>
+            </div>
+
+            <!-- Hero 手写介绍 -->
+            <div class="hero-hand">
+                <span class="hero-date-tag samp">9月4日 · 晴</span>
+                <p class="greeting">~/workshop · 门没锁，随便看</p>
+                <h2>Hi, I'm Dragonzhi.</h2>
+                <p class="hero-desc">
+                    一个<em>喜欢做游戏的学生</em>。这间工房里摆着我的作品、
+                    Mod 练习和一点 vibe coding 的痕迹。
+                </p>
+                <p class="hero-links samp">
+                    <a href="mailto:dzloong@foxmail.com">Email</a>
+                    <a href="#">隔壁箱庭</a>
+                    <a href="#">GitHub</a>
+                </p>
+            </div>
+
+            <!-- 终端 · 打印小票 -->
+            <div class="receipt-terminal" aria-label="终端 neofetch">
+                <div class="receipt-body">
+                    <div class="receipt-title">— RECEIPT / WORKSHOP —</div>
+                    <pre class="term-receipt"><span class="c-brand">➜  ~</span> neofetch
+<span class="c-brand"> ██████╗ ███████╗
+ ██╔══██╗╚══███╔╝
+ ██║  ██║  ███╔╝
+ ██║  ██║ ███╔╝
+ ██████╔╝███████╗
+ ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">workshop</span>
+                   ─────────────────
+                   <span class="c-key">OS</span>      Godot 4 · Unity
+                   <span class="c-key">Shell</span>   GDScript · C# · C++
+                   <span class="c-key">Uptime</span>  learning game dev
+                   <span class="c-key">Agents</span>  DeepSeek Harness · Codex
+                   <span class="c-key">Focus</span>   gameplay · tools · mods
+                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span> <span class="c-dim"># 成稿自校</span></pre>
+                    <div class="receipt-foot">*** THANK YOU FOR VISITING ***</div>
+                </div>
+            </div>
+
+            <!-- about.md · 手写段落 -->
+            <div class="about-hand">
+                <div class="section-title">about.md</div>
+                <p>
+                    <span class="side-note">主力引擎 Godot 4 ✦</span>
+                    做游戏的学生，主要用 <span class="underline-word">Godot 4</span>，也写 Unity 和 C++。
+                    喜欢<span class="circle-word">像素美术</span>、vibe coding 和把想法变成能玩的东西。
+                </p>
+                <p>
+                    这间工房是我堆作品、记笔记、放练习的地方——
+                    东西有点乱，但每一样都在干活。
+                </p>
+            </div>
+
+            <!-- now.md · 待办清单 -->
+            <div class="now-todo">
+                <div class="section-title">now.md</div>
+                <ul class="todo-list">
+                    <li>
+                        <span class="todo-checkbox"></span>
+                        <span class="todo-text">打磨「棱镜：碧芙洛斯」卡牌核心玩法</span>
+                        <span class="todo-tag">进行中</span>
+                    </li>
+                    <li>
+                        <span class="todo-checkbox"></span>
+                        <span class="todo-text">学 Godot 4 的渲染管线和 shader</span>
+                        <span class="todo-tag">学习中</span>
+                    </li>
+                    <li>
+                        <span class="todo-checkbox checked"></span>
+                        <span class="todo-text done">每天早上出一份 Hanako 箱庭日报</span>
+                        <span class="todo-tag">今日已发</span>
+                    </li>
+                </ul>
+                <div class="now-footnote samp">updated: 2026 · Make Continually</div>
+            </div>
+
+            <!-- 涂鸦装饰 -->
+            <div class="doodle doodle-star">★</div>
+            <div class="doodle doodle-arrow">↓ 往下翻</div>
+
+            <!-- 页脚 -->
+            <div class="page-footer samp">p.01 / ZLOONG Workshop Notebook</div>
+        </div>
+
+        <!-- ===== 书脊 / 装订线 ===== -->
+        <div class="spine" aria-hidden="true">
+            <div class="spine-thread"></div>
+            <div class="spine-holes">
+                <div class="spine-hole"></div>
+                <div class="spine-hole"></div>
+                <div class="spine-hole"></div>
+                <div class="spine-hole"></div>
+                <div class="spine-hole"></div>
+                <div class="spine-hole"></div>
+            </div>
+        </div>
+
+        <!-- ===== 右页 ===== -->
+        <div class="page page--right">
+            <div class="page-corner"></div>
+
+            <!-- 页头 -->
+            <div class="page-header">
+                <span class="samp">WORKS · 作品录</span>
+                <span class="page-num">— 02 —</span>
+            </div>
+
+            <!-- 章节标题 -->
+            <div class="chapter-title">
+                <h2>作品录</h2>
+                <span class="chapter-en">PROJECTS · 共肆件 · 壹件在制</span>
+            </div>
+
+            <!-- 项目剪报卡 -->
+            <div class="proj-cards" id="projects">
+
+                <article class="proj-card">
+                    <div class="proj-card-head">
+                        <span class="proj-card-index">第壹件</span>
+                        <h3>免疫联结 ImmuneLink</h3>
+                        <span class="state-badge win">获奖</span>
+                    </div>
+                    <div class="proj-card-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</div>
+                    <p class="proj-card-desc">
+                        主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。
+                        设计、编程、像素美术独立完成，支持关卡导入导出。
+                    </p>
+                    <div class="proj-card-tags">
+                        <span class="tag-chip">Godot 4</span>
+                        <span class="tag-chip">Pixel Art</span>
+                        <span class="tag-chip">JSON</span>
+                    </div>
+                    <div class="proj-card-links samp">
+                        <a href="#">在线游玩</a>
+                        <a href="#">源码</a>
+                    </div>
+                </article>
+
+                <article class="proj-card">
+                    <div class="proj-card-head">
+                        <span class="proj-card-index">第贰件</span>
+                        <h3>棱镜：碧芙洛斯</h3>
+                        <span class="state-badge wip">在制</span>
+                    </div>
+                    <div class="proj-card-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</div>
+                    <p class="proj-card-desc">
+                        Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。
+                        正在打磨成完整的小游戏。
+                    </p>
+                    <div class="proj-card-tags">
+                        <span class="tag-chip">Godot 4</span>
+                        <span class="tag-chip">卡牌</span>
+                        <span class="tag-chip">WebGL</span>
+                    </div>
+                    <div class="proj-card-links samp">
+                        <a href="#">源码</a>
+                    </div>
+                </article>
+
+                <article class="proj-card">
+                    <div class="proj-card-head">
+                        <span class="proj-card-index">第叁件</span>
+                        <h3>TriHorny4Link</h3>
+                    </div>
+                    <div class="proj-card-type samp">Godot 塔防 · gameplay practice</div>
+                    <p class="proj-card-desc">
+                        动态路径重规划、敌人对象池和事件驱动系统，
+                        顺便做了些单位很多时的优化。
+                    </p>
+                    <div class="proj-card-tags">
+                        <span class="tag-chip">GDScript</span>
+                        <span class="tag-chip">A*</span>
+                        <span class="tag-chip">Object Pool</span>
+                    </div>
+                    <div class="proj-card-links samp">
+                        <a href="#">演示</a>
+                    </div>
+                </article>
+
+                <article class="proj-card">
+                    <div class="proj-card-head">
+                        <span class="proj-card-index">第肆件</span>
+                        <h3>CounterStrikeGrenades</h3>
+                    </div>
+                    <div class="proj-card-type samp">Minecraft Forge Mod · systems</div>
+                    <p class="proj-card-desc">
+                        尝试把 CS2 的投掷物机制搬进 MC，
+                        含行为逻辑、简单 3D 资产和 TACZ 兼容。
+                    </p>
+                    <div class="proj-card-tags">
+                        <span class="tag-chip">Forge</span>
+                        <span class="tag-chip">Kotlin</span>
+                        <span class="tag-chip">Blockbench</span>
+                    </div>
+                    <div class="proj-card-links samp">
+                        <a href="#">源码</a>
+                    </div>
+                </article>
+
+            </div>
+
+            <div class="proj-archive-foot samp">
+                完整旧版作品集: <a href="#">legacy/portfolio.html</a>
+            </div>
+
+            <!-- links · 页边便签 -->
+            <div class="links-sticky" id="links">
+                <h3>links.md</h3>
+                <ul>
+                    <li><a href="#">blog<span class="link-sub"> / 博客</span></a></li>
+                    <li><a href="#">gallery<span class="link-sub"> / 洛天依画廊</span></a></li>
+                    <li><a href="#">portfolio<span class="link-sub"> / 作品集</span></a></li>
+                    <li><a href="#">GitHub<span class="link-sub"> / @Dragonzhi</span></a></li>
+                </ul>
+                <div class="link-email">dzloong@foxmail.com</div>
+            </div>
+
+            <!-- motto · 便利贴 -->
+            <div class="motto-sticky">
+                <div class="motto-label samp">motto.txt</div>
+                <blockquote>台面常乱，<br>ship 不断。</blockquote>
+                <div class="motto-author">— 便签 · 原句钉在进门墙上</div>
+            </div>
+
+            <!-- 涂鸦装饰 -->
+            <div class="doodle doodle-heart">♡</div>
+            <div class="doodle doodle-wave">〰</div>
+
+            <!-- 页脚 -->
+            <div class="page-footer samp">ZLOONG Workshop Notebook / p.02</div>
+        </div>
+
+    </div><!-- /notebook -->
+
+    <!-- ========== 导览牌 ========== -->
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="#">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="state-tag on">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
+            <span class="state-tag on">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
+            <span class="state-tag on">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅</span></span>
+            <span class="state-tag today">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- ========== 报尾 ========== -->
+    <footer class="colophon">
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            闽ICP备20260330551号-1 · <a href="https://dragonzhi.xyz/">https://dragonzhi.xyz/</a><br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+
+</div>
+
+
+    <style>
+    /* ============================================================
+       变体 3 · 手账本 Open Notebook
+       ============================================================ */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    ::selection { background: var(--red); color: var(--paper); }
+
+    :root {
+        /* 手账本暖纸色体系 */
+        --paper: #f7efdd;
+        --paper-dark: #efe4c9;
+        --paper-edge: #e0d3b0;
+        --ink-notebook: #2a241d;
+        --ink-faint: rgba(42, 36, 29, 0.45);
+        --ink-line: rgba(139, 96, 50, 0.22);
+        --red-cinnabar: #a33a2a;
+        --red-soft: rgba(163, 58, 42, 0.15);
+        --amber-warm: #c97a3a;
+        --tape-yellow: rgba(248, 228, 160, 0.65);
+        --tape-clear: rgba(255, 252, 240, 0.55);
+        --sticky-yellow: #f9e9a8;
+        --sticky-pink: #f4c9b8;
+        --sticky-blue: #b8d4e8;
+        --stitch: #8b6e45;
+        --spine-shadow: rgba(60, 40, 20, 0.25);
+    }
+
+    body {
+        font-family: var(--font-kai);
+        background: var(--paper-dark);
+        background-image:
+            radial-gradient(ellipse at top, rgba(255,248,230,.5), transparent 60%),
+            radial-gradient(ellipse at bottom, rgba(120,80,40,.08), transparent 60%);
+        color: var(--ink-notebook);
+        font-size: 16px;
+        line-height: 1.8;
+        min-height: 100vh;
+        overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+        text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3 { text-wrap: balance; }
+    a { color: var(--red-cinnabar); text-decoration: none; }
+    a:hover { color: var(--amber-warm); }
+    .samp { font-family: var(--font-mono); }
+    .dim { color: var(--ink-faint); }
+    .wrap { max-width: 1200px; margin: 0 auto; padding: 0 32px; }
+
+    /* ============================================================
+       报头 · 笔记本封面
+       ============================================================ */
+    .notebook-cover {
+        position: relative;
+        text-align: center;
+        padding: 48px 0 36px;
+    }
+    .cover-eyebrow {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        color: var(--ink-faint);
+        letter-spacing: 2px;
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+        gap: 8px;
+        padding-bottom: 14px;
+        border-bottom: 1px dashed var(--ink-line);
+        margin-bottom: 28px;
+    }
+    .cover-eyebrow .live { color: var(--red-cinnabar); }
+
+    .cover-title {
+        position: relative;
+        display: inline-block;
+        padding: 20px 40px;
+    }
+    .cover-title h1 {
+        font-family: var(--font-display);
+        font-size: clamp(44px, 6vw, 68px);
+        color: var(--ink-notebook);
+        letter-spacing: 14px;
+        text-indent: 14px;
+        line-height: 1.2;
+        font-weight: 400;
+        position: relative;
+        text-shadow: 1px 1px 0 rgba(163,58,42,.08);
+    }
+    .cover-title h1::after {
+        content: "";
+        position: absolute;
+        left: 10%;
+        right: 10%;
+        bottom: -4px;
+        height: 3px;
+        background: var(--red-cinnabar);
+        opacity: .7;
+        border-radius: 2px;
+        transform: skewX(-8deg);
+    }
+    .cover-sub {
+        margin-top: 14px;
+        font-family: var(--font-kai);
+        font-size: 13px;
+        color: var(--ink-faint);
+        letter-spacing: 6px;
+        text-indent: 6px;
+    }
+    .cover-stamp {
+        position: absolute;
+        right: 8%;
+        top: 50%;
+        transform: translateY(-50%) rotate(12deg);
+        font-family: var(--font-kai);
+        font-size: 13px;
+        color: var(--red-cinnabar);
+        border: 2px solid var(--red-cinnabar);
+        border-radius: 50%;
+        width: 64px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        line-height: 1.2;
+        opacity: .8;
+        letter-spacing: 1px;
+    }
+    .cover-stamp span { display: block; font-size: 10px; margin-top: 2px; }
+
+    /* 今日一言 · 写在封面下 */
+    .daily-quote {
+        text-align: center;
+        padding: 20px 0 32px;
+        position: relative;
+    }
+    .daily-quote .quote-line {
+        font-family: var(--font-kai);
+        font-size: 16px;
+        letter-spacing: 2px;
+        color: var(--ink-notebook);
+        position: relative;
+        display: inline-block;
+        padding: 0 30px;
+    }
+    .daily-quote .quote-line::before,
+    .daily-quote .quote-line::after {
+        content: "❝";
+        color: var(--red-cinnabar);
+        font-size: 20px;
+        position: absolute;
+        top: -4px;
+        opacity: .6;
+    }
+    .daily-quote .quote-line::before { left: 0; }
+    .daily-quote .quote-line::after { right: 0; content: "❞"; }
+    .daily-quote .quote-who {
+        margin-top: 6px;
+        font-size: 11.5px;
+        color: var(--ink-faint);
+        letter-spacing: 2px;
+        font-family: var(--font-mono);
+    }
+
+    /* ============================================================
+       手账本主体 · 双页展开
+       ============================================================ */
+    .notebook {
+        position: relative;
+        display: flex;
+        gap: 0;
+        margin: 0 auto 40px;
+        max-width: 1160px;
+        min-height: 1400px;
+        perspective: 2000px;
+    }
+
+    /* 书页通用 */
+    .page {
+        flex: 1;
+        position: relative;
+        background: var(--paper);
+        background-image:
+            repeating-linear-gradient(
+                transparent,
+                transparent 31px,
+                var(--ink-line) 31px,
+                var(--ink-line) 32px
+            );
+        padding: 44px 38px 56px;
+        box-shadow:
+            inset 0 0 60px rgba(160, 120, 60, 0.08),
+            0 4px 20px rgba(60, 40, 20, 0.12);
+        overflow: hidden;
+    }
+    .page::before {
+        content: "";
+        position: absolute;
+        top: 0; bottom: 0;
+        width: 24px;
+        pointer-events: none;
+    }
+
+    /* 左页 */
+    .page--left {
+        border-radius: 6px 2px 2px 6px;
+        transform: rotateY(1.5deg);
+        transform-origin: right center;
+    }
+    .page--left::before {
+        right: 0;
+        background: linear-gradient(to left, rgba(60,40,20,.12), transparent);
+    }
+    .page--left .page-corner {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(135deg, var(--paper-dark) 50%, transparent 50%);
+        box-shadow: -2px -2px 4px rgba(60,40,20,.1);
+    }
+
+    /* 右页 */
+    .page--right {
+        border-radius: 2px 6px 6px 2px;
+        transform: rotateY(-1.5deg);
+        transform-origin: left center;
+    }
+    .page--right::before {
+        left: 0;
+        background: linear-gradient(to right, rgba(60,40,20,.12), transparent);
+    }
+    .page--right .page-corner {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 36px;
+        height: 36px;
+        background: linear-gradient(225deg, var(--paper-dark) 50%, transparent 50%);
+        box-shadow: 2px -2px 4px rgba(60,40,20,.1);
+    }
+
+    /* 书脊 / 装订线 */
+    .spine {
+        position: relative;
+        width: 28px;
+        flex-shrink: 0;
+        background: linear-gradient(
+            to right,
+            var(--paper-edge) 0%,
+            #d4c49a 30%,
+            #c4b080 50%,
+            #d4c49a 70%,
+            var(--paper-edge) 100%
+        );
+        box-shadow:
+            inset 2px 0 6px rgba(60,40,20,.15),
+            inset -2px 0 6px rgba(60,40,20,.15),
+            0 4px 12px rgba(60,40,20,.18);
+        z-index: 2;
+    }
+    .spine-holes {
+        position: absolute;
+        top: 80px;
+        bottom: 80px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .spine-hole {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background: #3a2a18;
+        box-shadow: inset 0 1px 2px rgba(0,0,0,.5);
+    }
+    .spine-thread {
+        position: absolute;
+        top: 0; bottom: 0;
+        left: 50%;
+        width: 1px;
+        transform: translateX(-50%);
+        background: repeating-linear-gradient(
+            to bottom,
+            var(--stitch) 0px,
+            var(--stitch) 6px,
+            transparent 6px,
+            transparent 10px
+        );
+        opacity: .5;
+    }
+
+    /* 页头页码 */
+    .page-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ink-faint);
+        letter-spacing: 1px;
+        margin-bottom: 18px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--ink-line);
+    }
+    .page-header .page-num {
+        font-weight: 600;
+        color: var(--red-cinnabar);
+        opacity: .7;
+    }
+
+    /* 页脚 */
+    .page-footer {
+        position: absolute;
+        bottom: 20px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--ink-faint);
+        letter-spacing: 1px;
+    }
+    .page--left .page-footer { left: 32px; }
+    .page--right .page-footer { right: 32px; }
+
+    /* ============================================================
+       左页内容
+       ============================================================ */
+
+    /* Hero 介绍 · 手写开头 */
+    .hero-hand {
+        margin-bottom: 28px;
+        position: relative;
+    }
+    .hero-date-tag {
+        position: absolute;
+        top: -2px;
+        right: 0;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--red-cinnabar);
+        letter-spacing: 1px;
+        opacity: .75;
+    }
+    .hero-hand .greeting {
+        font-family: var(--font-kai);
+        font-size: 14px;
+        color: var(--ink-faint);
+        letter-spacing: 2px;
+        margin-bottom: 6px;
+    }
+    .hero-hand .greeting::before {
+        content: "✎ ";
+        color: var(--red-cinnabar);
+    }
+    .hero-hand h2 {
+        font-family: var(--font-display);
+        font-size: clamp(26px, 2.8vw, 36px);
+        color: var(--ink-notebook);
+        font-weight: 400;
+        line-height: 1.25;
+        margin-bottom: 10px;
+        position: relative;
+        display: inline-block;
+    }
+    .hero-hand h2::after {
+        content: "";
+        position: absolute;
+        left: 0;
+        right: -10%;
+        bottom: -2px;
+        height: 2px;
+        background: var(--red-cinnabar);
+        opacity: .4;
+        border-radius: 2px;
+        transform: skewX(-12deg);
+    }
+    .hero-hand .hero-desc {
+        font-family: var(--font-kai);
+        font-size: 15px;
+        color: var(--ink-notebook);
+        line-height: 1.9;
+        margin-top: 12px;
+    }
+    .hero-hand .hero-desc em {
+        font-style: normal;
+        background: linear-gradient(to top, var(--red-soft) 30%, transparent 30%);
+        padding: 0 2px;
+    }
+    .hero-hand .hero-links {
+        margin-top: 14px;
+        font-family: var(--font-mono);
+        font-size: 12px;
+    }
+    .hero-hand .hero-links a {
+        position: relative;
+        margin-right: 14px;
+    }
+    .hero-hand .hero-links a::after {
+        content: "↗";
+        font-size: 10px;
+        margin-left: 2px;
+    }
+
+    /* 终端 · 贴上去的打印小票 */
+    .receipt-terminal {
+        position: relative;
+        margin: 24px auto 32px;
+        max-width: 420px;
+        transform: rotate(-1.5deg);
+        filter: drop-shadow(2px 4px 6px rgba(60,40,20,.15));
+    }
+    .receipt-terminal::before,
+    .receipt-terminal::after {
+        content: "";
+        position: absolute;
+        width: 54px;
+        height: 18px;
+        background: var(--tape-yellow);
+        z-index: 3;
+        top: -8px;
+        border-left: 1px dashed rgba(120,90,30,.2);
+        border-right: 1px dashed rgba(120,90,30,.2);
+        box-shadow: 0 1px 2px rgba(60,40,20,.12);
+    }
+    .receipt-terminal::before {
+        left: 20px;
+        transform: rotate(-6deg);
+    }
+    .receipt-terminal::after {
+        right: 20px;
+        transform: rotate(5deg);
+    }
+    .receipt-body {
+        background: #fdfaf2;
+        padding: 22px 18px 18px;
+        position: relative;
+        box-shadow: 0 2px 8px rgba(60,40,20,.1);
+    }
+    /* 锯齿边缘 */
+    .receipt-body::before,
+    .receipt-body::after {
+        content: "";
+        position: absolute;
+        left: 0; right: 0;
+        height: 6px;
+        background-image: radial-gradient(circle, transparent 3px, #fdfaf2 3px);
+        background-size: 10px 6px;
+        background-repeat: repeat-x;
+    }
+    .receipt-body::before {
+        top: -3px;
+        background-position: 0 -3px;
+    }
+    .receipt-body::after {
+        bottom: -3px;
+        background-position: 0 3px;
+        transform: rotate(180deg);
+    }
+    .receipt-title {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: #8a7a5a;
+        text-align: center;
+        letter-spacing: 2px;
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px dashed #c4b080;
+    }
+    .term-receipt {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        line-height: 1.5;
+        color: #3a3020;
+        white-space: pre;
+        overflow-x: auto;
+    }
+    .term-receipt .c-brand { color: #a33a2a; font-weight: 600; }
+    .term-receipt .c-key { color: #8a6a3a; }
+    .term-receipt .c-dim { color: #a89a7a; }
+    .receipt-foot {
+        margin-top: 10px;
+        padding-top: 8px;
+        border-top: 1px dashed #c4b080;
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: #a89a7a;
+        text-align: center;
+        letter-spacing: 1px;
+    }
+
+    /* about.md · 手写段落 */
+    .about-hand {
+        margin-bottom: 28px;
+        position: relative;
+    }
+    .about-hand .section-title {
+        font-family: var(--font-kai);
+        font-size: 15px;
+        color: var(--red-cinnabar);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .about-hand .section-title::before {
+        content: "♦";
+        font-size: 10px;
+    }
+    .about-hand p {
+        font-family: var(--font-kai);
+        font-size: 15.5px;
+        line-height: 2;
+        color: var(--ink-notebook);
+        margin-bottom: 8px;
+        position: relative;
+    }
+    .about-hand .underline-word {
+        background: linear-gradient(to top, rgba(163,58,42,.25) 30%, transparent 30%);
+        padding: 0 2px;
+    }
+    .about-hand .circle-word {
+        position: relative;
+        display: inline-block;
+    }
+    .about-hand .circle-word::after {
+        content: "";
+        position: absolute;
+        left: -4px; right: -4px;
+        top: -2px; bottom: -2px;
+        border: 1.5px solid var(--red-cinnabar);
+        border-radius: 50%;
+        opacity: .5;
+        transform: rotate(-4deg);
+    }
+    .about-hand .side-note {
+        float: right;
+        width: 80px;
+        font-family: var(--font-kai);
+        font-size: 11px;
+        color: var(--red-cinnabar);
+        line-height: 1.4;
+        margin: 4px -10px 8px 12px;
+        padding: 6px 8px;
+        background: var(--sticky-yellow);
+        transform: rotate(3deg);
+        box-shadow: 1px 2px 4px rgba(60,40,20,.1);
+        opacity: .85;
+    }
+
+    /* now.md · 待办清单 */
+    .now-todo {
+        position: relative;
+    }
+    .now-todo .section-title {
+        font-family: var(--font-kai);
+        font-size: 15px;
+        color: var(--red-cinnabar);
+        margin-bottom: 12px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .now-todo .section-title::before {
+        content: "✓";
+        font-size: 12px;
+    }
+    .todo-list {
+        list-style: none;
+        font-family: var(--font-kai);
+        font-size: 15px;
+    }
+    .todo-list li {
+        display: flex;
+        align-items: flex-start;
+        gap: 10px;
+        padding: 7px 0;
+        position: relative;
+    }
+    .todo-checkbox {
+        flex: none;
+        width: 16px;
+        height: 16px;
+        border: 1.5px solid var(--red-cinnabar);
+        border-radius: 2px;
+        margin-top: 3px;
+        position: relative;
+        opacity: .7;
+    }
+    .todo-checkbox.checked::after {
+        content: "✓";
+        position: absolute;
+        top: -4px;
+        left: 1px;
+        color: var(--red-cinnabar);
+        font-size: 14px;
+        font-weight: 700;
+    }
+    .todo-text.done {
+        text-decoration: line-through;
+        text-decoration-color: var(--red-cinnabar);
+        text-decoration-thickness: 1.5px;
+        opacity: .6;
+    }
+    .todo-tag {
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        color: var(--red-cinnabar);
+        background: var(--red-soft);
+        padding: 1px 6px;
+        border-radius: 3px;
+        margin-left: auto;
+        white-space: nowrap;
+        letter-spacing: .5px;
+    }
+    .now-footnote {
+        margin-top: 12px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--ink-faint);
+        letter-spacing: 1px;
+        text-align: right;
+    }
+
+    /* 左页侧边涂鸦 */
+    .doodle {
+        position: absolute;
+        pointer-events: none;
+        opacity: .35;
+        color: var(--red-cinnabar);
+        font-family: var(--font-kai);
+        font-size: 10px;
+    }
+    .doodle-star {
+        right: 18px;
+        top: 200px;
+        font-size: 16px;
+        transform: rotate(15deg);
+        opacity: .25;
+    }
+    .doodle-arrow {
+        left: 12px;
+        bottom: 140px;
+        font-size: 12px;
+        transform: rotate(-10deg);
+    }
+
+    /* ============================================================
+       右页内容
+       ============================================================ */
+
+    /* 章节标题 · 作品录 */
+    .chapter-title {
+        text-align: center;
+        margin-bottom: 24px;
+        position: relative;
+        padding: 8px 0;
+    }
+    .chapter-title h2 {
+        font-family: var(--font-kai);
+        font-size: 28px;
+        color: var(--ink-notebook);
+        letter-spacing: 12px;
+        text-indent: 12px;
+        font-weight: 400;
+        display: inline-block;
+        position: relative;
+    }
+    .chapter-title h2::before,
+    .chapter-title h2::after {
+        content: "❖";
+        color: var(--red-cinnabar);
+        font-size: 14px;
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        opacity: .6;
+    }
+    .chapter-title h2::before { left: -28px; }
+    .chapter-title h2::after { right: -28px; }
+    .chapter-title .chapter-en {
+        display: block;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        color: var(--ink-faint);
+        letter-spacing: 3px;
+        margin-top: 4px;
+    }
+
+    /* 项目剪报卡 */
+    .proj-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        margin-bottom: 28px;
+    }
+    .proj-card {
+        position: relative;
+        background: var(--card);
+        padding: 16px 18px 14px;
+        border: 1px solid rgba(60,40,20,.12);
+        box-shadow: 2px 3px 8px rgba(60,40,20,.1);
+    }
+    .proj-card:nth-child(odd) {
+        transform: rotate(-0.8deg);
+        margin-right: 8px;
+    }
+    .proj-card:nth-child(even) {
+        transform: rotate(0.8deg);
+        margin-left: 8px;
+    }
+    /* 胶带贴角 */
+    .proj-card::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        width: 44px;
+        height: 20px;
+        background: var(--tape-clear);
+        border-left: 1px dashed rgba(120,90,30,.15);
+        border-right: 1px dashed rgba(120,90,30,.15);
+        z-index: 2;
+        box-shadow: 0 1px 2px rgba(60,40,20,.08);
+    }
+    .proj-card:nth-child(odd)::before {
+        left: 18px;
+        transform: rotate(-4deg);
+    }
+    .proj-card:nth-child(even)::before {
+        right: 18px;
+        transform: rotate(4deg);
+    }
+    .proj-card-head {
+        display: flex;
+        align-items: baseline;
+        gap: 10px;
+        margin-bottom: 4px;
+    }
+    .proj-card-index {
+        font-family: var(--font-kai);
+        font-size: 13px;
+        color: var(--red-cinnabar);
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    .proj-card h3 {
+        font-family: var(--font-display);
+        font-size: 18px;
+        color: var(--ink-notebook);
+        font-weight: 400;
+    }
+    .proj-card .state-badge {
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        padding: 1px 7px;
+        border-radius: 999px;
+        letter-spacing: 1px;
+        margin-left: auto;
+        white-space: nowrap;
+    }
+    .state-badge.win {
+        color: var(--red-cinnabar);
+        border: 1px solid rgba(163,58,42,.4);
+        background: var(--red-soft);
+    }
+    .state-badge.wip {
+        color: var(--amber-warm);
+        border: 1px solid rgba(201,122,58,.4);
+        background: rgba(201,122,58,.12);
+    }
+    .proj-card-type {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ink-faint);
+        margin-bottom: 8px;
+        letter-spacing: .5px;
+    }
+    .proj-card-desc {
+        font-family: var(--font-kai);
+        font-size: 13.5px;
+        line-height: 1.7;
+        color: var(--ink-notebook);
+        margin-bottom: 8px;
+    }
+    .proj-card-tags {
+        margin-bottom: 8px;
+    }
+    .proj-card-tags .tag-chip {
+        display: inline-block;
+        font-family: var(--font-mono);
+        font-size: 9.5px;
+        color: var(--ink-faint);
+        background: rgba(60,40,20,.06);
+        border-radius: 3px;
+        padding: 1px 7px;
+        margin-right: 4px;
+        margin-bottom: 4px;
+    }
+    .proj-card-links {
+        font-family: var(--font-mono);
+        font-size: 11px;
+        border-top: 1px dashed var(--ink-line);
+        padding-top: 6px;
+    }
+    .proj-card-links a {
+        margin-right: 14px;
+    }
+    .proj-card-links a::before {
+        content: "→ ";
+        color: var(--red-cinnabar);
+    }
+
+    /* 项目档案架底部标注 */
+    .proj-archive-foot {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ink-faint);
+        text-align: center;
+        letter-spacing: 1px;
+        margin-bottom: 24px;
+    }
+    .proj-archive-foot a::after { content: " ↗"; }
+
+    /* links · 页边便签 */
+    .links-sticky {
+        position: relative;
+        background: var(--sticky-yellow);
+        padding: 14px 16px 16px;
+        transform: rotate(-1deg);
+        box-shadow: 2px 3px 8px rgba(60,40,20,.12);
+        margin: 0 10px 20px;
+    }
+    .links-sticky::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%) rotate(2deg);
+        width: 60px;
+        height: 16px;
+        background: var(--tape-clear);
+        border-left: 1px dashed rgba(120,90,30,.15);
+        border-right: 1px dashed rgba(120,90,30,.15);
+    }
+    .links-sticky h3 {
+        font-family: var(--font-kai);
+        font-size: 14px;
+        color: var(--red-cinnabar);
+        margin-bottom: 8px;
+        font-weight: 600;
+    }
+    .links-sticky h3::before {
+        content: "🔗 ";
+        font-size: 12px;
+    }
+    .links-sticky ul {
+        list-style: none;
+        font-family: var(--font-kai);
+        font-size: 13px;
+        line-height: 1.9;
+    }
+    .links-sticky li a::before {
+        content: "▸ ";
+        color: var(--red-cinnabar);
+        font-size: 10px;
+    }
+    .links-sticky .link-sub {
+        font-size: 11px;
+        color: var(--ink-faint);
+        margin-left: 2px;
+    }
+    .links-sticky .link-email {
+        margin-top: 4px;
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ink-faint);
+    }
+
+    /* motto · 便利贴 */
+    .motto-sticky {
+        position: absolute;
+        right: 20px;
+        bottom: 70px;
+        width: 160px;
+        background: var(--sticky-pink);
+        padding: 18px 16px 20px;
+        transform: rotate(4deg);
+        box-shadow: 3px 4px 10px rgba(60,40,20,.15);
+        z-index: 3;
+    }
+    .motto-sticky::before {
+        content: "";
+        position: absolute;
+        top: -8px;
+        left: 50%;
+        transform: translateX(-50%) rotate(-3deg);
+        width: 50px;
+        height: 16px;
+        background: var(--tape-clear);
+        border-left: 1px dashed rgba(120,90,30,.15);
+        border-right: 1px dashed rgba(120,90,30,.15);
+    }
+    .motto-sticky .motto-label {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        color: var(--ink-faint);
+        letter-spacing: 1px;
+        margin-bottom: 6px;
+    }
+    .motto-sticky blockquote {
+        font-family: var(--font-kai);
+        font-size: 17px;
+        line-height: 1.5;
+        color: var(--ink-notebook);
+        font-weight: 600;
+    }
+    .motto-sticky blockquote::before {
+        content: "「";
+        color: var(--red-cinnabar);
+        font-size: 14px;
+    }
+    .motto-sticky blockquote::after {
+        content: "」";
+        color: var(--red-cinnabar);
+        font-size: 14px;
+    }
+    .motto-sticky .motto-author {
+        margin-top: 8px;
+        font-family: var(--font-kai);
+        font-size: 10.5px;
+        color: var(--ink-faint);
+        text-align: right;
+    }
+
+    /* 右页侧边涂鸦 */
+    .doodle-heart {
+        left: 16px;
+        top: 280px;
+        font-size: 14px;
+        color: var(--red-cinnabar);
+        opacity: .25;
+        transform: rotate(-8deg);
+    }
+    .doodle-wave {
+        right: 14px;
+        top: 520px;
+        font-size: 18px;
+        color: var(--amber-warm);
+        opacity: .3;
+    }
+
+    /* ============================================================
+       导览牌
+       ============================================================ */
+    .directory {
+        max-width: 1160px;
+        margin: 0 auto 36px;
+        border: 1px solid var(--ink-notebook);
+        background: var(--paper);
+        padding: 4px 24px;
+        box-shadow: 2px 3px 10px rgba(60,40,20,.1);
+        position: relative;
+    }
+    .directory::before {
+        content: "";
+        position: absolute;
+        top: -10px;
+        left: 36px;
+        width: 80px;
+        height: 18px;
+        background: var(--tape-yellow);
+        transform: rotate(-2deg);
+        border-left: 1px dashed rgba(120,90,30,.2);
+        border-right: 1px dashed rgba(120,90,30,.2);
+        box-shadow: 0 1px 2px rgba(60,40,20,.08);
+    }
+    .directory .head {
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+        padding: 12px 0 8px;
+        border-bottom: 2px solid var(--ink-notebook);
+        font-family: var(--font-kai);
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 4px;
+    }
+    .directory .head .en {
+        font-size: 10.5px;
+        font-weight: 400;
+        color: var(--ink-faint);
+        letter-spacing: 2px;
+        font-family: var(--font-mono);
+    }
+    .dir-item {
+        display: flex;
+        align-items: baseline;
+        gap: 16px;
+        padding: 13px 0;
+        border-bottom: 1px dotted var(--ink-line);
+        color: var(--ink-notebook);
+        transition: background .15s;
+    }
+    .dir-item:last-child { border-bottom: none; }
+    .dir-item:hover { background: var(--red-soft); }
+    .dir-item .no {
+        font-family: var(--font-kai);
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--red-cinnabar);
+        min-width: 28px;
+    }
+    .dir-item .info { flex: 1; min-width: 0; }
+    .dir-item .t {
+        font-family: var(--font-kai);
+        font-size: 16px;
+        font-weight: 600;
+        letter-spacing: 1px;
+    }
+    .dir-item .d {
+        font-size: 13px;
+        color: var(--ink-faint);
+        margin-left: 10px;
+    }
+    .dir-item .state-tag {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        border-radius: 999px;
+        padding: 1px 8px;
+        letter-spacing: 1px;
+        white-space: nowrap;
+    }
+    .state-tag.on {
+        color: var(--ink-faint);
+        border: 1px solid var(--ink-line);
+    }
+    .state-tag.today {
+        color: var(--red-cinnabar);
+        border: 1px solid rgba(163,58,42,.4);
+        background: var(--red-soft);
+    }
+    .dir-item .arrow {
+        font-size: 14px;
+        color: var(--ink-faint);
+        transition: transform .15s;
+    }
+    .dir-item:hover .t { color: var(--red-cinnabar); }
+    .dir-item:hover .arrow { transform: translateX(4px); color: var(--red-cinnabar); }
+
+    /* ============================================================
+       报尾
+       ============================================================ */
+    .colophon {
+        max-width: 1160px;
+        margin: 0 auto;
+        padding: 20px 0 32px;
+        text-align: center;
+        border-top: 2px solid var(--ink-notebook);
+        position: relative;
+    }
+    .colophon::before {
+        content: "— 工房不关门 —";
+        display: block;
+        font-family: var(--font-kai);
+        font-size: 13px;
+        letter-spacing: 6px;
+        margin-bottom: 10px;
+        color: var(--ink-notebook);
+    }
+    .colophon .meta {
+        font-family: var(--font-mono);
+        font-size: 10.5px;
+        color: var(--ink-faint);
+        line-height: 2;
+    }
+    .colophon .meta a {
+        color: var(--ink-faint);
+        text-decoration: underline;
+    }
+
+    /* ============================================================
+       响应式 · 窄屏单页滚动
+       ============================================================ */
+    @media (max-width: 900px) {
+        .wrap { padding: 0 16px; }
+
+        .cover-stamp { display: none; }
+
+        .notebook {
+            flex-direction: column;
+            min-height: auto;
+            perspective: none;
+        }
+        .page {
+            transform: none !important;
+            border-radius: 4px;
+            padding: 32px 24px 48px;
+        }
+        .page--left {
+            border-radius: 6px 6px 2px 2px;
+        }
+        .page--right {
+            border-radius: 2px 2px 6px 6px;
+        }
+        .page::before { display: none; }
+        .page-corner { display: none; }
+
+        .spine {
+            width: 100%;
+            height: 24px;
+            background: linear-gradient(
+                to bottom,
+                var(--paper-edge) 0%,
+                #d4c49a 30%,
+                #c4b080 50%,
+                #d4c49a 70%,
+                var(--paper-edge) 100%
+            );
+            box-shadow:
+                inset 0 2px 6px rgba(60,40,20,.15),
+                inset 0 -2px 6px rgba(60,40,20,.15),
+                0 2px 8px rgba(60,40,20,.12);
+        }
+        .spine-holes {
+            top: 50%;
+            bottom: auto;
+            left: 60px;
+            right: 60px;
+            transform: translateY(-50%);
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .spine-thread {
+            top: 50%;
+            bottom: auto;
+            left: 0; right: 0;
+            width: auto;
+            height: 1px;
+            transform: translateY(-50%);
+            background: repeating-linear-gradient(
+                to right,
+                var(--stitch) 0px,
+                var(--stitch) 6px,
+                transparent 6px,
+                transparent 10px
+            );
+        }
+
+        .motto-sticky {
+            position: relative;
+            right: auto;
+            bottom: auto;
+            width: auto;
+            margin: 20px 10px 0;
+            transform: rotate(1deg);
+        }
+
+        .doodle { display: none; }
+
+        .about-hand .side-note {
+            float: none;
+            width: auto;
+            margin: 10px 0;
+            transform: none;
+        }
+
+        .cover-title h1 { letter-spacing: 8px; text-indent: 8px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+    }
+    </style>
+</body>
+</html>

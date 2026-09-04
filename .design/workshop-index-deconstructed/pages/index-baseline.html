@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · 基线版</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 设计令牌（台面解构变体共用）
+   与 workshop.css / tokens.css 同谱系
+   ============================================================ */
+
+:root {
+  /* ===== 语义化别名（Design Library 兼容 / Tailwind 桥接） ===== */
+  --workshop-background: #f5f0e6;
+  --workshop-foreground: #26221c;
+  --workshop-card: #fbf8f2;
+  --workshop-card-foreground: #26221c;
+  --workshop-primary: #8b2c1f;
+  --workshop-primary-foreground: #fbf8f2;
+  --workshop-border: rgba(38,34,28,.18);
+  --workshop-muted: rgba(38,34,28,.08);
+  --workshop-muted-foreground: rgba(38,34,28,.68);
+  --workshop-accent: #2f5d8a;
+  --workshop-radius-sm: 4px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 10px;
+
+  /* 基底色 */
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+
+  /* 强调色 */
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --green: #4a6b4a;
+  --screen: #2b2620;
+  --tape: rgba(255,252,242,.75);
+
+  /* 材质 */
+  --paper-texture:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+
+  /* 字体四轨 */
+  --workshop-font-display: "Averia Gruesa Libre", "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-kai: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-font-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-font-mono: "Cascadia Code", "JetBrains Mono", Consolas, "Courier New", monospace;
+
+  /* 兼容别名：页面内联样式用短名 */
+  --font-display: var(--workshop-font-display);
+  --font-kai: var(--workshop-font-kai);
+  --font-serif: var(--workshop-font-serif);
+  --font-mono: var(--workshop-font-mono);
+
+  /* 字号阶梯 */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+  --prose: 65ch;
+
+  /* 间距与圆角 */
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+}
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-accent: var(--workshop-accent);
+    --color-border: var(--workshop-border);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-accent { background-color: var(--workshop-accent); }
+      .text-accent { color: var(--workshop-accent); }
+      .border-accent { border-color: var(--workshop-accent); }
+      .ring-accent { --tw-ring-color: var(--workshop-accent); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 与箱庭同院 <span class="live">● 常开</span></span>
+        <span>2026年9月4日 · 星期五</span>
+        <span>编辑：ZLOONG · 排印：Hanako</span>
+    </div>
+
+    <header class="wall">
+        <span class="seal samp">常开<br>OPEN</span>
+        <h1>ZLOONG 工房</h1>
+        <div class="sub">THE WORKSHOP · 手作与代码的台面</div>
+    </header>
+    <div class="rule-double"></div>
+
+    <div class="daily">
+        <div class="quote">「 make games, have fun, and ship it someday. 」</div>
+        <div class="who">— 钉在墙上的话 · 手机电量与动力同步下降中</div>
+    </div>
+
+    <div class="bench-label">
+        <span class="t">进门</span>
+        <span class="en">HELLO &amp; MACHINE</span>
+    </div>
+    <main class="bento">
+
+        <section class="tile tile--hero t-2w t-2h taped">
+            <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
+            <h2 class="hero-title">Hi, I'm Dragonzhi.</h2>
+            <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
+            <p class="hero-links samp">
+                <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
+                <a href="#">隔壁箱庭 ↗</a> ·
+                <a href="#">GitHub ↗</a>
+            </p>
+        </section>
+
+        <section class="tile tile--term t-2w t-2h">
+            <div class="term-bar">
+                <i></i><i></i><i></i>
+                <span class="term-title samp">dragonzhi@workshop — zsh</span>
+            </div>
+            <pre class="term-body"><span class="c-brand">➜  ~</span> neofetch
+<span class="c-brand"> ██████╗ ███████╗
+ ██╔══██╗╚══███╔╝
+ ██║  ██║  ███╔╝
+ ██║  ██║ ███╔╝
+ ██████╔╝███████╗
+ ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">workshop</span>
+                   ─────────────────
+                   <span class="c-key">OS</span>      Godot 4 · Unity
+                   <span class="c-key">Shell</span>   GDScript · C# · C++
+                   <span class="c-key">Uptime</span>  learning game dev
+                   <span class="c-key">Agents</span>  DeepSeek Harness · Codex
+                   <span class="c-key">Focus</span>   gameplay · tools · mods
+                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span> <span class="c-dim"># 成稿自校</span></pre>
+        </section>
+
+        <section class="tile t-2w">
+            <h2 class="tile-title samp">about.md</h2>
+            <p>做游戏的学生，主要用 Godot 4，也写 Unity 和 C++。喜欢像素美术、vibe coding 和把想法变成能玩的东西。</p>
+            <p>这间工房是我堆作品、记笔记、放练习的地方——东西有点乱，但每一样都在干活。</p>
+        </section>
+
+        <section class="tile t-2w">
+            <h2 class="tile-title samp">now.md</h2>
+            <ul class="now-list">
+                <li><span class="now-dot"></span>打磨「棱镜：碧芙洛斯」卡牌核心玩法</li>
+                <li><span class="now-dot"></span>学 Godot 4 的渲染管线和 shader</li>
+                <li><span class="now-dot"></span>每天早上出一份 Hanako 箱庭日报</li>
+            </ul>
+            <p class="tile-foot samp">updated: 2026 · Make Continually</p>
+        </section>
+
+        <section class="tile t-4w" id="projects">
+            <div class="tile-head">
+                <h2 class="tile-title samp">projects/ 档案架</h2>
+                <span class="tile-count samp">共肆件 · 壹件在制</span>
+            </div>
+            <ol class="proj-list">
+                <li class="proj">
+                    <span class="proj-index">第壹件</span>
+                    <div class="proj-main">
+                        <h3>免疫联结 ImmuneLink <span class="state">获奖</span></h3>
+                        <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
+                        <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
+                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="#">在线游玩 ↗</a>
+                        <a href="#">源码 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index">第贰件</span>
+                    <div class="proj-main">
+                        <h3>棱镜：碧芙洛斯 <span class="state">在制</span></h3>
+                        <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
+                        <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
+                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="#">源码 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index">第叁件</span>
+                    <div class="proj-main">
+                        <h3>TriHorny4Link</h3>
+                        <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
+                        <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
+                        <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="#">演示 ↗</a>
+                    </div>
+                </li>
+                <li class="proj">
+                    <span class="proj-index">第肆件</span>
+                    <div class="proj-main">
+                        <h3>CounterStrikeGrenades</h3>
+                        <p class="proj-type samp">Minecraft Forge Mod · systems</p>
+                        <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
+                        <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
+                    </div>
+                    <div class="proj-links samp">
+                        <a href="#">源码 ↗</a>
+                    </div>
+                </li>
+            </ol>
+            <p class="tile-foot samp">完整旧版作品集: <a href="#">legacy/portfolio.html ↗</a></p>
+        </section>
+
+        <section class="tile t-2w" id="links">
+            <h2 class="tile-title samp">links.md</h2>
+            <ul class="link-list samp">
+                <li><a href="#">blog <span class="dim">/ 博客</span> ↗</a></li>
+                <li><a href="#">gallery <span class="dim">/ 洛天依画廊</span> ↗</a></li>
+                <li><a href="#">portfolio <span class="dim">/ 作品集</span> ↗</a></li>
+                <li><a href="#">GitHub <span class="dim">/ @Dragonzhi</span> ↗</a></li>
+                <li>dzloong@foxmail.com</li>
+            </ul>
+        </section>
+
+        <section class="tile tile--quote t-2w">
+            <h2 class="tile-title samp">motto.txt</h2>
+            <blockquote>台面常乱，<br>ship 不断。</blockquote>
+            <p class="tile-foot samp">— 便签 · 原句钉在进门墙上</p>
+        </section>
+
+    </main>
+
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="#">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
+            <span class="state calm">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅</span></span>
+            <span class="state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            闽ICP备20260330551号-1 · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+
+    <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    ::selection { background: var(--red); color: var(--card); }
+    body {
+        font-family: var(--font-kai);
+        background: var(--desk);
+        background-image: var(--paper-texture);
+        background-size: 26px 26px;
+        color: var(--ink); font-size: 16px; line-height: 1.75;
+        min-height: 100vh; overflow-x: hidden;
+        -webkit-font-smoothing: antialiased;
+        font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+        text-rendering: optimizeLegibility;
+    }
+    h1, h2, h3 { text-wrap: balance; }
+    a { color: var(--blue); text-decoration: none; }
+    a:hover { color: var(--red); }
+    .samp { font-family: var(--font-mono); }
+    .dim { color: var(--ink-soft); }
+    .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+    /* 门牌 */
+    .eyebrow {
+        font-size: var(--fs-xs); color: var(--ink-soft); letter-spacing: 2px;
+        display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+        border-bottom: 1px solid var(--line); padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
+        font-family: var(--font-mono);
+    }
+    .eyebrow .live { color: var(--red); }
+
+    /* 报头墙 */
+    .wall { text-align: center; padding: calc(var(--gap)*2) 0 calc(var(--gap)*1.5); position: relative; }
+    .wall h1 {
+        font-size: clamp(40px, 7vw, 62px); font-weight: 800; color: var(--red);
+        letter-spacing: 18px; line-height: 1.15; text-indent: 18px;
+        font-family: var(--font-serif);
+    }
+    .wall .sub {
+        margin-top: 8px; font-size: 12px; color: var(--ink-soft);
+        letter-spacing: 7px; text-indent: 7px;
+        font-family: var(--font-display);
+    }
+    .wall .seal {
+        position: absolute; right: 4%; top: 30px;
+        font-family: var(--font-mono); font-size: 11px; color: var(--red);
+        border: 2px solid var(--red); border-radius: 3px;
+        padding: 3px 9px; letter-spacing: 3px;
+        transform: rotate(7deg); opacity: .85;
+    }
+    .rule-double {
+        border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink);
+        height: 5px; margin-bottom: 24px;
+    }
+
+    /* 今日一言 */
+    .daily {
+        text-align: center; padding: calc(var(--gap)*.5) 0 var(--gap);
+        border-bottom: 1px solid var(--line); margin-bottom: calc(var(--gap)*1.75);
+    }
+    .daily .quote { font-size: 16.5px; letter-spacing: 2px; font-family: var(--font-kai); }
+    .daily .who { margin-top: 6px; font-size: var(--fs-xs); color: var(--ink-soft); letter-spacing: 3px; font-family: var(--font-kai); }
+
+    /* 台面标注 */
+    .bench-label {
+        display: flex; align-items: baseline; gap: 12px;
+        margin: 0 0 14px;
+    }
+    .bench-label .t { font-size: 17px; font-weight: 700; letter-spacing: 3px; }
+    .bench-label .en { margin-left: auto; font-family: var(--font-mono); font-size: 10.5px; color: var(--ink-soft); letter-spacing: 2px; }
+
+    /* bento 工作台面 */
+    .bento {
+        display: grid; grid-template-columns: repeat(4, minmax(0,1fr));
+        grid-auto-rows: minmax(140px, auto); gap: var(--gap);
+        padding-bottom: calc(var(--gap)*.5);
+    }
+    .t-2w { grid-column: span 2; }
+    .t-4w { grid-column: 1 / -1; }
+    .t-2h { grid-row: span 2; }
+
+    .tile {
+        position: relative;
+        background: var(--card);
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
+        padding: 20px 22px; overflow: hidden;
+        transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+    }
+    .tile:hover {
+        transform: translateY(-3px);
+        border-color: rgba(139,44,31,.45);
+        box-shadow: 0 14px 30px rgba(38,34,28,.10);
+    }
+    .tile-title {
+        margin: 0 0 12px; font-family: var(--font-mono); font-size: 13px; font-weight: 600;
+        color: var(--ink-soft); letter-spacing: .5px;
+    }
+    .tile-title::before { content: "▤ "; color: var(--red); }
+    .tile-head { display: flex; align-items: baseline; justify-content: space-between; }
+    .tile-count { font-size: 11px; color: var(--ink-soft); font-family: var(--font-mono); }
+    .tile p { margin: 0 0 12px; }
+    .tile-foot { font-size: 12px; color: var(--ink-soft); margin: 12px 0 0 !important; font-family: var(--font-mono); }
+
+    /* 胶带 */
+    .taped::before {
+        content: ""; position: absolute; top: -8px; left: 24px;
+        width: 74px; height: 18px; background: var(--tape);
+        transform: rotate(-3deg);
+        border-left: 1px dashed rgba(38,34,28,.12); border-right: 1px dashed rgba(38,34,28,.12);
+        box-shadow: 0 1px 2px rgba(38,34,28,.08);
+    }
+
+    /* hero */
+    .tile--hero { display: flex; flex-direction: column; justify-content: center; }
+    .hero-hello { color: var(--ink-soft); font-size: 13px; margin: 0 0 6px; font-family: var(--font-mono); }
+    .hero-hello .mark { color: var(--red); }
+    .hero-title {
+        margin: 0 0 12px; font-family: var(--font-display);
+        font-size: clamp(28px, 3.2vw, 40px); line-height: 1.15; color: var(--ink);
+    }
+    .hero-sub { margin: 0 0 14px; color: var(--ink-soft); }
+    .hero-links { margin: auto 0 0; font-size: 14px; font-family: var(--font-mono); }
+    .hero-links a::before { content: "> "; color: var(--red); }
+
+    /* 终端卡 */
+    .tile--term {
+        background: var(--screen); border-color: #1d1915; padding: 0;
+        display: flex; flex-direction: column;
+    }
+    .tile--term:hover { border-color: var(--amber); transform: translateY(-3px); }
+    .term-bar {
+        display: flex; align-items: center; gap: 6px; padding: 11px 16px;
+        background: rgba(255,255,255,.04); border-bottom: 1px solid rgba(255,255,255,.06);
+    }
+    .term-bar i { width: 10px; height: 10px; border-radius: 50%; background: #4a4238; }
+    .term-bar i:first-child { background: var(--red); }
+    .term-title { margin-left: 8px; font-family: var(--font-mono); font-size: 11px; color: rgba(232,221,200,.5); }
+    .term-body {
+        margin: 0; padding: 14px 18px 18px; flex: 1; overflow: auto;
+        font-family: var(--font-mono); font-size: 12px; line-height: 1.55; color: #e8ddc8;
+    }
+    .c-brand { color: var(--amber); }
+    .c-key { color: #c9a86a; }
+    .c-dim { color: rgba(232,221,200,.45); }
+
+    /* now list */
+    .now-list { list-style: none; }
+    .now-list li {
+        display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap;
+        padding: 7px 0; border-bottom: 1px dashed var(--line); font-size: 15px;
+    }
+    .now-list li:last-child { border-bottom: none; }
+    .now-dot {
+        flex: none; width: 8px; height: 8px; border-radius: 2px;
+        background: var(--red); transform: rotate(45deg); margin-top: 2px;
+    }
+    .state {
+        font-family: var(--font-mono); font-size: 10px; color: var(--red);
+        border: 1px solid rgba(139,44,31,.45); border-radius: 999px;
+        padding: 0 8px; letter-spacing: 1px; white-space: nowrap;
+    }
+    .state.calm { color: var(--ink-soft); border-color: var(--line); }
+
+    /* 项目档案 */
+    .proj-list { list-style: none; margin-top: 2px; }
+    .proj {
+        display: grid; grid-template-columns: 64px 1fr auto; gap: 18px;
+        padding: 15px 2px; border-top: 1px dashed var(--line);
+    }
+    .proj:first-child { border-top: none; }
+    .proj-index { font-size: 13px; color: var(--red); font-weight: 700; padding-top: 4px; letter-spacing: 1px; }
+    .proj-main h3 { margin: 0 0 2px; font-family: var(--font-display); font-size: 19px; color: var(--ink); }
+    .proj-type { margin: 0 0 6px; font-size: 12px; color: var(--ink-soft); font-family: var(--font-mono); }
+    .proj-desc { margin: 0 0 8px; font-size: var(--fs-md); color: var(--ink-soft); max-width: var(--prose); }
+    .tag {
+        display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-style: normal;
+        color: var(--ink-soft); background: var(--desk);
+        border: 1px solid var(--line); border-radius: 3px; padding: 1px 9px; margin: 0 6px 6px 0;
+    }
+    .proj-links {
+        display: flex; flex-direction: column; align-items: flex-end; gap: 8px;
+        font-size: 13px; white-space: nowrap; font-family: var(--font-mono);
+    }
+    .proj-links a::before { content: "→ "; color: var(--red); }
+
+    /* links */
+    .link-list { list-style: none; font-size: 14px; font-family: var(--font-mono); }
+    .link-list li { padding: 9px 0; border-bottom: 1px dashed var(--line); }
+    .link-list li:last-child { border-bottom: none; }
+    .link-list a::before { content: "→ "; color: var(--red); }
+
+    /* motto */
+    .tile--quote { background: #fdf3dd; transform: rotate(-.8deg); }
+    .tile--quote:hover { transform: rotate(-.8deg) translateY(-3px); }
+    .tile--quote::before {
+        content: ""; position: absolute; top: -9px; left: 50%; transform: translateX(-50%) rotate(1.5deg);
+        width: 92px; height: 20px; background: var(--tape);
+        border-left: 1px dashed rgba(38,34,28,.12); border-right: 1px dashed rgba(38,34,28,.12);
+        box-shadow: 0 1px 2px rgba(38,34,28,.08);
+    }
+    .tile--quote blockquote {
+        margin: 4px 0 10px; font-family: var(--font-display);
+        font-size: 21px; line-height: 1.5; color: var(--ink);
+    }
+    .tile--quote blockquote::before { content: "“"; color: var(--red); }
+    .tile--quote blockquote::after { content: "”"; color: var(--red); }
+
+    /* 导览牌 */
+    .directory {
+        border: 1px solid var(--ink); background: var(--card);
+        padding: 4px 24px; margin: calc(var(--gap)*1.5) 0 0;
+    }
+    .directory .head {
+        display: flex; justify-content: space-between; align-items: baseline;
+        padding: 12px 0 8px; border-bottom: 2px solid var(--ink);
+        font-size: 15px; font-weight: 700; letter-spacing: 3px;
+    }
+    .directory .head .en { font-size: 10.5px; font-weight: 400; color: var(--ink-soft); letter-spacing: 2px; font-family: var(--font-display); }
+    .dir-item {
+        display: flex; align-items: baseline; gap: 16px;
+        padding: 13px 0; border-bottom: 1px dotted var(--line); color: var(--ink);
+    }
+    .dir-item:last-child { border-bottom: none; }
+    .dir-item .no { font-size: 13px; font-weight: 700; color: var(--red); min-width: 34px; }
+    .dir-item .info { flex: 1; min-width: 0; }
+    .dir-item .t { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+    .dir-item .d { font-size: var(--fs-sm); color: var(--ink-soft); margin-left: 10px; }
+    .dir-item .arrow { font-size: 15px; color: var(--ink-soft); transition: transform .15s; }
+    .dir-item:hover .t { color: var(--red); }
+    .dir-item:hover .arrow { transform: translateX(4px); color: var(--red); }
+
+    /* 报尾 */
+    .colophon {
+        margin-top: calc(var(--gap)*2); padding: 18px 0 8px; text-align: center; border-top: 2px solid var(--ink);
+    }
+    .colophon .end { font-size: 13px; letter-spacing: 6px; margin-bottom: 8px; }
+    .colophon .meta { font-size: var(--fs-xs); color: var(--ink-soft); line-height: 2; font-family: var(--font-mono); }
+    .colophon .meta a { color: var(--ink-soft); text-decoration: underline; }
+
+    @media (max-width: 900px) {
+        .bento { grid-template-columns: 1fr; grid-auto-rows: auto; }
+        .t-2w, .t-4w { grid-column: auto; }
+        .t-2h { grid-row: auto; }
+        .wall h1 { letter-spacing: 10px; text-indent: 10px; }
+        .wall .seal { display: none; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+        html { scroll-behavior: auto; }
+        .tile, .tile:hover, .tile--quote, .tile--quote:hover { transform: none; }
+    }
+    </style>
+</body>
+</html>

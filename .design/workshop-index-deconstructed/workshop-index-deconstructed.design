@@ -1,0 +1,126 @@
+{
+  "data": [
+    {
+      "id": "page-index-baseline",
+      "title": "基线 · 当前版",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 2639,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-5d2432a7",
+          "measuredAt": 1788513587164
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/index-baseline.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-index-variant-1",
+      "title": "变体 1 · 散落台面",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 480,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 2017,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-f5c36dc4",
+          "measuredAt": 1788513587164
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/index-variant-1.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-index-variant-2",
+      "title": "变体 2 · 墙与台",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 960,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 2750,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-7eb9047f",
+          "measuredAt": 1788513587164
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/index-variant-2.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-index-variant-3",
+      "title": "变体 3 · 手账本",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 1440,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 2378,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-7dd2905b",
+          "measuredAt": 1788513587164
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/index-variant-3.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-index-fusion",
+      "title": "融合版 · 整理过的台面",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 1920,
+        "y": 0,
+        "group": 0,
+        "layoutSnapshot": {
+          "version": 1,
+          "contentHeight": 1917,
+          "viewportWidth": 1440,
+          "sourceHash": "fnv1a-049c7207",
+          "measuredAt": 1788514898152
+        }
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/index-fusion.html",
+        "interactions": []
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "desktop",
+    "projectName": "工房主页面 · 台面解构变体",
+    "designLibrary": null,
+    "visualEditorEnabled": false
+  }
+}
