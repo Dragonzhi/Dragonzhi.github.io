@@ -1,6 +1,6 @@
 # ZLOONG 工房
 
-[GitHub Pages 镜像](https://dragonzhi.github.io/) · 隔壁：[Hanako 箱庭](https://dragonzhi.xyz/hanako/)
+[dragonzhi.xyz](https://dragonzhi.xyz/) · [GitHub Pages 镜像](https://dragonzhi.github.io/)
 
 ---
 
@@ -18,12 +18,16 @@
 
 ## 关于项目
 
-这是 ZLOONG 的个人主站（**工房**），与隔壁的 [Hanako 箱庭](https://dragonzhi.xyz/hanako/) 同院不同屋：**日报在隔壁，作品在这屋**。
+这是 ZLOONG 的个人主站（**工房**）：作品、Mod 练习和一点 vibe coding 的痕迹，都摆在这张台面上。
 
-纯静态 HTML + CSS + 原生 JavaScript，无框架、无构建工具，与箱庭同一哲学。设计遵循「工房 Workshop」定稿：暖纸台面 + 朱砂点缀 + 双轨编号（中文数字 × mono）；geek 元素纸化——终端和打字机天然存在，发光只允许出现在 SIGNAL 彩蛋一处。
+纯静态 HTML + CSS + 原生 JavaScript，无框架、无构建工具、零第三方依赖。设计遵循「工房 Workshop」定稿：暖纸台面 + 朱砂点缀 + 双轨编号（中文数字 × mono）；geek 元素纸化——终端和打字机天然存在，发光只允许出现在 SIGNAL 彩蛋一处。
 
-> 备案合规：备案名称「Hanako箱庭」，`<title>` 写作「ZLOONG 工房 · Hanako箱庭」，
+> 备案合规：备案名称「Hanako箱庭」，`<title>` 固定写作「ZLOONG 工房 · Hanako箱庭」，
 > 页脚挂 [闽ICP备20260330551号-1](https://beian.miit.gov.cn/)。
+
+### 部署
+
+推送 `main` 分支即自动发布：GitHub Actions 通过 SSH 到腾讯云服务器拉取最新代码（`.github/workflows/deploy.yml`），主站为 <https://dragonzhi.xyz/>，GitHub Pages 同步作为镜像。无构建步骤，推什么部署什么。
 
 ---
 
@@ -31,14 +35,15 @@
 
 | 路径 | 说明 |
 |---|---|
-| `index.html` | 工房首页：报头墙 → 今日一言 → bento 台面 → 本区导览 → 报尾 |
+| `index.html` | 工房首页：报头墙 → 今日一言 → 可拖动贴贴台面 → 本区导览 → 报尾 |
 | `css/workshop.css` | 首页样式（自 workshop v5 设计定稿抽取） |
-| `js/workshop.js` | 打字机、门牌日期、迷你 Markdown 解析 + files/ 读取、复制邮箱、SIGNAL 彩蛋 |
+| `js/workshop.js` | 打字机、门牌日期、迷你 Markdown 解析 + files/ 读取、台面拖动与自适应撑大、复制邮箱、SIGNAL 彩蛋 |
 | `data/content.js` | 打字机 phrases（其余卡片文案在 `files/`） |
+| `data/desk-config.js` | 台面尺寸配置：最小高/宽与四周留白，只改这一个文件，刷新即生效 |
 | `files/` | 卡片文案源文件：`about.md` / `now.md` / `links.md` / `motto.txt` / `daily.txt`；新增 `.md` 自动成为档案架卡片 |
 | `scripts/` | 本地生成脚本：`generate_manifest.py`（files/ 索引）、`generate_gallery_json.py`（画廊索引） |
 | `data/files-manifest.json` | `files/` 目录索引：丢新文件后跑 `python scripts/generate_manifest.py` 重新生成 |
-| `pages/` | 旧主题子页面（博客、画廊、作品集），从首页导览牌进入 |
+| `pages/` | 子页面（博客版、画廊版、作品集存档），已迁移至工房设计系统，从首页导览牌进入 |
 | `posts/` + `data/posts.json` | 博客文章（Markdown + JSON 索引，marked.js 渲染） |
 | `legacy/` | 旧版主页与作品集存档（legacy 作品集仍由 `data/portfolio.json` 驱动） |
 | `images/` | 头像、favicon、项目图；`画廊/` 目录的索引由脚本生成 |
@@ -47,8 +52,9 @@
 
 ## 主要功能
 
-* **工房首页**：报头墙 + 「常开 OPEN」印章、今日一言（按日期轮选，同一天所有人看到同一句）、bento 纸卡台面（hero 胶带卡 / 琥珀屏终端 / about / now / projects 档案架 / links / motto / 自发现档案架）。about / now / links / motto / 今日一言 的文案是 `files/` 下的真实 .md/.txt，页面自动读取渲染；`files/` 里新增的任意 `.md` 文件会自动变成一张档案架卡片。
-* **本区导览**：箱庭菜单语法的目录牌（壹贰叁肆），通向博客版、画廊版、旧版作品集与隔壁箱庭。
+* **工房首页**：报头墙 + 「常开 OPEN」印章、今日一言（按 UTC 日期轮选，同一天所有人看到同一句）、纸卡台面（hero 胶带卡 / about / now / projects 档案架 / links / motto / 自发现档案架）。about / now / links / motto / 今日一言 的文案是 `files/` 下的真实 .md/.txt，页面自动读取渲染；`files/` 里新增的任意 `.md` 文件会自动变成一张档案架卡片。
+* **可拖动台面**：桌面端（≥901px 且鼠标精准）每张贴贴可自由拖动，位置存 localStorage 刷新不丢，「还原台面」一键复位；台面随内容自动撑大，尺寸可在 `data/desk-config.js` 调整；窄屏 / 触屏自动退化为单列流式。
+* **本区导览**：菜单式目录牌（壹～伍），通向博客版、画廊版、作品集存档与 IterTrip。
 * **隐藏信号**：点页脚 `SIGNAL / 66.00 MHz`，或在任意位置键入 `66CCFF`，唤出工房角落的收音机。
 * **渐进增强**：核心内容纯静态即可完整显示；所有 fetch 容忍失败，绝不白屏。
 * **响应式 + 无障碍**：窄屏退化为单列；尊重 `prefers-reduced-motion`。
@@ -94,6 +100,10 @@ python scripts/generate_manifest.py
 
 在 [`data/content.js`](data/content.js) 的 `phrases` 里改。
 
+### 调台面尺寸
+
+台面的最小高度 / 宽度与四周留白都在 [`data/desk-config.js`](data/desk-config.js) 里改，无需动 CSS/JS，刷新即生效；台面内容超出配置范围时会自动撑大。
+
 ### 改作品档案架
 
 `index.html` 的 `projects/` 区块为静态四件，直接编辑即可；中文数字编号（第壹件～第肆件）与「获奖 / 在制」徽章手工维护。
@@ -123,6 +133,6 @@ python -m http.server 8000
 
 ## 最近更新
 
-- **工房版式上线**：首页重构为 ZLOONG 工房（Workshop v5 定稿），替换原 bento 玻璃版式；文案数据流（`data/content.js`）保留沿用。
-- **数据源精简**：下线每周抓取 GitHub 仓库的 update-data 工作流及失效的 `repos.json` / `org-repo.json`，作品档案改为手工维护。
-- **合规就位**：`<title>` 与页脚备案号按备案名称「Hanako箱庭」落地，备案号链接工信部。
+- **台面贴贴可拖动**：桌面端卡片自由拖拽、localStorage 存档、一键还原；台面尺寸支持 `data/desk-config.js` 配置，自适应撑大并修复布局棘轮问题。
+- **子页面统一**：博客版 / 画廊版 / 作品集迁移至工房设计系统，统一设计令牌与样式。
+- **导览扩充**：目录牌新增 IterTrip 启程（/itertrip/）。
