@@ -290,9 +290,39 @@
         card.innerHTML = inner;
         return card;
     }
+    /* ---------- 台面自适应撑高：档案架是异步长高的，台面必须跟着长，
+       否则架子底部会冒出 `.desk`（高度写死），一拖就被 bounds 夹回顶部。
+       高度 = 所有卡片底部最大值 + 留白；只取最大值，导览牌自然被顶下去。
+       移动端是单列流式布局，不需要撑高。 */
+    function fitDeskHeight() {
+        var desk = document.querySelector(".desk");
+        if (!desk) { return; }
+        if (!window.matchMedia("(min-width: 901px)").matches) {
+            desk.style.removeProperty("min-height");
+            return;
+        }
+        var base = 1180;
+        try {
+            var v = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--desk-height"), 10);
+            if (!isNaN(v)) { base = v; }
+        } catch (e) { /* noop */ }
+        var need = base, i, el, bottom;
+        var cards = desk.querySelectorAll(".paper[data-desk-card]");
+        for (i = 0; i < cards.length; i += 1) {
+            el = cards[i];
+            bottom = el.offsetTop + el.offsetHeight;
+            if (bottom > need - 60) { need = bottom + 60; }
+        }
+        if (need > base) {
+            desk.style.minHeight = need + "px";
+        } else {
+            desk.style.removeProperty("min-height");
+        }
+    }
     function bootFiles() {
         loadText("files/about.md").then(function (t) {
             if (aboutBody && t) { aboutBody.innerHTML = blockMd(t); }
+            fitDeskHeight();
         });
         loadText("files/now.md").then(function (t) {
             if (nowList && t) {
@@ -303,6 +333,7 @@
                     }).join("");
                 }
             }
+            fitDeskHeight();
         });
         loadText("files/links.md").then(function (t) {
             if (linksList && t) {
@@ -318,6 +349,7 @@
                 if (lis.length) { linksList.innerHTML = lis.join(""); }
                 bindCopyButtons(); /* 新按钮需要重新绑定 */
             }
+            fitDeskHeight();
         });
         loadText("files/motto.txt").then(function (t) {
             if (mottoQuote && t) {
@@ -351,13 +383,16 @@
             if (!Array.isArray(manifest)) return;
             var shelf = document.getElementById("auto-shelf");
             if (!shelf) return;
-            manifest.filter(function (e) { return e.auto; }).forEach(function (entry) {
+            var pending = manifest.filter(function (e) { return e.auto; });
+            pending.forEach(function (entry) {
                 loadText("files/" + entry.filename).then(function (body) {
                     if (!body) return;
                     var card = buildAutoCard(entry.filename, body);
                     if (card) { shelf.appendChild(card); }
+                    fitDeskHeight();
                 });
             });
+            if (!pending.length) { fitDeskHeight(); }
         });
     }
     bindCopyButtons();
@@ -538,6 +573,7 @@
                 });
                 topZ = cssVar("--desk-z-stack", 10);
                 dismissHint();
+                fitDeskHeight();
             });
         }
 
