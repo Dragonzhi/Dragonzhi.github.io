@@ -1,0 +1,17 @@
+name: Deploy to Tencent Cloud
+on:
+  push:
+    branches: [main]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH and pull
+        uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: 111.229.70.27
+          username: ubuntu
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: 22
+          script: |
+            /usr/local/bin/ci-pull.sh
