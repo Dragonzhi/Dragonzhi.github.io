@@ -321,7 +321,7 @@
     function fitDesk() {
         var desk = document.querySelector(".desk");
         if (!desk) { return; }
-        if (!window.matchMedia("(min-width: 901px)").matches) {
+        if (!window.matchMedia("(min-width: 1081px)").matches) {
             desk.style.removeProperty("min-height");
             desk.style.removeProperty("min-width");
             desk.style.removeProperty("margin-left");   /* 移动端单列布局，清掉居中偏移 */
@@ -510,11 +510,11 @@
     bootFiles();
 
     /* ---------- 台面拖动 ----------
-       桌面端（≥901px 且 pointer:fine）每张 .paper 可自由拖动；
+       桌面端（≥1081px 且 pointer:fine）每张 .paper 可自由拖动；
        位置存 localStorage，刷新不丢；「还原台面」清空存档回到设计稿默认；
        点击不误触：位移超过阈值才算拖动，链接 / 按钮照常可点；
        移动端单列堆叠不绑定；跨过断点进入桌面时再初始化。 */
-    var deskMq = window.matchMedia("(min-width: 901px)");
+    var deskMq = window.matchMedia("(min-width: 1081px)");
     var fineMq = window.matchMedia("(pointer: fine)");
     if (deskMq.matches && fineMq.matches) {
         initDeskDrag();
@@ -632,6 +632,7 @@
         } catch (e) { /* noop */ }
 
         function onDown(e) {
+            if (!deskMq.matches) { return; }   /* 非桌面散点态不启拖（缩到窄屏后仍生效） */
             if (e.button !== undefined && e.button !== 0) { return; }
             /* 链接 / 按钮上不启拖，避免吞掉点击 */
             if (e.target.closest && e.target.closest("a, button")) { return; }
@@ -649,6 +650,7 @@
 
         function onMove(e) {
             if (!start) { return; }
+            if (!deskMq.matches) { start = null; return; }   /* 缩到窄屏后停止拖动 */
             var dx = e.clientX - start.px;
             var dy = e.clientY - start.py;
             if (!start.moved) {
@@ -708,14 +710,15 @@
             });
         }
 
-        /* 窗口尺寸变化时兜底夹回台面内（防横向溢出）；
-           仅桌面模式生效，避免把移动端流式布局误写成存档 */
+        /* 窗口尺寸变化时：统一由 fitDesk 决定。
+           桌面态撑台面/居中；移动态清掉桌面残留下来的内联 min-* / margin-left / --desk-shift，
+           否则从桌面缩到窄屏会横向溢出。仅桌面态兜底夹回台面内。 */
         var rzT;
         window.addEventListener("resize", function () {
             clearTimeout(rzT);
             rzT = setTimeout(function () {
-                if (!deskMq.matches) { return; }
-                clampAll();
+                fitDesk();
+                if (deskMq.matches) { clampAll(); }
             }, 180);
         });
 

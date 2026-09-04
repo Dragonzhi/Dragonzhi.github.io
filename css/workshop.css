@@ -658,19 +658,9 @@ a:hover { color: var(--red); }
 .signal-console p a { color: #4fe0c4; border-bottom: 1px solid rgba(79,224,196,.4); }
 
 /* ===== 响应式 ===== */
-@media (min-width: 901px) and (max-width: 1100px) {
-  .desk { min-height: var(--desk-height); }
-  .paper--hero { width: 540px; padding: 24px 28px 34px; }
-  .hero-title { font-size: 32px; }
-  .paper--about { width: 320px; padding: 18px 20px; }
-  .paper--now { top: 150px; right: 12px; width: 300px; }
-  .paper--projects { top: 370px; left: 30px; width: 720px; padding: 30px 22px 22px 42px; }
-  .paper--links { right: 0; width: 210px; }
-  .paper--motto { right: 20px; }
-  .paper--shelf { left: 30px; width: 720px; }
-}
-
-@media (max-width: 900px) {
+/* 散点拼贴断点：≥1081px 才是桌面散点；以下走单列堆叠。
+   与 js/workshop.js 内 3 处的 1081px 保持一致。 */
+@media (max-width: 1080px) {
   .wrap {
     max-width: 100%;
     padding: 0 16px;
