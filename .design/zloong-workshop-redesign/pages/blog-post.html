@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · Hanako箱庭</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 统一设计令牌
+   基于 workshop.css v5 定稿，供全站子页面复用
+   ============================================================ */
+
+:root {
+  /* 基底色 */
+  --workshop-desk: #f5f0e6;          /* 纸底/台面 */
+  --workshop-card: #fbf8f2;          /* 纸卡 */
+  --workshop-ink: #26221c;           /* 墨色 */
+  --workshop-ink-soft: rgba(38, 34, 28, 0.68);
+  --workshop-line: rgba(38, 34, 28, 0.18);
+
+  /* 强调色 */
+  --workshop-red: #8b2c1f;           /* 朱砂：编号、状态、印章 */
+  --workshop-blue: #2f5d8a;          /* 链接蓝 */
+  --workshop-amber: #d98e4a;         /* 琥珀：终端屏 */
+  --workshop-screen: #2b2620;        /* 终端深底 */
+
+  /* 材质 */
+  --workshop-tape: rgba(255, 252, 242, 0.75);  /* 胶带 */
+
+  /* 字号阶梯 */
+  --workshop-fs-xs: 11.5px;
+  --workshop-fs-sm: 12.5px;
+  --workshop-fs-md: 14.5px;
+  --workshop-prose: 65ch;
+
+  /* 间距与圆角 */
+  --workshop-radius: 6px;
+  --workshop-gap: 16px;
+  --workshop-wrap: 1040px;
+
+  /* 字体三轨 */
+  --workshop-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --workshop-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-display: "Averia Gruesa Libre", var(--workshop-hand);
+
+  /* ===== 语义化别名（Design Library 兼容） ===== */
+  --workshop-background: var(--workshop-desk);
+  --workshop-foreground: var(--workshop-ink);
+  --workshop-card-bg: var(--workshop-card);
+  --workshop-card-foreground: var(--workshop-ink);
+  --workshop-popover: var(--workshop-card);
+  --workshop-popover-foreground: var(--workshop-ink);
+  --workshop-primary: var(--workshop-red);
+  --workshop-primary-foreground: var(--workshop-card);
+  --workshop-muted: rgba(38, 34, 28, 0.08);
+  --workshop-muted-foreground: var(--workshop-ink-soft);
+  --workshop-border: var(--workshop-line);
+  --workshop-input: var(--workshop-line);
+  --workshop-ring: var(--workshop-red);
+
+  /* 圆角阶梯 */
+  --workshop-radius-sm: 3px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 8px;
+  --workshop-radius-full: 9999px;
+}
+
+/* 工具类 */
+.wk-samp { font-family: var(--workshop-mono); }
+.wk-dim { color: var(--workshop-ink-soft); }
+.wk-mark { color: var(--workshop-red); }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-popover: var(--workshop-popover);
+    --color-popover-foreground: var(--workshop-popover-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-border: var(--workshop-border);
+    --color-input: var(--workshop-input);
+    --color-ring: var(--workshop-ring);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-popover { background-color: var(--workshop-popover); }
+      .text-popover { color: var(--workshop-popover); }
+      .border-popover { border-color: var(--workshop-popover); }
+      .ring-popover { --tw-ring-color: var(--workshop-popover); }
+      .bg-popover-foreground { background-color: var(--workshop-popover-foreground); }
+      .text-popover-foreground { color: var(--workshop-popover-foreground); }
+      .border-popover-foreground { border-color: var(--workshop-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--workshop-popover-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+      .bg-input { background-color: var(--workshop-input); }
+      .text-input { color: var(--workshop-input); }
+      .border-input { border-color: var(--workshop-input); }
+      .ring-input { --tw-ring-color: var(--workshop-input); }
+      .bg-ring { background-color: var(--workshop-ring); }
+      .text-ring { color: var(--workshop-ring); }
+      .border-ring { border-color: var(--workshop-ring); }
+      .ring-ring { --tw-ring-color: var(--workshop-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- ===== 门牌（报眉） ===== -->
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 博客版</span>
+        <span>贰零贰陆年玖月肆日 · 星期五</span>
+        <a href="blog-archive.html" class="back">返回存档架</a>
+    </div>
+
+    <div class="rule-double"></div>
+
+    <!-- ===== 文章头部 ===== -->
+    <article>
+        <header class="post-head">
+            <div class="post-archive samp">
+                <span class="dot"></span>
+                第壹篇 &nbsp;·&nbsp; 存档号 B-001
+            </div>
+            <h1 class="post-title">Godot 4 中的对象池模式实践</h1>
+            <div class="post-meta">
+                <span class="cat">GAMEDEV</span>
+                <span>2026.09.01</span>
+                <span class="sep">·</span>
+                <span>ZLOONG</span>
+                <span class="sep">·</span>
+                <span>工程笔记</span>
+                <span class="sep">·</span>
+                <span>约 8 分钟阅读</span>
+            </div>
+            <div class="post-tags">
+                <code class="tag">Godot 4</code>
+                <code class="tag">GDScript</code>
+                <code class="tag">设计模式</code>
+                <code class="tag">性能优化</code>
+            </div>
+            <hr class="post-head-divider">
+        </header>
+
+        <!-- ===== 文章正文 ===== -->
+        <section class="post-body">
+            <div class="prose">
+
+                <p>在做 <code>TriHorny4Link</code> 这款塔防原型的时候，我遇到了一个经典问题：敌人数量一多，帧率就往下掉。每生成一个敌人就 <code>instantiate</code> 一个新节点，死了就 <code>queue_free</code>，听起来很合理，但当屏幕上同时有五六十个敌人在刷新时，GC 的压力就开始显现了。</p>
+
+                <p>对象池（Object Pool）是游戏开发里最常用的优化手段之一。它的核心思想很简单：<strong>提前创建一批对象，用的时候取出来，不用的时候放回池里</strong>，而不是反复创建销毁。在 Godot 4 里实现一个好用的对象池其实不难，但有几个细节值得拿出来聊聊。</p>
+
+                <h2>为什么需要对象池</h2>
+
+                <p>在解释怎么写之前，先说说为什么要费这个劲。Godot 的节点系统其实已经很高效了，但频繁地创建和销毁节点仍然会带来几方面的开销：</p>
+
+                <ul>
+                    <li>内存分配与释放的频繁调用，产生内存碎片</li>
+                    <li>节点进入场景树时的 <code>_ready()</code> 调用链</li>
+                    <li>每帧结束时的 <code>queue_free</code> 批量清理</li>
+                    <li>如果节点上挂了很多子节点和组件，实例化的成本会更高</li>
+                </ul>
+
+                <blockquote>
+                    <p>对象池不是银弹。如果你的游戏里同屏敌人不超过十个，那直接 <code>instantiate</code> 完全够用。过早优化是万恶之源——但当你真的遇到瓶颈时，对象池是性价比最高的方案之一。</p>
+                    <cite>工房备忘贴</cite>
+                </blockquote>
+
+                <p>塔防游戏的典型场景是「一波接一波」：波次开始时大量生成敌人，波次结束后全部清空。这种情况下对象池的收益特别明显——你只需要在波次开始前预热池子，波次结束后把敌人全部回收，整个过程几乎没有内存分配。</p>
+
+                <h2>一个简洁的实现</h2>
+
+                <p>下面是我在 Godot 4 里用的对象池实现，基于 <code>Node</code> 作为容器，用 <code>PackedScene</code> 作为模板。整个类不到一百行，但足够应对大多数情况。</p>
+
+<pre><div class="code-bar">
+  <i></i><i></i><i></i>
+  <span class="filename">object_pool.gd</span>
+</div><code><span class="c-cmt"># 对象池 — 复用节点，避免频繁 instantiate/queue_free</span>
+<span class="c-kw">class_name</span> ObjectPool
+<span class="c-kw">extends</span> Node
+
+<span class="c-kw">var</span> _scene: PackedScene
+<span class="c-kw">var</span> _pool: Array = []
+<span class="c-kw">var</span> _container: Node
+
+<span class="c-fn">func</span> _init(scene: PackedScene, container: Node, initial_count: <span class="c-num">int</span> = <span class="c-num">8</span>):
+    _scene = scene
+    _container = container
+    _warm_up(initial_count)
+
+<span class="c-fn">func</span> _warm_up(count: <span class="c-num">int</span>):
+    <span class="c-kw">for</span> i <span class="c-kw">in</span> range(count):
+        _pool.append(_create_instance())
+
+<span class="c-fn">func</span> _create_instance():
+    <span class="c-kw">var</span> inst = _scene.instantiate()
+    inst.reparent(_container)
+    inst.visible = <span class="c-kw">false</span>
+    <span class="c-kw">if</span> inst.has_method(<span class="c-str">"on_pool_init"</span>):
+        inst.on_pool_init()
+    <span class="c-kw">return</span> inst
+
+<span class="c-fn">func</span> acquire() -> Node:
+    <span class="c-kw">if</span> _pool.is_empty():
+        _pool.append(_create_instance())
+    <span class="c-kw">var</span> inst = _pool.pop_back()
+    inst.visible = <span class="c-kw">true</span>
+    <span class="c-kw">if</span> inst.has_method(<span class="c-str">"on_acquire"</span>):
+        inst.on_acquire()
+    <span class="c-kw">return</span> inst
+
+<span class="c-fn">func</span> release(inst: Node):
+    <span class="c-kw">if</span> inst.has_method(<span class="c-str">"on_release"</span>):
+        inst.on_release()
+    inst.visible = <span class="c-kw">false</span>
+    _pool.append(inst)</code></pre>
+
+                <p>用法很简单：在你的游戏管理器里创建一个池，需要敌人时 <code>acquire()</code>，敌人死了就 <code>release()</code> 回去。池子里不够的时候它会自动扩容，所以不用担心溢出。</p>
+
+                <h3>几个设计细节</h3>
+
+                <p>上面这段代码看起来平平无奇，但有几个地方是我踩过坑之后才确定下来的：</p>
+
+                <ol>
+                    <li><strong>用 <code>reparent</code> 而不是 <code>add_child</code>：</strong>池子里的对象挂在容器节点下，取出时不需要重新父化，只改 visible 即可，开销最小。</li>
+                    <li><strong>回调方法约定：</strong><code>on_pool_init</code>、<code>on_acquire</code>、<code>on_release</code> 三个钩子，让被池化的对象自己管理状态重置，而不是靠外部调用一堆 setter。</li>
+                    <li><strong>惰性扩容：</strong>池子空了就新建一个，永远不会因为池子不够而报错。预热只是优化，不是限制。</li>
+                </ol>
+
+                <figure>
+                    <span class="photo">
+                        <span class="ph-img">[ 对象池工作原理示意 ]</span>
+                    </span>
+                    <figcaption>图 1 · 对象池的取放循环：acquire 从池尾弹出，release 放回池尾</figcaption>
+                </figure>
+
+                <h2>在实际项目里怎么用</h2>
+
+                <p>光有池子还不够，你还需要一个好的「调度员」。在我的塔防项目里，我用了一个 <code>EnemyManager</code> 单例来管理所有敌人的生成和回收，它对外只暴露 <code>spawn_enemy(type, position)</code> 和 <code>despawn_enemy(enemy)</code> 两个方法。</p>
+
+                <p>这样做的好处是，上层逻辑完全不需要知道对象池的存在。波次系统只管说「我要一个敌人」，管理器就从对应的池子里取一个出来配置好丢出去。敌人死亡时也不用自己 <code>queue_free</code>，只要通知管理器回收就行。</p>
+
+                <blockquote>
+                    <p>把对象池藏在管理器背后，是我从「能用」到「好用」之间最关键的一步。别让业务代码直接碰池，不然到处都是 acquire/release，维护起来比没用池还痛苦。</p>
+                    <cite>TriHorny4Link 开发笔记</cite>
+                </blockquote>
+
+                <p>最后说一下性能收益。在我的项目里，同屏 60 个敌人的情况下，用对象池之后 GC 相关的卡顿基本消失了，帧率稳定了不少。当然，具体收益取决于你的节点有多复杂——节点越重、实例化越频繁，对象池的效果就越明显。</p>
+
+                <p>如果你也在做 Godot 项目，并且遇到了类似的性能问题，不妨试试这个模式。代码量不大，但效果往往出乎意料的好。</p>
+
+            </div>
+        </section>
+
+        <!-- ===== 文章底部 ===== -->
+        <div class="post-end">— 完 —</div>
+
+        <!-- 上下篇导航 -->
+        <nav class="post-nav" aria-label="文章导航">
+            <a href="#" class="nav-card prev">
+                <div class="nav-label">上一篇</div>
+                <div class="nav-title">从 Unity 转 Godot 四个月后的一些感想</div>
+            </a>
+            <a href="#" class="nav-card next">
+                <div class="nav-label">下一篇</div>
+                <div class="nav-title">像素画工具链：Aseprite 到 Godot 的工作流</div>
+            </a>
+        </nav>
+
+        <!-- 返回存档架 -->
+        <div class="back-archive">
+            <a href="blog-archive.html">返回存档架</a>
+        </div>
+
+    </article>
+
+    <!-- ===== 报尾 ===== -->
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+
+</div>
+
+
+    <style>
+/* ============================================================
+   ZLOONG 工房 · 博客文章详情页
+   设计语言：暖纸台面 + 朱砂点缀 + 报纸版面
+   ============================================================ */
+:root {
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --screen: #2b2620;
+  --tape: rgba(255,252,242,.75);
+  --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --display: "Averia Gruesa Libre", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 860px;
+  --prose: 65ch;
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+::selection { background: var(--red); color: var(--card); }
+
+body {
+  font-family: var(--hand);
+  background: var(--desk);
+  background-image:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+  background-size: 26px 26px;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { text-wrap: balance; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { color: var(--red); }
+
+.samp { font-family: var(--mono); }
+.dim { color: var(--ink-soft); }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+/* ===== 门牌（报眉） ===== */
+.eyebrow {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
+}
+.eyebrow .live { color: var(--red); }
+.eyebrow a { color: var(--ink-soft); }
+.eyebrow a:hover { color: var(--red); }
+.eyebrow a.back::before { content: "← "; }
+
+/* ===== 双线分割 ===== */
+.rule-double {
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  height: 5px;
+  margin: 0 0 24px;
+}
+
+/* ===== 文章头部（展开的档案卡） ===== */
+.post-head {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
+  padding: 36px 36px 28px;
+  margin: 28px 0 20px;
+}
+.post-head::before {
+  content: "";
+  position: absolute;
+  top: -10px;
+  left: 36px;
+  width: 88px;
+  height: 20px;
+  background: var(--tape);
+  transform: rotate(-2.5deg);
+  border-left: 1px dashed rgba(38,34,28,.12);
+  border-right: 1px dashed rgba(38,34,28,.12);
+  box-shadow: 0 1px 2px rgba(38,34,28,.08);
+}
+
+.post-archive {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--red);
+  letter-spacing: 1px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.post-archive .dot {
+  width: 6px; height: 6px;
+  background: var(--red);
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.post-title {
+  font-family: var(--display);
+  font-size: clamp(26px, 4vw, 34px);
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 16px;
+  font-weight: 700;
+}
+
+.post-meta {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  letter-spacing: .5px;
+  margin-bottom: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  align-items: center;
+}
+.post-meta .sep { color: var(--line); }
+.post-meta .cat {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--red);
+  border: 1px solid rgba(139,44,31,.4);
+  border-radius: 999px;
+  padding: 1px 9px;
+  letter-spacing: 1px;
+}
+
+.post-tags {
+  margin-bottom: 6px;
+}
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 11px;
+  font-style: normal;
+  color: var(--ink-soft);
+  background: var(--desk);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin: 0 6px 6px 0;
+  transition: color .15s, border-color .15s;
+}
+.tag:hover { color: var(--red); border-color: rgba(139,44,31,.35); }
+
+.post-head-divider {
+  border: none;
+  border-top: 1px dashed var(--line);
+  margin-top: 14px;
+}
+
+/* ===== 文章正文（信纸风格） ===== */
+.post-body {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
+  padding: 40px 44px;
+  margin-bottom: 20px;
+}
+
+.prose {
+  max-width: var(--prose);
+  margin: 0 auto;
+  font-size: 16px;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+.prose p {
+  margin-bottom: 1.1em;
+}
+
+.prose h2 {
+  font-family: var(--serif);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--ink);
+  margin: 2em 0 .9em;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--line);
+  position: relative;
+}
+.prose h2::before {
+  content: "";
+  position: absolute;
+  left: 0; bottom: -1px;
+  width: 48px; height: 2px;
+  background: var(--red);
+}
+
+.prose h3 {
+  font-family: var(--serif);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--red);
+  margin: 1.6em 0 .7em;
+}
+
+.prose strong { font-weight: 700; color: var(--ink); }
+
+.prose em { font-style: italic; }
+
+/* 引用块 */
+.prose blockquote {
+  margin: 1.4em 0;
+  padding: 14px 20px 14px 18px;
+  background: rgba(139,44,31,.04);
+  border-left: 3px solid var(--red);
+  border-radius: 0 var(--radius) var(--radius) 0;
+  font-style: italic;
+  color: var(--ink-soft);
+  line-height: 1.75;
+}
+.prose blockquote p { margin-bottom: .6em; }
+.prose blockquote p:last-child { margin-bottom: 0; }
+.prose blockquote cite {
+  display: block;
+  margin-top: 8px;
+  font-size: 13px;
+  font-style: normal;
+  color: var(--ink-soft);
+  text-align: right;
+}
+.prose blockquote cite::before { content: "— "; }
+
+/* 行内代码 */
+.prose code {
+  font-family: var(--mono);
+  font-size: .88em;
+  color: var(--red);
+  background: rgba(139,44,31,.06);
+  padding: 2px 7px;
+  border-radius: 3px;
+  border: 1px solid rgba(139,44,31,.12);
+}
+
+/* 代码块 */
+.prose pre {
+  margin: 1.4em 0;
+  background: var(--screen);
+  border-radius: var(--radius);
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(38,34,28,.12);
+}
+.prose pre .code-bar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 10px 16px;
+  background: rgba(255,255,255,.04);
+  border-bottom: 1px solid rgba(255,255,255,.06);
+}
+.prose pre .code-bar i {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  background: #4a4238;
+}
+.prose pre .code-bar i:nth-child(1) { background: var(--red); }
+.prose pre .code-bar i:nth-child(2) { background: var(--amber); }
+.prose pre .code-bar i:nth-child(3) { background: #6b8e5a; }
+.prose pre .code-bar .filename {
+  margin-left: 10px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(232,221,200,.5);
+}
+.prose pre code {
+  display: block;
+  padding: 16px 18px;
+  font-family: var(--mono);
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--amber);
+  background: transparent;
+  border: none;
+  overflow-x: auto;
+  white-space: pre;
+  padding: 0;
+}
+.prose pre > code {
+  padding: 16px 18px;
+}
+.c-kw { color: #c9a86a; }
+.c-str { color: #a8c28a; }
+.c-cmt { color: rgba(232,221,200,.38); font-style: italic; }
+.c-fn { color: #e8c872; }
+.c-num { color: #d98e4a; }
+
+/* 列表 */
+.prose ul, .prose ol {
+  margin: 1em 0 1.2em;
+  padding-left: 1.6em;
+}
+.prose li { margin-bottom: .4em; }
+
+.prose ul { list-style: none; padding-left: 1.4em; }
+.prose ul li {
+  position: relative;
+  padding-left: 2px;
+}
+.prose ul li::before {
+  content: "◆";
+  position: absolute;
+  left: -1.4em;
+  top: 0;
+  color: var(--red);
+  font-size: 10px;
+  line-height: 1.9;
+}
+
+.prose ol { list-style: none; counter-reset: cn; padding-left: 2em; }
+.prose ol li {
+  counter-increment: cn;
+  position: relative;
+}
+.prose ol li::before {
+  content: counter(cn, cjk-ideographic) "、";
+  position: absolute;
+  left: -2em;
+  top: 0;
+  color: var(--red);
+  font-family: var(--serif);
+  font-weight: 700;
+}
+
+/* 图片占位 - 相纸风格 */
+.prose figure {
+  margin: 1.6em 0;
+  text-align: center;
+}
+.prose .photo {
+  display: inline-block;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 10px 10px 32px;
+  box-shadow: 0 2px 8px rgba(38,34,28,.10);
+  border-radius: 2px;
+  max-width: 100%;
+}
+.prose .photo .ph-img {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background:
+    repeating-linear-gradient(
+      45deg,
+      rgba(38,34,28,.04),
+      rgba(38,34,28,.04) 10px,
+      rgba(38,34,28,.07) 10px,
+      rgba(38,34,28,.07) 20px
+    ),
+    var(--desk);
+  border: 1px solid var(--line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+}
+.prose figcaption {
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--ink-soft);
+  font-style: italic;
+}
+
+/* 分割线 */
+.prose hr {
+  border: none;
+  border-top: 1px dashed var(--line);
+  margin: 2em 0;
+}
+
+/* ===== 文章底部 ===== */
+.post-end {
+  text-align: center;
+  margin: 12px 0 24px;
+  font-family: var(--serif);
+  font-size: 15px;
+  color: var(--ink-soft);
+  letter-spacing: 6px;
+}
+.post-end::before, .post-end::after {
+  content: "";
+  display: inline-block;
+  width: 40px;
+  height: 1px;
+  background: var(--line);
+  vertical-align: middle;
+  margin: 0 14px;
+}
+
+/* 上下篇导航 */
+.post-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--gap);
+  margin-bottom: 24px;
+}
+.nav-card {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 16px 20px;
+  transition: border-color .2s, transform .2s;
+  display: block;
+  color: var(--ink);
+}
+.nav-card:hover {
+  border-color: rgba(139,44,31,.45);
+  transform: translateY(-2px);
+}
+.nav-card .nav-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.nav-card .nav-title {
+  font-family: var(--display);
+  font-size: 15px;
+  font-weight: 600;
+  line-height: 1.4;
+}
+.nav-card.prev .nav-label::before { content: "← "; color: var(--red); }
+.nav-card.next { text-align: right; }
+.nav-card.next .nav-label::after { content: " →"; color: var(--red); }
+
+/* 返回存档架按钮 */
+.back-archive {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.back-archive a {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 12.5px;
+  letter-spacing: 2px;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 8px 22px;
+  background: var(--card);
+  transition: all .2s;
+}
+.back-archive a:hover {
+  color: var(--red);
+  border-color: rgba(139,44,31,.45);
+  background: rgba(139,44,31,.04);
+}
+.back-archive a::before { content: "↖ "; }
+
+/* ===== 报尾 ===== */
+.colophon {
+  margin-top: calc(var(--gap)*1.5);
+  padding: 18px 0 28px;
+  text-align: center;
+  border-top: 2px solid var(--ink);
+}
+.colophon .end {
+  font-size: 13px;
+  letter-spacing: 6px;
+  margin-bottom: 10px;
+}
+.colophon .meta {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  line-height: 2;
+}
+.colophon .meta a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+.colophon .meta a:hover { color: var(--red); }
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+  .wrap { padding: 0 18px; }
+  .post-head { padding: 28px 22px 22px; margin-top: 20px; }
+  .post-head::before { left: 22px; width: 72px; height: 18px; }
+  .post-body { padding: 28px 22px; }
+  .prose { max-width: none; }
+  .post-nav { grid-template-columns: 1fr; }
+  .nav-card.next { text-align: left; }
+  .nav-card.next .nav-label::after { content: ""; }
+  .nav-card.next .nav-label::before { content: "→ "; color: var(--red); }
+  .eyebrow { font-size: 10.5px; letter-spacing: 1px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .nav-card, .nav-card:hover { transform: none; }
+}
+    </style>
+</body>
+</html>

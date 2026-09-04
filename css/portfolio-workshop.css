@@ -1,0 +1,270 @@
+/* ============================================================
+   ZLOONG 工房 · 档案架（作品集）样式
+   展开的档案夹风格
+   ============================================================ */
+
+/* 索引标签栏（文件夹标签） */
+.archive-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-bottom: 20px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 0;
+}
+.archive-tabs .tab {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  padding: 8px 16px 10px;
+  background: transparent;
+  color: var(--ink-soft);
+  border: none;
+  border-radius: 4px 4px 0 0;
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: all .15s ease;
+  position: relative;
+}
+.archive-tabs .tab:hover {
+  color: var(--ink);
+  background: rgba(139, 44, 31, .06);
+}
+.archive-tabs .tab.active {
+  background: var(--card);
+  color: var(--red);
+  border: 2px solid var(--ink);
+  border-bottom-color: var(--card);
+  font-weight: 700;
+  z-index: 1;
+}
+
+/* 档案列表 */
+.archive-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* 单份档案 */
+.archive-item {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  box-shadow: 0 1px 2px rgba(38, 34, 28, .06), 0 6px 18px rgba(38, 34, 28, .05);
+  overflow: hidden;
+}
+
+/* 档案头条 */
+.archive-head {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 24px;
+  background: var(--ink);
+  color: #faf6ee;
+  flex-wrap: wrap;
+}
+.archive-item:nth-child(even) .archive-head {
+  background: var(--red);
+}
+
+.archive-head .index {
+  font-family: var(--serif);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  color: rgba(250, 246, 238, .9);
+}
+.archive-head .title {
+  font-family: var(--display);
+  font-size: 20px;
+  color: #faf6ee;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.archive-head .badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  letter-spacing: 2px;
+  background: rgba(250, 246, 238, .15);
+  color: #faf6ee;
+  padding: 3px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(250, 246, 238, .25);
+}
+.archive-head .year {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(250, 246, 238, .7);
+  letter-spacing: 1px;
+}
+
+/* 档案主体 */
+.archive-body {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 28px;
+  padding: 24px;
+}
+
+.archive-info .type-label {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+.archive-info .type-label::before { content: "▤ "; }
+
+.archive-info .desc {
+  font-size: var(--fs-md);
+  line-height: 1.75;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+.archive-info .desc p {
+  margin: 0 0 10px;
+}
+.archive-info .desc p:last-child { margin-bottom: 0; }
+
+.archive-info .highlights {
+  list-style: none;
+  padding: 0;
+  margin: 14px 0;
+  font-size: var(--fs-md);
+  line-height: 1.8;
+  color: var(--ink);
+}
+.archive-info .highlights li {
+  position: relative;
+  padding-left: 20px;
+  margin-bottom: 6px;
+}
+.archive-info .highlights li::before {
+  content: "◆";
+  position: absolute;
+  left: 0;
+  top: 2px;
+  color: var(--red);
+  font-size: 10px;
+}
+
+.archive-info .tech-group {
+  margin: 14px 0 4px;
+}
+.archive-info .tech-group .label {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.archive-info .tech-tags .tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  background: var(--desk);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 2px 9px;
+  margin: 0 5px 6px 0;
+}
+
+/* 右侧：截图 + 链接 */
+.archive-visual {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.archive-visual .shot {
+  border: 3px solid #5c4a3a;
+  border-radius: 2px;
+  padding: 6px;
+  background: #fff;
+  box-shadow: 0 4px 12px rgba(38, 34, 28, .12);
+}
+.archive-visual .shot img {
+  width: 100%;
+  height: auto;
+  display: block;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #e8e0cf;
+}
+.archive-visual .shot .shot-placeholder {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #e8e0cf 0%, #d9cbb3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: rgba(38, 34, 28, .3);
+  letter-spacing: 2px;
+}
+
+.archive-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.archive-links .link-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--red);
+  border: 1px solid rgba(139, 44, 31, .4);
+  border-radius: 4px;
+  padding: 6px 14px;
+  text-decoration: none;
+  letter-spacing: .5px;
+  transition: all .15s ease;
+  background: transparent;
+}
+.archive-links .link-btn:hover {
+  background: var(--red);
+  color: #faf6ee;
+  border-color: var(--red);
+}
+.archive-links .link-btn::after { content: " ↗"; font-size: 10px; }
+
+/* 档案脚 */
+.archive-foot {
+  padding: 10px 24px 14px;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  border-top: 1px dashed var(--line);
+  letter-spacing: .5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+.archive-foot .sep { opacity: .4; }
+
+/* ---- 响应式 ---- */
+@media (max-width: 900px) {
+  .archive-body {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .archive-visual {
+    order: -1; /* 截图放上面 */
+  }
+  .archive-head .title {
+    font-size: 17px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .archive-tabs .tab,
+  .archive-links .link-btn { transition: none; }
+}

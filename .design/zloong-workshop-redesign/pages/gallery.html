@@ -1,0 +1,943 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · Hanako箱庭</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 统一设计令牌
+   基于 workshop.css v5 定稿，供全站子页面复用
+   ============================================================ */
+
+:root {
+  /* 基底色 */
+  --workshop-desk: #f5f0e6;          /* 纸底/台面 */
+  --workshop-card: #fbf8f2;          /* 纸卡 */
+  --workshop-ink: #26221c;           /* 墨色 */
+  --workshop-ink-soft: rgba(38, 34, 28, 0.68);
+  --workshop-line: rgba(38, 34, 28, 0.18);
+
+  /* 强调色 */
+  --workshop-red: #8b2c1f;           /* 朱砂：编号、状态、印章 */
+  --workshop-blue: #2f5d8a;          /* 链接蓝 */
+  --workshop-amber: #d98e4a;         /* 琥珀：终端屏 */
+  --workshop-screen: #2b2620;        /* 终端深底 */
+
+  /* 材质 */
+  --workshop-tape: rgba(255, 252, 242, 0.75);  /* 胶带 */
+
+  /* 字号阶梯 */
+  --workshop-fs-xs: 11.5px;
+  --workshop-fs-sm: 12.5px;
+  --workshop-fs-md: 14.5px;
+  --workshop-prose: 65ch;
+
+  /* 间距与圆角 */
+  --workshop-radius: 6px;
+  --workshop-gap: 16px;
+  --workshop-wrap: 1040px;
+
+  /* 字体三轨 */
+  --workshop-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --workshop-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-display: "Averia Gruesa Libre", var(--workshop-hand);
+
+  /* ===== 语义化别名（Design Library 兼容） ===== */
+  --workshop-background: var(--workshop-desk);
+  --workshop-foreground: var(--workshop-ink);
+  --workshop-card-bg: var(--workshop-card);
+  --workshop-card-foreground: var(--workshop-ink);
+  --workshop-popover: var(--workshop-card);
+  --workshop-popover-foreground: var(--workshop-ink);
+  --workshop-primary: var(--workshop-red);
+  --workshop-primary-foreground: var(--workshop-card);
+  --workshop-muted: rgba(38, 34, 28, 0.08);
+  --workshop-muted-foreground: var(--workshop-ink-soft);
+  --workshop-border: var(--workshop-line);
+  --workshop-input: var(--workshop-line);
+  --workshop-ring: var(--workshop-red);
+
+  /* 圆角阶梯 */
+  --workshop-radius-sm: 3px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 8px;
+  --workshop-radius-full: 9999px;
+}
+
+/* 工具类 */
+.wk-samp { font-family: var(--workshop-mono); }
+.wk-dim { color: var(--workshop-ink-soft); }
+.wk-mark { color: var(--workshop-red); }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-popover: var(--workshop-popover);
+    --color-popover-foreground: var(--workshop-popover-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-border: var(--workshop-border);
+    --color-input: var(--workshop-input);
+    --color-ring: var(--workshop-ring);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-popover { background-color: var(--workshop-popover); }
+      .text-popover { color: var(--workshop-popover); }
+      .border-popover { border-color: var(--workshop-popover); }
+      .ring-popover { --tw-ring-color: var(--workshop-popover); }
+      .bg-popover-foreground { background-color: var(--workshop-popover-foreground); }
+      .text-popover-foreground { color: var(--workshop-popover-foreground); }
+      .border-popover-foreground { border-color: var(--workshop-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--workshop-popover-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+      .bg-input { background-color: var(--workshop-input); }
+      .text-input { color: var(--workshop-input); }
+      .border-input { border-color: var(--workshop-input); }
+      .ring-input { --tw-ring-color: var(--workshop-input); }
+      .bg-ring { background-color: var(--workshop-ring); }
+      .text-ring { color: var(--workshop-ring); }
+      .border-ring { border-color: var(--workshop-ring); }
+      .ring-ring { --tw-ring-color: var(--workshop-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- 门牌（报眉） -->
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 画廊版 <span class="channel">● 青色频道</span></span>
+        <span>2026年9月4日 · 星期五</span>
+        <span><a href="../../index.html">← 返回工房</a></span>
+    </div>
+
+    <!-- 报头墙 / 展览前言 -->
+    <header class="wall">
+        <span class="seal samp">第叁展<br>EXHIBITION</span>
+        <h1>画廊版</h1>
+        <div class="sub">GALLERY · 洛天依同人画廊 · 青色频道</div>
+        <p class="foreword">
+            这里挂着一些洛天依的同人画作，随缘更新。<br>
+            每一幅都装了框，挂在工房的西墙上。
+        </p>
+    </header>
+    <div class="rule-double"></div>
+
+    <!-- 台面标注 -->
+    <div class="bench-label">
+        <span class="no samp">01</span>
+        <span class="t">第壹展 · 陈列墙</span>
+        <span class="count">共 <strong>捌</strong> 幅 · 按创作时间倒序</span>
+        <span class="en">EXHIBITION WALL</span>
+    </div>
+
+    <!-- 画框陈列区 -->
+    <main class="gallery-grid">
+
+        <!-- 第壹幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork portrait art-01" role="img" aria-label="青空下的歌">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第壹幅</div>
+                <h3 class="title">青空下的歌</h3>
+                <div class="meta">2026.08 · 数字绘画</div>
+                <div class="medium">DIGITAL · PROCREATE</div>
+            </div>
+        </article>
+
+        <!-- 第贰幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork landscape art-02" role="img" aria-label="夕暮れ">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第贰幅</div>
+                <h3 class="title">夕暮れ</h3>
+                <div class="meta">2026.07 · 数字绘画</div>
+                <div class="medium">DIGITAL · CLIP STUDIO</div>
+            </div>
+        </article>
+
+        <!-- 第叁幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork portrait art-03" role="img" aria-label="星降る夜">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第叁幅</div>
+                <h3 class="title">星降る夜</h3>
+                <div class="meta">2026.06 · 数字绘画</div>
+                <div class="medium">DIGITAL · PROCREATE</div>
+            </div>
+        </article>
+
+        <!-- 第肆幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork landscape art-04" role="img" aria-label="桜の季節">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第肆幅</div>
+                <h3 class="title">桜の季節</h3>
+                <div class="meta">2026.05 · 数字绘画</div>
+                <div class="medium">DIGITAL · CLIP STUDIO</div>
+            </div>
+        </article>
+
+        <!-- 第伍幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork portrait art-05" role="img" aria-label="電脳都市">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第伍幅</div>
+                <h3 class="title">電脳都市</h3>
+                <div class="meta">2026.04 · 数字绘画</div>
+                <div class="medium">DIGITAL · PROCREATE</div>
+            </div>
+        </article>
+
+        <!-- 第陆幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork landscape art-06" role="img" aria-label="雨上がり">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第陆幅</div>
+                <h3 class="title">雨上がり</h3>
+                <div class="meta">2026.03 · 数字绘画</div>
+                <div class="medium">DIGITAL · CLIP STUDIO</div>
+            </div>
+        </article>
+
+        <!-- 第柒幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork portrait art-07" role="img" aria-label="春の朝">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第柒幅</div>
+                <h3 class="title">春の朝</h3>
+                <div class="meta">2026.02 · 数字绘画</div>
+                <div class="medium">DIGITAL · PROCREATE</div>
+            </div>
+        </article>
+
+        <!-- 第捌幅 -->
+        <article class="frame">
+            <div class="frame-body">
+                <div class="frame-mat">
+                    <div class="artwork portrait art-08" role="img" aria-label="雪の日">
+                        <span class="sig">ZLOONG '26</span>
+                    </div>
+                </div>
+            </div>
+            <div class="frame-label">
+                <div class="no">第捌幅</div>
+                <h3 class="title">雪の日</h3>
+                <div class="meta">2026.01 · 数字绘画</div>
+                <div class="medium">DIGITAL · CLIP STUDIO</div>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- 展区导览 -->
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="../../index.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">工房主页</span><span class="d">工作台面 · 作品档案</span></span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="blog.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="#">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">便签、笔记、零散物件</span></span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅</span></span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+
+    <style>
+/* ============================================================
+   ZLOONG 工房 · 画廊版 gallery.css
+   设计：暖纸台面 + 朱砂点缀 + 画框陈列
+   ============================================================ */
+:root {
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --frame: #5c4a3a;
+  --frame-dark: #3d3126;
+  --frame-inner: #f0e8d8;
+  --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --display: "Averia Gruesa Libre", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+::selection { background: var(--red); color: var(--card); }
+body {
+  font-family: var(--hand);
+  background: var(--desk);
+  background-image:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+  background-size: 26px 26px;
+  color: var(--ink); font-size: 16px; line-height: 1.75;
+  min-height: 100vh; overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+}
+h1, h2, h3 { text-wrap: balance; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { color: var(--red); }
+.samp { font-family: var(--mono); }
+.dim { color: var(--ink-soft); }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+/* ===== 门牌（报眉） ===== */
+.eyebrow {
+  font-size: var(--fs-xs); color: var(--ink-soft); letter-spacing: 2px;
+  display: flex; justify-content: space-between; gap: 8px; flex-wrap: wrap;
+  border-bottom: 1px solid var(--line); padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
+}
+.eyebrow .live { color: var(--red); }
+.eyebrow .channel { color: var(--blue); }
+.eyebrow a { color: var(--ink-soft); }
+.eyebrow a:hover { color: var(--red); }
+
+/* ===== 报头墙 ===== */
+.wall { text-align: center; padding: calc(var(--gap)*2.5) 0 calc(var(--gap)*2); position: relative; }
+.wall h1 {
+  font-size: clamp(44px, 8vw, 72px); font-weight: 800; color: var(--red);
+  letter-spacing: 22px; line-height: 1.15; text-indent: 22px;
+  font-family: var(--serif);
+}
+.wall .sub {
+  margin-top: 10px; font-size: 12.5px; color: var(--ink-soft);
+  letter-spacing: 8px; text-indent: 8px;
+}
+.wall .foreword {
+  max-width: 520px; margin: 18px auto 0;
+  font-size: var(--fs-md); color: var(--ink-soft); line-height: 1.9;
+}
+.wall .seal {
+  position: absolute; right: 4%; top: 40px;
+  font-family: var(--mono); font-size: 11px; color: var(--red);
+  border: 2px solid var(--red); border-radius: 3px;
+  padding: 4px 10px; letter-spacing: 3px;
+  transform: rotate(8deg); opacity: .85;
+  line-height: 1.5;
+}
+.rule-double {
+  border-top: 3px solid var(--ink); border-bottom: 1px solid var(--ink);
+  height: 5px; margin-bottom: 28px;
+}
+
+/* ===== 台面标注 ===== */
+.bench-label {
+  display: flex; align-items: baseline; gap: 12px;
+  margin: 0 0 20px;
+}
+.bench-label .no { font-family: var(--mono); font-size: 12px; color: var(--red); }
+.bench-label .t { font-size: 17px; font-weight: 700; letter-spacing: 3px; }
+.bench-label .en { margin-left: auto; font-family: var(--mono); font-size: 10.5px; color: var(--ink-soft); letter-spacing: 2px; }
+.bench-label .count { font-family: var(--mono); font-size: 11px; color: var(--ink-soft); letter-spacing: 1px; }
+.bench-label .count strong { color: var(--red); font-weight: 700; }
+
+/* ===== 画框陈列区 ===== */
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 32px 28px;
+  padding-bottom: calc(var(--gap)*1.5);
+}
+
+/* 画框容器 */
+.frame {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  transition: transform .3s ease, box-shadow .3s ease;
+}
+.frame:hover {
+  transform: translateY(-6px);
+}
+.frame:hover .frame-body {
+  box-shadow: 0 20px 40px rgba(38,34,28,.18), 0 4px 10px rgba(38,34,28,.08);
+}
+
+/* 挂钩 */
+.frame::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background: var(--frame-dark);
+  border-radius: 50%;
+  box-shadow: 0 1px 2px rgba(38,34,28,.3);
+  z-index: 2;
+}
+.frame::after {
+  content: "";
+  position: absolute;
+  top: -14px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 36px;
+  height: 16px;
+  border: 2px solid var(--frame-dark);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  opacity: .5;
+  z-index: 1;
+}
+
+/* 画框主体 */
+.frame-body {
+  background: var(--frame);
+  padding: 10px;
+  border-radius: 3px;
+  box-shadow:
+    0 8px 20px rgba(38,34,28,.12),
+    0 2px 4px rgba(38,34,28,.06),
+    inset 0 1px 0 rgba(255,255,255,.1);
+  position: relative;
+  transition: box-shadow .3s ease;
+}
+.frame-body::before {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border: 1px solid rgba(0,0,0,.2);
+  border-radius: 2px;
+  pointer-events: none;
+}
+
+/* 衬纸 */
+.frame-mat {
+  background: var(--frame-inner);
+  padding: 14px;
+  box-shadow: inset 0 1px 3px rgba(0,0,0,.08);
+}
+
+/* 画作区域 */
+.artwork {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  box-shadow: inset 0 0 20px rgba(0,0,0,.06);
+}
+.artwork.portrait { aspect-ratio: 3 / 4; }
+.artwork.landscape { aspect-ratio: 4 / 3; }
+.artwork.square { aspect-ratio: 1 / 1; }
+
+/* ===== CSS 画作 ===== */
+/* 第壹幅：青空下的歌 — 青色调洛天依风格 */
+.art-01 {
+  background:
+    radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.4) 0%, transparent 40%),
+    linear-gradient(180deg, #a8d8ea 0%, #66CCFF 35%, #4a9fd8 70%, #2d6a9f 100%);
+}
+.art-01::before {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background: linear-gradient(180deg, transparent 0%, rgba(45,106,159,.3) 100%);
+}
+.art-01::after {
+  content: "♪";
+  position: absolute;
+  top: 25%; left: 50%;
+  transform: translateX(-50%);
+  font-size: 48px;
+  color: rgba(255,255,255,.7);
+  text-shadow: 0 2px 10px rgba(102,204,255,.5);
+}
+
+/* 第贰幅：夕暮れ — 暖调黄昏 */
+.art-02 {
+  background:
+    radial-gradient(circle at 65% 60%, #ffeaa7 0%, #fdcb6e 15%, #e17055 40%, #d63031 65%, #6c5ce7 100%);
+}
+.art-02::before {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 30%;
+  background: linear-gradient(180deg, transparent 0%, rgba(0,0,0,.25) 100%);
+}
+.art-02::after {
+  content: "";
+  position: absolute;
+  bottom: 25%; left: 10%;
+  width: 80%;
+  height: 2px;
+  background: rgba(255,255,255,.4);
+  box-shadow: 0 8px 0 rgba(255,255,255,.2), 0 -6px 0 rgba(255,255,255,.15);
+}
+
+/* 第叁幅：星降る夜 — 星空 */
+.art-03 {
+  background: linear-gradient(180deg, #0c1445 0%, #1a237e 40%, #283593 70%, #3949ab 100%);
+  overflow: hidden;
+}
+.art-03::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 20% 15%, #fff, transparent),
+    radial-gradient(1px 1px at 40% 25%, #fff, transparent),
+    radial-gradient(2px 2px at 60% 10%, #fff, transparent),
+    radial-gradient(1px 1px at 75% 35%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 15% 45%, #fff, transparent),
+    radial-gradient(1px 1px at 85% 20%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 50% 50%, #fff, transparent),
+    radial-gradient(1px 1px at 30% 60%, #fff, transparent),
+    radial-gradient(2px 2px at 70% 55%, #fff, transparent),
+    radial-gradient(1px 1px at 90% 65%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 10% 70%, #fff, transparent),
+    radial-gradient(1px 1px at 55% 75%, #fff, transparent),
+    radial-gradient(1px 1px at 35% 85%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 80% 80%, #fff, transparent);
+  opacity: .8;
+}
+.art-03::after {
+  content: "";
+  position: absolute;
+  top: 15%; right: 20%;
+  width: 30px; height: 30px;
+  background: radial-gradient(circle, #fff 0%, #e8e8e8 60%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255,255,255,.4);
+}
+
+/* 第肆幅：桜の季節 — 樱花季 */
+.art-04 {
+  background:
+    radial-gradient(ellipse at 50% 100%, #ffcdd2 0%, transparent 50%),
+    linear-gradient(180deg, #fce4ec 0%, #f8bbd0 30%, #f48fb1 60%, #ec407a 100%);
+}
+.art-04::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(3px 3px at 15% 20%, #fff, transparent),
+    radial-gradient(4px 4px at 35% 35%, rgba(255,255,255,.8), transparent),
+    radial-gradient(2px 2px at 55% 15%, #fff, transparent),
+    radial-gradient(5px 5px at 75% 40%, rgba(255,255,255,.7), transparent),
+    radial-gradient(3px 3px at 85% 25%, #fff, transparent),
+    radial-gradient(2px 2px at 25% 55%, rgba(255,255,255,.8), transparent),
+    radial-gradient(4px 4px at 65% 60%, #fff, transparent),
+    radial-gradient(3px 3px at 45% 50%, rgba(255,255,255,.6), transparent),
+    radial-gradient(2px 2px at 10% 70%, #fff, transparent),
+    radial-gradient(5px 5px at 90% 75%, rgba(255,255,255,.7), transparent);
+}
+.art-04::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 25%;
+  background: linear-gradient(180deg, transparent 0%, rgba(233,30,99,.25) 100%);
+}
+
+/* 第伍幅：電脳都市 — 赛博都市 */
+.art-05 {
+  background: linear-gradient(180deg, #0d0221 0%, #1a0a3e 30%, #2d1b69 60%, #4a148c 100%);
+}
+.art-05::before {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 50%;
+  background:
+    linear-gradient(90deg,
+      transparent 0%, transparent 5%,
+      #00e5ff 5%, #00e5ff 7%,
+      transparent 7%, transparent 12%,
+      #e040fb 12%, #e040fb 15%,
+      transparent 15%, transparent 22%,
+      #00e5ff 22%, #00e5ff 25%,
+      transparent 25%, transparent 32%,
+      #76ff03 32%, #76ff03 34%,
+      transparent 34%, transparent 42%,
+      #e040fb 42%, #e040fb 46%,
+      transparent 46%, transparent 55%,
+      #00e5ff 55%, #00e5ff 58%,
+      transparent 58%, transparent 65%,
+      #ff4081 65%, #ff4081 68%,
+      transparent 68%, transparent 75%,
+      #00e5ff 75%, #00e5ff 78%,
+      transparent 78%, transparent 85%,
+      #e040fb 85%, #e040fb 88%,
+      transparent 88%, transparent 95%,
+      #76ff03 95%, #76ff03 97%,
+      transparent 97%
+    );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  opacity: .7;
+  clip-path: polygon(
+    0 100%, 0 60%, 8% 60%, 8% 40%, 15% 40%, 15% 55%,
+    22% 55%, 22% 30%, 30% 30%, 30% 50%, 38% 50%, 38% 20%,
+    45% 20%, 45% 45%, 52% 45%, 52% 35%, 60% 35%, 60% 25%,
+    68% 25%, 68% 55%, 75% 55%, 75% 40%, 82% 40%, 82% 50%,
+    90% 50%, 90% 35%, 100% 35%, 100% 100%
+  );
+}
+.art-05::after {
+  content: "";
+  position: absolute;
+  top: 20%; left: 50%;
+  transform: translateX(-50%);
+  width: 60%; height: 2px;
+  background: linear-gradient(90deg, transparent, #00e5ff, #e040fb, transparent);
+  opacity: .5;
+  box-shadow:
+    0 15px 0 rgba(0,229,255,.3),
+    0 -12px 0 rgba(224,64,251,.25);
+}
+
+/* 第陆幅：雨上がり — 雨后 */
+.art-06 {
+  background:
+    radial-gradient(ellipse at 30% 70%, rgba(129,199,132,.3) 0%, transparent 40%),
+    linear-gradient(180deg, #90a4ae 0%, #78909c 25%, #546e7a 50%, #37474f 75%, #263238 100%);
+}
+.art-06::before {
+  content: "";
+  position: absolute;
+  top: 20%; left: 25%;
+  width: 50%; height: 25%;
+  background: radial-gradient(ellipse, rgba(255,255,255,.15) 0%, transparent 70%);
+  border-radius: 50%;
+}
+.art-06::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 35%;
+  background:
+    linear-gradient(180deg, transparent 0%, rgba(0,0,0,.15) 40%, rgba(0,0,0,.3) 100%),
+    repeating-linear-gradient(90deg,
+      transparent 0px, transparent 20px,
+      rgba(255,255,255,.03) 20px, rgba(255,255,255,.03) 21px
+    );
+}
+
+/* 第柒幅：春の朝 — 竖幅春景 */
+.art-07 {
+  background: linear-gradient(180deg, #e8f5e9 0%, #c8e6c9 30%, #a5d6a7 55%, #81c784 80%, #66bb6a 100%);
+}
+.art-07::before {
+  content: "";
+  position: absolute;
+  top: 10%; right: 15%;
+  width: 40px; height: 40px;
+  background: radial-gradient(circle, #fff59d 0%, #ffee58 50%, transparent 70%);
+  border-radius: 50%;
+  box-shadow: 0 0 30px rgba(255,238,88,.5);
+}
+.art-07::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 40%;
+  background:
+    radial-gradient(ellipse 80px 30px at 20% 85%, #4caf50 0%, transparent 70%),
+    radial-gradient(ellipse 100px 40px at 50% 90%, #388e3c 0%, transparent 70%),
+    radial-gradient(ellipse 70px 25px at 80% 88%, #43a047 0%, transparent 70%),
+    radial-gradient(ellipse 90px 35px at 35% 95%, #2e7d32 0%, transparent 70%),
+    radial-gradient(ellipse 60px 20px at 70% 92%, #4caf50 0%, transparent 70%);
+}
+
+/* 第捌幅：雪の日 — 竖幅雪景 */
+.art-08 {
+  background: linear-gradient(180deg, #eceff1 0%, #cfd8dc 30%, #b0bec5 60%, #90a4ae 100%);
+}
+.art-08::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(2px 2px at 10% 15%, #fff, transparent),
+    radial-gradient(3px 3px at 25% 30%, #fff, transparent),
+    radial-gradient(2px 2px at 40% 10%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 55% 25%, #fff, transparent),
+    radial-gradient(2.5px 2.5px at 70% 15%, #fff, transparent),
+    radial-gradient(2px 2px at 85% 35%, #fff, transparent),
+    radial-gradient(3px 3px at 15% 50%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 35% 45%, #fff, transparent),
+    radial-gradient(2.5px 2.5px at 60% 40%, #fff, transparent),
+    radial-gradient(2px 2px at 80% 55%, #fff, transparent),
+    radial-gradient(2px 2px at 5% 70%, #fff, transparent),
+    radial-gradient(3px 3px at 30% 65%, #fff, transparent),
+    radial-gradient(1.5px 1.5px at 50% 60%, #fff, transparent),
+    radial-gradient(2.5px 2.5px at 75% 75%, #fff, transparent),
+    radial-gradient(2px 2px at 90% 50%, #fff, transparent);
+  opacity: .9;
+}
+.art-08::after {
+  content: "";
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 25%;
+  background: linear-gradient(180deg, transparent 0%, #fff 50%, #e0e0e0 100%);
+  border-radius: 50% 50% 0 0 / 20% 20% 0 0;
+  transform: translateY(30%);
+}
+
+/* 画作内装饰性签名 */
+.artwork .sig {
+  position: absolute;
+  bottom: 8px; right: 10px;
+  font-family: var(--display);
+  font-size: 10px;
+  color: rgba(255,255,255,.4);
+  letter-spacing: 1px;
+  z-index: 2;
+}
+
+/* 画框底部标签 */
+.frame-label {
+  margin-top: 14px;
+  text-align: center;
+  padding: 0 4px;
+}
+.frame-label .title {
+  font-family: var(--display);
+  font-size: 17px;
+  color: var(--ink);
+  line-height: 1.3;
+  margin-bottom: 4px;
+}
+.frame-label .no {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--red);
+  border: 1px solid rgba(139,44,31,.4);
+  border-radius: 2px;
+  padding: 1px 8px;
+  letter-spacing: 1px;
+  margin-bottom: 6px;
+}
+.frame-label .meta {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  letter-spacing: .5px;
+  line-height: 1.6;
+}
+.frame-label .medium {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--ink-soft);
+  margin-top: 4px;
+  letter-spacing: 1px;
+}
+
+/* ===== 展区导览 ===== */
+.directory {
+  border: 1px solid var(--ink); background: var(--card);
+  padding: 4px 24px; margin: calc(var(--gap)*2) 0 0;
+}
+.directory .head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  padding: 12px 0 8px; border-bottom: 2px solid var(--ink);
+  font-size: 15px; font-weight: 700; letter-spacing: 3px;
+}
+.directory .head .en { font-size: 10.5px; font-weight: 400; color: var(--ink-soft); letter-spacing: 2px; }
+.dir-item {
+  display: flex; align-items: baseline; gap: 16px;
+  padding: 13px 0; border-bottom: 1px dotted var(--line); color: var(--ink);
+}
+.dir-item:last-child { border-bottom: none; }
+.dir-item .no { font-size: 13px; font-weight: 700; color: var(--red); min-width: 34px; }
+.dir-item .info { flex: 1; min-width: 0; }
+.dir-item .t { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
+.dir-item .d { font-size: var(--fs-sm); color: var(--ink-soft); margin-left: 10px; }
+.dir-item .arrow { font-size: 15px; color: var(--ink-soft); transition: transform .15s; }
+.dir-item:hover .t { color: var(--red); }
+.dir-item:hover .arrow { transform: translateX(4px); color: var(--red); }
+
+/* ===== 报尾 ===== */
+.colophon {
+  margin-top: calc(var(--gap)*2); padding: 18px 0 8px; text-align: center; border-top: 2px solid var(--ink);
+}
+.colophon .end { font-size: 13px; letter-spacing: 6px; margin-bottom: 8px; }
+.colophon .meta { font-size: var(--fs-xs); color: var(--ink-soft); line-height: 2; }
+.colophon .meta a { color: var(--ink-soft); text-decoration: underline; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 28px 22px;
+  }
+  .wall h1 { letter-spacing: 14px; text-indent: 14px; }
+  .wall .seal { display: none; }
+  .wall .sub { letter-spacing: 5px; text-indent: 5px; }
+}
+
+@media (max-width: 560px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+    gap: 36px;
+    max-width: 360px;
+    margin: 0 auto;
+  }
+  .wall h1 { letter-spacing: 10px; text-indent: 10px; font-size: clamp(36px, 10vw, 48px); }
+  .wall .sub { letter-spacing: 3px; text-indent: 3px; font-size: 11px; }
+  .eyebrow { font-size: 10.5px; letter-spacing: 1px; }
+  .bench-label .count { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .frame, .frame:hover { transform: none; }
+  .frame-body, .frame:hover .frame-body { transition: none; }
+  .dir-item .arrow { transition: none; }
+}
+    </style>
+</body>
+</html>

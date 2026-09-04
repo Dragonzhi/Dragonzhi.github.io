@@ -3,62 +3,301 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (function() {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark-mode');
-            }
-        })();
-    </script>
-    <title>洛天依画廊 | Dragonzhi</title>
+    <meta name="description" content="ZLOONG 工房 · 画廊版：洛天依同人画作陈列室。">
+    <meta name="theme-color" content="#f5f0e6">
+    <title>画廊版 · ZLOONG 工房 · Hanako箱庭</title>
     <link rel="icon" href="../images/favicon.png">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/gallery.css">
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/workshop.css">
+    <link rel="stylesheet" href="../css/subpages.css">
+    <link rel="stylesheet" href="../css/gallery-workshop.css">
 </head>
 <body>
-    <div id="theme-toggle" class="theme-toggle-button">
-        <i class="fas fa-moon"></i>
-    </div>
-    
-    <div class="gallery-container">
-        <header class="gallery-header" data-aos="fade-down">
-            <a href="../index.html" class="back-link">
-                <i class="fas fa-arrow-left"></i> 返回主页
-            </a>
-            <h1><i class="fas fa-images"></i> 洛天依画廊</h1>
-        </header>
 
-        <div class="masonry-gallery" id="gallery">
-        </div>
+<div class="sub-wrap">
+
+    <!-- 门牌 -->
+    <div class="sub-eyebrow">
+        <span>ZLOONG 工房 · 画廊版 <span class="live" style="color:#2f5d8a;">● 青色频道</span></span>
+        <span id="today">2026年9月4日 · 星期五</span>
+        <span><a href="../index.html" class="back-home">返回工作台</a></span>
     </div>
 
-    <div id="lightbox" class="lightbox">
-        <button class="lightbox-close" aria-label="关闭">
-            <i class="fas fa-times"></i>
-        </button>
-        <button class="lightbox-prev" aria-label="上一张">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <button class="lightbox-next" aria-label="下一张">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-        <div class="lightbox-content">
-            <img src="" alt="" class="lightbox-image">
-            <div class="lightbox-caption">
-                <h3></h3>
-                <p></p>
+    <!-- 报头墙 -->
+    <header class="sub-wall">
+        <span class="seal samp">第叁展<br>EXHIBITION</span>
+        <h1>画廊版</h1>
+        <div class="sub">GALLERY · 洛天依同人画廊 · 青色频道</div>
+        <p class="intro">
+            西墙上挂着一些洛天依的同人画作，装了框，钉了牌。<br>
+            随缘更新，画得不好，还望见谅。
+        </p>
+    </header>
+    <div class="sub-rule-double"></div>
+
+    <!-- 台面标注 -->
+    <div class="sub-bench-label">
+        <span class="t">第壹展 · 陈列墙</span>
+        <span class="count samp" id="gallery-count">共 伍 幅</span>
+        <span class="en">按创作时间倒序</span>
+    </div>
+
+    <!-- 画框陈列区 -->
+    <div class="gallery-wall" id="gallery-wall">
+        <!-- 静态兜底：JS 加载失败时展示占位画框 -->
+        <figure class="gallery-frame">
+            <span class="hook"></span>
+            <div class="frame">
+                <div class="mat">
+                    <div class="artwork">
+                        <span class="placeholder">LOADING</span>
+                    </div>
+                </div>
             </div>
-        </div>
+            <figcaption class="label">
+                <span class="no">第壹幅</span>
+                <span class="name">A星</span>
+                <span class="meta">2026 · 数字绘画</span>
+            </figcaption>
+        </figure>
+
+        <figure class="gallery-frame tall">
+            <span class="hook"></span>
+            <div class="frame">
+                <div class="mat">
+                    <div class="artwork">
+                        <span class="placeholder">LOADING</span>
+                    </div>
+                </div>
+            </div>
+            <figcaption class="label">
+                <span class="no">第贰幅</span>
+                <span class="name">海洋之心</span>
+                <span class="meta">2025 · 数字绘画</span>
+            </figcaption>
+        </figure>
+
+        <figure class="gallery-frame">
+            <span class="hook"></span>
+            <div class="frame">
+                <div class="mat">
+                    <div class="artwork">
+                        <span class="placeholder">LOADING</span>
+                    </div>
+                </div>
+            </div>
+            <figcaption class="label">
+                <span class="no">第叁幅</span>
+                <span class="name">海洋之心 Ⅱ</span>
+                <span class="meta">2025 · 数字绘画</span>
+            </figcaption>
+        </figure>
     </div>
 
-    <button id="back-to-top" class="back-to-top" aria-label="回到顶部">
-        <i class="fas fa-arrow-up"></i>
-    </button>
+    <!-- 展区导览 -->
+    <nav class="sub-directory" aria-label="本区导览" style="margin-top:40px;">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="sub-dir-item" href="../index.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">工房主页</span><span class="d">返回工作台</span></span>
+            <span class="sub-state calm">常开</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="blog.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">博客版</span><span class="d">存档架 · 长文记录</span></span>
+            <span class="sub-state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="portfolio.html">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
+            <span class="sub-state calm">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · dragonzhi.xyz/hanako</span></span>
+            <span class="sub-state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
-    <script src="js/gallery.js"></script>
+    <!-- 报尾 -->
+    <footer class="sub-colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+<!-- Lightbox -->
+<div class="gallery-lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="图片查看器">
+    <button class="lb-close" id="lb-close" aria-label="关闭">×</button>
+    <button class="lb-nav lb-prev" id="lb-prev" aria-label="上一张">‹</button>
+    <button class="lb-nav lb-next" id="lb-next" aria-label="下一张">›</button>
+    <div class="lb-content">
+        <div class="lb-mat">
+            <img id="lb-img" src="" alt="">
+        </div>
+        <div class="lb-caption">
+            <div class="t" id="lb-title">作品名</div>
+            <div id="lb-desc">点击查看大图</div>
+        </div>
+    </div>
+</div>
+
+<script>
+/* 门牌日期 */
+(function() {
+    var todayEl = document.getElementById("today");
+    if (todayEl) {
+        var nd = new Date();
+        var week = ["日", "一", "二", "三", "四", "五", "六"][nd.getDay()];
+        todayEl.textContent = nd.getFullYear() + "年" + (nd.getMonth() + 1) + "月" + nd.getDate() + "日 · 星期" + week;
+    }
+})();
+
+/* 中文数字 */
+var CN_NUMS = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"];
+function cnNum(n) {
+    n = parseInt(n, 10);
+    if (n <= 10) return CN_NUMS[n];
+    if (n < 20) return "壹拾" + CN_NUMS[n - 10];
+    if (n < 100) {
+        var t = Math.floor(n / 10), o = n % 10;
+        return CN_NUMS[t] + "拾" + (o ? CN_NUMS[o] : "");
+    }
+    return String(n);
+}
+function escHtml(s) {
+    return String(s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+/* ===== 画廊数据加载 ===== */
+var galleryData = [];
+var currentIndex = 0;
+
+(function() {
+    var wall = document.getElementById("gallery-wall");
+    if (!wall) return;
+
+    fetch("../images/gallery-images.json")
+        .then(function(r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then(function(imgs) {
+            if (!Array.isArray(imgs) || !imgs.length) return;
+
+            galleryData = imgs;
+            var html = "";
+            imgs.forEach(function(item, i) {
+                var isTall = (i % 3 === 1); /* 错落：第2、5、8...幅用竖版比例 */
+                var idx = "第" + cnNum(i + 1) + "幅";
+                var imgSrc = "../images/画廊/" + encodeURIComponent(item.filename);
+
+                html +=
+                    '<figure class="gallery-frame' + (isTall ? ' tall' : '') + '" data-index="' + i + '">' +
+                    '<span class="hook"></span>' +
+                    '<div class="frame">' +
+                    '<div class="mat">' +
+                    '<div class="artwork">' +
+                    '<img src="' + imgSrc + '" alt="' + escHtml(item.title) + '" loading="lazy">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>' +
+                    '<figcaption class="label">' +
+                    '<span class="no">' + idx + '</span>' +
+                    '<span class="name">' + escHtml(item.title) + '</span>' +
+                    '<span class="meta">数字绘画 · ' + escHtml(item.filename.split('.').pop().toUpperCase()) + '</span>' +
+                    '</figcaption>' +
+                    '</figure>';
+            });
+
+            wall.innerHTML = html;
+
+            /* 更新计数 */
+            var countEl = document.getElementById("gallery-count");
+            if (countEl) countEl.textContent = "共 " + cnNum(imgs.length) + " 幅";
+
+            /* 绑定点击事件 */
+            var frames = wall.querySelectorAll(".gallery-frame");
+            frames.forEach(function(f) {
+                f.addEventListener("click", function() {
+                    var idx = parseInt(f.getAttribute("data-index"), 10);
+                    openLightbox(idx);
+                });
+            });
+        })
+        .catch(function() {
+            /* 静默失败，保留静态占位 */
+        });
+})();
+
+/* ===== Lightbox ===== */
+var lightbox, lbImg, lbTitle, lbDesc;
+
+function openLightbox(idx) {
+    if (!galleryData.length) return;
+    currentIndex = idx;
+    updateLightbox();
+    lightbox.classList.add("active");
+    document.body.style.overflow = "hidden";
+}
+function closeLightbox() {
+    lightbox.classList.remove("active");
+    document.body.style.overflow = "";
+}
+function updateLightbox() {
+    if (!lightbox || !galleryData[currentIndex]) return;
+    var item = galleryData[currentIndex];
+    var src = "../images/画廊/" + encodeURIComponent(item.filename);
+    lbImg.src = src;
+    lbImg.alt = item.title;
+    lbTitle.textContent = item.title;
+    lbDesc.textContent = item.description || "第 " + cnNum(currentIndex + 1) + " 幅";
+}
+function prevImg() {
+    if (!galleryData.length) return;
+    currentIndex = (currentIndex - 1 + galleryData.length) % galleryData.length;
+    updateLightbox();
+}
+function nextImg() {
+    if (!galleryData.length) return;
+    currentIndex = (currentIndex + 1) % galleryData.length;
+    updateLightbox();
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    lightbox = document.getElementById("lightbox");
+    lbImg = document.getElementById("lb-img");
+    lbTitle = document.getElementById("lb-title");
+    lbDesc = document.getElementById("lb-desc");
+
+    if (!lightbox) return;
+
+    document.getElementById("lb-close").addEventListener("click", closeLightbox);
+    document.getElementById("lb-prev").addEventListener("click", prevImg);
+    document.getElementById("lb-next").addEventListener("click", nextImg);
+
+    /* 点击背景关闭 */
+    lightbox.addEventListener("click", function(e) {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    /* 键盘操作 */
+    document.addEventListener("keydown", function(e) {
+        if (!lightbox.classList.contains("active")) return;
+        if (e.key === "Escape") closeLightbox();
+        else if (e.key === "ArrowLeft") prevImg();
+        else if (e.key === "ArrowRight") nextImg();
+    });
+});
+</script>
 </body>
 </html>

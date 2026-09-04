@@ -1,0 +1,1035 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · Hanako箱庭</title>
+    <style id="theme-vars">
+/* ============================================================
+   ZLOONG 工房 · 统一设计令牌
+   基于 workshop.css v5 定稿，供全站子页面复用
+   ============================================================ */
+
+:root {
+  /* 基底色 */
+  --workshop-desk: #f5f0e6;          /* 纸底/台面 */
+  --workshop-card: #fbf8f2;          /* 纸卡 */
+  --workshop-ink: #26221c;           /* 墨色 */
+  --workshop-ink-soft: rgba(38, 34, 28, 0.68);
+  --workshop-line: rgba(38, 34, 28, 0.18);
+
+  /* 强调色 */
+  --workshop-red: #8b2c1f;           /* 朱砂：编号、状态、印章 */
+  --workshop-blue: #2f5d8a;          /* 链接蓝 */
+  --workshop-amber: #d98e4a;         /* 琥珀：终端屏 */
+  --workshop-screen: #2b2620;        /* 终端深底 */
+
+  /* 材质 */
+  --workshop-tape: rgba(255, 252, 242, 0.75);  /* 胶带 */
+
+  /* 字号阶梯 */
+  --workshop-fs-xs: 11.5px;
+  --workshop-fs-sm: 12.5px;
+  --workshop-fs-md: 14.5px;
+  --workshop-prose: 65ch;
+
+  /* 间距与圆角 */
+  --workshop-radius: 6px;
+  --workshop-gap: 16px;
+  --workshop-wrap: 1040px;
+
+  /* 字体三轨 */
+  --workshop-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --workshop-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-display: "Averia Gruesa Libre", var(--workshop-hand);
+
+  /* ===== 语义化别名（Design Library 兼容） ===== */
+  --workshop-background: var(--workshop-desk);
+  --workshop-foreground: var(--workshop-ink);
+  --workshop-card-bg: var(--workshop-card);
+  --workshop-card-foreground: var(--workshop-ink);
+  --workshop-popover: var(--workshop-card);
+  --workshop-popover-foreground: var(--workshop-ink);
+  --workshop-primary: var(--workshop-red);
+  --workshop-primary-foreground: var(--workshop-card);
+  --workshop-muted: rgba(38, 34, 28, 0.08);
+  --workshop-muted-foreground: var(--workshop-ink-soft);
+  --workshop-border: var(--workshop-line);
+  --workshop-input: var(--workshop-line);
+  --workshop-ring: var(--workshop-red);
+
+  /* 圆角阶梯 */
+  --workshop-radius-sm: 3px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 8px;
+  --workshop-radius-full: 9999px;
+}
+
+/* 工具类 */
+.wk-samp { font-family: var(--workshop-mono); }
+.wk-dim { color: var(--workshop-ink-soft); }
+.wk-mark { color: var(--workshop-red); }
+
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4.3.1/dist/index.global.js"></script>
+    <script src="https://unpkg.com/lucide@1.8.0/dist/umd/lucide.min.js"></script>
+    <style type="text/tailwindcss">
+  @theme inline {
+    --color-background: var(--workshop-background);
+    --color-foreground: var(--workshop-foreground);
+    --color-card: var(--workshop-card);
+    --color-card-foreground: var(--workshop-card-foreground);
+    --color-popover: var(--workshop-popover);
+    --color-popover-foreground: var(--workshop-popover-foreground);
+    --color-primary: var(--workshop-primary);
+    --color-primary-foreground: var(--workshop-primary-foreground);
+    --color-muted: var(--workshop-muted);
+    --color-muted-foreground: var(--workshop-muted-foreground);
+    --color-border: var(--workshop-border);
+    --color-input: var(--workshop-input);
+    --color-ring: var(--workshop-ring);
+    --radius-sm: var(--workshop-radius-sm);
+    --radius-md: var(--workshop-radius-md);
+    --radius-lg: var(--workshop-radius-lg);
+  }
+  @layer base {
+    body { background: var(--workshop-background); color: var(--workshop-foreground); }
+    td, th { @apply break-words; word-break: break-all; word-break: auto-phrase; }
+    th { @apply whitespace-nowrap; }
+  }
+    </style>
+    <style id="semantic-token-fallback">
+      .bg-background { background-color: var(--workshop-background); }
+      .text-background { color: var(--workshop-background); }
+      .border-background { border-color: var(--workshop-background); }
+      .ring-background { --tw-ring-color: var(--workshop-background); }
+      .bg-foreground { background-color: var(--workshop-foreground); }
+      .text-foreground { color: var(--workshop-foreground); }
+      .border-foreground { border-color: var(--workshop-foreground); }
+      .ring-foreground { --tw-ring-color: var(--workshop-foreground); }
+      .bg-card { background-color: var(--workshop-card); }
+      .text-card { color: var(--workshop-card); }
+      .border-card { border-color: var(--workshop-card); }
+      .ring-card { --tw-ring-color: var(--workshop-card); }
+      .bg-card-foreground { background-color: var(--workshop-card-foreground); }
+      .text-card-foreground { color: var(--workshop-card-foreground); }
+      .border-card-foreground { border-color: var(--workshop-card-foreground); }
+      .ring-card-foreground { --tw-ring-color: var(--workshop-card-foreground); }
+      .bg-popover { background-color: var(--workshop-popover); }
+      .text-popover { color: var(--workshop-popover); }
+      .border-popover { border-color: var(--workshop-popover); }
+      .ring-popover { --tw-ring-color: var(--workshop-popover); }
+      .bg-popover-foreground { background-color: var(--workshop-popover-foreground); }
+      .text-popover-foreground { color: var(--workshop-popover-foreground); }
+      .border-popover-foreground { border-color: var(--workshop-popover-foreground); }
+      .ring-popover-foreground { --tw-ring-color: var(--workshop-popover-foreground); }
+      .bg-primary { background-color: var(--workshop-primary); }
+      .text-primary { color: var(--workshop-primary); }
+      .border-primary { border-color: var(--workshop-primary); }
+      .ring-primary { --tw-ring-color: var(--workshop-primary); }
+      .bg-primary-foreground { background-color: var(--workshop-primary-foreground); }
+      .text-primary-foreground { color: var(--workshop-primary-foreground); }
+      .border-primary-foreground { border-color: var(--workshop-primary-foreground); }
+      .ring-primary-foreground { --tw-ring-color: var(--workshop-primary-foreground); }
+      .bg-muted { background-color: var(--workshop-muted); }
+      .text-muted { color: var(--workshop-muted); }
+      .border-muted { border-color: var(--workshop-muted); }
+      .ring-muted { --tw-ring-color: var(--workshop-muted); }
+      .bg-muted-foreground { background-color: var(--workshop-muted-foreground); }
+      .text-muted-foreground { color: var(--workshop-muted-foreground); }
+      .border-muted-foreground { border-color: var(--workshop-muted-foreground); }
+      .ring-muted-foreground { --tw-ring-color: var(--workshop-muted-foreground); }
+      .bg-border { background-color: var(--workshop-border); }
+      .text-border { color: var(--workshop-border); }
+      .border-border { border-color: var(--workshop-border); }
+      .ring-border { --tw-ring-color: var(--workshop-border); }
+      .bg-input { background-color: var(--workshop-input); }
+      .text-input { color: var(--workshop-input); }
+      .border-input { border-color: var(--workshop-input); }
+      .ring-input { --tw-ring-color: var(--workshop-input); }
+      .bg-ring { background-color: var(--workshop-ring); }
+      .text-ring { color: var(--workshop-ring); }
+      .border-ring { border-color: var(--workshop-ring); }
+      .ring-ring { --tw-ring-color: var(--workshop-ring); }
+    </style>
+    <style>
+      .no-scrollbar::-webkit-scrollbar { display: none; }
+      .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+      [data-icon] {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        -webkit-mask-size: contain;
+        mask-size: contain;
+        -webkit-mask-repeat: no-repeat;
+        mask-repeat: no-repeat;
+        -webkit-mask-position: center;
+        mask-position: center;
+        background-color: currentColor;
+      }
+    </style>
+</head>
+<body>
+
+<div class="wrap">
+
+    <!-- 门牌（报眉） -->
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 档案架</span>
+        <span>2026年9月4日 · 星期五</span>
+        <a href="../../index.html">← 返回工作台</a>
+    </div>
+
+    <!-- 报头墙 / 档案目录 -->
+    <header class="wall">
+        <span class="seal samp">第贰台<br>ARCHIVE</span>
+        <h1>档案架</h1>
+        <div class="sub">PORTFOLIO · 作品存档 · 按时间倒序</div>
+    </header>
+    <div class="rule-double"></div>
+
+    <!-- 索引栏（分类标签） -->
+    <nav class="archive-tabs" aria-label="档案分类">
+        <button class="archive-tab active" type="button">
+            全部 <span class="count">04</span>
+        </button>
+        <button class="archive-tab" type="button">
+            游戏 <span class="count">02</span>
+        </button>
+        <button class="archive-tab" type="button">
+            Mod <span class="count">01</span>
+        </button>
+        <button class="archive-tab" type="button">
+            工具 <span class="count">01</span>
+        </button>
+        <button class="archive-tab" type="button">
+            其他 <span class="count">00</span>
+        </button>
+    </nav>
+
+    <!-- 档案列表 -->
+    <main class="archive-list">
+
+        <!-- 第壹件：免疫联结 -->
+        <article class="archive-item">
+            <div class="archive-header">
+                <div class="archive-header-left">
+                    <span class="archive-no">第壹件</span>
+                    <h2 class="archive-name">免疫联结 ImmuneLink</h2>
+                </div>
+                <div class="archive-header-right">
+                    <span class="badge award">获奖</span>
+                    <span class="archive-year">2025</span>
+                </div>
+            </div>
+            <div class="archive-body">
+                <div class="archive-main">
+                    <div class="archive-type">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</div>
+                    <div class="archive-desc">
+                        <p>主题是「桥」的塔防游戏：玩家通过画桥连接资源点与防线，在人体免疫系统的微观世界里抵御病原入侵。设计理念是将生物学概念转化为塔防机制——抗体塔、补体系统、炎症反应，每座防御塔都对应真实的免疫功能。</p>
+                        <p>从策划到像素美术独立完成，支持关卡导入导出系统。开发周期约三个月，在 2025 年卡赢杯公益赛中获奖，同时也是一次对「游戏即科普」表达方式的实验。</p>
+                    </div>
+                    <div class="archive-tags">
+                        <code class="tag">Godot 4</code>
+                        <code class="tag">Pixel Art</code>
+                        <code class="tag">GDScript</code>
+                        <code class="tag">JSON 关卡</code>
+                        <code class="tag">塔防</code>
+                        <code class="tag">独立开发</code>
+                    </div>
+                    <ul class="archive-highlights">
+                        <li>自研关卡导入导出系统，JSON 格式可分享自制关卡</li>
+                        <li>桥接机制：路径随玩家建造动态重规划，A* 算法实时寻路</li>
+                        <li>像素美术全手绘，免疫主题视觉风格统一</li>
+                        <li>公益赛获奖作品，主题融合生物学科普与游戏玩法</li>
+                    </ul>
+                </div>
+                <div class="archive-side">
+                    <div class="screenshot-frame">
+                        <div class="screenshot-placeholder sp-immunelink">
+                            <span class="screenshot-caption">SCREENSHOT · 01</span>
+                        </div>
+                    </div>
+                    <div class="archive-links">
+                        <a class="btn-link" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩</a>
+                        <a class="btn-link" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码</a>
+                        <a class="btn-link" href="#" target="_blank" rel="noreferrer">演示视频</a>
+                    </div>
+                </div>
+            </div>
+            <div class="archive-footer">
+                <span><span class="label">归档日期：</span>2025.08.15</span>
+                <span><span class="label">最后更新：</span>2026.03.22</span>
+            </div>
+        </article>
+
+        <!-- 第贰件：棱镜 -->
+        <article class="archive-item">
+            <div class="archive-header">
+                <div class="archive-header-left">
+                    <span class="archive-no">第贰件</span>
+                    <h2 class="archive-name">棱镜：碧芙洛斯</h2>
+                </div>
+                <div class="archive-header-right">
+                    <span class="badge wip">在制</span>
+                    <span class="archive-year">2026</span>
+                </div>
+            </div>
+            <div class="archive-body">
+                <div class="archive-main">
+                    <div class="archive-type">Godot 4 · 卡牌游戏 · 抖音小游戏</div>
+                    <div class="archive-desc">
+                        <p>Uno 机制 × 七色光谱的卡牌游戏。核心规则：只能出与上家颜色相邻的光谱牌，光谱可反转，+2/+4 可连锁叠加，最后一张牌要喊「棱镜」。</p>
+                        <p>正在打磨成完整的抖音小游戏，包含单机 AI 对战、在线匹配和排位系统。美术风格走霓虹光谱路线，每一张牌都有独特的光效设计。</p>
+                    </div>
+                    <div class="archive-tags">
+                        <code class="tag">Godot 4</code>
+                        <code class="tag">卡牌</code>
+                        <code class="tag">WebGL</code>
+                        <code class="tag">抖音小游戏</code>
+                        <code class="tag">多人联机</code>
+                    </div>
+                    <ul class="archive-highlights">
+                        <li>光谱相邻出牌机制，比 Uno 更有策略深度</li>
+                        <li>连锁系统：+2/+4 可叠加翻倍，反转牌改变光谱方向</li>
+                        <li>适配抖音小游戏平台，支持一键开播</li>
+                        <li>霓虹美术风格，每张牌都有独立光效动画</li>
+                    </ul>
+                </div>
+                <div class="archive-side">
+                    <div class="screenshot-frame">
+                        <div class="screenshot-placeholder sp-prism">
+                            <span class="screenshot-caption">SCREENSHOT · WIP</span>
+                        </div>
+                    </div>
+                    <div class="archive-links">
+                        <a class="btn-link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">源码</a>
+                        <a class="btn-link" href="#" target="_blank" rel="noreferrer">开发日志</a>
+                    </div>
+                </div>
+            </div>
+            <div class="archive-footer">
+                <span><span class="label">归档日期：</span>2026.01.10</span>
+                <span><span class="label">最后更新：</span>2026.08.30</span>
+            </div>
+        </article>
+
+        <!-- 第叁件：TriHorny4Link -->
+        <article class="archive-item">
+            <div class="archive-header">
+                <div class="archive-header-left">
+                    <span class="archive-no">第叁件</span>
+                    <h2 class="archive-name">TriHorny4Link</h2>
+                </div>
+                <div class="archive-header-right">
+                    <span class="badge done">完成</span>
+                    <span class="archive-year">2024</span>
+                </div>
+            </div>
+            <div class="archive-body">
+                <div class="archive-main">
+                    <div class="archive-type">Godot 塔防 · gameplay practice</div>
+                    <div class="archive-desc">
+                        <p>塔防玩法练习项目，重点打磨动态路径重规划、敌人对象池和事件驱动系统。项目名称源自「三角关系」的谐音，暗示三路敌人与多重防线的博弈。</p>
+                        <p>做这个项目的目标是练手感——大量敌人同屏时的性能优化、波次系统的节奏设计、以及不同防御塔之间的组合搭配策略。顺便踩了一堆 Godot 4 新 API 的坑。</p>
+                    </div>
+                    <div class="archive-tags">
+                        <code class="tag">GDScript</code>
+                        <code class="tag">A*</code>
+                        <code class="tag">Object Pool</code>
+                        <code class="tag">性能优化</code>
+                        <code class="tag">事件驱动</code>
+                    </div>
+                    <ul class="archive-highlights">
+                        <li>动态 A* 寻路：防线建造实时影响敌人路径</li>
+                        <li>对象池系统：支持上百敌人同屏不卡顿</li>
+                        <li>事件驱动架构：塔与敌人通过信号解耦</li>
+                        <li>波次编辑器：可视化调整每波敌人配置</li>
+                    </ul>
+                </div>
+                <div class="archive-side">
+                    <div class="screenshot-frame">
+                        <div class="screenshot-placeholder sp-trihorny">
+                            <span class="screenshot-caption">SCREENSHOT · 03</span>
+                        </div>
+                    </div>
+                    <div class="archive-links">
+                        <a class="btn-link" href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示视频</a>
+                        <a class="btn-link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">源码</a>
+                    </div>
+                </div>
+            </div>
+            <div class="archive-footer">
+                <span><span class="label">归档日期：</span>2024.11.03</span>
+                <span><span class="label">最后更新：</span>2024.12.20</span>
+            </div>
+        </article>
+
+    </main>
+
+    <!-- 本区导览 -->
+    <nav class="directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="dir-item" href="../../index.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">工房主页</span><span class="d">工作台面 · 档案架总览</span></span>
+            <span class="state">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="blog.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="gallery.html">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
+            <span class="state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅 · dragonzhi.xyz/hanako</span></span>
+            <span class="state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+
+    <style>
+/* ============================================================
+   ZLOONG 工房 · 作品集档案页
+   概念：展开的档案夹 — 从档案架上取下一件，摊开细看
+   ============================================================ */
+:root {
+  --desk: #f5f0e6;
+  --card: #fbf8f2;
+  --ink: #26221c;
+  --ink-soft: rgba(38,34,28,.68);
+  --line: rgba(38,34,28,.18);
+  --red: #8b2c1f;
+  --blue: #2f5d8a;
+  --amber: #d98e4a;
+  --tape: rgba(255,252,242,.75);
+  --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --display: "Averia Gruesa Libre", var(--hand);
+  --radius: 6px;
+  --gap: 16px;
+  --wrap: 1040px;
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+  --prose: 65ch;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+::selection { background: var(--red); color: var(--card); }
+
+body {
+  font-family: var(--hand);
+  background: var(--desk);
+  background-image:
+    linear-gradient(rgba(139,44,31,.022) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(139,44,31,.022) 1px, transparent 1px);
+  background-size: 26px 26px;
+  color: var(--ink);
+  font-size: 16px;
+  line-height: 1.75;
+  min-height: 100vh;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3 { text-wrap: balance; }
+a { color: var(--blue); text-decoration: none; }
+a:hover { color: var(--red); }
+.samp { font-family: var(--mono); }
+.dim { color: var(--ink-soft); }
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+/* ===== 门牌（报眉语法） ===== */
+.eyebrow {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
+}
+.eyebrow .live { color: var(--red); }
+.eyebrow a { color: var(--ink-soft); }
+.eyebrow a:hover { color: var(--red); }
+
+/* ===== 报头墙 / 档案目录 ===== */
+.wall {
+  text-align: center;
+  padding: calc(var(--gap)*2.5) 0 calc(var(--gap)*1.5);
+  position: relative;
+}
+.wall h1 {
+  font-size: clamp(44px, 8vw, 72px);
+  font-weight: 800;
+  color: var(--red);
+  letter-spacing: 22px;
+  line-height: 1.15;
+  text-indent: 22px;
+  font-family: var(--serif);
+}
+.wall .sub {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 7px;
+  text-indent: 7px;
+}
+.wall .seal {
+  position: absolute;
+  right: 2%;
+  top: 40px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  border: 2px solid var(--red);
+  border-radius: 3px;
+  padding: 4px 11px;
+  letter-spacing: 3px;
+  transform: rotate(8deg);
+  opacity: .85;
+  line-height: 1.4;
+}
+.rule-double {
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  height: 5px;
+  margin-bottom: 28px;
+}
+
+/* ===== 档案索引栏（文件夹标签） ===== */
+.archive-tabs {
+  display: flex;
+  gap: 2px;
+  margin-bottom: -1px;
+  position: relative;
+  z-index: 2;
+  flex-wrap: wrap;
+}
+.archive-tab {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 1.5px;
+  padding: 9px 18px 8px;
+  border: 1px solid var(--line);
+  border-bottom: none;
+  border-radius: var(--radius) var(--radius) 0 0;
+  background: var(--card);
+  color: var(--ink-soft);
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  position: relative;
+}
+.archive-tab:hover {
+  color: var(--red);
+  border-color: rgba(139,44,31,.4);
+}
+.archive-tab.active {
+  background: var(--red);
+  color: var(--card);
+  border-color: var(--red);
+}
+.archive-tab .count {
+  margin-left: 6px;
+  opacity: .6;
+  font-size: 10px;
+}
+
+/* ===== 档案列表容器 ===== */
+.archive-list {
+  border: 1px solid var(--line);
+  border-radius: 0 var(--radius) var(--radius) var(--radius);
+  background: var(--card);
+  padding: calc(var(--gap)*1.5);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--gap)*1.5);
+  box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 8px 24px rgba(38,34,28,.06);
+  margin-bottom: calc(var(--gap)*2);
+}
+
+/* ===== 单个档案条目（展开的文件） ===== */
+.archive-item {
+  position: relative;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--desk);
+  overflow: hidden;
+  transition: border-color .2s ease, box-shadow .2s ease;
+}
+.archive-item:hover {
+  border-color: rgba(139,44,31,.35);
+  box-shadow: 0 4px 16px rgba(38,34,28,.08);
+}
+
+/* 档案头条 */
+.archive-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 20px;
+  background: var(--ink);
+  color: var(--card);
+  flex-wrap: wrap;
+}
+.archive-item:nth-child(even) .archive-header {
+  background: var(--red);
+}
+.archive-header-left {
+  display: flex;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+.archive-no {
+  font-family: var(--serif);
+  font-size: 13px;
+  letter-spacing: 2px;
+  opacity: .7;
+}
+.archive-name {
+  font-family: var(--display);
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.archive-header-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.archive-year {
+  font-family: var(--mono);
+  font-size: 12px;
+  opacity: .75;
+  letter-spacing: 1px;
+}
+.badge {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  letter-spacing: 2px;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(251,248,242,.5);
+  color: var(--card);
+  white-space: nowrap;
+}
+.badge.award { background: var(--amber); border-color: var(--amber); color: var(--ink); }
+.badge.wip { background: transparent; border-color: rgba(251,248,242,.6); }
+.badge.done { background: rgba(251,248,242,.15); border-color: rgba(251,248,242,.4); }
+
+/* 档案主体 */
+.archive-body {
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  gap: calc(var(--gap)*1.5);
+  padding: 22px 24px;
+}
+.archive-main { min-width: 0; }
+.archive-side { min-width: 0; display: flex; flex-direction: column; gap: 14px; }
+
+.archive-type {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  color: var(--red);
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.archive-type::before {
+  content: "▤";
+  color: var(--red);
+}
+
+.archive-desc {
+  font-size: var(--fs-md);
+  color: var(--ink);
+  line-height: 1.85;
+  margin-bottom: 14px;
+}
+.archive-desc p { margin-bottom: 10px; }
+.archive-desc p:last-child { margin-bottom: 0; }
+
+.archive-tags {
+  margin-bottom: 16px;
+}
+.tag {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  font-style: normal;
+  color: var(--ink-soft);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 2px 10px;
+  margin: 0 6px 6px 0;
+}
+
+.archive-highlights {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.archive-highlights li {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 6px 0;
+  font-size: var(--fs-md);
+  line-height: 1.7;
+}
+.archive-highlights li::before {
+  content: "";
+  flex: none;
+  width: 7px;
+  height: 7px;
+  background: var(--red);
+  transform: rotate(45deg);
+  margin-top: 3px;
+}
+
+/* 画框风格截图占位 */
+.screenshot-frame {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: var(--card);
+  box-shadow: 0 2px 8px rgba(38,34,28,.08);
+}
+.screenshot-frame::before {
+  content: "";
+  position: absolute;
+  inset: 8px;
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  pointer-events: none;
+}
+.screenshot-placeholder {
+  position: absolute;
+  inset: 12px;
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+/* 项目一截图：塔防游戏场景 */
+.sp-immunelink {
+  background: linear-gradient(135deg, #2d4a3e 0%, #1a3328 50%, #0f1f17 100%);
+}
+.sp-immunelink::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(100,180,120,.1) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(100,180,120,.1) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+.sp-immunelink::after {
+  content: "ImmuneLink";
+  position: relative;
+  font-family: var(--display);
+  font-size: 28px;
+  color: rgba(180,220,160,.7);
+  letter-spacing: 3px;
+  z-index: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+/* 项目二截图：卡牌游戏 */
+.sp-prism {
+  background: linear-gradient(135deg, #4a2d5c 0%, #2d1a3e 50%, #1a0f28 100%);
+}
+.sp-prism::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(255,180,100,.15) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(150,100,220,.15) 0%, transparent 50%);
+}
+.sp-prism::after {
+  content: "棱镜：碧芙洛斯";
+  position: relative;
+  font-family: var(--display);
+  font-size: 24px;
+  color: rgba(220,180,240,.75);
+  letter-spacing: 4px;
+  z-index: 1;
+  text-shadow: 0 2px 10px rgba(0,0,0,.4);
+}
+/* 项目三截图：塔防练习 */
+.sp-trihorny {
+  background: linear-gradient(135deg, #3a3a2a 0%, #2a2a1a 50%, #1a1a0f 100%);
+}
+.sp-trihorny::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    repeating-linear-gradient(45deg, rgba(180,160,80,.05) 0, rgba(180,160,80,.05) 10px, transparent 10px, transparent 20px);
+}
+.sp-trihorny::after {
+  content: "TriHorny4Link";
+  position: relative;
+  font-family: var(--mono);
+  font-size: 20px;
+  color: rgba(200,180,120,.7);
+  letter-spacing: 2px;
+  z-index: 1;
+  text-shadow: 0 2px 8px rgba(0,0,0,.3);
+}
+
+.screenshot-caption {
+  position: absolute;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--mono);
+  font-size: 10px;
+  color: rgba(251,248,242,.5);
+  letter-spacing: 2px;
+  z-index: 2;
+  white-space: nowrap;
+}
+
+/* 链接按钮组 */
+.archive-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.btn-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-family: var(--mono);
+  font-size: 12px;
+  letter-spacing: 1px;
+  color: var(--red);
+  border: 1px solid rgba(139,44,31,.4);
+  border-radius: var(--radius);
+  padding: 9px 16px;
+  background: transparent;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  text-align: center;
+}
+.btn-link:hover {
+  background: var(--red);
+  color: var(--card);
+  border-color: var(--red);
+}
+.btn-link::after {
+  content: "↗";
+  font-size: 11px;
+  opacity: .8;
+}
+
+/* 档案脚 */
+.archive-footer {
+  padding: 10px 24px 14px;
+  border-top: 1px dashed var(--line);
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: .5px;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.archive-footer .label {
+  color: var(--red);
+  margin-right: 4px;
+}
+
+/* ===== 导览牌 ===== */
+.directory {
+  border: 1px solid var(--ink);
+  background: var(--card);
+  padding: 4px 24px;
+  margin: calc(var(--gap)*1.5) 0 0;
+}
+.directory .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0 8px;
+  border-bottom: 2px solid var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.directory .head .en {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+}
+.dir-item {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px dotted var(--line);
+  color: var(--ink);
+}
+.dir-item:last-child { border-bottom: none; }
+.dir-item .no {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--red);
+  min-width: 34px;
+}
+.dir-item .info { flex: 1; min-width: 0; }
+.dir-item .t {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.dir-item .d {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  margin-left: 10px;
+}
+.dir-item .arrow {
+  font-size: 15px;
+  color: var(--ink-soft);
+  transition: transform .15s;
+}
+.dir-item:hover .t { color: var(--red); }
+.dir-item:hover .arrow { transform: translateX(4px); color: var(--red); }
+
+.state {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+  border: 1px solid rgba(139,44,31,.45);
+  border-radius: 999px;
+  padding: 0 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.state.calm {
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+/* ===== 报尾 ===== */
+.colophon {
+  margin-top: calc(var(--gap)*2);
+  padding: 18px 0 8px;
+  text-align: center;
+  border-top: 2px solid var(--ink);
+}
+.colophon .end {
+  font-size: 13px;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+}
+.colophon .meta {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  line-height: 2;
+}
+.colophon .meta a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+/* ===== 响应式 ===== */
+@media (max-width: 900px) {
+  .wrap { padding: 0 18px; }
+  .wall h1 { letter-spacing: 12px; text-indent: 12px; }
+  .wall .seal { display: none; }
+
+  .archive-body {
+    grid-template-columns: 1fr;
+    gap: var(--gap);
+  }
+  .archive-side {
+    order: -1;
+  }
+  .archive-links {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  .btn-link {
+    flex: 1;
+    min-width: 120px;
+  }
+
+  .archive-header {
+    padding: 10px 16px;
+  }
+  .archive-name { font-size: 19px; }
+  .archive-body { padding: 18px 16px; }
+  .archive-footer { padding: 8px 16px 12px; }
+
+  .archive-list {
+    padding: var(--gap);
+    border-radius: 0 0 var(--radius) var(--radius);
+  }
+
+  .dir-item {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .dir-item .d {
+    display: block;
+    margin-left: 0;
+    margin-top: 2px;
+  }
+}
+
+/* ===== 减少动效 ===== */
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .archive-item, .archive-item:hover,
+  .btn-link, .btn-link:hover,
+  .archive-tab, .archive-tab:hover,
+  .dir-item:hover .arrow {
+    transition: none;
+    transform: none;
+  }
+}
+    </style>
+</body>
+</html>

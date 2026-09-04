@@ -1,0 +1,65 @@
+/* ============================================================
+   ZLOONG 工房 · 统一设计令牌
+   基于 workshop.css v5 定稿，供全站子页面复用
+   ============================================================ */
+
+:root {
+  /* 基底色 */
+  --workshop-desk: #f5f0e6;          /* 纸底/台面 */
+  --workshop-card: #fbf8f2;          /* 纸卡 */
+  --workshop-ink: #26221c;           /* 墨色 */
+  --workshop-ink-soft: rgba(38, 34, 28, 0.68);
+  --workshop-line: rgba(38, 34, 28, 0.18);
+
+  /* 强调色 */
+  --workshop-red: #8b2c1f;           /* 朱砂：编号、状态、印章 */
+  --workshop-blue: #2f5d8a;          /* 链接蓝 */
+  --workshop-amber: #d98e4a;         /* 琥珀：终端屏 */
+  --workshop-screen: #2b2620;        /* 终端深底 */
+
+  /* 材质 */
+  --workshop-tape: rgba(255, 252, 242, 0.75);  /* 胶带 */
+
+  /* 字号阶梯 */
+  --workshop-fs-xs: 11.5px;
+  --workshop-fs-sm: 12.5px;
+  --workshop-fs-md: 14.5px;
+  --workshop-prose: 65ch;
+
+  /* 间距与圆角 */
+  --workshop-radius: 6px;
+  --workshop-gap: 16px;
+  --workshop-wrap: 1040px;
+
+  /* 字体三轨 */
+  --workshop-mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --workshop-serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --workshop-hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --workshop-display: "Averia Gruesa Libre", var(--workshop-hand);
+
+  /* ===== 语义化别名（Design Library 兼容） ===== */
+  --workshop-background: var(--workshop-desk);
+  --workshop-foreground: var(--workshop-ink);
+  --workshop-card-bg: var(--workshop-card);
+  --workshop-card-foreground: var(--workshop-ink);
+  --workshop-popover: var(--workshop-card);
+  --workshop-popover-foreground: var(--workshop-ink);
+  --workshop-primary: var(--workshop-red);
+  --workshop-primary-foreground: var(--workshop-card);
+  --workshop-muted: rgba(38, 34, 28, 0.08);
+  --workshop-muted-foreground: var(--workshop-ink-soft);
+  --workshop-border: var(--workshop-line);
+  --workshop-input: var(--workshop-line);
+  --workshop-ring: var(--workshop-red);
+
+  /* 圆角阶梯 */
+  --workshop-radius-sm: 3px;
+  --workshop-radius-md: 6px;
+  --workshop-radius-lg: 8px;
+  --workshop-radius-full: 9999px;
+}
+
+/* 工具类 */
+.wk-samp { font-family: var(--workshop-mono); }
+.wk-dim { color: var(--workshop-ink-soft); }
+.wk-mark { color: var(--workshop-red); }

@@ -1,0 +1,75 @@
+{
+  "data": [
+    {
+      "id": "page-blog-list",
+      "title": "博客版 · 文章列表",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 0,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/blog-list.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-blog-post",
+      "title": "博客版 · 文章详情",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 480,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/blog-post.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-gallery",
+      "title": "画廊版 · 陈列室",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 960,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/gallery.html",
+        "interactions": []
+      }
+    },
+    {
+      "id": "page-portfolio",
+      "title": "档案架 · 作品详情",
+      "type": "page",
+      "version": 1,
+      "createdAt": 1756992000000,
+      "canvasData": {
+        "x": 1440,
+        "y": 0,
+        "group": 0
+      },
+      "devMetadata": {
+        "htmlSrc": "pages/portfolio.html",
+        "interactions": []
+      }
+    }
+  ],
+  "config": {
+    "autoLayout": true,
+    "deviceType": "desktop",
+    "projectName": "ZLOONG 工房 · 子页面统一方案",
+    "designLibrary": null,
+    "visualEditorEnabled": false
+  }
+}

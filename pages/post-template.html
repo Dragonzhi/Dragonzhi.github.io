@@ -3,93 +3,450 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (function() {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark-mode');
-            }
-        })();
-    </script>
-    <title>博客文章 | Dragonzhi</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/blog.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/transition.css">
+    <meta name="description" content="ZLOONG 工房 · 博客版文章。">
+    <meta name="theme-color" content="#f5f0e6">
+    <title>文章 · ZLOONG 工房 · Hanako箱庭</title>
+    <link rel="icon" href="../images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/workshop.css">
+    <link rel="stylesheet" href="../css/subpages.css">
+    <link rel="stylesheet" href="../css/blog-workshop.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="avatar-container">
-                 <a href="../index.html" style="text-decoration: none; color: inherit;">
-                    <div class="avatar">
-                        <img src="../images/avatar.png" alt="Dragonzhi 的头像">
-                    </div>
-                    <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
-                    <p class="tagline">程序开发爱好者</p>
-                </a>
-            </div>
-            <div id="theme-toggle" class="theme-toggle-button">
-                <i class="fas fa-moon"></i>
-            </div>
-        </header>
-        
-        <main>
-            <article class="post-content">
-                <a href="blog.html" class="back-link"><i class="fas fa-arrow-left"></i> 返回博客列表</a>
-                <div id="post-container">
-                    <!-- 文章内容将动态加载于此 -->
-                </div>
-            </article>
-        </main>
-        
-        <footer>
-            <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
-        </footer>
+
+<div class="sub-wrap">
+
+    <!-- 门牌 -->
+    <div class="sub-eyebrow">
+        <span>ZLOONG 工房 · 博客版</span>
+        <span id="today">2026年9月4日 · 星期五</span>
+        <span><a href="blog.html" class="back-home">返回存档架</a></span>
     </div>
-    
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="../js/transition.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', async () => {
-            const postContainer = document.getElementById('post-container');
-            try {
-                const params = new URLSearchParams(window.location.search);
-                const postSlug = params.get('slug');
+    <!-- 文章头部（静态兜底内容） -->
+    <article class="post-head">
+        <div class="archive-no samp">第壹篇 / 存档号 B-001</div>
+        <h1 id="post-title">如何用纯静态文件搭建这个博客</h1>
+        <div class="post-meta-row">
+            <span id="post-date">2026.01.16</span>
+            <span class="sep">·</span>
+            <span>编辑：ZLOONG</span>
+            <span class="sep">·</span>
+            <span id="post-readtime">约 5 分钟阅读</span>
+        </div>
+        <p class="post-tags" id="post-tags">
+            <span class="tag">HTML</span>
+            <span class="tag">CSS</span>
+            <span class="tag">教程</span>
+        </p>
+        <div class="post-foot-divider"></div>
+    </article>
 
-                if (!postSlug) {
-                    postContainer.innerHTML = '<p>错误：未指定文章。</p>';
-                    return;
-                }
+    <!-- 文章正文（静态兜底：第一篇文章的内容） -->
+    <div class="post-body" id="post-body">
+        <p>为个人主页添加一个博客是分享知识和记录成长的好方法。但很多时候，我们不需要一个像 WordPress 或 Ghost 那样复杂的动态博客系统。对于一个开发者来说，一个纯静态、用 HTML 和 CSS 构建的博客不仅维护简单、加载飞快，而且完全免费（托管在 GitHub Pages 上）。</p>
 
-                const postsResponse = await fetch('../data/posts.json');
-                if (!postsResponse.ok) throw new Error('无法加载文章索引。');
-                const posts = await postsResponse.json();
-                
-                const postData = posts.find(p => p.slug === postSlug);
+        <h2>第一步：规划文件结构</h2>
+        <p>我们的目标是简洁。所以我们只需要几个核心文件：</p>
+        <ul>
+            <li><code>index.html</code> — 你的主页。</li>
+            <li><code>blog.html</code> — 新的博客文章列表页。</li>
+            <li><code>post1.md</code>, <code>post2.md</code> — 每一篇文章都是一个独立的 Markdown 文件。</li>
+            <li><code>workshop.css</code> — 主样式表。</li>
+            <li><code>blog-workshop.css</code> — 博客页面的专属样式。</li>
+        </ul>
 
-                if (!postData) {
-                    postContainer.innerHTML = '<p>错误：找不到指定的文章。</p>';
-                    return;
-                }
+        <h2>第二步：创建文章列表页</h2>
+        <p>这个页面的作用是作为博客的入口，展示所有文章。每个条目包含标题、日期、摘要和一个「阅读全文」的链接。</p>
+        <pre><div class="code-bar"><i></i><i></i><i></i><span class="code-title">blog.html</span></div><code>&lt;div class="post-entry"&gt;
+    &lt;h3&gt;文章标题&lt;/h3&gt;
+    &lt;p class="post-meta"&gt;发布日期&lt;/p&gt;
+    &lt;p&gt;文章摘要...&lt;/p&gt;
+    &lt;a href="post-template.html?slug=post1"&gt;阅读全文&lt;/a&gt;
+&lt;/div&gt;</code></pre>
 
-                document.title = `${postData.title} | Dragonzhi`;
+        <blockquote>
+            <p>纯静态的好处是：不需要数据库、不需要后端、不怕宕机、部署到任何地方都能跑。</p>
+            <cite>— 工房笔记</cite>
+        </blockquote>
 
-                const markdownResponse = await fetch(`../${postData.file}`);
-                if (!markdownResponse.ok) throw new Error('无法加载文章内容。');
-                const markdown = await markdownResponse.text();
-                
-                postContainer.innerHTML = marked.parse(markdown);
+        <h2>第三步：动态加载 Markdown</h2>
+        <p>通过 JavaScript 读取 URL 中的 slug 参数，然后 fetch 对应的 Markdown 文件，在前端解析并渲染。这样发布新文章只需要：</p>
+        <ol>
+            <li>在 <code>posts/</code> 目录新建 Markdown 文件</li>
+            <li>在 <code>data/posts.json</code> 添加一条记录</li>
+            <li>提交，完事</li>
+        </ol>
 
-            } catch (error) {
-                console.error('加载文章时出错:', error);
-                postContainer.innerHTML = '<p>抱歉，加载文章时出现错误。请稍后再试。</p>';
+        <p>这就是全部了！通过这个简单的方法，你就有了一个可以随时扩展的静态博客。</p>
+    </div>
+
+    <!-- 文章底部 -->
+    <div class="post-footer">
+        <div class="post-end">— 完 —</div>
+
+        <div class="post-nav" id="post-nav">
+            <a class="post-nav-card prev" href="#">
+                <div class="nav-label">← 上一篇</div>
+                <div class="nav-title">（暂无）</div>
+            </a>
+            <a class="post-nav-card next" href="#">
+                <div class="nav-label">下一篇 →</div>
+                <div class="nav-title">博客系统改造：从手动更新到动态加载</div>
+            </a>
+        </div>
+
+        <div class="back-to-list">
+            <a href="blog.html">← 返回存档架</a>
+        </div>
+    </div>
+
+    <!-- 本区导览 -->
+    <nav class="sub-directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="sub-dir-item" href="../index.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">工房主页</span><span class="d">返回工作台</span></span>
+            <span class="sub-state calm">常开</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="blog.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">博客版</span><span class="d">存档架 · 长文记录</span></span>
+            <span class="sub-state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="gallery.html">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊</span></span>
+            <span class="sub-state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · dragonzhi.xyz/hanako</span></span>
+            <span class="sub-state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="sub-colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+<script>
+/* ============================================================
+   博客详情页逻辑：URL 参数 → 找文章 → 加载 Markdown → 渲染
+   ============================================================ */
+
+/* 门牌日期 */
+(function() {
+    var todayEl = document.getElementById("today");
+    if (todayEl) {
+        var nd = new Date();
+        var week = ["日", "一", "二", "三", "四", "五", "六"][nd.getDay()];
+        todayEl.textContent = nd.getFullYear() + "年" + (nd.getMonth() + 1) + "月" + nd.getDate() + "日 · 星期" + week;
+    }
+})();
+
+/* 中文数字 */
+var CN_NUMS = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"];
+function cnNum(n) {
+    n = parseInt(n, 10);
+    if (n <= 10) return CN_NUMS[n];
+    if (n < 20) return "壹拾" + CN_NUMS[n - 10];
+    if (n < 100) {
+        var t = Math.floor(n / 10), o = n % 10;
+        return CN_NUMS[t] + "拾" + (o ? CN_NUMS[o] : "");
+    }
+    return String(n);
+}
+
+function escHtml(s) {
+    return String(s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+/* 获取 URL 参数 */
+function getQueryParam(name) {
+    var m = window.location.search.match(new RegExp("[?&]" + name + "=([^&]*)"));
+    return m ? decodeURIComponent(m[1]) : null;
+}
+
+/* ===== 迷你 Markdown 解析器（博客版扩展） =====
+   支持：标题 / 段落 / 无序列表 / 有序列表 / 引用块 /
+         行内代码 / 代码块(```) / 粗体 / 链接 / 图片 */
+function parseMarkdown(md) {
+    var lines = String(md).replace(/\r\n?/g, "\n").split("\n");
+    var html = "";
+    var i = 0, n = lines.length;
+    var inCode = false, codeLang = "", codeBuf = [];
+    var inQuote = false, quoteBuf = [];
+    var inList = false, listType = "", listBuf = [];
+    var paraBuf = [];
+
+    function flushPara() {
+        if (paraBuf.length) {
+            html += "<p>" + inlineMd(paraBuf.join(" ")) + "</p>";
+            paraBuf = [];
+        }
+    }
+    function flushList() {
+        if (inList && listBuf.length) {
+            var tag = listType === "ol" ? "ol" : "ul";
+            html += "<" + tag + ">" + listBuf.join("") + "</" + tag + ">";
+            listBuf = [];
+            inList = false;
+            listType = "";
+        }
+    }
+    function flushQuote() {
+        if (inQuote && quoteBuf.length) {
+            html += "<blockquote>" + parseMarkdownInlineBlock(quoteBuf.join("\n")) + "</blockquote>";
+            quoteBuf = [];
+            inQuote = false;
+        }
+    }
+
+    function inlineMd(s) {
+        s = escHtml(s);
+        /* 图片 ![alt](url) */
+        s = s.replace(/!\[([^\]]*)\]\(([^)\s]+)\)/g, function(m, alt, url) {
+            return '<img src="' + url + '" alt="' + alt + '" style="max-width:100%;height:auto;">';
+        });
+        /* 链接 [text](url) */
+        s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function(m, text, url) {
+            var ok = /^(https?:|mailto:)\S+$/i.test(url)
+                || /^\/(?!\/)/.test(url)
+                || /^(?!\/\/)(\.{0,2}\/)?[a-zA-Z0-9._\-\/]+\.html?$/.test(url);
+            if (!ok) return m;
+            return '<a href="' + url + '"' + (/^https?:/i.test(url) ? ' target="_blank" rel="noreferrer"' : "") + ">" + text + "</a>";
+        });
+        /* 行内代码 `code` */
+        s = s.replace(/`([^`]+)`/g, "<code>$1</code>");
+        /* 粗体 **bold** */
+        s = s.replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>");
+        /* 斜体 *italic* */
+        s = s.replace(/(^|[^*])\*([^*\n]+)\*/g, "$1<em>$2</em>");
+        return s;
+    }
+
+    /* 用于引用块内部的解析（段落 + 换行） */
+    function parseMarkdownInlineBlock(text) {
+        var paras = text.split(/\n\s*\n/);
+        var out = "";
+        paras.forEach(function(p) {
+            var lines = p.trim().split("\n");
+            if (lines.length) {
+                out += "<p>" + inlineMd(lines.join(" ")) + "</p>";
             }
         });
-    </script>
+        return out;
+    }
+
+    while (i < n) {
+        var ln = lines[i];
+
+        /* 代码块围栏 ``` */
+        if (/^```/.test(ln)) {
+            if (!inCode) {
+                flushPara(); flushList(); flushQuote();
+                inCode = true;
+                codeLang = ln.replace(/^```\s*/, "").trim();
+                codeBuf = [];
+            } else {
+                /* 结束代码块 */
+                var codeHtml = escHtml(codeBuf.join("\n"));
+                var title = codeLang || "code";
+                html += '<pre><div class="code-bar"><i></i><i></i><i></i><span class="code-title">' + title + '</span></div><code>' + codeHtml + '</code></pre>';
+                inCode = false;
+                codeLang = "";
+                codeBuf = [];
+            }
+            i += 1;
+            continue;
+        }
+        if (inCode) { codeBuf.push(ln); i += 1; continue; }
+
+        /* 空行：结束当前段落/列表/引用 */
+        if (!ln.trim()) {
+            flushPara();
+            flushList();
+            flushQuote();
+            i += 1;
+            continue;
+        }
+
+        /* 标题 # ## ### */
+        var hMatch = ln.match(/^(#{1,6})\s+(.+)$/);
+        if (hMatch) {
+            flushPara(); flushList(); flushQuote();
+            var level = hMatch[1].length;
+            html += "<h" + level + ">" + inlineMd(hMatch[2]) + "</h" + level + ">";
+            i += 1;
+            continue;
+        }
+
+        /* 引用块 > */
+        if (/^>\s?/.test(ln)) {
+            flushPara(); flushList();
+            inQuote = true;
+            quoteBuf.push(ln.replace(/^>\s?/, ""));
+            i += 1;
+            continue;
+        } else if (inQuote && !/^>\s?/.test(ln)) {
+            flushQuote();
+        }
+
+        /* 无序列表 - / * / + */
+        if (/^\s*[-*+]\s+/.test(ln)) {
+            flushPara(); flushQuote();
+            if (!inList || listType !== "ul") { flushList(); inList = true; listType = "ul"; }
+            listBuf.push("<li>" + inlineMd(ln.replace(/^\s*[-*+]\s+/, "")) + "</li>");
+            i += 1;
+            continue;
+        }
+
+        /* 有序列表 1. / 1) */
+        if (/^\s*\d+[.)]\s+/.test(ln)) {
+            flushPara(); flushQuote();
+            if (!inList || listType !== "ol") { flushList(); inList = true; listType = "ol"; }
+            listBuf.push("<li>" + inlineMd(ln.replace(/^\s*\d+[.)]\s+/, "")) + "</li>");
+            i += 1;
+            continue;
+        }
+
+        if (inList) { flushList(); }
+
+        /* 普通段落 */
+        paraBuf.push(ln.trim());
+        i += 1;
+    }
+
+    flushPara(); flushList(); flushQuote();
+    if (inCode && codeBuf.length) {
+        var codeHtml = escHtml(codeBuf.join("\n"));
+        html += '<pre><code>' + codeHtml + '</code></pre>';
+    }
+
+    return html;
+}
+
+/* 计算阅读时间（按中文字数，约 400 字/分钟） */
+function calcReadTime(text) {
+    var cnChars = (text.match(/[\u4e00-\u9fa5]/g) || []).length;
+    var enWords = (text.match(/[a-zA-Z]+/g) || []).length;
+    var total = cnChars + enWords * 1.5;
+    var mins = Math.max(1, Math.round(total / 400));
+    return "约 " + mins + " 分钟阅读";
+}
+
+/* ===== 主逻辑 ===== */
+(function() {
+    var slug = getQueryParam("slug");
+    if (!slug) return; /* 无 slug 时显示静态兜底内容 */
+
+    var postsIndex = null;
+
+    /* 1. 先加载文章索引 */
+    fetch("../data/posts.json")
+        .then(function(r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then(function(posts) {
+            if (!Array.isArray(posts)) return;
+            posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+            postsIndex = posts;
+
+            /* 找到当前文章 */
+            var idx = posts.findIndex(function(p) { return p.slug === slug; });
+            if (idx === -1) return;
+            var post = posts[idx];
+
+            /* 更新标题、元信息 */
+            document.title = post.title + " · ZLOONG 工房 · Hanako箱庭";
+
+            var titleEl = document.getElementById("post-title");
+            if (titleEl) titleEl.textContent = post.title;
+
+            var archiveEl = document.querySelector(".post-head .archive-no");
+            if (archiveEl) {
+                archiveEl.textContent = "第" + cnNum(idx + 1) + "篇 / 存档号 B-" + String(idx + 1).padStart(3, "0");
+            }
+
+            var dateObj = new Date(post.date);
+            var dateStr = dateObj.getFullYear() + "." +
+                String(dateObj.getMonth() + 1).padStart(2, "0") + "." +
+                String(dateObj.getDate()).padStart(2, "0");
+            var dateEl = document.getElementById("post-date");
+            if (dateEl) dateEl.textContent = dateStr;
+
+            /* 标签 */
+            var tagsEl = document.getElementById("post-tags");
+            if (tagsEl && post.tags && Array.isArray(post.tags)) {
+                tagsEl.innerHTML = post.tags.map(function(t) {
+                    return '<span class="tag">' + escHtml(t) + '</span>';
+                }).join("");
+            }
+
+            /* 上下篇导航 */
+            var navEl = document.getElementById("post-nav");
+            if (navEl) {
+                var prevPost = posts[idx + 1]; /* 日期倒序，所以 +1 是上一篇（更早的） */
+                var nextPost = posts[idx - 1];
+                var prevHtml = prevPost
+                    ? '<a class="post-nav-card prev" href="post-template.html?slug=' + escHtml(prevPost.slug) + '">' +
+                      '<div class="nav-label">← 上一篇</div>' +
+                      '<div class="nav-title">' + escHtml(prevPost.title) + '</div></a>'
+                    : '<a class="post-nav-card prev" href="javascript:void(0)" style="opacity:.4;pointer-events:none;">' +
+                      '<div class="nav-label">← 上一篇</div>' +
+                      '<div class="nav-title">已是第一篇</div></a>';
+                var nextHtml = nextPost
+                    ? '<a class="post-nav-card next" href="post-template.html?slug=' + escHtml(nextPost.slug) + '">' +
+                      '<div class="nav-label">下一篇 →</div>' +
+                      '<div class="nav-title">' + escHtml(nextPost.title) + '</div></a>'
+                    : '<a class="post-nav-card next" href="javascript:void(0)" style="opacity:.4;pointer-events:none;">' +
+                      '<div class="nav-label">下一篇 →</div>' +
+                      '<div class="nav-title">已是最新一篇</div></a>';
+                navEl.innerHTML = prevHtml + nextHtml;
+            }
+
+            /* 2. 加载 Markdown 内容 */
+            return fetch("../" + post.file)
+                .then(function(r) {
+                    if (!r.ok) throw new Error("HTTP " + r.status);
+                    return r.text();
+                })
+                .then(function(md) {
+                    /* 去掉第一行标题（已在页面头部展示）和第二行日期 */
+                    var lines = md.split("\n");
+                    var start = 0;
+                    if (/^#\s+/.test(lines[0])) start = 1;
+                    if (start < lines.length && /发布于/.test(lines[start])) start += 1;
+                    var contentMd = lines.slice(start).join("\n");
+
+                    var bodyEl = document.getElementById("post-body");
+                    if (bodyEl) {
+                        bodyEl.innerHTML = parseMarkdown(contentMd);
+                    }
+
+                    /* 更新阅读时间 */
+                    var rtEl = document.getElementById("post-readtime");
+                    if (rtEl) rtEl.textContent = calcReadTime(contentMd);
+                });
+        })
+        .catch(function() {
+            /* 静默失败，保留静态兜底内容 */
+        });
+})();
+</script>
 </body>
 </html>
