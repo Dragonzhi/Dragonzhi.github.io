@@ -16,10 +16,10 @@
 
 <div class="wrap">
 
-    <!-- 门牌（报眉语法） -->
+    <!-- 报眉 -->
     <div class="eyebrow">
         <span>ZLOONG 工房 · 与箱庭同院 <span class="live">● 常开</span></span>
-        <span id="today">2026年8月30日 · 星期日</span>
+        <span id="today">2026年9月4日 · 星期五</span>
         <span>编辑：ZLOONG · 排印：Hanako</span>
     </div>
 
@@ -37,15 +37,30 @@
         <div class="who">— 钉在墙上的话 · 手机电量与动力同步下降中 (˶ᵔ ᵕ ᵔ˶)</div>
     </div>
 
-    <!-- ===== 台面一：欢迎 + 机器 ===== -->
+    <!-- 台面标注 -->
     <div class="bench-label">
         <span class="t">进门</span>
         <span class="en">HELLO &amp; MACHINE</span>
     </div>
-    <main class="bento">
 
-        <!-- hero 胶带卡 -->
-        <section class="tile tile--hero t-2w t-2h taped">
+    <!-- 融合版台面：每张贴贴可拖动 -->
+    <main class="desk">
+
+        <!-- "重要"印章 -->
+        <div class="stamp-important" aria-hidden="true">
+            <svg viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="35" cy="35" r="32" fill="none" stroke="#8b2c1f" stroke-width="3"/>
+                <circle cx="35" cy="35" r="27" fill="none" stroke="#8b2c1f" stroke-width="1"/>
+                <text x="35" y="28" text-anchor="middle" fill="#8b2c1f" font-family="serif" font-size="14" font-weight="bold" letter-spacing="2">重要</text>
+                <text x="35" y="46" text-anchor="middle" fill="#8b2c1f" font-family="monospace" font-size="9" letter-spacing="1">IMPORTANT</text>
+                <path d="M10 35 L60 35" stroke="#8b2c1f" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
+            </svg>
+        </div>
+
+        <!-- ===== 上段 · 进门区 ===== -->
+
+        <!-- Hero 便签纸 -->
+        <section class="paper paper--hero" data-desk-card="hero">
             <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
             <h2 class="hero-title"><span id="typed">Hi, I'm Dragonzhi.</span><span class="caret" aria-hidden="true"></span></h2>
             <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
@@ -56,103 +71,97 @@
             </p>
         </section>
 
-        <!-- 琥珀屏终端卡（全站唯一深色块） -->
-        <section class="tile tile--term t-2w t-2h" role="img" aria-label="终端里的 neofetch 个人信息卡">
-            <div class="term-bar">
-                <i></i><i></i><i></i>
-                <span class="term-title samp">dragonzhi@workshop — zsh</span>
-            </div>
-            <pre class="term-body"><span class="c-brand">➜  ~</span> neofetch
-<span class="c-brand"> ██████╗ ███████╗
- ██╔══██╗╚══███╔╝
- ██║  ██║  ███╔╝
- ██║  ██║ ███╔╝
- ██████╔╝███████╗
- ╚═════╝ ╚══════╝</span>  <span class="c-brand">dragonzhi</span>@<span class="c-brand">workshop</span>
-                   ─────────────────
-                   <span class="c-key">OS</span>      Godot 4 · Unity
-                   <span class="c-key">Shell</span>   GDScript · C# · C++
-                   <span class="c-key">Uptime</span>  learning game dev
-                   <span class="c-key">Agents</span>  DeepSeek Harness · Codex
-                   <span class="c-key">Focus</span>   gameplay · tools · mods
-                   <span class="c-key">Status</span>  <span class="c-brand">vibe coding…</span> <span class="c-dim"># 成稿自校</span></pre>
+        <!-- about.md：文案在 files/about.md 里改 -->
+        <section class="paper paper--about" data-desk-card="about">
+            <h2 class="paper-title samp">about.md</h2>
+            <div id="about-body"><!-- 由 js/workshop.js 填充 --></div>
         </section>
 
-        <!-- about.md：文案在 data/content.js 里改 -->
-        <section class="tile t-2w">
-            <h2 class="tile-title samp">about.md</h2>
-            <div id="about-body"><!-- 由 data/content.js 填充 --></div>
+        <!-- now.md：文案在 files/now.md 里改 -->
+        <section class="paper paper--now" data-desk-card="now">
+            <h2 class="paper-title samp">now.md</h2>
+            <ul class="now-list" id="now-list">
+                <li><span class="now-dot"></span>打磨「棱镜：碧芙洛斯」卡牌核心玩法</li>
+                <li><span class="now-dot"></span>学 Godot 4 的渲染管线和 shader</li>
+                <li><span class="now-dot"></span>每天早上出一份 Hanako 箱庭日报</li>
+            </ul>
+            <p class="paper-foot samp">updated: <span data-current-year>2026</span> · Make Continually</p>
         </section>
 
-        <!-- now.md：文案在 data/content.js 里改 -->
-        <section class="tile t-2w">
-            <h2 class="tile-title samp">now.md</h2>
-            <ul class="now-list" id="now-list"><!-- 由 data/content.js 填充 --></ul>
-            <p class="tile-foot samp">updated: <span data-current-year>2026</span> · Make Continually</p>
-        </section>
+        <!-- ===== 中段 · 档案区 ===== -->
 
-        <!-- ===== 台面三：作品档案（静态四件，照 v5 定稿） ===== -->
-        <section class="tile t-4w" id="projects">
-            <div class="tile-head">
-                <h2 class="tile-title samp">projects/ 档案架</h2>
-                <span class="tile-count samp">共肆件 · 壹件在制</span>
+        <!-- projects 档案册 -->
+        <section class="paper paper--projects" id="projects" data-desk-card="projects">
+            <div class="binding-edge" aria-hidden="true"></div>
+            <div class="paper-head">
+                <h2 class="paper-title samp">projects/ 档案架</h2>
+                <span class="paper-count samp">共肆件 · 壹件在制</span>
             </div>
             <ol class="proj-list">
                 <li class="proj">
-                    <span class="proj-index">第壹件</span>
-                    <div class="proj-main">
-                        <h3>免疫联结 ImmuneLink <span class="state">获奖</span></h3>
-                        <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
-                        <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
-                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
-                    </div>
-                    <div class="proj-links samp">
-                        <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩 ↗</a>
-                        <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码 ↗</a>
-                    </div>
-                </li>
-                <li class="proj">
-                    <span class="proj-index">第贰件</span>
-                    <div class="proj-main">
-                        <h3>棱镜：碧芙洛斯 <span class="state">在制</span></h3>
-                        <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
-                        <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
-                        <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
-                    </div>
-                    <div class="proj-links samp">
-                        <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">源码 ↗</a>
+                    <div class="proj-inner">
+                        <span class="proj-index">第壹件</span>
+                        <div class="proj-main">
+                            <h3>免疫联结 ImmuneLink <span class="state">获奖</span></h3>
+                            <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
+                            <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
+                            <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩 ↗</a>
+                            <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码 ↗</a>
+                        </div>
                     </div>
                 </li>
                 <li class="proj">
-                    <span class="proj-index">第叁件</span>
-                    <div class="proj-main">
-                        <h3>TriHorny4Link</h3>
-                        <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
-                        <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
-                        <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
-                    </div>
-                    <div class="proj-links samp">
-                        <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示 ↗</a>
+                    <div class="proj-inner">
+                        <span class="proj-index">第贰件</span>
+                        <div class="proj-main">
+                            <h3>棱镜：碧芙洛斯 <span class="state">在制</span></h3>
+                            <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
+                            <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
+                            <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">源码 ↗</a>
+                        </div>
                     </div>
                 </li>
                 <li class="proj">
-                    <span class="proj-index">第肆件</span>
-                    <div class="proj-main">
-                        <h3>CounterStrikeGrenades</h3>
-                        <p class="proj-type samp">Minecraft Forge Mod · systems</p>
-                        <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
-                        <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
+                    <div class="proj-inner">
+                        <span class="proj-index">第叁件</span>
+                        <div class="proj-main">
+                            <h3>TriHorny4Link</h3>
+                            <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
+                            <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
+                            <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示 ↗</a>
+                        </div>
                     </div>
-                    <div class="proj-links samp">
-                        <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer">源码 ↗</a>
+                </li>
+                <li class="proj">
+                    <div class="proj-inner">
+                        <span class="proj-index">第肆件</span>
+                        <div class="proj-main">
+                            <h3>CounterStrikeGrenades</h3>
+                            <p class="proj-type samp">Minecraft Forge Mod · systems</p>
+                            <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
+                            <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
+                        </div>
+                        <div class="proj-links samp">
+                            <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer">源码 ↗</a>
+                        </div>
                     </div>
                 </li>
             </ol>
-            <p class="tile-foot samp">完整旧版作品集: <a href="legacy/portfolio.html">legacy/portfolio.html ↗</a></p>
+            <p class="paper-foot samp">完整旧版作品集: <a href="legacy/portfolio.html">legacy/portfolio.html ↗</a></p>
         </section>
 
-        <section class="tile t-2w" id="links">
-            <h2 class="tile-title samp">links.md</h2>
+        <!-- links.md 书签：文案在 files/links.md 里改 -->
+        <section class="paper paper--links" id="links" data-desk-card="links">
+            <h2 class="paper-title samp">links.md</h2>
             <ul class="link-list samp">
                 <li><a href="pages/blog.html">blog <span class="dim">/ 博客</span> ↗</a></li>
                 <li><a href="pages/gallery.html">gallery <span class="dim">/ 洛天依画廊</span> ↗</a></li>
@@ -165,17 +174,24 @@
             </ul>
         </section>
 
-        <section class="tile tile--quote t-2w">
-            <h2 class="tile-title samp">motto.txt</h2>
+        <!-- motto 黄色便签：文案在 files/motto.txt 里改 -->
+        <section class="paper paper--motto" data-desk-card="motto">
+            <div class="motto-title samp">motto.txt</div>
             <blockquote id="motto-quote">台面常乱，<br>ship 不断。</blockquote>
-            <p class="tile-foot samp" id="motto-foot">— 便签 · 原句钉在进门墙上</p>
+            <p class="motto-foot samp" id="motto-foot">— 便签 · 原句钉在进门墙上</p>
         </section>
 
-        <!-- ===== 自发现档案架：由 data/files-manifest.json + files/ 驱动 ===== -->
-        <div id="auto-shelf" aria-label="档案架"></div>
+        <!-- 自发现档案架：由 data/files-manifest.json + files/ 驱动 -->
+        <div class="paper paper--shelf" id="auto-shelf" data-desk-card="shelf" aria-label="档案架"><!-- 新增 .md 自动成卡 --></div>
+
+        <!-- 台面工具：拖动提示 + 还原 -->
+        <div class="desk-tools" aria-label="台面工具">
+            <span class="drag-hint samp" id="drag-hint">贴贴可以拖动哦</span>
+            <button type="button" class="desk-reset samp" id="desk-reset">还原台面</button>
+        </div>
     </main>
 
-    <!-- ===== 导览牌（箱庭菜单语法） ===== -->
+    <!-- 导览牌 -->
     <nav class="directory" aria-label="本区导览">
         <div class="head">本区导览 <span class="en">CONTENTS</span></div>
         <a class="dir-item" href="pages/blog.html">
