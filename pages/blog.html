@@ -3,95 +3,235 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script>
-        (function() {
-            const theme = localStorage.getItem('theme');
-            if (theme === 'dark') {
-                document.documentElement.classList.add('dark-mode');
-            }
-        })();
-    </script>
-    <title>博客 | Dragonzhi</title>
-    <link rel="icon" href="images/favicon.png">
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="stylesheet" href="../css/blog.css"> <!-- 博客专属样式 -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/transition.css">
+    <meta name="description" content="ZLOONG 工房 · 博客版：游戏开发、Mod、vibe coding 的长文记录。">
+    <meta name="theme-color" content="#f5f0e6">
+    <title>博客版 · ZLOONG 工房 · Hanako箱庭</title>
+    <link rel="icon" href="../images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/workshop.css">
+    <link rel="stylesheet" href="../css/subpages.css">
+    <link rel="stylesheet" href="../css/blog-workshop.css">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <div class="avatar-container">
-                <a href="../index.html" style="text-decoration: none; color: inherit;">
-                    <div class="avatar">
-                        <img src="../images/avatar.png" alt="Dragonzhi 的头像">
-                    </div>
-                    <h1>你好，我是 <span class="highlight">Dragonzhi</span></h1>
-                    <p class="tagline">程序开发爱好者</p>
-                </a>
-            </div>
-            <div id="theme-toggle" class="theme-toggle-button">
-                <i class="fas fa-moon"></i>
-            </div>
-        </header>
-        
-        <main>
-            <section id="blog-list" data-aos="fade-up">
-                <h2><i class="fas fa-book-open"></i> 开发博客</h2>
-                <div id="dynamic-post-list">
-                    <!-- 文章列表将动态加载于此 -->
-                </div>
-                
-                <script>
-                    document.addEventListener('DOMContentLoaded', async () => {
-                        const postListContainer = document.getElementById('dynamic-post-list');
-                        try {
-                            const response = await fetch('../data/posts.json');
-                            if (!response.ok) throw new Error('Could not fetch posts.json');
-                            const posts = await response.json();
 
-                            if (posts.length === 0) {
-                                postListContainer.innerHTML = '<p>暂无文章。</p>';
-                                return;
-                            }
-                            
-                            posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+<div class="sub-wrap">
 
-                            posts.forEach(post => {
-                                const postElement = document.createElement('div');
-                                postElement.className = 'post-entry';
-
-                                const postDate = new Date(post.date);
-                                // 修正 UTC 日期问题，确保日期正确
-                                const adjustedDate = new Date(postDate.valueOf() + postDate.getTimezoneOffset() * 60 * 1000);
-                                const dateString = `${adjustedDate.getFullYear()}年${adjustedDate.getMonth() + 1}月${adjustedDate.getDate()}日`;
-                                
-                                postElement.innerHTML = `
-                                    <h3>${post.title}</h3>
-                                    <p class="post-meta">发布于 ${dateString}</p>
-                                    <p>${post.summary}</p>
-                                    <a href="post-template.html?slug=${post.slug}" class="button">阅读全文 <i class="fas fa-arrow-right"></i></a>
-                                `;
-                                postListContainer.appendChild(postElement);
-                            });
-
-                        } catch (error) {
-                            console.error('Error loading blog posts:', error);
-                            postListContainer.innerHTML = '<p>加载文章列表时出错。</p>';
-                        }
-                    });
-                </script>
-            </section>
-        </main>
-        
-        <footer>
-            <p>© 2026 Dragonzhi · 用代码创造有趣的世界</p>
-            <p class="footer-note">最后更新: <span id="current-date"></span></p>
-        </footer>
+    <!-- 门牌 -->
+    <div class="sub-eyebrow">
+        <span>ZLOONG 工房 · 博客版 <span class="live">● 常开</span></span>
+        <span id="today">2026年9月4日 · 星期五</span>
+        <span><a href="../index.html" class="back-home">返回工作台</a></span>
     </div>
-    
-    <script src="../js/transition.js"></script>
-    <script src="../js/script.js"></script>
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+
+    <!-- 报头墙 -->
+    <header class="sub-wall">
+        <span class="seal samp">随笔<br>NOTES</span>
+        <h1>博客版</h1>
+        <div class="sub">BLOG · 长一点的记录，更新随缘</div>
+        <p class="intro">
+            这里摆着一些写得比较长的东西——开发笔记、折腾记录、偶尔的随笔。<br>
+            钉在工房的北墙上，想起来就添一篇。
+        </p>
+    </header>
+    <div class="sub-rule-double"></div>
+
+    <!-- 台面标注 -->
+    <div class="sub-bench-label">
+        <span class="t">第壹台 · 存档架</span>
+        <span class="en">ARCHIVE SHELF</span>
+    </div>
+
+    <!-- 文章列表（JS 动态填充；静态兜底见下方 noscript/初始内容） -->
+    <div class="blog-shelf">
+        <div id="post-list">
+            <!-- 静态兜底：JS 不可用时也能看到两篇文章 -->
+            <article class="post-entry">
+                <span class="post-index">第壹篇</span>
+                <div class="post-main">
+                    <h3><a href="post-template.html?slug=post2">博客系统改造：从手动更新到动态加载</a></h3>
+                    <p class="post-meta">2026.01.24 <span class="sep">·</span> 技术笔记</p>
+                    <p class="post-summary">记录了博客从手动创建HTML页面和更新列表的旧流程，到现在通过JS读取JSON索引和动态加载Markdown内容的新流程的技术改造。</p>
+                    <p class="post-tags">
+                        <span class="tag">JavaScript</span>
+                        <span class="tag">Markdown</span>
+                        <span class="tag">静态站点</span>
+                    </p>
+                </div>
+                <div class="post-links samp">
+                    <a href="post-template.html?slug=post2">阅读全文</a>
+                </div>
+            </article>
+
+            <article class="post-entry">
+                <span class="post-index">第贰篇</span>
+                <div class="post-main">
+                    <h3><a href="post-template.html?slug=post1">如何用纯静态文件搭建这个博客</a></h3>
+                    <p class="post-meta">2026.01.16 <span class="sep">·</span> 教程</p>
+                    <p class="post-summary">这是我的第一篇博客文章，记录了如何为我的个人主页添加一个简单的、无需数据库或后端服务器的静态博客系统。</p>
+                    <p class="post-tags">
+                        <span class="tag">HTML</span>
+                        <span class="tag">CSS</span>
+                        <span class="tag">教程</span>
+                    </p>
+                </div>
+                <div class="post-links samp">
+                    <a href="post-template.html?slug=post1">阅读全文</a>
+                </div>
+            </article>
+        </div>
+
+        <div class="blog-pagination">
+            <span class="more-line">更多文章待写</span>
+        </div>
+    </div>
+
+    <!-- 本区导览 -->
+    <nav class="sub-directory" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="sub-dir-item" href="../index.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">工房主页</span><span class="d">返回工作台</span></span>
+            <span class="sub-state calm">常开</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="gallery.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊</span></span>
+            <span class="sub-state calm">已上线</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="portfolio.html">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
+            <span class="sub-state calm">存档</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · dragonzhi.xyz/hanako</span></span>
+            <span class="sub-state">今日已发</span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="sub-colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
+            隔壁箱庭每日出报 · 明晨八时再会
+        </div>
+    </footer>
+</div>
+
+<script>
+/* 门牌日期 */
+(function() {
+    var todayEl = document.getElementById("today");
+    if (todayEl) {
+        var nd = new Date();
+        var week = ["日", "一", "二", "三", "四", "五", "六"][nd.getDay()];
+        todayEl.textContent = nd.getFullYear() + "年" + (nd.getMonth() + 1) + "月" + nd.getDate() + "日 · 星期" + week;
+    }
+})();
+
+/* 中文数字映射 */
+var CN_NUMS = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"];
+function cnNum(n) {
+    n = parseInt(n, 10);
+    if (n <= 10) return CN_NUMS[n];
+    if (n < 20) return "壹拾" + CN_NUMS[n - 10];
+    if (n < 100) {
+        var t = Math.floor(n / 10), o = n % 10;
+        return CN_NUMS[t] + "拾" + (o ? CN_NUMS[o] : "");
+    }
+    return String(n);
+}
+
+/* HTML 转义 */
+function escHtml(s) {
+    return String(s)
+        .replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+}
+
+/* 加载文章列表 */
+(function() {
+    var listEl = document.getElementById("post-list");
+    if (!listEl) return;
+
+    fetch("../data/posts.json")
+        .then(function(r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+        .then(function(posts) {
+            if (!Array.isArray(posts) || !posts.length) return;
+
+            /* 按日期倒序 */
+            posts.sort(function(a, b) { return new Date(b.date) - new Date(a.date); });
+
+            /* 中文数字编号标签映射（按实际数据的分类字段，如果没有就用默认） */
+            var categoryMap = {
+                "技术笔记": "技术笔记",
+                "教程": "教程",
+                "游戏开发": "游戏开发",
+                "随笔": "随笔"
+            };
+
+            var html = "";
+            posts.forEach(function(post, i) {
+                var idx = "第" + cnNum(i + 1) + "篇";
+                var dateObj = new Date(post.date);
+                /* 修正 UTC 日期 */
+                var dateStr = dateObj.getFullYear() + "." +
+                    String(dateObj.getMonth() + 1).padStart(2, "0") + "." +
+                    String(dateObj.getDate()).padStart(2, "0");
+
+                var tags = "";
+                if (post.tags && Array.isArray(post.tags)) {
+                    tags = post.tags.map(function(t) {
+                        return '<span class="tag">' + escHtml(t) + '</span>';
+                    }).join("");
+                }
+
+                var category = post.category || "笔记";
+
+                html += '<article class="post-entry">' +
+                    '<span class="post-index">' + idx + '</span>' +
+                    '<div class="post-main">' +
+                    '<h3><a href="post-template.html?slug=' + escHtml(post.slug) + '">' + escHtml(post.title) + '</a></h3>' +
+                    '<p class="post-meta">' + dateStr + ' <span class="sep">·</span> ' + escHtml(category) + '</p>' +
+                    '<p class="post-summary">' + escHtml(post.summary || "") + '</p>' +
+                    (tags ? '<p class="post-tags">' + tags + '</p>' : '') +
+                    '</div>' +
+                    '<div class="post-links samp">' +
+                    '<a href="post-template.html?slug=' + escHtml(post.slug) + '">阅读全文</a>' +
+                    '</div>' +
+                    '</article>';
+            });
+
+            listEl.innerHTML = html;
+
+            /* 更新计数 */
+            var countEl = document.querySelector(".sub-bench-label .count");
+            if (countEl) {
+                countEl.textContent = "共 " + cnNum(posts.length) + " 篇";
+            } else {
+                var en = document.querySelector(".sub-bench-label .en");
+                if (en) {
+                    var span = document.createElement("span");
+                    span.className = "count samp";
+                    span.textContent = "共 " + cnNum(posts.length) + " 篇";
+                    span.style.marginRight = "12px";
+                    en.parentNode.insertBefore(span, en);
+                }
+            }
+        })
+        .catch(function() {
+            /* 静默失败，保留静态兜底内容 */
+        });
+})();
+</script>
 </body>
+</html>

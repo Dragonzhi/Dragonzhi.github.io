@@ -1,0 +1,222 @@
+/* ============================================================
+   ZLOONG 工房 · 子页面共享样式
+   基于 workshop.css v5 扩展，供 blog / gallery / portfolio 复用
+   ============================================================ */
+
+/* ===== 子页面通用：门牌 + 报头墙 + 台面标注 + 本区导览 + 报尾 =====
+   结构与首页 workshop.css 保持一致，类名前缀 .sub- 区分 */
+
+.sub-wrap {
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---- 门牌（报眉） ---- */
+.sub-eyebrow {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid var(--line);
+  padding: calc(var(--gap) * .75) 0 calc(var(--gap) * .5);
+}
+.sub-eyebrow .live { color: var(--red); }
+.sub-eyebrow a {
+  color: var(--ink-soft);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.sub-eyebrow a:hover { color: var(--red); }
+.sub-eyebrow .back-home::before { content: "← "; color: var(--red); }
+
+/* ---- 报头墙 ---- */
+.sub-wall {
+  text-align: center;
+  padding: calc(var(--gap) * 2) 0 calc(var(--gap) * 1.5);
+  position: relative;
+}
+.sub-wall h1 {
+  font-size: clamp(36px, 6vw, 52px);
+  font-weight: 800;
+  color: var(--red);
+  letter-spacing: 14px;
+  line-height: 1.15;
+  text-indent: 14px;
+  font-family: var(--serif);
+}
+.sub-wall .sub {
+  margin-top: 8px;
+  font-size: 12px;
+  color: var(--ink-soft);
+  letter-spacing: 6px;
+  text-indent: 6px;
+}
+.sub-wall .seal {
+  position: absolute;
+  right: 4%;
+  top: 30px;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  border: 2px solid var(--red);
+  border-radius: 3px;
+  padding: 3px 9px;
+  letter-spacing: 3px;
+  transform: rotate(7deg);
+  opacity: .85;
+}
+.sub-wall .intro {
+  margin-top: 14px;
+  font-size: var(--fs-md);
+  color: var(--ink-soft);
+  max-width: 52ch;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+.sub-rule-double {
+  border-top: 3px solid var(--ink);
+  border-bottom: 1px solid var(--ink);
+  height: 5px;
+  margin-bottom: 24px;
+}
+
+/* ---- 台面标注 ---- */
+.sub-bench-label {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  margin: 0 0 14px;
+}
+.sub-bench-label .t {
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.sub-bench-label .en {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+}
+.sub-bench-label .count {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink-soft);
+}
+
+/* ---- 本区导览 ---- */
+.sub-directory {
+  border: 1px solid var(--ink);
+  background: var(--card);
+  padding: 4px 24px;
+  margin: calc(var(--gap) * 1.5) 0 0;
+}
+.sub-directory .head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 12px 0 8px;
+  border-bottom: 2px solid var(--ink);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 3px;
+}
+.sub-directory .head .en {
+  font-size: 10.5px;
+  font-weight: 400;
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+}
+.sub-dir-item {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  padding: 13px 0;
+  border-bottom: 1px dotted var(--line);
+  color: var(--ink);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+.sub-dir-item:last-child { border-bottom: none; }
+.sub-dir-item .no {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--red);
+  min-width: 34px;
+}
+.sub-dir-item .info { flex: 1; min-width: 0; }
+.sub-dir-item .t {
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.sub-dir-item .d {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  margin-left: 10px;
+}
+.sub-dir-item .arrow {
+  font-size: 15px;
+  color: var(--ink-soft);
+  transition: transform .15s;
+}
+.sub-dir-item:hover .t { color: var(--red); }
+.sub-dir-item:hover .arrow {
+  transform: translateX(4px);
+  color: var(--red);
+}
+
+/* ---- 报尾 ---- */
+.sub-colophon {
+  margin-top: calc(var(--gap) * 2);
+  padding: 18px 0 8px;
+  text-align: center;
+  border-top: 2px solid var(--ink);
+}
+.sub-colophon .end {
+  font-size: 13px;
+  letter-spacing: 6px;
+  margin-bottom: 8px;
+}
+.sub-colophon .meta {
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  line-height: 2;
+}
+.sub-colophon .meta a {
+  color: var(--ink-soft);
+  text-decoration: underline;
+}
+
+/* ---- 状态徽章 ---- */
+.sub-state {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--red);
+  border: 1px solid rgba(139, 44, 31, .45);
+  border-radius: 999px;
+  padding: 0 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.sub-state.calm {
+  color: var(--ink-soft);
+  border-color: var(--line);
+}
+
+/* ---- 响应式 ---- */
+@media (max-width: 900px) {
+  .sub-wall h1 { letter-spacing: 8px; text-indent: 8px; }
+  .sub-wall .seal { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .sub-eyebrow a,
+  .sub-dir-item,
+  .sub-dir-item .arrow { transition: none; }
+}

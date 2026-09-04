@@ -290,9 +290,39 @@
         card.innerHTML = inner;
         return card;
     }
+    /* ---------- 台面自适应撑高：档案架是异步长高的，台面必须跟着长，
+       否则架子底部会冒出 `.desk`（高度写死），一拖就被 bounds 夹回顶部。
+       高度 = 所有卡片底部最大值 + 留白；只取最大值，导览牌自然被顶下去。
+       移动端是单列流式布局，不需要撑高。 */
+    function fitDeskHeight() {
+        var desk = document.querySelector(".desk");
+        if (!desk) { return; }
+        if (!window.matchMedia("(min-width: 901px)").matches) {
+            desk.style.removeProperty("min-height");
+            return;
+        }
+        var base = 1180;
+        try {
+            var v = parseInt(getComputedStyle(document.documentElement).getPropertyValue("--desk-height"), 10);
+            if (!isNaN(v)) { base = v; }
+        } catch (e) { /* noop */ }
+        var need = base, i, el, bottom;
+        var cards = desk.querySelectorAll(".paper[data-desk-card]");
+        for (i = 0; i < cards.length; i += 1) {
+            el = cards[i];
+            bottom = el.offsetTop + el.offsetHeight;
+            if (bottom > need - 60) { need = bottom + 60; }
+        }
+        if (need > base) {
+            desk.style.minHeight = need + "px";
+        } else {
+            desk.style.removeProperty("min-height");
+        }
+    }
     function bootFiles() {
         loadText("files/about.md").then(function (t) {
             if (aboutBody && t) { aboutBody.innerHTML = blockMd(t); }
+            fitDeskHeight();
         });
         loadText("files/now.md").then(function (t) {
             if (nowList && t) {
@@ -303,6 +333,7 @@
                     }).join("");
                 }
             }
+            fitDeskHeight();
         });
         loadText("files/links.md").then(function (t) {
             if (linksList && t) {
@@ -318,6 +349,7 @@
                 if (lis.length) { linksList.innerHTML = lis.join(""); }
                 bindCopyButtons(); /* 新按钮需要重新绑定 */
             }
+            fitDeskHeight();
         });
         loadText("files/motto.txt").then(function (t) {
             if (mottoQuote && t) {
@@ -351,15 +383,212 @@
             if (!Array.isArray(manifest)) return;
             var shelf = document.getElementById("auto-shelf");
             if (!shelf) return;
-            manifest.filter(function (e) { return e.auto; }).forEach(function (entry) {
+            var pending = manifest.filter(function (e) { return e.auto; });
+            pending.forEach(function (entry) {
                 loadText("files/" + entry.filename).then(function (body) {
                     if (!body) return;
                     var card = buildAutoCard(entry.filename, body);
                     if (card) { shelf.appendChild(card); }
+                    fitDeskHeight();
                 });
             });
+            if (!pending.length) { fitDeskHeight(); }
         });
     }
     bindCopyButtons();
     bootFiles();
+
+    /* ---------- 台面拖动 ----------
+       桌面端（≥901px 且 pointer:fine）每张 .paper 可自由拖动；
+       位置存 localStorage，刷新不丢；「还原台面」清空存档回到设计稿默认；
+       点击不误触：位移超过阈值才算拖动，链接 / 按钮照常可点；
+       移动端单列堆叠不绑定；跨过断点进入桌面时再初始化。 */
+    var deskMq = window.matchMedia("(min-width: 901px)");
+    var fineMq = window.matchMedia("(pointer: fine)");
+    if (deskMq.matches && fineMq.matches) {
+        initDeskDrag();
+    } else if (deskMq.addEventListener) {
+        deskMq.addEventListener("change", function (e) {
+            if (e.matches && fineMq.matches) { initDeskDrag(); }
+        });
+    } else {
+        deskMq.addListener(function (e) { if (e.matches && fineMq.matches) { initDeskDrag(); } });
+    }
+
+    function initDeskDrag() {
+        if (document.body.dataset.deskDrag) { return; }   /* 防止重复绑定 */
+        document.body.dataset.deskDrag = "1";
+        var desk = document.querySelector(".desk");
+        var cards = Array.prototype.slice.call(document.querySelectorAll(".paper[data-desk-card]"));
+        var resetBtn = document.getElementById("desk-reset");
+        var hintEl = document.getElementById("drag-hint");
+        var LS_KEY = "zloong-desk-v1";
+        var HINT_KEY = "zloong-desk-hint-dismissed";
+        var THRESHOLD = 6;   /* px：超过才算拖动，避免吞点击 */
+        var cssVar = function (name, fallback) {   /* 读取 workshop.css 顶部的台面拖拽配置 */
+            var v = getComputedStyle(document.documentElement).getPropertyValue(name);
+            var p = parseInt(v, 10);
+            return isNaN(p) ? fallback : p;
+        };
+        var pad = cssVar("--desk-padding", 24);    /* 活动空间边界留白 */
+        var topZ = cssVar("--desk-z-stack", 10);   /* 拖拽栈起点：拖一张 +1，最后拖的在最上 */
+        var start = null;
+
+        if (!desk || !cards.length) { return; }
+
+        function clamp(v, min, max) { return Math.min(Math.max(v, min), Math.max(min, max)); }
+
+        function boundsPos(x, y, w, h) {
+            var sz = { w: desk.clientWidth, h: desk.clientHeight };
+            return {
+                x: clamp(x, pad, Math.max(pad, sz.w - w - pad)),
+                y: clamp(y, pad, Math.max(pad, sz.h - h - pad))
+            };
+        }
+
+        /* 统一改成 left/top 定位（沿用当前布局位置），书签不再依赖 right 锚点 */
+        function anchorAll() {
+            cards.forEach(function (el) {
+                if (!el.style.left) {
+                    el.style.left = el.offsetLeft + "px";
+                    el.style.top = el.offsetTop + "px";
+                }
+            });
+        }
+
+        function readSave() {
+            try { return JSON.parse(localStorage.getItem(LS_KEY) || "null"); }
+            catch (e) { return null; }
+        }
+
+        function writeSave() {
+            var map = {};
+            cards.forEach(function (el) {
+                if (el.style.left && el.dataset.deskCard) {
+                    map[el.dataset.deskCard] = {
+                        x: parseFloat(el.style.left),
+                        y: parseFloat(el.style.top)
+                    };
+                }
+            });
+            try { localStorage.setItem(LS_KEY, JSON.stringify(map)); } catch (e) { /* noop */ }
+        }
+
+        function restore() {
+            var map = readSave();
+            if (!map) { return; }
+            cards.forEach(function (el) {
+                var p = map[el.dataset.deskCard];
+                if (!p || typeof p.x !== "number" || typeof p.y !== "number") { return; }
+                var pos = boundsPos(p.x, p.y, el.offsetWidth, el.offsetHeight);
+                el.style.left = pos.x + "px";
+                el.style.top = pos.y + "px";
+            });
+        }
+
+        function clampAll() {
+            cards.forEach(function (el) {
+                if (!el.style.left) { return; }
+                var pos = boundsPos(parseFloat(el.style.left), parseFloat(el.style.top),
+                                    el.offsetWidth, el.offsetHeight);
+                el.style.left = pos.x + "px";
+                el.style.top = pos.y + "px";
+            });
+            writeSave();
+        }
+
+        function dismissHint() {
+            if (hintEl) { hintEl.classList.add("is-hidden"); }
+            try { localStorage.setItem(HINT_KEY, "1"); } catch (e) { /* noop */ }
+        }
+        try {
+            if (localStorage.getItem(HINT_KEY)) { hintEl.classList.add("is-hidden"); }
+        } catch (e) { /* noop */ }
+
+        function onDown(e) {
+            if (e.button !== undefined && e.button !== 0) { return; }
+            /* 链接 / 按钮上不启拖，避免吞掉点击 */
+            if (e.target.closest && e.target.closest("a, button")) { return; }
+            var el = e.currentTarget;
+            start = {
+                el: el,
+                px: e.clientX,
+                py: e.clientY,
+                ox: el.offsetLeft,
+                oy: el.offsetTop,
+                moved: false
+            };
+            try { el.setPointerCapture(e.pointerId); } catch (err) { /* noop */ }
+        }
+
+        function onMove(e) {
+            if (!start) { return; }
+            var dx = e.clientX - start.px;
+            var dy = e.clientY - start.py;
+            if (!start.moved) {
+                if (Math.sqrt(dx * dx + dy * dy) < THRESHOLD) { return; }
+                start.moved = true;
+                start.el.classList.add("is-dragging");
+                dismissHint();
+                document.body.style.userSelect = "none";
+                document.body.style.cursor = "grabbing";
+            }
+            var pos = boundsPos(start.ox + dx, start.oy + dy,
+                                start.el.offsetWidth, start.el.offsetHeight);
+            start.el.style.left = pos.x + "px";
+            start.el.style.top = pos.y + "px";
+        }
+
+        function onUp() {
+            if (!start) { return; }
+            var el = start.el;
+            var moved = start.moved;
+            start = null;
+            if (el.classList.contains("is-dragging")) {
+                el.classList.remove("is-dragging");
+                document.body.style.userSelect = "";
+                document.body.style.cursor = "";
+                if (moved) {
+                    topZ += 1;
+                    el.style.zIndex = String(topZ);
+                    writeSave();
+                }
+            }
+        }
+
+        cards.forEach(function (el) {
+            el.addEventListener("pointerdown", onDown);
+        });
+        document.addEventListener("pointermove", onMove);
+        document.addEventListener("pointerup", onUp);
+        document.addEventListener("pointercancel", onUp);
+
+        if (resetBtn) {
+            resetBtn.addEventListener("click", function () {
+                try { localStorage.removeItem(LS_KEY); } catch (e) { /* noop */ }
+                cards.forEach(function (el) {
+                    el.style.removeProperty("left");
+                    el.style.removeProperty("top");
+                    el.style.removeProperty("z-index");
+                });
+                topZ = cssVar("--desk-z-stack", 10);
+                dismissHint();
+                fitDeskHeight();
+            });
+        }
+
+        /* 窗口尺寸变化时兜底夹回台面内（防横向溢出）；
+           仅桌面模式生效，避免把移动端流式布局误写成存档 */
+        var rzT;
+        window.addEventListener("resize", function () {
+            clearTimeout(rzT);
+            rzT = setTimeout(function () {
+                if (!deskMq.matches) { return; }
+                clampAll();
+            }, 180);
+        });
+
+        anchorAll();
+        restore();
+    }
 })();
