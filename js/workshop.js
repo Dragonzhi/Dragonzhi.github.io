@@ -328,6 +328,10 @@
             desk.style.removeProperty("--desk-shift");   /* 清掉卡片群右移偏移 */
             return;
         }
+        /* 先清掉上一次的 --desk-shift，量出"纯布局"基线：
+           margin-left 由 --desk-shift 控制，若不清，offsetLeft 会把上次偏移
+           混进测量，spanCenter 和 shift 就会一把比一把偏（棘轮）。 */
+        desk.style.removeProperty("--desk-shift");
         var baseH = cfgMinH, baseW = 0, i, el, bottom, right, key, s;
         /* 先转 left/top 锚定：about/now/links/motto 都是依 right 锚定的
            （right:0 / right:-15px），desk 一撑宽它们会跟着右移。
@@ -545,6 +549,14 @@
 
         function clamp(v, min, max) { return Math.min(Math.max(v, min), Math.max(min, max)); }
 
+        /* 取当前卡片左边的 margin 偏移（左锚卡才有 --desk-shift，
+           右锚卡/无 shift 时为 0）。拖动写的是 layout-left(style.left)，但
+           offsetLeft 已含 margin，两者差一个 margin，补回来才能拖到贴边。 */
+        function marginShift(el) {
+            var ml = parseFloat(getComputedStyle(el).marginLeft);
+            return isNaN(ml) ? 0 : ml;
+        }
+
         function boundsPos(x, y, w, h) {
             var sz = { w: desk.clientWidth, h: desk.clientHeight };
             return {
@@ -557,7 +569,7 @@
         function anchorAll() {
             cards.forEach(function (el) {
                 if (!el.style.left) {
-                    el.style.left = el.offsetLeft + "px";
+                    el.style.left = toLayoutX(el, el.offsetLeft) + "px";
                     el.style.top = el.offsetTop + "px";
                 }
             });
@@ -568,13 +580,20 @@
             catch (e) { return null; }
         }
 
+        /* 存档与夹回统一用「视觉坐标」(= offsetLeft)。
+           左锚卡带 margin-left(--desk-shift)，visual = layout + margin，
+           若存/夹 layout(style.left)，shift 一变位置就错位(右侧棘轮)。
+           旧存档(引入 shift 前) layout==visual，视为 visual 读也兼容。 */
+        function toLayoutX(el, visualX) {   /* visual → layout，写 style.left 用 */
+            return visualX - marginShift(el);
+        }
         function writeSave() {
             var map = {};
             cards.forEach(function (el) {
                 if (el.style.left && el.dataset.deskCard) {
                     map[el.dataset.deskCard] = {
-                        x: parseFloat(el.style.left),
-                        y: parseFloat(el.style.top)
+                        x: el.offsetLeft,
+                        y: el.offsetTop
                     };
                 }
             });
@@ -588,7 +607,7 @@
                 var p = map[el.dataset.deskCard];
                 if (!p || typeof p.x !== "number" || typeof p.y !== "number") { return; }
                 var pos = boundsPos(p.x, p.y, el.offsetWidth, el.offsetHeight);
-                el.style.left = pos.x + "px";
+                el.style.left = toLayoutX(el, pos.x) + "px";
                 el.style.top = pos.y + "px";
             });
         }
@@ -596,9 +615,9 @@
         function clampAll() {
             cards.forEach(function (el) {
                 if (!el.style.left) { return; }
-                var pos = boundsPos(parseFloat(el.style.left), parseFloat(el.style.top),
+                var pos = boundsPos(el.offsetLeft, el.offsetTop,
                                     el.offsetWidth, el.offsetHeight);
-                el.style.left = pos.x + "px";
+                el.style.left = toLayoutX(el, pos.x) + "px";
                 el.style.top = pos.y + "px";
             });
             writeSave();
@@ -642,7 +661,7 @@
             }
             var pos = boundsPos(start.ox + dx, start.oy + dy,
                                 start.el.offsetWidth, start.el.offsetHeight);
-            start.el.style.left = pos.x + "px";
+            start.el.style.left = toLayoutX(start.el, pos.x) + "px";
             start.el.style.top = pos.y + "px";
         }
 
