@@ -227,26 +227,12 @@
         return out;
     }
 
-    /* ---------- 自发现卡片：按内容判型，复用现有卡片 DOM 结构 ----------
-       links 型：全部是列表行且每行含 [文字](链接) 或以 {copy} 结尾
-       list  型：全部是列表行（无链接）
-       quote 型：全部行以 > 开头
-       doc   型：其他（段落、混合内容） */
-    function detectCardType(text) {
-        var ls = String(text).replace(/\r\n?/g, "\n").split("\n")
-            .map(function (l) { return l.trim(); })
-            .filter(function (l) { return l; });
-        if (!ls.length) { return null; }
-        var allList = ls.every(function (l) { return /^-\s+/.test(l); });
-        if (allList) {
-            var allLink = ls.every(function (l) {
-                return /\[[^\]]+\]\([^)\s]+\)/.test(l) || /\{copy\}\s*$/.test(l);
-            });
-            return allLink ? "links" : "list";
-        }
-        if (ls.every(function (l) { return /^>\s?/.test(l); })) { return "quote"; }
-        return "doc";
-    }
+    /* ---------- 自发现卡片：样式由 manifest 的 style 字段手动指定，复用现有卡片 DOM 结构 ----------
+       links 型：列表行，每行含 [文字](链接) 或以 {copy} 结尾
+       list  型：圆点列表行
+       quote 型：黄便签引用卡
+       doc   型：段落文档卡（默认） */
+    var AUTO_STYLES = ["links", "list", "quote", "doc"];
 
     /* links 型列表行：- [label](url) 尾部文字 / 邮箱 {copy} */
     function linksItemHtml(line) {
@@ -266,11 +252,11 @@
         return "<li>" + inlineMd(body) + "</li>";
     }
 
-    /* 组装自发现卡片：返回 section 元素，复用现有卡片样式类 */
-    function buildAutoCard(filename, body) {
+    /* 组装自发现卡片：返回 section 元素，复用现有卡片样式类
+       styleCfg = manifest 条目的 style 字段（手写单值；不写/非法 → doc） */
+    function buildAutoCard(filename, body, styleCfg) {
         if (!body || !String(body).trim()) { return null; }
-        var type = detectCardType(body);
-        if (!type) { return null; }
+        var type = AUTO_STYLES.indexOf(styleCfg) >= 0 ? styleCfg : "doc";
         var title = "<h2 class=\"tile-title samp\">" + escHtml(filename) + "</h2>";
         var cls = "tile t-2w", inner = title;
         if (type === "links") {
@@ -306,8 +292,10 @@
         card.innerHTML = inner;
         return card;
     }
-    /* 台面存档键：与 initDeskDrag 内共用，fitDesk 读它做"按存档预撑"。 */
-    var DESK_LS_KEY = "zloong-desk-v1";
+    /* 台面存档键：与 initDeskDrag 内共用，fitDesk 读它做"按存档预撑"。
+       v2：档案架默认落位改为排到档案册下方，v1 存档记录的是压进档案册的
+       旧位置，升版作废，让大家落到新默认。 */
+    var DESK_LS_KEY = "zloong-desk-v2";
     /* 存档落位句柄：initDeskDrag 初始化后挂上，fitDesk 撑大台面后重落位，
        避免"存档位置先被自然尺寸误夹、台面后撑大却回不去"。 */
     var deskRestore = null;
@@ -332,6 +320,21 @@
            margin-left 由 --desk-shift 控制，若不清，offsetLeft 会把上次偏移
            混进测量，spanCenter 和 shift 就会一把比一把偏（棘轮）。 */
         desk.style.removeProperty("--desk-shift");
+        /* 档案架默认落位：CSS 里的 top 是老设计稿兜底值，档案册项目一多
+           底部就会压过它（档案架整个陷进档案册的浅底里，像个大空框）。
+           无拖拽存档时按档案册实际底边把档案架排到其下方；有存档则交给
+           拖拽恢复，不打架。 */
+        var shelfEl = document.getElementById("auto-shelf");
+        var projEl = desk.querySelector(".paper--projects");
+        if (shelfEl && projEl && !shelfEl.style.top) {
+            var savedShelf = null;
+            try {
+                savedShelf = (JSON.parse(localStorage.getItem(DESK_LS_KEY) || "null") || {}).shelf;
+            } catch (e) { /* noop */ }
+            if (!savedShelf || typeof savedShelf.y !== "number") {
+                shelfEl.style.top = (projEl.offsetTop + projEl.offsetHeight + 24) + "px";
+            }
+        }
         var baseH = cfgMinH, baseW = 0, i, el, bottom, right, key, s;
         /* 先转 left/top 锚定：about/now/links/motto 都是依 right 锚定的
            （right:0 / right:-15px），desk 一撑宽它们会跟着右移。
@@ -498,7 +501,7 @@
             pending.forEach(function (entry) {
                 loadText("files/" + entry.filename).then(function (body) {
                     if (!body) return;
-                    var card = buildAutoCard(entry.filename, body);
+                    var card = buildAutoCard(entry.filename, body, entry.style);
                     if (card) { shelf.appendChild(card); }
                     fitDesk();
                 });

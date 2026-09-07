@@ -42,7 +42,7 @@
 | `data/desk-config.js` | 台面尺寸配置：最小高/宽与四周留白，只改这一个文件，刷新即生效 |
 | `files/` | 卡片文案源文件：`about.md` / `now.md` / `links.md` / `motto.txt` / `daily.txt`；新增 `.md` 自动成为档案架卡片 |
 | `scripts/` | 本地生成脚本：`generate_manifest.py`（files/ 索引）、`generate_gallery_json.py`（画廊索引） |
-| `data/files-manifest.json` | `files/` 目录索引：丢新文件后跑 `python scripts/generate_manifest.py` 重新生成 |
+| `data/files-manifest.json` | `files/` 目录索引：丢新文件后跑 `python scripts/generate_manifest.py` 重新生成（手改的 `style` 字段会保留） |
 | `pages/` | 子页面（博客版、画廊版、作品集存档），已迁移至工房设计系统，从首页导览牌进入 |
 | `posts/` + `data/posts.json` | 博客文章（Markdown + JSON 索引，marked.js 渲染） |
 | `legacy/` | 旧版主页与作品集存档（legacy 作品集仍由 `data/portfolio.json` 驱动） |
@@ -85,16 +85,30 @@
 python scripts/generate_manifest.py
 ```
 
-推送到仓库后，首页 bento 网格会自动多一张卡片，**样式按内容自动匹配**，不用记任何约定：
-
-| 文件内容 | 渲染成 |
-|---|---|
-| 全部是 `- ` 列表且每行含 `[文字](链接)` 或以 `{copy}` 结尾 | links 风格链接列表卡（外链自动新窗口） |
-| 全部是 `- ` 列表 | now 风格圆点列表卡 |
-| 全部以 `> ` 开头 | motto 风格便签卡（空行后的引用块作落款） |
-| 其他（段落、混合） | 段落卡 |
+推送到仓库后，首页 bento 网格会自动多一张卡片，外观由该条目的 `style` 字段决定（不写默认 doc 段落卡，见下节）：
 
 **dim 灰字约定**：链接后的尾部文字自动变灰并补 ↗，写法 `- [blog](pages/blog.html) / 博客`。卡片标题即文件名（带扩展名）。`about` / `now` / `links` / `motto` / `daily` 是内置卡片名，不会被重复生成。
+
+### 配置卡片样式（style 字段）
+
+卡片外观**全手动配置**：在 [`data/files-manifest.json`](data/files-manifest.json) 对应条目上加 `style` 字段（手改，只对 `auto: true` 的卡片生效）：
+
+| style 取值 | 行为 |
+|---|---|
+| 不写 / 非法值 | 默认 doc 段落卡 |
+| `"links"` | 链接列表卡（每行 `- [文字](链接)`，尾部文字变灰，邮箱支持 `{copy}`） |
+| `"list"` | 圆点列表卡（每行 `- 文字`） |
+| `"quote"` | 黄便签引用卡（首段为引文，其余段为落款） |
+| `"doc"` | 段落文档卡 |
+
+```json
+[
+  { "filename": "工具箱.md", "title": "工具箱.md", "auto": true, "style": "list" },
+  { "filename": "随想.md", "title": "随想.md", "auto": true, "style": "quote" }
+]
+```
+
+注意：重新跑生成脚本会**保留**手改的 `style`（非法值会被丢弃）。内容套了不适配的渲染器也有优雅降级（如 quote 型遇到普通段落会按便签正文显示），不会坏版。
 
 ### 改打字机句子
 

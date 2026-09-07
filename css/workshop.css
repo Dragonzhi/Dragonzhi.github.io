@@ -503,16 +503,26 @@ a:hover { color: var(--red); }
 .copy-btn:hover, .copy-btn.copied { background: var(--red); color: var(--card); }
 
 /* 自发现档案架：容器内流式排列，容器本身可拖动 */
+/* ID+!important 终极覆盖：容器只是堆叠/拖拽层，任何断点、任何来源都不得渲染成卡 */
+#auto-shelf {
+  background: transparent !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
 .paper--shelf {
-  top: 780px;
+  /* top 仅作无 JS 兜底；JS 端 fitDesk 会按档案册实际底边动态落位
+     （档案册项目一多会长过 1400，硬编码会再次压住档案架） */
+  top: 1400px;
   left: 50px;
   margin-left: var(--desk-shift, 0px);   /* 台面撑宽后卡片群右移居中 */
   width: 860px;
   background: transparent;
   border: 0;
+  box-shadow: none;                      /* 容器只是堆叠/拖拽层，不渲染成卡 */
   padding: 0;
   display: flex;
   flex-direction: column;
+  align-items: flex-start;               /* 卡片宽度随内容收放，不撑满整行 */
   gap: 14px;
   cursor: default;
 }
@@ -523,6 +533,8 @@ a:hover { color: var(--red); }
   border-radius: var(--radius);
   box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
   padding: 20px 22px;
+  max-width: 100%;                       /* 长内容仍在容器内折行 */
+  min-width: min(280px, 100%);           /* 太短的内容也保住卡片比例 */
   transition: transform .2s ease, box-shadow .2s ease;
 }
 .paper--shelf .tile:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(38,34,28,.10); }
@@ -536,6 +548,24 @@ a:hover { color: var(--red); }
 .tile-body { font-size: 13.5px; line-height: 1.7; }
 .tile-body p { margin: 0 0 6px; }
 .tile-body ul { margin: 0 0 6px; padding-left: 18px; }
+/* quote 型档案卡：镜像 motto 黄便签外观（收放由 .paper--shelf 的 align-items 统一处理） */
+.paper--shelf .tile--quote {
+  max-width: 72%;
+  background: #fff3b8;
+  background-image: linear-gradient(135deg, rgba(255,255,255,.5), transparent 60%);
+  transform: rotate(-2deg);
+  text-align: center;
+}
+.paper--shelf .tile--quote:hover { transform: rotate(-2deg) translateY(-3px); }
+.paper--shelf .tile--quote blockquote {
+  margin: 4px 0 8px;
+  font-family: var(--display);
+  font-size: 17px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+.paper--shelf .tile--quote blockquote::before { content: "“"; color: var(--red); }
+.paper--shelf .tile--quote blockquote::after { content: "”"; color: var(--red); }
 
 /* ===== 装饰物件 ===== */
 .stamp-important {
@@ -710,7 +740,12 @@ a:hover { color: var(--red); }
   .paper--projects .binding-edge { display: none; }
   .paper--projects::before,
   .paper--projects::after { display: none; }
-  .paper--shelf { padding: 0; order: 7; }
+  .paper--shelf {
+    padding: 0; order: 7;
+    background: transparent;             /* 覆盖窄屏 .paper 的白卡底：容器不渲染成卡 */
+    border: 0;
+    box-shadow: none;
+  }
 
   .proj {
     position: static;
