@@ -652,6 +652,14 @@ a:hover { color: var(--red); }
   margin-top: calc(var(--gap)*2); padding: 18px 0 8px; text-align: center; border-top: 2px solid var(--ink);
 }
 .colophon .end { font-size: 13px; letter-spacing: 6px; margin-bottom: 8px; }
+.colophon .colophon-avatar {
+  display: inline-block; width: 72px; height: 72px; border-radius: 50%;
+  object-fit: cover; margin-bottom: 12px; vertical-align: middle;
+  transform: rotate(-2deg); background: var(--card);
+  /* 印章式双边：内圈朱砂 + 纸缝 + 外圈细墨线（呼应站点卡片描边与印章边线） */
+  border: 2px solid var(--red);
+  box-shadow: 0 0 0 3px var(--card), 0 0 0 4.5px var(--line);
+}
 .colophon .meta { font-size: var(--fs-xs); color: var(--ink-soft); line-height: 2; }
 .colophon .meta a { color: var(--ink-soft); text-decoration: underline; }
 .signal-trigger {
