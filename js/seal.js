@@ -3,11 +3,14 @@
    工房印章（case 3 · 单物件）：一块 168×168 的 three.js 画布，
    固定在视口右下角。拖到任意纸卡上按下 → 触纸那一帧在卡上留一枚
    朱砂印（田字格「验收完成」+ SHIPPED · NO.xx），盖完自动归位。
+   印子持久化在 localStorage（zloong-seal-v1），刷新还在；
+   印章上方挂着一枚清除键，有印子才出现。
 
-   三条边界，刻意写死在这里：
-   1. 窄屏（≤1080px）不出现，**也不下载 three.js**；
+   四条边界，刻意写死在这里：
+   1. 窄屏（≤1080px）不出现、**不下载 three.js**，已存的印子也不渲染；
    2. 无 WebGL 或 three.js 加载失败 → 退化成 2D 印章，功能照旧；
-   3. 静止时一个 rAF 都不跑（按需渲染）。
+   3. 静止时一个 rAF 都不跑（按需渲染）；
+   4. 存档只记坐标 + 随机种子（不存图片），最多 48 枚，超出丢最早的。
 
    要撤掉这个方向：删本文件 + css/seal.css + index.html 里的 .seal-rig 区块。
    ============================================================ */
@@ -21,13 +24,50 @@
   var RED = "#8b2c1f";
   var THREE_URL = "https://cdn.jsdelivr.net/npm/three@0.159.0/build/three.min.js";
   var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var stampCount = 0;              /* 印子只活在这一屏，刷新即清空 */
+
+  /* ---------- 0. 存档：印子只记「盖在哪张卡、卡内坐标、角度、种子」 ----------
+     不存图片（一张 384px 的 PNG 转 base64 要十几 KB，几十枚就撑爆配额）；
+     印面的随机缺口由种子复现，刷新后长回来一模一样。 */
+  var STORE_KEY = "zloong-seal-v1";
+  var MAX_MARKS = 48;
+  var marks = readStore();
+  var stampCount = marks.reduce(function (a, m) { return Math.max(a, m.n || 0); }, 0);
+
+  function readStore() {
+    var out = [];
+    try {
+      var arr = JSON.parse(localStorage.getItem(STORE_KEY) || "null");
+      if (Array.isArray(arr)) {
+        out = arr.filter(function (m) {
+          return m && typeof m.c === "string" &&
+            isFinite(m.x) && isFinite(m.y) && isFinite(m.n) && isFinite(m.s);
+        }).slice(-MAX_MARKS);
+      }
+    } catch (e) { out = []; }     /* 隐私模式 / 配额满：当没有存档，不报错 */
+    return out;
+  }
+  function saveStore() {
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(marks.slice(-MAX_MARKS))); } catch (e) {}
+  }
+
+  /* 固定种子的伪随机：同一枚印子每次画出来都一样 */
+  function seeded(seed) {
+    var a = (seed >>> 0) || 1;
+    return function () {
+      a = (a + 0x6d2b79f5) >>> 0;
+      var t = a;
+      t = Math.imul(t ^ (t >>> 15), t | 1);
+      t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+  }
 
   /* ---------- 1. 印面图案（3D 贴图与印子共用同一套画法） ---------- */
-  function makeSealArt(S, serial) {
+  function makeSealArt(S, serial, seed) {
     var cv = document.createElement("canvas");
     cv.width = cv.height = S;
     var ctx = cv.getContext("2d");
+    var rnd = seed === undefined ? Math.random : seeded(seed);   /* 有种子 = 可复现 */
     var M = Math.round(S * 0.055);
     ctx.fillStyle = RED;
     ctx.fillRect(0, 0, S, S);
@@ -55,16 +95,16 @@
     /* 印泥没吃满：边框与笔画上的随机缺口 */
     ctx.globalCompositeOperation = "destination-out";
     for (var i = 0; i < 190; i++) {
-      var edge = Math.random() < 0.72, x, y;
+      var edge = rnd() < 0.72, x, y;
       if (edge) {
-        var side = Math.floor(Math.random() * 4), t = Math.random() * S;
-        if (side === 0) { x = t; y = Math.random() * M * 1.6; }
-        else if (side === 1) { x = t; y = S - Math.random() * M * 1.6; }
-        else if (side === 2) { x = Math.random() * M * 1.6; y = t; }
-        else { x = S - Math.random() * M * 1.6; y = t; }
-      } else { x = Math.random() * S; y = Math.random() * S; }
+        var side = Math.floor(rnd() * 4), t = rnd() * S;
+        if (side === 0) { x = t; y = rnd() * M * 1.6; }
+        else if (side === 1) { x = t; y = S - rnd() * M * 1.6; }
+        else if (side === 2) { x = rnd() * M * 1.6; y = t; }
+        else { x = S - rnd() * M * 1.6; y = t; }
+      } else { x = rnd() * S; y = rnd() * S; }
       ctx.beginPath();
-      ctx.arc(x, y, 0.6 + Math.random() * 2.2, 0, Math.PI * 2);
+      ctx.arc(x, y, 0.6 + rnd() * 2.2, 0, Math.PI * 2);
       ctx.fill();
     }
     ctx.globalCompositeOperation = "source-over";
@@ -83,7 +123,7 @@
     return c2;
   }
 
-  /* ---------- 2. 盖印（不持久化：刷新即干净） ---------- */
+  /* ---------- 2. 盖印 + 存档 ---------- */
   function cardAt(x, y) {
     var list = document.elementsFromPoint ? document.elementsFromPoint(x, y) : [document.elementFromPoint(x, y)];
     for (var i = 0; i < list.length; i++) {
@@ -94,38 +134,86 @@
     }
     return null;
   }
-  function drawMark(card, mark) {
+  function cardByKey(key) {
+    var all = document.querySelectorAll(".paper[data-desk-card]");
+    for (var i = 0; i < all.length; i++) {
+      if (all[i].getAttribute("data-desk-card") === key) return all[i];
+    }
+    return null;
+  }
+  /* 卡内坐标用 px（相对卡片左上角）而不是百分比：
+     档案架是自上而下长高的容器，加一篇 .md 就会把百分比印子往下推；
+     用 px 记，印子就钉在纸上原来那一处。 */
+  function drawMark(card, mark, animate) {
     var el = document.createElement("span");
     el.className = "seal-print";
-    el.style.left = mark.x + "%";
-    el.style.top = mark.y + "%";
+    el.style.left = mark.x + "px";
+    el.style.top = mark.y + "px";
     el.style.setProperty("--r", mark.r + "deg");
     el.style.setProperty("--o", mark.o);
-    el.style.backgroundImage = "url(" + mark.art + ")";
+    el.style.backgroundImage = "url(" + makeSealArt(384, mark.n, mark.s).toDataURL("image/png") + ")";
     el.setAttribute("aria-hidden", "true");
+    if (!animate) el.classList.add("on");     /* 回填的印子直接就是清晰状态 */
     card.appendChild(el);
-    requestAnimationFrame(function () { el.classList.add("on"); });
+    if (animate) requestAnimationFrame(function () { el.classList.add("on"); });
+  }
+  function clearRendered() {
+    Array.prototype.forEach.call(document.querySelectorAll(".seal-print"), function (m) { m.remove(); });
+  }
+  /* 刷新后把存档里的印子贴回去；窄屏不参与（印章整块不出现） */
+  function renderMarks() {
+    clearRendered();
+    if (mq.matches) return;
+    marks.forEach(function (m) {
+      var card = cardByKey(m.c);
+      if (card) drawMark(card, m, false);
+    });
+    syncClear();
   }
   function stampAt(card, clientX, clientY) {
     var r = card.getBoundingClientRect();
     stampCount += 1;
-    drawMark(card, {
-      x: Math.max(6, Math.min(94, (clientX - r.left) / r.width * 100)),
-      y: Math.max(6, Math.min(94, (clientY - r.top) / r.height * 100)),
-      r: (Math.random() * 10 - 5).toFixed(1),
-      o: (0.72 + Math.random() * 0.2).toFixed(2),
-      art: makeSealArt(384, stampCount).toDataURL("image/png")
-    });
+    var mark = {
+      c: card.getAttribute("data-desk-card"),
+      x: Math.round(Math.max(6, Math.min(r.width - 6, clientX - r.left))),
+      y: Math.round(Math.max(6, Math.min(r.height - 6, clientY - r.top))),
+      r: Number((Math.random() * 10 - 5).toFixed(1)),
+      o: Number((0.72 + Math.random() * 0.2).toFixed(2)),
+      n: stampCount,
+      s: Math.floor(Math.random() * 4294967295)
+    };
+    marks.push(mark);
+    while (marks.length > MAX_MARKS) marks.shift();
+    saveStore();
+    drawMark(card, mark, true);
     syncClear();
   }
 
+  /* 清除键：贴在印章上方。抹掉是不可逆的，所以第一次点只是「上膛」 */
   var clearBtn = document.getElementById("seal-clear");
+  var armed = false, armTimer = null;
   function syncClear() {
-    if (clearBtn) clearBtn.hidden = document.querySelectorAll(".seal-print").length === 0;
+    if (!clearBtn) return;
+    var n = document.querySelectorAll(".seal-print").length;
+    if (!n) armed = false;
+    clearBtn.hidden = !n;
+    clearBtn.classList.toggle("is-armed", armed);
+    clearBtn.textContent = !n ? "抹掉印章" : (armed ? "再点一次抹掉" : "已盖 " + n + " 枚 · 抹掉");
   }
   if (clearBtn) clearBtn.addEventListener("click", function () {
-    Array.prototype.forEach.call(document.querySelectorAll(".seal-print"), function (m) { m.remove(); });
+    if (!armed) {
+      armed = true;
+      syncClear();
+      clearTimeout(armTimer);
+      armTimer = setTimeout(function () { armed = false; syncClear(); }, 4000);
+      return;
+    }
+    clearTimeout(armTimer);
+    armed = false;
+    marks = [];
     stampCount = 0;
+    saveStore();
+    clearRendered();
     syncClear();
   });
 
@@ -426,10 +514,13 @@
   var mq = window.matchMedia("(max-width: 1080px)");
   var started = false;
   function applyMode() {
-    if (mq.matches) {                 /* 窄屏：卡片重排，印章整块不参与 */
+    if (mq.matches) {                 /* 窄屏：卡片重排，印章与印子整块不参与 */
       RIG.removeAttribute("data-ready");
+      clearRendered();
+      syncClear();
       return;
     }
+    renderMarks();                    /* 进桌面就先把存档里的印子贴回纸上 */
     if (started) { RIG.setAttribute("data-ready", "1"); return; }
     started = true;
     loadThree(function (ok) {

@@ -2,7 +2,8 @@
    工房印章（case 3 · 单物件）
    一块 168×168 的 three.js 画布，固定在视口右下角。
    - 窄屏（≤1080px）整块不出现，js/seal.js 也不会去下载 three.js；
-   - 无 WebGL 时 js/seal.js 会退化成 2D 印章，功能照旧。
+   - 无 WebGL 时 js/seal.js 会退化成 2D 印章，功能照旧；
+   - 印子持久化（localStorage zloong-seal-v1），清除键 #seal-clear 贴在印章上方。
    要撤掉这个方向：删掉本文件 + js/seal.js + index.html 里的 .seal-rig 区块即可。
    ============================================================ */
 
@@ -31,10 +32,20 @@
 }
 .seal-print.on{ opacity:var(--o,.85); transform:rotate(var(--r,-6deg)) scale(1); }
 
+/* 印章清除键：视口固定贴在印章上方（28 底距 + 168 印章高 + 10 间隙）。
+   印章拖走时它留在原位——盖完会自动归位，这里一直是它的家。 */
+#seal-clear{
+    position:fixed; right:28px; bottom:206px; z-index:40;
+    white-space:nowrap;
+    box-shadow:0 6px 16px rgba(38,34,28,.12);
+}
+#seal-clear.is-armed{ background:#8b2c1f; color:#fbf8f2; }
+
 .seal-hint{ color:#8b2c1f; }
 
 @media (max-width:1080px){
     #seal-rig{ display:none !important; }   /* 窄屏卡片重排，印章不参与 */
+    #seal-clear{ display:none !important; }
     .seal-hint{ display:none; }
 }
 @media (prefers-reduced-motion:reduce){

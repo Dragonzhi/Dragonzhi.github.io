@@ -190,12 +190,13 @@
              aria-label="工房印章：拖动到纸卡上按下即可盖章，双击归位">
             <canvas id="seal-canvas" aria-hidden="true"></canvas>
         </div>
+        <!-- 印章清除键：视口固定贴在印章上方，有印子才出现 -->
+        <button type="button" class="desk-reset samp" id="seal-clear" hidden>抹掉印章</button>
 
         <!-- 台面工具：拖动提示 + 还原 -->
         <div class="desk-tools" aria-label="台面工具">
             <span class="drag-hint samp" id="drag-hint">贴贴可以拖动哦</span>
-            <span class="drag-hint samp seal-hint">印章：拖到纸卡上按下即盖章</span>
-            <button type="button" class="desk-reset samp" id="seal-clear" hidden>抹掉印章</button>
+            <span class="drag-hint samp seal-hint">印章：拖到纸卡上按下即盖章，印子会留着</span>
             <button type="button" class="desk-reset samp" id="desk-reset">还原台面</button>
         </div>
     </main>
