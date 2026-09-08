@@ -11,6 +11,7 @@
     <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
     <link rel="stylesheet" href="css/workshop.css">
+    <link rel="stylesheet" href="css/seal.css">
 </head>
 <body>
 
@@ -184,9 +185,17 @@
         <!-- 自发现档案架：由 data/files-manifest.json + files/ 驱动 -->
         <div class="paper paper--shelf" id="auto-shelf" data-desk-card="shelf" aria-label="档案架"><!-- 新增 .md 自动成卡 --></div>
 
+        <!-- 工房印章（case 3 · 单物件）：拖到纸卡上按下即盖章；窄屏整块不出现 -->
+        <div id="seal-rig" role="button" tabindex="0"
+             aria-label="工房印章：拖动到纸卡上按下即可盖章，双击归位">
+            <canvas id="seal-canvas" aria-hidden="true"></canvas>
+        </div>
+
         <!-- 台面工具：拖动提示 + 还原 -->
         <div class="desk-tools" aria-label="台面工具">
             <span class="drag-hint samp" id="drag-hint">贴贴可以拖动哦</span>
+            <span class="drag-hint samp seal-hint">印章：拖到纸卡上按下即盖章</span>
+            <button type="button" class="desk-reset samp" id="seal-clear" hidden>抹掉印章</button>
             <button type="button" class="desk-reset samp" id="desk-reset">还原台面</button>
         </div>
     </main>
@@ -255,5 +264,6 @@
 <script src="data/content.js"></script>
 <script src="data/desk-config.js"></script>
 <script src="js/workshop.js"></script>
+<script src="js/seal.js"></script>
 </body>
 </html>

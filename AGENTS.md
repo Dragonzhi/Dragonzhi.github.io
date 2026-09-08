@@ -6,6 +6,7 @@
 ## 项目速览
 
 - `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/` + `data/files-manifest.json`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`，`files/` 新增 `.md` 通过 `scripts/generate_manifest.py` 生成的索引自动成为档案架卡片，样式按内容自动判型：链接列表/圆点列表/便签/段落）。
+- `css/seal.css` + `js/seal.js`：工房印章（3D 单物件方向）——视口右下角一枚 three.js 印章，拖到纸卡上按下即盖章；窄屏不出现也不加载 three.js，无 WebGL 退化为 2D 印章。**全站唯一的第三方依赖就在这里**（见工作约定 6）。
 - `posts/` + `data/posts.json`：博客文章（Markdown + JSON 索引）。
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
@@ -19,7 +20,7 @@
 3. 发新博客：在 `posts/` 建 Markdown，并在 `data/posts.json` 登记记录。
 4. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
 5. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。
-6. 无构建工具，不要引入打包器、框架或 npm 依赖；保持零依赖原生实现。
+6. 无构建工具，**首页保持零依赖原生实现**；唯一例外是工房印章 `js/seal.js` 按需加载的 three.js r159 UMD（窄屏不加载、无 WebGL 或加载失败退化为 2D 印章，功能不丢）。除此之外不得引入任何打包器、框架或 npm 依赖；新增依赖前必须先征得同意并同步更新本条。
 7. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。
 
 ## 硬性约束

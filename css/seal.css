@@ -1,0 +1,43 @@
+/* ============================================================
+   工房印章（case 3 · 单物件）
+   一块 168×168 的 three.js 画布，固定在视口右下角。
+   - 窄屏（≤1080px）整块不出现，js/seal.js 也不会去下载 three.js；
+   - 无 WebGL 时 js/seal.js 会退化成 2D 印章，功能照旧。
+   要撤掉这个方向：删掉本文件 + js/seal.js + index.html 里的 .seal-rig 区块即可。
+   ============================================================ */
+
+#seal-rig{
+    position:fixed; right:28px; bottom:28px; width:168px; height:168px;
+    z-index:40;                 /* 低于 SIGNAL 彩蛋层(50) */
+    display:none;               /* 由 js 打上 data-ready 才出现 */
+    opacity:0;
+    cursor:grab; touch-action:none; -webkit-user-select:none; user-select:none;
+    transition:transform .18s ease, opacity .45s ease;
+}
+#seal-rig[data-ready]{ display:block; opacity:1; }
+#seal-rig canvas{ display:block; width:100%; height:100%; pointer-events:none; }
+#seal-rig.dragging{ cursor:grabbing; z-index:45; }
+#seal-rig.pressing{ transform:scale(.94); }
+#seal-rig:focus-visible{ outline:2px dashed #8b2c1f; outline-offset:6px; border-radius:10px; }
+
+/* 盖在纸上的印子：落墨时从略大略虚收到清晰 */
+.seal-print{
+    position:absolute; width:88px; height:88px; margin:-44px 0 0 -44px;
+    background-size:contain; background-repeat:no-repeat;
+    pointer-events:none; mix-blend-mode:multiply;
+    opacity:0; z-index:5;
+    transform:rotate(var(--r,-6deg)) scale(1.18);
+    transition:opacity .16s ease-out, transform .18s cubic-bezier(.2,.8,.3,1);
+}
+.seal-print.on{ opacity:var(--o,.85); transform:rotate(var(--r,-6deg)) scale(1); }
+
+.seal-hint{ color:#8b2c1f; }
+
+@media (max-width:1080px){
+    #seal-rig{ display:none !important; }   /* 窄屏卡片重排，印章不参与 */
+    .seal-hint{ display:none; }
+}
+@media (prefers-reduced-motion:reduce){
+    #seal-rig{ transition:none; }
+    .seal-print{ transition:opacity .01s linear; }
+}
