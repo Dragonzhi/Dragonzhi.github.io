@@ -25,21 +25,17 @@
         <span><a href="../index.html" class="back-home">返回工房工作台</a></span>
     </div>
 
-    <!-- 卷宗顶栏控制条 -->
-    <nav class="resume-toolbar" aria-label="卷宗视图切换与操作">
-        <div class="resume-track-switch">
-            <span class="track-label">卷宗主线切换:</span>
-            <button type="button" class="track-btn active" data-track="ai">🎯 AI 应用开发 (主修)</button>
-            <button type="button" class="track-btn" data-track="game">🎮 游戏与系统工程</button>
-            <button type="button" class="track-btn" data-track="all">📋 完整全景卷宗</button>
+    <!-- 卷宗索引标签栏（活页档案夹风格，契合全站主题） -->
+    <nav class="resume-tab-bar" aria-label="卷宗视图切换与操作">
+        <div class="resume-track-tabs">
+            <button type="button" class="track-tab active" data-track="ai">🎯 AI 应用开发 (主修)</button>
+            <button type="button" class="track-tab" data-track="game">🎮 游戏与系统工程</button>
+            <button type="button" class="track-tab" data-track="all">📋 完整全景卷宗</button>
         </div>
-        <div class="resume-actions-group">
-            <button type="button" class="resume-tool-btn" id="resume-print-btn" title="调用浏览器打印为 A4 PDF">
+        <div class="resume-print-action">
+            <button type="button" class="resume-print-btn samp" id="resume-print-btn" title="调用浏览器打印为 A4 PDF">
                 <span>🖨️ 导出 PDF / 打印</span>
             </button>
-            <a href="../index.html" class="resume-tool-btn">
-                <span>← 工房台面</span>
-            </a>
         </div>
     </nav>
 
@@ -482,6 +478,10 @@
                             <strong>完整架构设计：</strong>实现 GridManager 逻辑网格、BridgeBuilder 绘图拓扑连接、ConnectionManager 通路完整性校验与波次循环；支持 MOD 关卡热加载与 CRT 屏幕特效。
                         </li>
                     </ul>
+                    <div class="proj-photo-slip">
+                        <img src="../images/projects/immune-link.png" alt="免疫联结游戏实机画面" loading="lazy">
+                        <div class="photo-caption">实机截图 · 桥梁网络与防御设施</div>
+                    </div>
                     <div class="proj-bottom-bar">
                         <div class="proj-tech-chips">
                             <span class="tech-chip">Godot 4</span>
@@ -491,6 +491,7 @@
                         </div>
                         <div class="proj-links-cluster">
                             <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer" class="proj-link-item">在线试玩 ↗</a>
+                            <a href="portfolio.html" class="proj-link-item">作品集档案 ↗</a>
                             <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer" class="proj-link-item">GitHub 源码 ↗</a>
                         </div>
                     </div>
@@ -554,6 +555,10 @@
                             <strong>实体物理与渲染分离：</strong>基于三轴角速度实现投掷物翻滚、反弹与能量衰减；实现手持与抛出实体模型动态分离；基于 Set 与中心加权算法实现烟雾体智能沉降与子弹穿烟包围盒判定。
                         </li>
                     </ul>
+                    <div class="proj-photo-slip">
+                        <img src="../images/projects/csg.png" alt="CounterStrikeGrenades 投掷物与烟雾实机渲染" loading="lazy">
+                        <div class="photo-caption">实机截图 · MC 中的 CS2 烟雾与 3D 投掷物</div>
+                    </div>
                     <div class="proj-bottom-bar">
                         <div class="proj-tech-chips">
                             <span class="tech-chip">Minecraft Forge</span>
@@ -563,6 +568,7 @@
                             <span class="tech-chip">TACZ 兼容</span>
                         </div>
                         <div class="proj-links-cluster">
+                            <a href="portfolio.html" class="proj-link-item">作品集档案 ↗</a>
                             <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer" class="proj-link-item">GitHub 源码 ↗</a>
                         </div>
                     </div>
@@ -704,7 +710,7 @@
     }
 
     // 4. 方向切换逻辑
-    var trackBtns = document.querySelectorAll(".track-btn");
+    var trackBtns = document.querySelectorAll(".track-tab");
     var projItems = document.querySelectorAll(".dossier-proj-item");
     var skillCards = document.querySelectorAll(".skill-card");
     var targetTextEl = document.getElementById("dossier-target-text");

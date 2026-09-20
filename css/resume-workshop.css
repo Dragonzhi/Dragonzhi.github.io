@@ -10,91 +10,126 @@
   padding: 0 24px 60px;
 }
 
-/* ---------- 卷宗顶栏工具条 ---------- */
-.resume-toolbar {
+/* ---------- 卷宗索引标签栏（活页档案夹风格，契合全站主题） ---------- */
+.resume-tab-bar {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: flex-end;
+  border-bottom: 2px solid var(--ink, #26221c);
+  margin: 18px 0 28px;
+  padding-bottom: 0;
   flex-wrap: wrap;
-  gap: 16px;
-  background: var(--card, #fdfaf3);
-  border: 1px solid var(--line, rgba(38, 34, 28, .14));
-  border-radius: 4px;
-  padding: 12px 20px;
-  margin: 20px 0 28px;
-  box-shadow: 0 2px 8px rgba(38, 34, 28, .04);
+  gap: 12px;
 }
 
-.resume-track-switch {
+.resume-track-tabs {
   display: flex;
-  align-items: center;
-  gap: 8px;
+  gap: 6px;
   flex-wrap: wrap;
+  margin-bottom: -2px; /* 沉入底线形成插片感 */
 }
 
-.track-label {
-  font-family: var(--mono, monospace);
-  font-size: 11.5px;
-  color: var(--ink-soft, #6b645b);
-  letter-spacing: 1px;
-}
-
-.track-btn {
+.track-tab {
   font-family: var(--mono, monospace);
   font-size: 12px;
-  padding: 6px 14px;
+  letter-spacing: .5px;
+  padding: 8px 16px 9px;
   background: transparent;
   color: var(--ink-soft, #6b645b);
   border: 1px solid var(--line, rgba(38, 34, 28, .2));
-  border-radius: 3px;
+  border-bottom: none;
+  border-radius: 4px 4px 0 0;
   cursor: pointer;
-  transition: all .18s ease;
+  transition: all .15s ease;
+  position: relative;
 }
 
-.track-btn:hover {
+.track-tab:hover {
   color: var(--ink, #26221c);
-  border-color: var(--ink, #26221c);
-  background: rgba(139, 44, 31, .04);
+  background: rgba(139, 44, 31, .05);
 }
 
-.track-btn.active {
-  background: var(--ink, #26221c);
-  color: #faf6ee;
-  border-color: var(--ink, #26221c);
-  font-weight: 600;
+.track-tab.active {
+  background: var(--card, #fdfaf3);
+  color: var(--red, #8b2c1f);
+  border: 2px solid var(--ink, #26221c);
+  border-bottom: 2px solid var(--card, #fdfaf3); /* 遮挡底黑线，形成活页插卡效果 */
+  font-weight: 700;
+  z-index: 2;
 }
 
-.track-btn[data-track="ai"].active {
+.track-tab.active::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
   background: var(--red, #8b2c1f);
-  border-color: var(--red, #8b2c1f);
+  border-radius: 2px 2px 0 0;
 }
 
-.resume-actions-group {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.resume-print-action {
+  margin-bottom: 6px;
 }
 
-.resume-tool-btn {
+.resume-print-btn {
   font-family: var(--mono, monospace);
-  font-size: 12px;
-  color: var(--ink, #26221c);
-  background: #faf5ea;
-  border: 1px solid var(--line, rgba(38, 34, 28, .2));
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  color: var(--ink-soft, #6b645b);
+  background: var(--card, #fdfaf3);
+  border: 1px dashed var(--line, rgba(38, 34, 28, .25));
   border-radius: 3px;
-  padding: 6px 12px;
+  padding: 5px 12px;
   cursor: pointer;
-  text-decoration: none;
   display: inline-flex;
   align-items: center;
   gap: 6px;
   transition: all .15s ease;
 }
 
-.resume-tool-btn:hover {
+.resume-print-btn:hover {
   color: var(--red, #8b2c1f);
   border-color: var(--red, #8b2c1f);
   background: #fff;
+}
+
+/* 项目实机照片卡（拍立得/档案照片风格） */
+.proj-photo-slip {
+  display: inline-block;
+  background: #fff;
+  border: 1px solid var(--line, rgba(38, 34, 28, .18));
+  padding: 6px 6px 14px 6px;
+  box-shadow: 1px 3px 8px rgba(38, 34, 28, .08);
+  border-radius: 2px;
+  margin: 10px 0 14px;
+  transform: rotate(-0.5deg);
+  max-width: 320px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.proj-photo-slip:hover {
+  transform: rotate(0deg) scale(1.02);
+  box-shadow: 2px 6px 16px rgba(38, 34, 28, .14);
+}
+
+.proj-photo-slip img {
+  display: block;
+  width: 100%;
+  height: 160px;
+  object-fit: cover;
+  border: 1px solid rgba(0, 0, 0, .08);
+  border-radius: 1px;
+}
+
+.proj-photo-slip .photo-caption {
+  font-family: var(--mono, monospace);
+  font-size: 10.5px;
+  color: var(--ink-soft, #6b645b);
+  margin-top: 6px;
+  text-align: center;
+  letter-spacing: .5px;
 }
 
 /* ---------- 卷宗主卷封面卡片 ---------- */
@@ -707,12 +742,14 @@
 
   /* 隐藏所有非必要网页控件与导航 */
   .sub-eyebrow,
+  .resume-tab-bar,
   .resume-toolbar,
   .resume-actions-group,
   .sub-directory,
   .signal-layer,
   .email-copy-pill,
   .dossier-seal-badge,
+  .proj-photo-slip,
   .colophon,
   #today {
     display: none !important;
