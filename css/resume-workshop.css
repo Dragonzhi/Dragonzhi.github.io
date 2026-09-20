@@ -1,16 +1,16 @@
 /* ============================================================
-   ZLOONG 工房 · 个人技术履历卷宗 (resume-workshop.css)
-   工房工整卷宗风格 · 双向导流 · 支持方向切换与原生 A4 打印
+   ZLOONG 工房 · 个人技术履历 (resume-workshop.css)
+   工房档案便签风格 · 双向导流 · 支持方向切换与原生 A4 打印
    ============================================================ */
 
-/* ---------- 卷宗容器 ---------- */
+/* ---------- 履历容器 ---------- */
 .dossier-wrap {
   max-width: var(--wrap, 1031px);
   margin: 0 auto;
   padding: 0 24px 60px;
 }
 
-/* ---------- 卷宗索引标签栏（活页档案夹风格，契合全站主题） ---------- */
+/* ---------- 履历索引标签栏（活页档案夹风格，契合全站主题） ---------- */
 .resume-tab-bar {
   display: flex;
   justify-content: space-between;
@@ -132,7 +132,7 @@
   letter-spacing: .5px;
 }
 
-/* ---------- 卷宗主卷封面卡片 ---------- */
+/* ---------- 履历主页封面卡片 ---------- */
 .resume-dossier-card {
   background: #faf5ea;
   border: 1px solid rgba(38, 34, 28, .18);
@@ -263,7 +263,7 @@
   color: #fff;
 }
 
-/* ---------- 卷宗各分卷板块 (Section) ---------- */
+/* ---------- 履历各分卷板块 (Section) ---------- */
 .resume-section {
   margin-bottom: 38px;
 }
@@ -358,25 +358,53 @@
   font-weight: 600;
 }
 
-/* ---------- 技能矩阵卡片 (Skills) ---------- */
+/* ---------- 技能矩阵卡片 (Skills) — 工程师案台便签风格 ---------- */
 .skills-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 18px;
+  gap: 22px 20px;
+  padding-top: 10px;
 }
 
 .skill-card {
+  position: relative;
   background: var(--card, #fdfaf3);
-  border: 1px solid var(--line, rgba(38, 34, 28, .14));
-  border-radius: 3px;
-  padding: 18px 20px;
-  box-shadow: 0 1px 4px rgba(38, 34, 28, .04);
-  transition: transform .18s ease, border-color .18s ease;
+  border: 1px solid var(--line, rgba(38, 34, 28, .16));
+  border-radius: 2px;
+  padding: 24px 20px 18px;
+  box-shadow: 1px 2px 8px rgba(38, 34, 28, .06);
+  transition: transform .22s cubic-bezier(.2,0,0,1), box-shadow .22s ease, border-color .22s ease;
 }
 
+/* 顶部半透明米白美纹纸胶带 */
+.skill-card::before {
+  content: "";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%) rotate(-1deg);
+  width: 58px;
+  height: 16px;
+  background: rgba(255, 242, 210, .75);
+  border-left: 1px dashed rgba(38, 34, 28, .14);
+  border-right: 1px dashed rgba(38, 34, 28, .14);
+  box-shadow: 0 1px 2px rgba(38, 34, 28, .08);
+  z-index: 2;
+}
+
+/* 极微角度错落（绝不影响扫读，保持手作案台感） */
+.skill-card:nth-child(1) { transform: rotate(-0.35deg); }
+.skill-card:nth-child(2) { transform: rotate(0.4deg); }
+.skill-card:nth-child(3) { transform: rotate(-0.25deg); }
+.skill-card:nth-child(4) { transform: rotate(0.3deg); }
+.skill-card:nth-child(5) { transform: rotate(-0.2deg); }
+
+/* 鼠标悬停：微扶正 + 向上抽起 + 阴影扩散 */
 .skill-card:hover {
-  transform: translateY(-2px);
-  border-color: rgba(139, 44, 31, .3);
+  transform: rotate(0deg) translateY(-4px);
+  box-shadow: 2px 10px 22px rgba(38, 34, 28, .13);
+  border-color: rgba(139, 44, 31, .35);
+  z-index: 4;
 }
 
 .skill-card-head {
@@ -404,6 +432,13 @@
   border: 1px solid rgba(139, 44, 31, .35);
   border-radius: 999px;
   padding: 1px 7px;
+  letter-spacing: .5px;
+}
+
+.skill-card[data-skill-cat="ai"] .skill-card-badge {
+  background: rgba(139, 44, 31, .06);
+  border-color: var(--red, #8b2c1f);
+  font-weight: 700;
 }
 
 .skill-list {
@@ -761,7 +796,7 @@
     margin: 0 !important;
   }
 
-  /* 卷宗封面打印纯净化 */
+  /* 履历封面打印纯净化 */
   .resume-dossier-card {
     background: none !important;
     border: none !important;
@@ -835,6 +870,11 @@
     border: 1pt solid #bbb !important;
     box-shadow: none !important;
     margin-bottom: 8pt !important;
+    transform: none !important;
+  }
+
+  .skill-card::before {
+    display: none !important;
   }
 
   .proj-head-banner {
