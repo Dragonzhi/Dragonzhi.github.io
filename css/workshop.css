@@ -201,6 +201,25 @@ a:hover { color: var(--red); }
 .hero-links { margin: 8px 0 0; font-size: 14px; font-family: var(--mono); }
 .hero-links a::before { content: "> "; color: var(--red); }
 
+/* 招聘方入口：求职期临时块（整块撤下时删这三条规则即可） */
+.hero-hire {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 3px 12px;
+  margin: 0 0 12px;
+  padding: 9px 12px;
+  border: 1px dashed rgba(139,44,31,.5);
+  border-radius: var(--radius);
+  background: rgba(139,44,31,.035);
+}
+.hero-hire a { font-size: 15px; font-weight: 600; }
+.hero-hire .hero-hire-note {
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+}
+
 /* about.md — 右上小纸片，两个角胶带贴住 */
 .paper--about {
   top: 0;

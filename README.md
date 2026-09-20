@@ -44,6 +44,7 @@
 | `scripts/` | 本地生成脚本：`generate_manifest.py`（files/ 索引）、`generate_gallery_json.py`（画廊索引） |
 | `data/files-manifest.json` | `files/` 目录索引：丢新文件后跑 `python scripts/generate_manifest.py` 重新生成（手改的 `style` 字段会保留） |
 | `pages/` | 子页面（博客版、画廊版、作品集存档），已迁移至工房设计系统，从首页导览牌进入 |
+| `resume/` | 求职简历页 `/resume/`：面向招聘方的信息架构（摘要 / 技能矩阵 / 项目 / 凭证 / 教育），沿用子页面外壳 + `css/resume-workshop.css`；**简历 PDF 不在此托管**，只留邮件索取通道 |
 | `posts/` + `data/posts.json` | 博客文章（Markdown + JSON 索引，marked.js 渲染） |
 | `legacy/` | 旧版主页与作品集存档（legacy 作品集仍由 `data/portfolio.json` 驱动） |
 | `images/` | 头像、favicon、项目图；`画廊/` 目录的索引由脚本生成 |

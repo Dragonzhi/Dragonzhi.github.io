@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="徐智鸿（ZLOONG）的求职简历：AI 应用开发 / 大模型应用开发实习方向。项目经历、技能矩阵、软件著作权与竞赛荣誉。">
+    <meta name="theme-color" content="#f5f0e6">
+    <title>简历 · ZLOONG 工房 · Hanako箱庭</title>
+    <link rel="icon" href="../images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
+    <link rel="stylesheet" href="../css/workshop.css">
+    <link rel="stylesheet" href="../css/subpages.css">
+    <link rel="stylesheet" href="../css/resume-workshop.css">
+</head>
+<body>
+
+<div class="sub-wrap">
+
+    <!-- 门牌 -->
+    <div class="sub-eyebrow">
+        <span>ZLOONG 工房 · 简历</span>
+        <span id="today">2026年9月20日 · 星期日</span>
+        <span><a href="../index.html" class="back-home">返回工作台</a></span>
+    </div>
+
+    <!-- 报头墙 -->
+    <header class="sub-wall">
+        <span class="seal samp">求职中<br>HIRE</span>
+        <h1>简历</h1>
+        <div class="sub">RESUME · 徐智鸿 · AI 应用开发 / 大模型应用开发</div>
+        <p class="intro">
+            西北农林科技大学 计算机科学与技术（大三）。做 AI 应用开发，把大模型能力落成能跑起来的产品：结构化输出契约、RAG 检索、上下文成本控制、流式交互，直到线上部署，能独立走完从设计到上线的全流程。
+        </p>
+    </header>
+    <div class="sub-rule-double"></div>
+
+    <!-- 求职状态条 -->
+    <div class="rv-status">
+        <span><span class="k">求职意向</span> AI 应用开发实习 / 大模型应用开发实习</span>
+        <span class="dot">|</span>
+        <span><span class="k">实习窗口</span> 日常实习随时可谈 · <strong>2027 暑期实习</strong>为主目标</span>
+        <span class="dot">|</span>
+        <span><span class="k">所在地</span> 陕西 · 杨凌</span>
+    </div>
+
+    <!-- 页内快速索引 -->
+    <nav class="rv-jump rv-noprint" aria-label="页内索引">
+        <a href="#summary">摘要</a>
+        <a href="#skills">技能</a>
+        <a href="#projects">项目</a>
+        <a href="#credentials">凭证</a>
+        <a href="#education">教育</a>
+        <a href="#request">索取简历</a>
+    </nav>
+
+    <!-- ===== 壹 · 摘要 ===== -->
+    <section class="rv-sec" id="summary">
+        <div class="rv-sec-head">
+            <span class="no">壹</span>
+            <h2>摘要</h2>
+            <span class="en">SUMMARY</span>
+        </div>
+        <div class="rv-facts">
+            <div class="rv-fact">
+                <span class="k">求职意向</span>
+                <span class="v">AI 应用开发实习<br>大模型应用开发实习</span>
+            </div>
+            <div class="rv-fact">
+                <span class="k">教育状况</span>
+                <span class="v">西北农林科技大学 · 计算机科学与技术 · 本科大三<br>2024.09 – 2028.06</span>
+            </div>
+            <div class="rv-fact">
+                <span class="k">知识产权</span>
+                <span class="v">软件著作权 <strong>3 项</strong>（均为第一著作人）</span>
+            </div>
+            <div class="rv-fact">
+                <span class="k">主力项目</span>
+                <span class="v">IterTrip · 约 2.5 万行 · 已线上部署</span>
+            </div>
+            <div class="rv-fact">
+                <span class="k">内容创作</span>
+                <span class="v">B 站 UP 主 · 3 万粉丝 · 累计播放 480 万+</span>
+            </div>
+            <div class="rv-fact">
+                <span class="k">联系方式</span>
+                <span class="v">
+                    <a href="#" id="mail-line" data-copy-email data-email="dzloong@foxmail.com">dzloong@foxmail.com</a>（点击复制）<br>
+                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a> ·
+                    <a href="https://dragonzhi.xyz/" target="_blank" rel="noreferrer">dragonzhi.xyz ↗</a>
+                </span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 贰 · 技能 ===== -->
+    <section class="rv-sec" id="skills">
+        <div class="rv-sec-head">
+            <span class="no">贰</span>
+            <h2>技能矩阵</h2>
+            <span class="en">SKILLS</span>
+        </div>
+        <div class="rv-skill-grid">
+            <div class="rv-skill">
+                <h3>LLM / AI 应用工程 <span class="core">主攻</span></h3>
+                <ul>
+                    <li><b>Agent 工作流编排</b>：多节点链路（关键词 → 联网检索 → 网页读取 → 生成）落地</li>
+                    <li><b>结构化输出与 Schema 约束</b>：pydantic 契约作为生成 / 编辑 / 导出三端唯一数据源，校验失败携带错误重试自愈</li>
+                    <li><b>上下文工程</b>：多轮管理、Token 成本控制、上下文裁剪，提示词缓存命中 96%</li>
+                    <li><b>RAG 检索增强</b>：自建分类知识库 + 检索问答链路</li>
+                    <li><b>多模型统一接入</b>：DeepSeek / 豆包 / Ollama，OpenAI 兼容协议 + BYOK 路由</li>
+                    <li><b>多模态集成</b>：视觉推理、文生图、TTS 语音合成全链路</li>
+                    <li><b>流式与实时</b>：SSE 流式输出可中断、WebSocket 长连接</li>
+                    <li><b>可靠性工程</b>：幻觉兜底与三级降级、confidence 置信度分级、失败重试</li>
+                </ul>
+            </div>
+            <div class="rv-skill">
+                <h3>后端与语言</h3>
+                <ul>
+                    <li><b>Python</b>：FastAPI、Flask、SQLAlchemy + SQLite、APScheduler、httpx</li>
+                    <li><b>零依赖服务端</b>：纯标准库 http.server 承载多页面门户 + REST API</li>
+                    <li><b>TypeScript / JavaScript</b>、Java、C#、C++、Kotlin、GDScript</li>
+                    <li><b>Android 原生</b>：Kotlin + SpringBoot</li>
+                    <li><b>协议逆向</b>：wss 签名计算 + protobuf 消息体解析</li>
+                </ul>
+            </div>
+            <div class="rv-skill">
+                <h3>前端</h3>
+                <ul>
+                    <li><b>React 18</b> + Vite + Tailwind（Leaflet 地图轨迹渲染）</li>
+                    <li><b>Vue 3</b> + Vite + TypeScript（配置面板）</li>
+                    <li><b>原生 HTML / CSS / JavaScript</b>：无框架、无构建工具的静态站</li>
+                </ul>
+            </div>
+            <div class="rv-skill">
+                <h3>模型与视觉</h3>
+                <ul>
+                    <li><b>目标检测</b>：YOLO 系列（YOLOv11n 落地，五模型对比实验，mAP50 85.05%）</li>
+                    <li><b>参数高效微调</b>：LoRA 训练（团队成果）</li>
+                    <li><b>视觉大模型 / 文生图</b>：豆包 1.5 Pro 视觉推理、文生图模型接入</li>
+                    <li><b>图像处理</b>：OpenCV、Pillow；ComfyUI 工作流 + 图像 LoRA 训练</li>
+                </ul>
+            </div>
+            <div class="rv-skill">
+                <h3>工程与协作</h3>
+                <ul>
+                    <li><b>Git 工作流</b>：分支协作、PR 代码评审</li>
+                    <li><b>部署运维</b>：Docker 容器化、Linux 服务器、Nginx 反向代理子路径</li>
+                    <li><b>工程质量</b>：边界单元测试、配置检查脚本、文档体系</li>
+                    <li><b>跨职能协作</b>：8 人 GameJam 队伍程序负责人兼队长，数值契约走 PR 对齐</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 叁 · 项目 ===== -->
+    <section class="rv-sec" id="projects">
+        <div class="rv-sec-head">
+            <span class="no">叁</span>
+            <h2>项目经历</h2>
+            <span class="en">PROJECTS</span>
+        </div>
+
+        <!-- 1 · IterTrip -->
+        <article class="rv-proj">
+            <div class="rv-proj-head">
+                <span class="idx">第壹件</span>
+                <h3>IterTrip · AI 旅行攻略结构化落地应用</h3>
+                <span class="badge">已上线</span>
+            </div>
+            <div class="rv-meta">
+                <span class="role">独立开发（产品设计 + 前后端 + 部署）</span>
+                <span>2026.08 – 至今 · M24</span>
+                <span>约 2.5 万行（前端 1.3 万 / 86 文件 · 后端 1.2 万 / 94 文件）</span>
+            </div>
+            <p class="rv-line">把小红书 / 公众号 / 截图里的碎片攻略转成结构化路线并在地图上呈现，支持对话修改、手动编辑与一键导出。MVP 6 天交付。</p>
+            <ul class="rv-points">
+                <li><b>结构化输出契约</b>：pydantic 定义路线 JSON Schema 作为生成 / 编辑 / 导出三端唯一数据源；校验失败时携带错误信息重试，形成模型输出的自我修复环。</li>
+                <li><b>幻觉兜底与可解释</b>：地点坐标三级降级（精确匹配 → 模型补全 → 城市兜底），字段携带 confidence 置信度，低置信结果在地图上区分标注，坐标来源摘要回传进对话。</li>
+                <li><b>成本与上下文工程</b>：截图解析完成后将原图移出后续上下文，历史裁剪为最近 N 轮 + 路线快照；实测单轮 prompt 1,071 / completion ≈4.1k tokens，提示词缓存命中 96%，瓶颈定位在模型推理链而非后端或网络。</li>
+                <li><b>BYOK 多供应商接入</b>：用户 key 与模型名经请求头透传，由本地后端以 OpenAI 兼容格式统一代理转发，规避各家 CORS 政策差异。</li>
+                <li><b>工程与部署</b>：SSE 流式输出可中断；routeDiff 同名配对差异算法可视化变更点，AI 改动与手动拖拽共用同一撤销栈；Docker 单进程整站镜像，Nginx 反代子路径上线。</li>
+            </ul>
+            <div class="rv-tags">
+                <span class="rv-tag">FastAPI</span>
+                <span class="rv-tag">pydantic</span>
+                <span class="rv-tag">React 18</span>
+                <span class="rv-tag">Vite</span>
+                <span class="rv-tag">Tailwind</span>
+                <span class="rv-tag">Leaflet</span>
+                <span class="rv-tag">SSE</span>
+                <span class="rv-tag">Docker</span>
+            </div>
+            <div class="rv-links">
+                <a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer">线上 Demo ↗</a>
+                <a href="https://github.com/Dragonzhi/itertrip" target="_blank" rel="noreferrer">源码 ↗</a>
+            </div>
+        </article>
+
+        <!-- 2 · 合阳提线木偶 -->
+        <article class="rv-proj">
+            <div class="rv-proj-head">
+                <span class="idx">第贰件</span>
+                <h3>合阳提线木偶小助手 · 非遗共创 AI 应用</h3>
+                <span class="badge">软著 · 2026SR0131171</span>
+            </div>
+            <div class="rv-meta">
+                <span class="role">队长 / 第一作者，独立主导设计开发</span>
+                <span>2025</span>
+                <span>Python 源程序约 1,240 行 · 已发布 Coze 商店</span>
+            </div>
+            <p class="rv-line">面向大众与创作者的非遗共创助手，提供剧本工坊、图片生成、图片识别、知识问答四大 AI 功能，获校级乡村振兴非遗创新赋能大赛一等奖。</p>
+            <ul class="rv-points">
+                <li><b>多模型编排</b>：豆包 1.5 Pro 视觉推理 + DeepSeek 系列 + 文生图模型，经 Coze 工作流串联成端到端创作链路。</li>
+                <li><b>剧本工坊链路</b>：创意关键词 → 联网检索 → 大纲生成 → 完整木偶戏剧本，多节点 Agent 工作流落地。</li>
+                <li><b>自建 6 类非遗知识库</b>（历史、剧目、制作工艺、操作指南等）支撑 RAG 检索问答；图片识别模块由视觉模型输出文化深度解读。</li>
+                <li><b>性能验收</b>：首页首屏 1.1s、交互响应 ≤0.5s，覆盖 iPhone / 华为 / 小米 / 红米多机型；完成软著全套申请材料并登记。</li>
+            </ul>
+            <div class="rv-tags">
+                <span class="rv-tag">Coze 工作流</span>
+                <span class="rv-tag">DeepSeek</span>
+                <span class="rv-tag">豆包视觉推理</span>
+                <span class="rv-tag">RAG</span>
+                <span class="rv-tag">Python</span>
+            </div>
+            <div class="rv-links">
+                <a href="https://www.coze.cn/store/project/7503825535160631306" target="_blank" rel="noreferrer">Coze 商店 ↗</a>
+            </div>
+        </article>
+
+        <!-- 3 · 羊肚菌检测 -->
+        <article class="rv-proj">
+            <div class="rv-proj-head">
+                <span class="idx">第叁件</span>
+                <h3>羊肚菌种类与成熟度检测系统（菌智鉴熟）</h3>
+                <span class="badge">软著 · 2026SR0492487</span>
+            </div>
+            <div class="rv-meta">
+                <span class="role">核心成员 · 负责 Flask Web 端与系统搭建</span>
+                <span>2025 – 2026</span>
+                <span>数据集 15K+ 图片</span>
+            </div>
+            <p class="rv-line">上传羊肚菌图片即时识别品种与成熟度，绘制边界框标注并留存可追溯的检测记录，辅助农户把握采摘时机。</p>
+            <ul class="rv-points">
+                <li><b>两阶段「先检测后分类」框架</b>：YOLOv11 定位目标 → 裁剪目标区域 → DINOv3 双头分类（成熟度头 + 品种头）。</li>
+                <li><b>检测选型实验</b>：YOLOv5 / 6 / 8 / 10 / 11n 五模型系统对比，选定 YOLOv11n（mAP50 85.05% / Precision 77.4% / Recall 82.2%）。</li>
+                <li><b>团队成果</b>：LoRA 参数高效微调使成熟度分类准确率由 89.68% 提升至 93.40%（+3.72pp），双任务综合 92.01%——由队友负责，本人不主张为个人能力。</li>
+                <li><b>本人实现</b>：Flask Web 端（登录、双功能检测、历史记录管理）+ SQLAlchemy / SQLite 数据层，完成软著登记全套材料。</li>
+            </ul>
+            <div class="rv-tags">
+                <span class="rv-tag">YOLOv11n</span>
+                <span class="rv-tag">DINOv3</span>
+                <span class="rv-tag">LoRA</span>
+                <span class="rv-tag">Flask</span>
+                <span class="rv-tag">SQLAlchemy</span>
+                <span class="rv-tag">OpenCV</span>
+            </div>
+        </article>
+
+        <!-- 4 · hanako 日报站 -->
+        <article class="rv-proj">
+            <div class="rv-proj-head">
+                <span class="idx">第肆件</span>
+                <h3>hanako 日报站 · 零依赖个人门户与内容管线</h3>
+                <span class="badge">已上线</span>
+            </div>
+            <div class="rv-meta">
+                <span class="role">独立开发</span>
+                <span>2026.08 – 至今（持续维护）</span>
+                <span>核心服务端约 710 行 · 39 期日报无断更</span>
+            </div>
+            <p class="rv-line">个人门户站点，集成日报、知识库、灵感碎片、日历、素材库等页面，核心是每日科技晨报（AI/科技 + 游戏/开发圈双栏），由 Agent 每日自动出报。</p>
+            <ul class="rv-points">
+                <li><b>纯标准库服务端</b>：http.server + ThreadingHTTPServer，零第三方依赖承载多页面门户与 REST API，轻量自托管。</li>
+                <li><b>安全细节</b>：HMAC 恒时比较防时序攻击、cookie 只存派生摘要、私域页内容级保护、部署体检（代码 mtime 检测旧进程）。</li>
+                <li><b>内容管线</b>：知识库 Markdown 源 → 树型卡片流自动渲染；每日出报自动归档索引。</li>
+                <li><b>持续产出</b>：日报自 2026-08-05 创刊起连续 39 期无断更，链路为采集 → 核验配图 → 报纸式渲染 → 自动归档。</li>
+            </ul>
+            <div class="rv-tags">
+                <span class="rv-tag">Python 标准库</span>
+                <span class="rv-tag">HMAC 鉴权</span>
+                <span class="rv-tag">REST API</span>
+                <span class="rv-tag">HTML/CSS/JS</span>
+                <span class="rv-tag">JSON 存储</span>
+            </div>
+            <div class="rv-links">
+                <a href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">站点 ↗</a>
+            </div>
+        </article>
+
+        <!-- 5 · 弹幕鸭 -->
+        <article class="rv-proj">
+            <div class="rv-proj-head">
+                <span class="idx">第伍件</span>
+                <h3>弹幕鸭 dycast-reply · 抖音直播 AI 弹幕互动</h3>
+                <span class="badge">LLM 练手作</span>
+            </div>
+            <div class="rv-meta">
+                <span class="role">独立开发（前端 fork 自开源 dycast，本人实现 LLM 回复与语音输出后端）</span>
+                <span>2025</span>
+            </div>
+            <p class="rv-line">实时抓取直播弹幕，AI 回复 + 语音播报 + 动态头像动画，打通从弹幕链路到语音输出的完整 LLM 应用闭环。</p>
+            <ul class="rv-points">
+                <li><b>弹幕链路逆向</b>：wss signature 签名计算 + protobuf 消息体解析，打通实时弹幕数据流。</li>
+                <li><b>双响应模式</b>：关键词触发（多关键词信息智能组合）与自由问答（含防刷屏过滤规则）。</li>
+                <li><b>多角色 Persona 配置化架构</b>，前端可视化增删改查；mood 情绪标签驱动 CSS 头像动画，文本 / 语音 / 动画一体互动。</li>
+                <li><b>语音输出链路</b>：DashScope Qwen-TTS（WAV Base64）→ Web Audio API 播放，端到端延迟约 1–2 秒。</li>
+            </ul>
+            <div class="rv-tags">
+                <span class="rv-tag">Python</span>
+                <span class="rv-tag">WebSocket</span>
+                <span class="rv-tag">protobuf</span>
+                <span class="rv-tag">DeepSeek Chat</span>
+                <span class="rv-tag">Qwen-TTS</span>
+                <span class="rv-tag">Vue 3 + TS</span>
+            </div>
+        </article>
+
+        <p class="rv-note">
+            <strong>其他项目</strong>：智能优化中（金海豚 2026 大赛作品，8 人队程序负责人兼队长，自研 Godot 节点式叙事编辑器，已上线好游快爆）·
+            棱镜 Prism（抖音小游戏，Uno 机制 × 七色光谱相邻出牌，软著在审）·
+            免疫联结 ImmuneLink（卡赢杯公益游戏赛最佳创意奖）·
+            Unity 2D 火影项目（负责秽土柱间角色技能系统与动画状态机）·
+            NWAFU 评教自动化脚本等校园工具、Minecraft 模组若干。
+        </p>
+    </section>
+
+    <!-- ===== 肆 · 凭证 ===== -->
+    <section class="rv-sec" id="credentials">
+        <div class="rv-sec-head">
+            <span class="no">肆</span>
+            <h2>知识产权与荣誉</h2>
+            <span class="en">CREDENTIALS</span>
+        </div>
+        <div class="rv-duo">
+            <div class="rv-panel">
+                <div class="cap">软件著作权 · 3 项（均为第一著作人）</div>
+                <ul class="rv-ip">
+                    <li><span class="no">01</span><span>菌智鉴熟软件</span><span class="reg">2026SR0492487</span></li>
+                    <li><span class="no">02</span><span>格物启示录软件</span><span class="reg">2025SR2378554</span></li>
+                    <li><span class="no">03</span><span>合阳提线木偶小助手软件</span><span class="reg">2026SR0131171</span></li>
+                </ul>
+            </div>
+            <div class="rv-panel">
+                <div class="cap">竞赛与荣誉</div>
+                <ul class="rv-award">
+                    <li>中国大学生计算机设计大赛 西北赛区<span class="lv">二等奖</span> <span class="yr">2025</span></li>
+                    <li>乡村振兴非遗创新赋能大赛 <span class="lv">一等奖</span> <span class="yr">2025</span></li>
+                    <li>蓝桥杯 全国软件和信息技术专业人才大赛 省赛<span class="lv">二等奖</span> <span class="yr">2024</span></li>
+                    <li>卡赢杯 开源游戏开发大赛 <span class="lv">最佳创意游戏奖</span> <span class="yr">2025</span></li>
+                    <li>034 GameJam <span class="lv">最战斗爽塔防游戏奖</span></li>
+                    <li>数字媒体科技作品竞赛 陕西赛区<span class="lv">三等奖</span></li>
+                    <li>金海豚 2026 游戏大赛 参赛作品上线好游快爆</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 伍 · 教育 ===== -->
+    <section class="rv-sec" id="education">
+        <div class="rv-sec-head">
+            <span class="no">伍</span>
+            <h2>教育背景</h2>
+            <span class="en">EDUCATION</span>
+        </div>
+        <div class="rv-edu">
+            <div class="row">
+                <b>西北农林科技大学</b>
+                <span>信息工程学院 · 计算机科学与技术 · 本科</span>
+                <span class="when">2024.09 – 2028.06</span>
+            </div>
+            <div class="courses">
+                <strong>主修课程</strong>：C 语言程序设计 · 离散数学 · 数据结构 · 计算机组成原理 · 操作系统 · 数据库原理与应用 · 编译原理 · 算法设计与分析 · 计算机网络
+            </div>
+        </div>
+    </section>
+
+    <!-- ===== 陆 · 索取简历 ===== -->
+    <section class="rv-sec" id="request">
+        <div class="rv-sec-head">
+            <span class="no">陆</span>
+            <h2>索取完整简历</h2>
+            <span class="en">REQUEST</span>
+        </div>
+        <div class="rv-request">
+            <p class="txt">
+                简历 PDF <span class="hl">不在此公开托管</span>，需要完整版请邮件索取，注明岗位名称即可，通常 24 小时内回复。
+            </p>
+            <div class="rv-actions">
+                <button type="button" class="rv-btn" data-copy-email data-email="dzloong@foxmail.com">复制邮箱</button>
+                <a class="rv-btn" href="mailto:dzloong@foxmail.com">写邮件 ↗</a>
+                <a class="rv-btn" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- 本区导览 -->
+    <nav class="sub-directory rv-noprint" aria-label="本区导览">
+        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
+        <a class="sub-dir-item" href="../index.html">
+            <span class="no">壹</span>
+            <span class="info"><span class="t">回到工作台</span><span class="d">工房首页 · 作品与台面</span></span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="../pages/portfolio.html">
+            <span class="no">贰</span>
+            <span class="info"><span class="t">档案架</span><span class="d">作品集存档 · 按时间倒序</span></span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer">
+            <span class="no">叁</span>
+            <span class="info"><span class="t">IterTrip 启程</span><span class="d">主力项目 · AI 旅行规划 · 线上可玩</span></span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="sub-dir-item" href="../pages/blog.html">
+            <span class="no">肆</span>
+            <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
+            <span class="arrow">→</span>
+        </a>
+    </nav>
+
+    <!-- 报尾 -->
+    <footer class="sub-colophon">
+        <div class="end">— 工房不关门 —</div>
+        <div class="meta">
+            ZLOONG 工房 · 简历页 · 内容截至 2026 年 9 月<br>
+            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/resume/
+        </div>
+    </footer>
+</div>
+
+<script>
+(function () {
+    /* 门牌日期 */
+    var el = document.getElementById("today");
+    if (el) {
+        var d = new Date();
+        var week = ["日", "一", "二", "三", "四", "五", "六"][d.getDay()];
+        el.textContent = d.getFullYear() + "年" + (d.getMonth() + 1) + "月" + d.getDate() + "日 · 星期" + week;
+    }
+
+    /* 复制邮箱（原生兜底，无 clipboard API 时用 range 选区） */
+    function copyText(text, done) {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(text).then(done, function () { fallback(text, done); });
+        } else {
+            fallback(text, done);
+        }
+    }
+    function fallback(text, done) {
+        var ta = document.createElement("textarea");
+        ta.value = text;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.opacity = "0";
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand("copy"); } catch (e) { /* 忽略 */ }
+        document.body.removeChild(ta);
+        done();
+    }
+
+    document.querySelectorAll("[data-copy-email]").forEach(function (node) {
+        node.addEventListener("click", function (e) {
+            e.preventDefault();
+            var mail = node.getAttribute("data-email") || "";
+            copyText(mail, function () {
+                var old = node.getAttribute("data-label") || node.textContent;
+                node.setAttribute("data-label", old);
+                if (node.tagName === "BUTTON") {
+                    node.textContent = "已复制 ✓";
+                    setTimeout(function () { node.textContent = old; }, 1600);
+                }
+            });
+        });
+    });
+})();
+</script>
+</body>
+</html>

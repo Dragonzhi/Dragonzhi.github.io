@@ -1,0 +1,407 @@
+/* ============================================================
+   ZLOONG 工房 · 简历页样式（/resume/）
+   复用 workshop.css 的 tokens + subpages.css 的外壳（门牌/报头墙/导览/报尾）
+   信息架构为「筛选者可扫读」优化：定位 → 摘要 → 技能 → 项目 → 凭证 → 教育
+   ============================================================ */
+
+/* ---- 求职状态条 ---- */
+.rv-status {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 8px 20px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--red);
+  padding: 13px 20px;
+  margin: 0 0 14px;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+}
+.rv-status .k { color: var(--red); letter-spacing: 1px; }
+.rv-status strong { color: var(--ink); font-weight: 600; }
+.rv-status .dot { color: var(--line); }
+
+/* ---- 页内快速索引 ---- */
+.rv-jump {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin: 0 0 30px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+}
+.rv-jump a {
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 3px 12px;
+  transition: color .15s ease, border-color .15s ease;
+}
+.rv-jump a:hover { color: var(--red); border-color: rgba(139, 44, 31, .45); }
+
+/* ---- 分区通用 ---- */
+.rv-sec { margin: 0 0 34px; scroll-margin-top: 20px; }
+.rv-sec-head {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+  border-bottom: 2px solid var(--ink);
+  padding-bottom: 6px;
+  margin-bottom: 16px;
+}
+.rv-sec-head .no {
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--red);
+  letter-spacing: 1px;
+}
+.rv-sec-head h2 {
+  font-family: var(--serif);
+  font-size: 19px;
+  font-weight: 800;
+  letter-spacing: 3px;
+}
+.rv-sec-head .en {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: 2px;
+}
+
+/* ---- 摘要卡（身份事实） ---- */
+.rv-facts {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+.rv-fact {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--red);
+  padding: 11px 14px;
+}
+.rv-fact .k {
+  display: block;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  letter-spacing: 1px;
+  margin-bottom: 3px;
+}
+.rv-fact .v { font-size: var(--fs-md); line-height: 1.6; }
+.rv-fact .v a { font-family: var(--mono); font-size: var(--fs-sm); }
+
+/* ---- 技能矩阵 ---- */
+.rv-skill-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(310px, 1fr));
+  gap: 12px;
+}
+.rv-skill {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 14px 16px;
+}
+.rv-skill h3 {
+  font-size: var(--fs-md);
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.rv-skill h3 .core {
+  font-family: var(--mono);
+  font-size: 9.5px;
+  font-weight: 400;
+  color: var(--red);
+  border: 1px solid rgba(139, 44, 31, .45);
+  border-radius: 999px;
+  padding: 0 7px;
+  letter-spacing: 1px;
+}
+.rv-skill ul { list-style: none; }
+.rv-skill li {
+  position: relative;
+  padding-left: 14px;
+  font-size: var(--fs-sm);
+  line-height: 1.85;
+  color: var(--ink-soft);
+}
+.rv-skill li::before {
+  content: "▪";
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: var(--red);
+  font-size: 9px;
+}
+.rv-skill li b { color: var(--ink); font-weight: 600; }
+
+/* ---- 项目卡 ---- */
+.rv-proj {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 17px 20px 16px;
+  margin-bottom: 14px;
+}
+.rv-proj::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--red);
+}
+.rv-proj-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 10px;
+  margin-bottom: 3px;
+}
+.rv-proj-head .idx {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+}
+.rv-proj-head h3 {
+  font-family: var(--display);
+  font-size: 17.5px;
+  line-height: 1.3;
+}
+.rv-proj-head .badge {
+  font-family: var(--mono);
+  font-size: 10px;
+  color: var(--blue);
+  border: 1px solid rgba(47, 93, 138, .35);
+  border-radius: 999px;
+  padding: 0 8px;
+  letter-spacing: 1px;
+  white-space: nowrap;
+}
+.rv-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px 14px;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  margin-bottom: 10px;
+}
+.rv-meta .role { color: var(--ink); }
+.rv-line {
+  font-size: var(--fs-md);
+  margin-bottom: 10px;
+}
+.rv-points { list-style: none; margin-bottom: 10px; }
+.rv-points li {
+  position: relative;
+  padding-left: 16px;
+  font-size: var(--fs-sm);
+  line-height: 1.9;
+  margin-bottom: 1px;
+}
+.rv-points li::before {
+  content: "▸";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 10px;
+  color: var(--red);
+}
+.rv-points b { color: var(--ink); font-weight: 600; }
+.rv-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 9px;
+}
+.rv-tag {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--blue);
+  background: rgba(47, 93, 138, .05);
+  border: 1px solid rgba(47, 93, 138, .28);
+  border-radius: 3px;
+  padding: 1px 7px;
+}
+.rv-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+}
+.rv-note {
+  margin-top: 11px;
+  padding-top: 9px;
+  border-top: 1px dotted var(--line);
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+  line-height: 1.8;
+}
+
+/* ---- 凭证：双栏（软著 / 竞赛） ---- */
+.rv-duo {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+.rv-panel {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 14px 16px;
+}
+.rv-panel .cap {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+  letter-spacing: 1px;
+  border-bottom: 1px dotted var(--line);
+  padding-bottom: 7px;
+  margin-bottom: 8px;
+}
+.rv-ip, .rv-award { list-style: none; }
+.rv-ip li {
+  display: flex;
+  align-items: baseline;
+  gap: 9px;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--line);
+  font-size: var(--fs-sm);
+}
+.rv-ip li:last-child, .rv-award li:last-child { border-bottom: none; }
+.rv-ip .no {
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--red);
+}
+.rv-ip .reg {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+  white-space: nowrap;
+}
+.rv-award li {
+  position: relative;
+  padding: 7px 0 7px 15px;
+  border-bottom: 1px dotted var(--line);
+  font-size: var(--fs-sm);
+  line-height: 1.7;
+}
+.rv-award li::before {
+  content: "★";
+  position: absolute;
+  left: 0;
+  top: 11px;
+  font-size: 9px;
+  color: var(--red);
+}
+.rv-award .lv { color: var(--red); font-weight: 600; }
+.rv-award .yr {
+  font-family: var(--mono);
+  font-size: 10.5px;
+  color: var(--ink-soft);
+}
+
+/* ---- 教育 ---- */
+.rv-edu {
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 15px 18px;
+}
+.rv-edu .row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 12px;
+}
+.rv-edu .row b { font-size: 16px; }
+.rv-edu .row .when {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: var(--fs-xs);
+  color: var(--ink-soft);
+}
+.rv-edu .major {
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  margin-top: 4px;
+}
+.rv-edu .courses {
+  margin-top: 9px;
+  padding-top: 9px;
+  border-top: 1px dotted var(--line);
+  font-size: var(--fs-sm);
+  color: var(--ink-soft);
+  line-height: 1.9;
+}
+
+/* ---- 简历索取 ---- */
+.rv-request {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px;
+  background: var(--card);
+  border: 1px dashed rgba(139, 44, 31, .5);
+  padding: 16px 18px;
+}
+.rv-request .txt { flex: 1; min-width: 240px; font-size: var(--fs-md); line-height: 1.75; }
+.rv-request .txt .hl { color: var(--red); font-weight: 600; }
+.rv-actions { display: flex; flex-wrap: wrap; gap: 10px; }
+.rv-btn {
+  font-family: var(--mono);
+  font-size: var(--fs-sm);
+  color: var(--red);
+  background: transparent;
+  border: 1px solid rgba(139, 44, 31, .5);
+  border-radius: 3px;
+  padding: 6px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background .15s ease, color .15s ease;
+}
+.rv-btn:hover { background: var(--red); color: var(--card); }
+
+/* ---- 响应式 ---- */
+@media (max-width: 620px) {
+  .rv-status { justify-content: flex-start; text-align: left; gap: 6px 14px; }
+  .rv-status .dot { display: none; }
+}
+@media (max-width: 820px) {
+  .rv-duo { grid-template-columns: 1fr; }
+  .rv-proj { padding: 15px 16px 14px; }
+  .rv-edu .row .when { margin-left: 0; width: 100%; }
+}
+
+/* ---- 打印：HR 直接 Ctrl+P 也能拿到干净的一份 ---- */
+@media print {
+  body { background: #fff; background-image: none; font-size: 12px; }
+  .sub-eyebrow, .sub-directory, .sub-colophon, .rv-jump, .rv-noprint { display: none !important; }
+  .sub-wall { padding: 0 0 10px; }
+  .sub-wall h1 { font-size: 30px; letter-spacing: 8px; }
+  .sub-wall .seal { display: none; }
+  .rv-status, .rv-fact, .rv-skill, .rv-proj, .rv-panel, .rv-edu, .rv-request {
+    border-color: #bbb;
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .rv-sec { margin-bottom: 18px; }
+  .rv-proj { margin-bottom: 10px; }
+  a { color: var(--ink) !important; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .rv-jump a, .rv-btn { transition: none; }
+}

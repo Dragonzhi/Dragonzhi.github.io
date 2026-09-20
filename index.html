@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ZLOONG 的工房：游戏开发、Mod、vibe coding 的工作台。">
+    <meta name="description" content="ZLOONG 的工房：AI 应用开发与独立游戏开发的工作台，含项目作品、技能与求职简历。">
     <meta name="theme-color" content="#f5f0e6">
     <title>ZLOONG 工房 · Hanako箱庭</title>
     <link rel="icon" href="images/favicon.png">
@@ -65,6 +65,10 @@
             <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
             <h2 class="hero-title"><span id="typed">Hi, I'm Dragonzhi.</span><span class="caret" aria-hidden="true"></span></h2>
             <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
+            <p class="hero-hire">
+                <a href="resume/">招聘方请走这边 → 看简历</a>
+                <span class="hero-hire-note samp">AI 应用开发 · 大模型应用开发 · 求实习</span>
+            </p>
             <p class="hero-links samp">
                 <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
                 <a href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">隔壁箱庭 ↗</a> ·
@@ -75,16 +79,19 @@
         <!-- about.md：文案在 files/about.md 里改 -->
         <section class="paper paper--about" data-desk-card="about">
             <h2 class="paper-title samp">about.md</h2>
-            <div id="about-body"><!-- 由 js/workshop.js 填充 --></div>
+            <div id="about-body"><!-- 由 js/workshop.js 填充；下面是 files/about.md 的静态兜底 -->
+                <p>西农计算机大三，做 AI 应用开发：把大模型能力落成能跑起来的产品，从结构化输出到线上部署自己走一遍。游戏开发是做了几年的老手艺。</p>
+            </div>
         </section>
 
         <!-- now.md：文案在 files/now.md 里改 -->
         <section class="paper paper--now" data-desk-card="now">
             <h2 class="paper-title samp">now.md</h2>
             <ul class="now-list" id="now-list">
-                <li><span class="now-dot"></span>打磨「棱镜：碧芙洛斯」卡牌核心玩法</li>
-                <li><span class="now-dot"></span>学 Godot 4 的渲染管线和 shader</li>
+                <li><span class="now-dot"></span>求职中：AI 应用开发 / 大模型应用实习</li>
+                <li><span class="now-dot"></span>IterTrip 持续迭代至 M24，线上可玩</li>
                 <li><span class="now-dot"></span>每天早上出一份 Hanako 箱庭日报</li>
+                <li><span class="now-dot"></span>♪ now playing：洛天依 #66CCFF</li>
             </ul>
             <p class="paper-foot samp">updated: <span data-current-year>2026</span> · Make Continually</p>
         </section>
@@ -204,32 +211,38 @@
     <!-- 导览牌 -->
     <nav class="directory" aria-label="本区导览">
         <div class="head">本区导览 <span class="en">CONTENTS</span></div>
-        <a class="dir-item" href="pages/blog.html">
+        <a class="dir-item" href="resume/">
             <span class="no">壹</span>
+            <span class="info"><span class="t">简历 / 求职</span><span class="d">AI 应用开发实习 · 技能矩阵与项目经历</span></span>
+            <span class="state hot">招聘方入口</span>
+            <span class="arrow">→</span>
+        </a>
+        <a class="dir-item" href="pages/blog.html">
+            <span class="no">贰</span>
             <span class="info"><span class="t">博客版</span><span class="d">长一点的记录，更新随缘</span></span>
             <span class="state calm">已上线</span>
             <span class="arrow">→</span>
         </a>
         <a class="dir-item" href="pages/gallery.html">
-            <span class="no">贰</span>
+            <span class="no">叁</span>
             <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
             <span class="state calm">已上线</span>
             <span class="arrow">→</span>
         </a>
         <a class="dir-item" href="pages/portfolio.html">
-            <span class="no">叁</span>
+            <span class="no">肆</span>
             <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
             <span class="state calm">存档</span>
             <span class="arrow">→</span>
         </a>
         <a class="dir-item" href="/itertrip/" target="_blank" rel="noreferrer">
-            <span class="no">肆</span>
+            <span class="no">伍</span>
             <span class="info"><span class="t">IterTrip 启程</span><span class="d">AI 旅行规划 · 攻略变地图 · /itertrip</span></span>
             <span class="state hot">新开</span>
             <span class="arrow">→</span>
         </a>
         <a class="dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
-            <span class="no">伍</span>
+            <span class="no">陆</span>
             <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅 · dragonzhi.xyz/hanako</span></span>
             <span class="state">今日已发</span>
             <span class="arrow">→</span>
