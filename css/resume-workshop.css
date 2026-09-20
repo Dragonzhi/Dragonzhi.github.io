@@ -1,0 +1,859 @@
+/* ============================================================
+   ZLOONG 工房 · 个人技术履历卷宗 (resume-workshop.css)
+   工房工整卷宗风格 · 双向导流 · 支持方向切换与原生 A4 打印
+   ============================================================ */
+
+/* ---------- 卷宗容器 ---------- */
+.dossier-wrap {
+  max-width: var(--wrap, 1031px);
+  margin: 0 auto;
+  padding: 0 24px 60px;
+}
+
+/* ---------- 卷宗顶栏工具条 ---------- */
+.resume-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+  background: var(--card, #fdfaf3);
+  border: 1px solid var(--line, rgba(38, 34, 28, .14));
+  border-radius: 4px;
+  padding: 12px 20px;
+  margin: 20px 0 28px;
+  box-shadow: 0 2px 8px rgba(38, 34, 28, .04);
+}
+
+.resume-track-switch {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.track-label {
+  font-family: var(--mono, monospace);
+  font-size: 11.5px;
+  color: var(--ink-soft, #6b645b);
+  letter-spacing: 1px;
+}
+
+.track-btn {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  padding: 6px 14px;
+  background: transparent;
+  color: var(--ink-soft, #6b645b);
+  border: 1px solid var(--line, rgba(38, 34, 28, .2));
+  border-radius: 3px;
+  cursor: pointer;
+  transition: all .18s ease;
+}
+
+.track-btn:hover {
+  color: var(--ink, #26221c);
+  border-color: var(--ink, #26221c);
+  background: rgba(139, 44, 31, .04);
+}
+
+.track-btn.active {
+  background: var(--ink, #26221c);
+  color: #faf6ee;
+  border-color: var(--ink, #26221c);
+  font-weight: 600;
+}
+
+.track-btn[data-track="ai"].active {
+  background: var(--red, #8b2c1f);
+  border-color: var(--red, #8b2c1f);
+}
+
+.resume-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.resume-tool-btn {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  color: var(--ink, #26221c);
+  background: #faf5ea;
+  border: 1px solid var(--line, rgba(38, 34, 28, .2));
+  border-radius: 3px;
+  padding: 6px 12px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all .15s ease;
+}
+
+.resume-tool-btn:hover {
+  color: var(--red, #8b2c1f);
+  border-color: var(--red, #8b2c1f);
+  background: #fff;
+}
+
+/* ---------- 卷宗主卷封面卡片 ---------- */
+.resume-dossier-card {
+  background: #faf5ea;
+  border: 1px solid rgba(38, 34, 28, .18);
+  border-radius: 4px;
+  padding: 32px 36px 28px;
+  position: relative;
+  box-shadow: 3px 6px 20px rgba(38, 34, 28, .07);
+  margin-bottom: 32px;
+}
+
+.resume-dossier-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; bottom: 0;
+  width: 6px;
+  background: var(--red, #8b2c1f);
+  border-radius: 4px 0 0 4px;
+}
+
+.dossier-seal-badge {
+  position: absolute;
+  top: 24px;
+  right: 32px;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--red, #8b2c1f);
+  border: 2px solid var(--red, #8b2c1f);
+  border-radius: 3px;
+  padding: 4px 10px;
+  letter-spacing: 2px;
+  transform: rotate(4deg);
+  text-align: center;
+  line-height: 1.3;
+  opacity: .9;
+  user-select: none;
+}
+
+.dossier-header-main h1 {
+  font-family: var(--serif, serif);
+  font-size: clamp(30px, 4.5vw, 42px);
+  color: var(--ink, #26221c);
+  margin: 0 0 6px;
+  letter-spacing: 4px;
+}
+
+.dossier-header-main h1 .en-alias {
+  font-family: var(--display, sans-serif);
+  font-size: 20px;
+  color: var(--ink-soft, #6b645b);
+  letter-spacing: 2px;
+  font-weight: 400;
+  margin-left: 12px;
+}
+
+.dossier-intent-badge {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-top: 4px;
+  margin-bottom: 16px;
+  font-family: var(--mono, monospace);
+  font-size: 14px;
+  color: var(--ink, #26221c);
+}
+
+.dossier-intent-badge .label {
+  color: var(--ink-soft, #6b645b);
+}
+
+.dossier-intent-badge .target {
+  font-weight: 700;
+  color: var(--red, #8b2c1f);
+}
+
+/* 个人基础信息元数据条 */
+.dossier-meta-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  gap: 12px 20px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line, rgba(38, 34, 28, .18));
+  font-size: 13.5px;
+  color: var(--ink, #26221c);
+}
+
+.meta-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta-item .k {
+  color: var(--ink-soft, #6b645b);
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+}
+
+.meta-item .v {
+  font-weight: 500;
+}
+
+.meta-item a {
+  color: var(--ink, #26221c);
+  text-decoration: none;
+  transition: color .15s ease;
+}
+
+.meta-item a:hover {
+  color: var(--red, #8b2c1f);
+}
+
+.email-copy-pill {
+  font-family: var(--mono, monospace);
+  font-size: 10.5px;
+  color: var(--red, #8b2c1f);
+  background: rgba(139, 44, 31, .06);
+  border: 1px solid rgba(139, 44, 31, .3);
+  border-radius: 3px;
+  padding: 2px 7px;
+  cursor: pointer;
+  margin-left: 6px;
+  transition: all .15s ease;
+}
+
+.email-copy-pill:hover,
+.email-copy-pill.copied {
+  background: var(--red, #8b2c1f);
+  color: #fff;
+}
+
+/* ---------- 卷宗各分卷板块 (Section) ---------- */
+.resume-section {
+  margin-bottom: 38px;
+}
+
+.section-head-bar {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  border-bottom: 2px solid var(--ink, #26221c);
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin: 0;
+  font-family: var(--serif, serif);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+  letter-spacing: 2px;
+}
+
+.section-title .sec-no {
+  font-family: var(--mono, monospace);
+  color: var(--red, #8b2c1f);
+  font-size: 14px;
+}
+
+.section-title .sec-en {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--ink-soft, #6b645b);
+  letter-spacing: 1.5px;
+  font-weight: 400;
+}
+
+.section-hint {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--ink-soft, #6b645b);
+}
+
+/* ---------- 教育背景栏 ---------- */
+.edu-strip {
+  background: var(--card, #fdfaf3);
+  border: 1px solid var(--line, rgba(38, 34, 28, .14));
+  border-radius: 3px;
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edu-main {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.edu-school {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+}
+
+.edu-major {
+  color: var(--ink-soft, #6b645b);
+  font-size: 14px;
+  margin-left: 8px;
+}
+
+.edu-time {
+  font-family: var(--mono, monospace);
+  font-size: 12.5px;
+  color: var(--red, #8b2c1f);
+  font-weight: 600;
+}
+
+.edu-courses {
+  font-size: 13px;
+  color: var(--ink-soft, #6b645b);
+  line-height: 1.6;
+}
+
+.edu-courses strong {
+  color: var(--ink, #26221c);
+  font-weight: 600;
+}
+
+/* ---------- 技能矩阵卡片 (Skills) ---------- */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 18px;
+}
+
+.skill-card {
+  background: var(--card, #fdfaf3);
+  border: 1px solid var(--line, rgba(38, 34, 28, .14));
+  border-radius: 3px;
+  padding: 18px 20px;
+  box-shadow: 0 1px 4px rgba(38, 34, 28, .04);
+  transition: transform .18s ease, border-color .18s ease;
+}
+
+.skill-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(139, 44, 31, .3);
+}
+
+.skill-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px dashed var(--line, rgba(38, 34, 28, .16));
+}
+
+.skill-card-title {
+  margin: 0;
+  font-family: var(--serif, serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+  letter-spacing: 1px;
+}
+
+.skill-card-badge {
+  font-family: var(--mono, monospace);
+  font-size: 10px;
+  color: var(--red, #8b2c1f);
+  border: 1px solid rgba(139, 44, 31, .35);
+  border-radius: 999px;
+  padding: 1px 7px;
+}
+
+.skill-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--ink, #26221c);
+}
+
+.skill-list li {
+  position: relative;
+  padding-left: 14px;
+  margin-bottom: 6px;
+}
+
+.skill-list li::before {
+  content: "▪";
+  position: absolute;
+  left: 0;
+  color: var(--red, #8b2c1f);
+  font-size: 10px;
+  top: -1px;
+}
+
+.skill-list .evidence {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--ink-soft, #6b645b);
+  margin-left: 4px;
+}
+
+/* 方向过滤高亮状态 */
+.skill-card.is-dimmed {
+  opacity: .5;
+  filter: grayscale(40%);
+}
+
+/* ---------- 重点项目卡片群 (Projects) ---------- */
+.projects-dossier-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.dossier-proj-item {
+  background: var(--card, #fdfaf3);
+  border: 1px solid var(--line, rgba(38, 34, 28, .16));
+  border-radius: 3px;
+  box-shadow: 0 2px 8px rgba(38, 34, 28, .05);
+  overflow: hidden;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.dossier-proj-item:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(38, 34, 28, .08);
+}
+
+/* 主打重点项目特殊样式条（如 IterTrip） */
+.dossier-proj-item.is-flagship {
+  border-left: 4px solid var(--red, #8b2c1f);
+  background: #fffdf8;
+}
+
+.proj-head-banner {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 14px 22px;
+  background: rgba(38, 34, 28, .03);
+  border-bottom: 1px solid var(--line, rgba(38, 34, 28, .12));
+}
+
+.proj-title-box {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.proj-index-tag {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--red, #8b2c1f);
+}
+
+.proj-main-title {
+  font-family: var(--display, sans-serif);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+  margin: 0;
+}
+
+.proj-role-badge {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--ink-soft, #6b645b);
+  border: 1px solid var(--line, rgba(38, 34, 28, .2));
+  border-radius: 3px;
+  padding: 1px 7px;
+}
+
+.proj-period-tag {
+  font-family: var(--mono, monospace);
+  font-size: 11.5px;
+  color: var(--ink-soft, #6b645b);
+}
+
+.proj-body-content {
+  padding: 20px 22px;
+}
+
+.proj-oneline-summary {
+  font-size: 14.5px;
+  color: var(--ink, #26221c);
+  font-weight: 500;
+  margin: 0 0 12px;
+  line-height: 1.6;
+}
+
+.proj-scale-callout {
+  background: rgba(139, 44, 31, .04);
+  border-left: 3px solid var(--red, #8b2c1f);
+  padding: 6px 12px;
+  font-size: 12.5px;
+  color: var(--ink, #26221c);
+  margin-bottom: 14px;
+  font-family: var(--mono, monospace);
+}
+
+.proj-scale-callout strong {
+  color: var(--red, #8b2c1f);
+}
+
+.proj-highlights-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+}
+
+.proj-highlights-list li {
+  position: relative;
+  padding-left: 18px;
+  margin-bottom: 8px;
+  font-size: 13.5px;
+  line-height: 1.65;
+  color: var(--ink, #26221c);
+}
+
+.proj-highlights-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--red, #8b2c1f);
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+}
+
+.proj-highlights-list li strong {
+  color: var(--ink, #26221c);
+}
+
+.proj-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--line, rgba(38, 34, 28, .14));
+}
+
+.proj-tech-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.tech-chip {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--ink-soft, #6b645b);
+  background: #faf5ea;
+  border: 1px solid var(--line, rgba(38, 34, 28, .18));
+  border-radius: 2px;
+  padding: 2px 7px;
+}
+
+.proj-links-cluster {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-family: var(--mono, monospace);
+  font-size: 12.5px;
+}
+
+.proj-link-item {
+  color: var(--red, #8b2c1f);
+  text-decoration: none;
+  font-weight: 500;
+  transition: opacity .15s ease;
+}
+
+.proj-link-item:hover {
+  text-decoration: underline;
+}
+
+/* 过滤切换动画与隐藏逻辑 */
+.dossier-proj-item.is-filtered-out {
+  display: none;
+}
+
+/* ---------- 知识产权与竞赛荣誉 (IP & Awards) ---------- */
+.ip-awards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+@media (max-width: 768px) {
+  .ip-awards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.dossier-box {
+  background: var(--card, #fdfaf3);
+  border: 1px solid var(--line, rgba(38, 34, 28, .14));
+  border-radius: 3px;
+  padding: 18px 20px;
+}
+
+.dossier-box-title {
+  margin: 0 0 14px;
+  font-family: var(--serif, serif);
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--ink, #26221c);
+  letter-spacing: 1px;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.dossier-box-title .count {
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--red, #8b2c1f);
+}
+
+.dossier-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+
+.dossier-table th {
+  text-align: left;
+  font-family: var(--mono, monospace);
+  font-size: 11px;
+  color: var(--ink-soft, #6b645b);
+  border-bottom: 1px solid var(--line, rgba(38, 34, 28, .2));
+  padding: 6px 8px;
+}
+
+.dossier-table td {
+  padding: 9px 8px;
+  border-bottom: 1px dashed var(--line, rgba(38, 34, 28, .12));
+  color: var(--ink, #26221c);
+}
+
+.dossier-table tr:last-child td {
+  border-bottom: none;
+}
+
+.reg-no {
+  font-family: var(--mono, monospace);
+  color: var(--red, #8b2c1f);
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.award-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.award-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  border-bottom: 1px dashed var(--line, rgba(38, 34, 28, .12));
+  padding: 7px 0;
+}
+
+.award-list li:last-child {
+  border-bottom: none;
+}
+
+.award-name {
+  color: var(--ink, #26221c);
+  font-weight: 500;
+}
+
+.award-rank {
+  font-family: var(--mono, monospace);
+  font-size: 12px;
+  color: var(--red, #8b2c1f);
+  font-weight: 600;
+  white-space: nowrap;
+  margin-left: 8px;
+}
+
+/* ---------- 打印专篇 (@media print) ---------- */
+@media print {
+  @page {
+    size: A4 portrait;
+    margin: 10mm 12mm 10mm 12mm;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 10.5pt;
+    line-height: 1.45;
+  }
+
+  /* 隐藏所有非必要网页控件与导航 */
+  .sub-eyebrow,
+  .resume-toolbar,
+  .resume-actions-group,
+  .sub-directory,
+  .signal-layer,
+  .email-copy-pill,
+  .dossier-seal-badge,
+  .colophon,
+  #today {
+    display: none !important;
+  }
+
+  .dossier-wrap {
+    max-width: 100% !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* 卷宗封面打印纯净化 */
+  .resume-dossier-card {
+    background: none !important;
+    border: none !important;
+    border-bottom: 2pt solid #000 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+    padding: 0 0 10pt 0 !important;
+    margin-bottom: 14pt !important;
+  }
+
+  .resume-dossier-card::before {
+    display: none !important;
+  }
+
+  .dossier-header-main h1 {
+    font-size: 22pt !important;
+    color: #000 !important;
+    letter-spacing: 2px !important;
+  }
+
+  .dossier-header-main h1 .en-alias {
+    font-size: 12pt !important;
+    color: #333 !important;
+  }
+
+  .dossier-intent-badge {
+    margin: 3pt 0 8pt !important;
+    font-size: 11pt !important;
+  }
+
+  .dossier-intent-badge .target {
+    color: #000 !important;
+    font-weight: bold !important;
+  }
+
+  .dossier-meta-grid {
+    border-top: 1pt solid #ccc !important;
+    padding-top: 6pt !important;
+    gap: 4pt 12pt !important;
+    font-size: 9.5pt !important;
+  }
+
+  /* 板块标题 */
+  .resume-section {
+    margin-bottom: 14pt !important;
+  }
+
+  .section-head-bar {
+    border-bottom: 1.5pt solid #000 !important;
+    padding-bottom: 3pt !important;
+    margin-bottom: 8pt !important;
+  }
+
+  .section-title {
+    font-size: 13pt !important;
+    color: #000 !important;
+  }
+
+  .section-title .sec-no {
+    color: #000 !important;
+  }
+
+  /* 卡片防跨页断裂 */
+  .dossier-proj-item,
+  .skill-card,
+  .dossier-box,
+  .edu-strip {
+    break-inside: avoid !important;
+    page-break-inside: avoid !important;
+    background: none !important;
+    border: 1pt solid #bbb !important;
+    box-shadow: none !important;
+    margin-bottom: 8pt !important;
+  }
+
+  .proj-head-banner {
+    background: #f0f0f0 !important;
+    padding: 6pt 10pt !important;
+  }
+
+  .proj-main-title {
+    font-size: 12pt !important;
+  }
+
+  .proj-body-content {
+    padding: 8pt 10pt !important;
+  }
+
+  .proj-oneline-summary {
+    font-size: 10pt !important;
+    margin-bottom: 6pt !important;
+  }
+
+  .proj-scale-callout {
+    background: #f7f7f7 !important;
+    border-left: 2pt solid #444 !important;
+    padding: 3pt 6pt !important;
+    font-size: 9pt !important;
+    margin-bottom: 6pt !important;
+  }
+
+  .proj-scale-callout strong {
+    color: #000 !important;
+  }
+
+  .proj-highlights-list li {
+    font-size: 9.5pt !important;
+    line-height: 1.4 !important;
+    margin-bottom: 3pt !important;
+  }
+
+  .proj-highlights-list li::before {
+    color: #000 !important;
+  }
+
+  .tech-chip {
+    border: 1pt solid #ccc !important;
+    background: none !important;
+    font-size: 8pt !important;
+    padding: 1pt 4pt !important;
+  }
+
+  .proj-links-cluster {
+    display: none !important;
+  }
+
+  /* 打印时始终展示主方向卡片，或按当前视图 */
+  .dossier-proj-item.is-filtered-out {
+    display: none !important;
+  }
+}
+
