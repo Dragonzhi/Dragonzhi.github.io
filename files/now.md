@@ -1,4 +1,4 @@
-- 棱镜：碧芙洛斯 · 卡牌打磨中 [[在制]]
-- 正在学游戏引擎
-- 摸鱼 Minecraft Mod（Forge · Kotlin）
+- 求职中：AI 应用开发 / 大模型应用实习 [[在投]]
+- IterTrip 持续迭代至 M24，线上可玩
+- 每天早上出一份 Hanako 箱庭日报
 - ♪ now playing：洛天依 `#66CCFF`

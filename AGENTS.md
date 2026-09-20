@@ -8,6 +8,7 @@
 - `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/` + `data/files-manifest.json`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`，`files/` 新增 `.md` 通过 `scripts/generate_manifest.py` 生成的索引自动成为档案架卡片，样式按内容自动判型：链接列表/圆点列表/便签/段落）。
 - `css/seal.css` + `js/seal.js`：工房印章（3D 单物件方向）——视口右下角一枚 three.js 印章，拖到纸卡上按下即盖章；印子存 localStorage（`zloong-seal-v1`，只记坐标与随机种子，最多 48 枚），清除键 `#seal-clear` 贴在印章上方；窄屏不出现、不加载 three.js，已存印子也不渲染；无 WebGL 退化为 2D 印章。**全站唯一的第三方依赖就在这里**（见工作约定 6）。
 - `posts/` + `data/posts.json`：博客文章（Markdown + JSON 索引）。
+- `resume/` + `css/resume-workshop.css`：求职简历页 `/resume/`（招聘方入口，首页 hero 与导览牌各有一个入口）。信息架构是为「筛选者扫读」设计的（定位 → 摘要 → 技能矩阵 → 项目 → 凭证 → 教育），与作品展示的叙事分开；改文案直接改 `resume/index.html`。**简历 PDF 一律不托管到站上**，只保留邮件索取通道，不要往仓库里放。
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
 - `pages/`、`legacy/`、`data/portfolio.json`：旧主题子页面与存档，改动需谨慎。
