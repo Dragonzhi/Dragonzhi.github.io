@@ -17,17 +17,21 @@ import argparse
 import html
 import re
 import sys
+import urllib.parse
+import urllib.request
 from collections import OrderedDict
 from datetime import date
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 OUT_HTML = ROOT / "luotianyi" / "index.html"
+# 同步下来的快照，同时用作离线回退；不手改，由本脚本写入
+CACHE_MD = ROOT / "luotianyi" / "洛天依歌单.md"
 
-DEFAULT_SOURCES = [
-    ROOT / "luotianyi" / "洛天依歌单.md",
-    Path.home() / "desk" / "洛天依歌单" / "洛天依歌单.md",
-]
+# 歌单数据的唯一来源（数据改动都在这个仓库里做）
+GITHUB_REPO = "Dragonzhi/luotianyi-song-list"
+GITHUB_BRANCH = "master"
+GITHUB_FILE = "洛天依歌单.md"
 
 LINE_RE = re.compile(
     r"^(?:-\s+)?(?P<title>.*?)"
@@ -38,21 +42,45 @@ LINE_RE = re.compile(
 )
 
 
-def pick_source(explicit):
-    if explicit:
-        p = Path(explicit)
+def raw_url():
+    return "https://raw.githubusercontent.com/%s/%s/%s" % (
+        GITHUB_REPO, GITHUB_BRANCH, urllib.parse.quote(GITHUB_FILE))
+
+
+def sync_from_github(dest):
+    """拉取歌单仓库最新数据，写入本地快照，返回文本。"""
+    req = urllib.request.Request(raw_url(), headers={"User-Agent": "luotianyi-page-generator"})
+    with urllib.request.urlopen(req, timeout=25) as resp:
+        text = resp.read().decode("utf-8")
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    dest.write_text(text, encoding="utf-8")
+    return text
+
+
+def load_songs(args):
+    """数据来源优先级：--src > GitHub 同步 > 上次同步的本地快照。"""
+    if args.src:
+        p = Path(args.src)
         if not p.exists():
             sys.exit("找不到指定文件: %s" % p)
-        return p
-    for p in DEFAULT_SOURCES:
-        if p.exists():
-            return p
-    sys.exit("找不到歌单文件，试过:\n  " + "\n  ".join(str(p) for p in DEFAULT_SOURCES))
+        return "%s (指定)" % p, p.read_text(encoding="utf-8")
+
+    if not args.offline:
+        try:
+            return "%s@%s (GitHub)" % (GITHUB_REPO, GITHUB_BRANCH), sync_from_github(CACHE_MD)
+        except Exception as exc:
+            print("从 GitHub 同步失败：%s" % exc)
+            print("改用上次同步的本地快照。")
+
+    if CACHE_MD.exists():
+        return "%s (本地快照)" % CACHE_MD, CACHE_MD.read_text(encoding="utf-8")
+
+    sys.exit("没有可用数据源：联网同步失败，且本地快照不存在")
 
 
-def parse_songs(path):
+def parse_songs(text):
     songs = []
-    for raw in path.read_text(encoding="utf-8").splitlines():
+    for raw in text.splitlines():
         s = raw.strip()
         if not s.startswith("- "):
             continue
@@ -201,20 +229,21 @@ TEMPLATE = """<!DOCTYPE html>
 
 def main():
     ap = argparse.ArgumentParser(description="生成洛天依歌单页面")
-    ap.add_argument("--src", help="歌单 Markdown 路径")
+    ap.add_argument("--src", help="指定歌单 Markdown 路径（绕过 GitHub 同步）")
+    ap.add_argument("--offline", action="store_true", help="不联网，直接用上次同步的本地快照")
     args = ap.parse_args()
 
-    src = pick_source(args.src)
-    songs = parse_songs(src)
+    origin, text = load_songs(args)
+    songs = parse_songs(text)
     if not songs:
-        sys.exit("没解析出任何条目，检查文件格式: %s" % src)
+        sys.exit("没解析出任何条目，检查数据格式")
 
     body = build_html(songs)
 
     OUT_HTML.parent.mkdir(parents=True, exist_ok=True)
     OUT_HTML.write_text(body, encoding="utf-8")
 
-    print("数据源: %s" % src)
+    print("数据源: %s" % origin)
     print("条目数: %d" % len(songs))
     print("年份: %d - %d" % (songs[-1]["y"], songs[0]["y"]))
     print("带精确时间: %d" % sum(1 for s in songs if s["h"] is not None))

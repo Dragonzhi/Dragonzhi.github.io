@@ -10,6 +10,7 @@
 - `posts/` + `data/posts.json`：博客文章（Markdown + JSON 索引）。
 - `resume/` + `css/resume-workshop.css`：求职简历页 `/resume/`（招聘方入口，首页 hero 与导览牌各有一个入口）。信息架构是为「筛选者扫读」设计的（定位 → 摘要 → 技能矩阵 → 项目 → 凭证 → 教育），与作品展示的叙事分开；改文案直接改 `resume/index.html`。**简历 PDF 一律不托管到站上**，只保留邮件索取通道，不要往仓库里放。
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
+- `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（夜空底 + 天依蓝，视觉上与工房纸面分开，同 `/itertrip/` 与主站的关系）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。首页入口是 `files/luotianyi.md` 走自发现机制成的卡。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
 - `pages/`、`legacy/`、`data/portfolio.json`：旧主题子页面与存档，改动需谨慎。
 - 合规红线：`<title>` 固定为「ZLOONG 工房 · Hanako箱庭」，页脚备案号「闽ICP备20260330551号-1」不得删改。
