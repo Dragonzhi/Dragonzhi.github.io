@@ -55,7 +55,15 @@ body {
 
 /* ---------------------------------------------------------- 头部 */
 
-.hero { padding: 92px 0 38px; }
+.hero { padding: 84px 0 38px; }
+
+.hero-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    flex-wrap: wrap;
+}
 
 .eyebrow {
     font-family: var(--mono);
@@ -63,6 +71,117 @@ body {
     letter-spacing: .24em;
     color: var(--tianyi);
     text-transform: uppercase;
+}
+
+/* 投喂吃货大人小笼包按钮 */
+.tianyi-bun-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    background: rgba(102, 204, 255, .08);
+    border: 1px solid rgba(102, 204, 255, .28);
+    border-radius: 999px;
+    padding: 6px 14px;
+    color: var(--tianyi);
+    font-family: var(--sans);
+    font-size: 12.5px;
+    font-weight: 500;
+    cursor: pointer;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    transition: all .2s cubic-bezier(0.34, 1.56, 0.64, 1);
+    user-select: none;
+    position: relative;
+}
+
+.tianyi-bun-btn:hover {
+    background: rgba(102, 204, 255, .18);
+    border-color: var(--tianyi);
+    box-shadow: 0 0 16px rgba(102, 204, 255, .32);
+    transform: translateY(-1px) scale(1.03);
+}
+
+.tianyi-bun-btn:active {
+    transform: scale(0.96);
+}
+
+.bun-icon {
+    font-size: 15px;
+    line-height: 1;
+    display: inline-block;
+    transition: transform .2s ease;
+}
+
+.tianyi-bun-btn:hover .bun-icon {
+    transform: rotate(-10deg) scale(1.15);
+}
+
+.bun-badge {
+    background: var(--tianyi);
+    color: #060b12;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+    padding: 2px 6px;
+    border-radius: 999px;
+}
+
+/* 掉落包子/音符粒子 */
+.falling-bun {
+    position: fixed;
+    pointer-events: none;
+    z-index: 9999;
+    font-size: 24px;
+    user-select: none;
+    will-change: transform, opacity;
+    animation: bun-fall 1.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes bun-fall {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 0, 0) scale(0.4) rotate(0deg);
+    }
+    15% {
+        opacity: 1;
+        transform: translate3d(var(--drift-x, 0), -30px, 0) scale(1.2) rotate(var(--rot, 15deg));
+    }
+    100% {
+        opacity: 0;
+        transform: translate3d(calc(var(--drift-x, 0) * 1.8), 240px, 0) scale(0.8) rotate(calc(var(--rot, 15deg) * 3));
+    }
+}
+
+/* 萌系天依台词 Toast */
+.bun-toast {
+    position: fixed;
+    top: 24px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px);
+    z-index: 10000;
+    background: rgba(8, 16, 28, 0.92);
+    border: 1px solid var(--tianyi);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5), 0 0 20px rgba(102, 204, 255, 0.35);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-radius: 999px;
+    padding: 10px 22px;
+    color: #fff;
+    font-size: 13.5px;
+    letter-spacing: .02em;
+    pointer-events: none;
+    opacity: 0;
+    transition: all .35s cubic-bezier(0.18, 0.89, 0.32, 1.28);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.bun-toast.is-show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 .hero h1 {
@@ -108,25 +227,155 @@ body {
     color: var(--ink-faint);
 }
 
-/* 十二年产量微缩图：时间正向（2012 → 2024），2020 的峰值一眼可见 */
+/* ---------------------------------------------------------- EQ 频谱仪产量图 */
+
+.spectrum-box {
+    margin-top: 34px;
+    padding: 18px 20px 14px;
+    background: rgba(10, 18, 30, 0.6);
+    border: 1px solid rgba(102, 204, 255, 0.18);
+    border-radius: 10px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    position: relative;
+    overflow: hidden;
+}
+
+.spectrum-box::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 50% 100%, rgba(102, 204, 255, 0.08), transparent 70%);
+    pointer-events: none;
+}
+
+.spectrum-meta {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--ink-faint);
+    margin-bottom: 14px;
+    letter-spacing: .08em;
+}
+
+.spectrum-title {
+    color: var(--tianyi);
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-weight: 500;
+}
+
+.eq-icon {
+    display: inline-block;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--tianyi);
+    box-shadow: 0 0 8px var(--tianyi);
+    animation: eq-blink 1.8s ease-in-out infinite;
+}
+
+@keyframes eq-blink {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: .35; transform: scale(0.75); }
+}
+
+.spectrum-legend {
+    color: rgba(232, 240, 248, .4);
+    font-size: 10.5px;
+}
+
 .spark {
     display: flex;
     align-items: flex-end;
-    gap: 4px;
-    height: 36px;
-    margin-top: 30px;
+    gap: 7px;
+    height: 54px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgba(102, 204, 255, 0.12);
 }
 
-.spark i {
-    display: block;
-    width: 6px;
-    border-radius: 1px 1px 0 0;
-    background: linear-gradient(180deg, rgba(102, 204, 255, .72), rgba(102, 204, 255, .14));
-    transition: background .2s;
+.spark-bar {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    text-decoration: none;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    transition: transform .2s ease;
 }
 
-.spark i:hover {
-    background: linear-gradient(180deg, var(--tianyi), rgba(102, 204, 255, .3));
+.spark-bar:hover {
+    transform: translateY(-2px);
+}
+
+.spark-fill {
+    width: 100%;
+    height: 100%;
+    border-radius: 2px 2px 0 0;
+    background: linear-gradient(180deg, rgba(102, 204, 255, 0.85) 0%, rgba(102, 204, 255, 0.35) 60%, rgba(102, 204, 255, 0.08) 100%);
+    transition: background .2s, box-shadow .2s;
+    position: relative;
+}
+
+/* EQ 分段刻度感条纹 */
+.spark-fill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: repeating-linear-gradient(180deg, transparent 0, transparent 3px, rgba(8, 13, 21, .55) 3px, rgba(8, 13, 21, .55) 4px);
+    pointer-events: none;
+}
+
+/* 顶部峰值条 Peak Cap */
+.spark-cap {
+    position: absolute;
+    top: -4px;
+    width: 100%;
+    height: 2px;
+    background: var(--tianyi);
+    border-radius: 1px;
+    box-shadow: 0 0 6px var(--tianyi);
+    opacity: 0.75;
+    transition: opacity .2s, transform .2s;
+}
+
+.spark-bar:hover .spark-fill,
+.spark-bar.is-active .spark-fill {
+    background: linear-gradient(180deg, #99e6ff 0%, var(--tianyi) 50%, rgba(102, 204, 255, 0.3) 100%);
+    box-shadow: 0 0 12px rgba(102, 204, 255, 0.55);
+}
+
+.spark-bar:hover .spark-cap,
+.spark-bar.is-active .spark-cap {
+    background: #ffffff;
+    opacity: 1;
+    transform: translateY(-2px);
+    box-shadow: 0 0 8px #ffffff;
+}
+
+.spark-bar.is-peak .spark-fill {
+    background: linear-gradient(180deg, #ffffff 0%, var(--tianyi) 40%, rgba(102, 204, 255, 0.22) 100%);
+}
+
+.spark-bar.is-peak .spark-cap {
+    background: #fff;
+    box-shadow: 0 0 10px var(--tianyi);
+}
+
+.spectrum-axis {
+    display: flex;
+    justify-content: space-between;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    color: var(--ink-faint);
+    margin-top: 7px;
+    padding: 0 2px;
 }
 
 /* ---------------------------------------------------------- 工具条 */
@@ -183,60 +432,105 @@ body {
 .years a:hover { color: var(--ink); }
 .years a.is-active { color: var(--tianyi); border-bottom-color: var(--tianyi-soft); }
 
-/* ---------------------------------------------------------- 时间轴 */
+/* ---------------------------------------------------------- 时间轴（电音导轨） */
 
 .timeline {
     position: relative;
-    padding-left: 26px;
-    margin-top: 30px;
+    padding-left: 28px;
+    margin-top: 36px;
 }
 
+/* 电音导轨光纤 */
 .timeline::before {
     content: "";
     position: absolute;
-    left: 5px;
+    left: 6px;
     top: 8px;
     bottom: 8px;
-    width: 1px;
+    width: 2px;
+    border-radius: 1px;
     background: linear-gradient(180deg,
-            rgba(102, 204, 255, .55) 0%,
-            rgba(102, 204, 255, .22) 45%,
+            rgba(102, 204, 255, .8) 0%,
+            rgba(102, 204, 255, .4) 40%,
+            rgba(102, 204, 255, .15) 80%,
             rgba(102, 204, 255, .04) 100%);
+    box-shadow: 0 0 8px rgba(102, 204, 255, .25);
 }
 
-.year { position: relative; padding-top: 36px; }
+.year {
+    position: relative;
+    padding-top: 40px;
+    transition: opacity .2s;
+}
+
 .year:first-child { padding-top: 4px; }
 .year[hidden] { display: none; }
 
 .year-node {
     position: absolute;
-    left: -24px;
-    top: 48px;
-    width: 11px;
-    height: 11px;
+    left: -28px;
+    top: 52px;
+    width: 12px;
+    height: 12px;
     border-radius: 50%;
     background: var(--bg);
-    border: 1px solid var(--tianyi);
-    box-shadow: 0 0 0 4px rgba(102, 204, 255, .06);
+    border: 2px solid var(--tianyi);
+    box-shadow: 0 0 0 3px rgba(102, 204, 255, .1);
+    transition: all .24s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 2;
 }
 
 .year:first-child .year-node { top: 16px; }
+
+/* 活跃年份：声波同心圆波纹与发光晶体核心 */
+.year.is-active .year-node {
+    background: var(--tianyi);
+    border-color: #ffffff;
+    box-shadow: 0 0 12px var(--tianyi), 0 0 20px rgba(102, 204, 255, 0.7);
+    transform: scale(1.15);
+}
+
+.year.is-active .year-node::after {
+    content: "";
+    position: absolute;
+    inset: -6px;
+    border-radius: 50%;
+    border: 1.5px solid var(--tianyi);
+    opacity: 0;
+    animation: cyber-ripple 2.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) infinite;
+}
+
+@keyframes cyber-ripple {
+    0% {
+        transform: scale(0.6);
+        opacity: 0.95;
+    }
+    100% {
+        transform: scale(2.4);
+        opacity: 0;
+    }
+}
 
 .year-head {
     display: flex;
     align-items: center;
     gap: 14px;
-    margin-bottom: 13px;
+    margin-bottom: 14px;
 }
 
 .year-num {
     flex: none;
     font-family: var(--serif);
     font-weight: 700;
-    font-size: clamp(25px, 5vw, 36px);
+    font-size: clamp(26px, 5vw, 38px);
     line-height: 1;
     color: var(--tianyi);
     letter-spacing: .01em;
+    transition: text-shadow .2s;
+}
+
+.year.is-active .year-num {
+    text-shadow: 0 0 18px rgba(102, 204, 255, 0.45);
 }
 
 .year-bar {
@@ -244,7 +538,25 @@ body {
     height: 2px;
     min-width: 24px;
     border-radius: 1px;
-    background: linear-gradient(90deg, rgba(102, 204, 255, .46), rgba(102, 204, 255, .06));
+    background: linear-gradient(90deg, rgba(102, 204, 255, .55), rgba(102, 204, 255, .08));
+    position: relative;
+    overflow: hidden;
+}
+
+.year.is-active .year-bar::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -40%;
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, #ffffff, transparent);
+    animation: sweep-sheen 3s ease-in-out infinite;
+}
+
+@keyframes sweep-sheen {
+    0% { left: -40%; }
+    40%, 100% { left: 100%; }
 }
 
 .year-count {
@@ -265,7 +577,8 @@ body {
     padding: 7px 12px;
     margin-left: -12px;
     border-radius: 6px;
-    transition: background .16s;
+    transition: background .16s, box-shadow .16s;
+    position: relative;
 }
 
 .songs li[hidden] { display: none; }
@@ -275,11 +588,80 @@ body {
     flex: 1;
     font-size: 15px;
     color: var(--ink);
-    transition: color .16s;
+    transition: color .16s, text-shadow .16s;
     word-break: break-word;
 }
 
 .songs li:hover .song-title { color: var(--tianyi); }
+
+/* ---------------------------------------------------------- 殿堂/传说徽章与光晕 */
+
+.song-badge {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--sans);
+    font-size: 10.5px;
+    line-height: 1;
+    font-weight: 600;
+    padding: 3px 6px;
+    border-radius: 4px;
+    margin-left: 8px;
+    letter-spacing: .06em;
+    user-select: none;
+    transition: all .2s ease;
+}
+
+/* 殿堂曲徽章：天依蓝微光晶体 */
+.badge-hall {
+    color: #99e6ff;
+    background: rgba(102, 204, 255, .12);
+    border: 1px solid rgba(102, 204, 255, .38);
+    box-shadow: 0 0 8px rgba(102, 204, 255, .15);
+}
+
+.songs li.is-hall:hover .badge-hall {
+    background: rgba(102, 204, 255, .24);
+    border-color: var(--tianyi);
+    box-shadow: 0 0 12px rgba(102, 204, 255, .4);
+}
+
+/* 传说曲徽章：金色与天依蓝双层发光渐变 */
+.badge-legend {
+    color: #ffe680;
+    background: linear-gradient(135deg, rgba(255, 207, 64, .18), rgba(102, 204, 255, .16));
+    border: 1px solid rgba(255, 207, 64, .55);
+    box-shadow: 0 0 10px rgba(255, 207, 64, .25), 0 0 16px rgba(102, 204, 255, .15);
+}
+
+.songs li.is-legend:hover .badge-legend {
+    background: linear-gradient(135deg, rgba(255, 207, 64, .3), rgba(102, 204, 255, .26));
+    border-color: #ffd700;
+    box-shadow: 0 0 14px rgba(255, 207, 64, .5), 0 0 20px rgba(102, 204, 255, .3);
+    transform: scale(1.05);
+}
+
+/* 传说曲目特权辉光 */
+.songs li.is-legend .song-title {
+    font-weight: 500;
+    color: #f6fbff;
+    text-shadow: 0 0 12px rgba(102, 204, 255, .3);
+}
+
+.songs li.is-legend:hover .song-title {
+    color: #b3ecff;
+    text-shadow: 0 0 16px rgba(102, 204, 255, .6), 0 0 24px rgba(255, 207, 64, .3);
+}
+
+.songs li.is-hall .song-title {
+    color: #edf5fc;
+}
+
+.songs li.is-hall:hover .song-title {
+    color: var(--tianyi);
+    text-shadow: 0 0 12px rgba(102, 204, 255, .4);
+}
 
 .song-note {
     flex: none;
@@ -347,18 +729,22 @@ mark {
 
 @media (max-width: 560px) {
     .page { padding: 0 18px 56px; }
-    .hero { padding: 64px 0 30px; }
+    .hero { padding: 60px 0 28px; }
+    .hero-top { gap: 10px; }
+    .spectrum-box { padding: 14px 14px 10px; }
+    .spark { gap: 4px; height: 42px; }
     .toolbar { margin: 0 -18px; padding: 12px 18px 9px; }
 
     .timeline { padding-left: 20px; }
-    .timeline::before { left: 3px; }
-    .year-node { left: -20px; width: 9px; height: 9px; }
+    .timeline::before { left: 4px; }
+    .year-node { left: -22px; width: 10px; height: 10px; }
     .songs li { gap: 10px; padding: 6px 8px; margin-left: -8px; }
     .song-title { font-size: 14.5px; }
     .song-date { font-size: 11.5px; }
+    .song-badge { font-size: 9.5px; padding: 2px 4px; margin-left: 4px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    * { transition: none !important; }
+    * { animation: none !important; transition: none !important; }
 }

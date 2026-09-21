@@ -109,6 +109,20 @@ def date_label(song):
     return label, ""
 
 
+LEGEND_SONGS = {
+    "权御天下", "达拉崩吧", "勾指起誓", "世末歌者", "霜雪千年",
+    "夜航星", "三月雨", "大氿歌", "干物女", "东京不太热", "万古生香"
+}
+
+HALL_SONGS = {
+    "千年食谱颂", "66ccff", "一花依世界", "前尘如梦", "追光使者",
+    "深海少女", "夏夕空", "夏风", "心跳同步的时光", "九尾妖狐",
+    "夜行者们", "遥远的相遇", "登陆宇宙", "Connect【洛天依的构成】",
+    "末日DISCO", "明日DISCO", "梦回古城", "天行健", "starlight",
+    "Henceforth", "step on your heart"
+}
+
+
 def build_html(songs):
     grouped = OrderedDict()
     for s in songs:
@@ -116,6 +130,7 @@ def build_html(songs):
 
     years = sorted(grouped, reverse=True)
     peak = max(len(v) for v in grouped.values())
+    peak_year = next(y for y in sorted(grouped) if len(grouped[y]) == peak)
     first, last = songs[-1], songs[0]
     timed = sum(1 for s in songs if s["h"] is not None)
 
@@ -131,11 +146,24 @@ def build_html(songs):
             dl, tl = date_label(s)
             note = ('<span class="song-note">%s</span>' % html.escape(s["note"])) if s["note"] else ""
             tm = ('<span class="song-time">%s</span>' % tl) if tl else ""
+
+            # 殿堂 / 传说曲徽标与标记
+            badge_html = ""
+            classes = []
+            if s["title"] in LEGEND_SONGS:
+                classes.append("is-legend")
+                badge_html = '<span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span>'
+            elif s["title"] in HALL_SONGS:
+                classes.append("is-hall")
+                badge_html = '<span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span>'
+
+            class_attr = (' class="%s"' % " ".join(classes)) if classes else ""
+
             items.append(
-                '                <li data-title="%s">'
-                '<span class="song-title">%s</span>%s'
+                '                <li%s data-title="%s">'
+                '<span class="song-title">%s</span>%s%s'
                 '<span class="song-date">%s%s</span>'
-                '</li>' % (html.escape(s["title"], quote=True), html.escape(s["title"]), note, dl, tm)
+                '</li>' % (class_attr, html.escape(s["title"], quote=True), html.escape(s["title"]), badge_html, note, dl, tm)
             )
         bar_grow = max(6, round(len(rows) * 100 / peak))
         blocks.append(
@@ -153,12 +181,24 @@ def build_html(songs):
     lede = ("十二年，从《%s》到《%s》。按投稿日期倒序排列，同一天按投稿时间倒序。"
             % (html.escape(first["title"]), html.escape(last["title"])))
 
-    # 十二年产量微缩图，按时间正向排列
-    spark = "".join(
-        '<i style="height:%d%%" title="%d 年 · %d 首"></i>'
-        % (14 + round(86 * len(grouped[y]) / peak), y, len(grouped[y]))
-        for y in sorted(grouped)
-    )
+    # 产量音频频谱仪（EQ Spectrum Visualizer）
+    sorted_years = sorted(grouped)
+    spark_bars = []
+    for y in sorted_years:
+        cnt = len(grouped[y])
+        pct = 14 + round(86 * cnt / peak)
+        is_peak = (cnt == peak)
+        peak_tag = " · 巅峰" if is_peak else ""
+        spark_bars.append(
+            '<a href="#y%d" class="spark-bar%s" style="height:%d%%" '
+            'data-year="%d" title="%d 年 · %d 首%s" aria-label="%d 年 · %d 首%s">'
+            '<span class="spark-cap"></span>'
+            '<span class="spark-fill"></span>'
+            '</a>' % (y, " is-peak" if is_peak else "", pct, y, y, cnt, peak_tag, y, cnt, peak_tag)
+        )
+    spark = "".join(spark_bars)
+
+    mid_year = sorted_years[len(sorted_years) // 2]
 
     return TEMPLATE.format(
         lede=lede,
@@ -169,6 +209,9 @@ def build_html(songs):
         years=last["y"] - first["y"] + 1,
         timed=timed,
         spark=spark,
+        peak_year=peak_year,
+        peak_count=peak,
+        mid_year=mid_year,
         blocks="\n".join(blocks),
         built=date.today().isoformat(),
         last_date="%04d-%02d-%02d" % (last["y"], last["mo"], last["d"]),
@@ -192,7 +235,14 @@ TEMPLATE = """<!DOCTYPE html>
 <div class="page">
 
     <header class="hero">
-        <div class="eyebrow">{span} &mdash; {end}</div>
+        <div class="hero-top">
+            <div class="eyebrow">{span} &mdash; {end}</div>
+            <button class="tianyi-bun-btn" type="button" id="bunBtn" title="投喂吃货大人小笼包" aria-label="投喂天依">
+                <span class="bun-icon" aria-hidden="true">🥟</span>
+                <span class="bun-text">投喂天依</span>
+                <span class="bun-badge" id="bunCount" hidden>0</span>
+            </button>
+        </div>
         <h1>洛天依歌单</h1>
         <p class="lede">{lede}</p>
         <div class="stats">
@@ -200,11 +250,22 @@ TEMPLATE = """<!DOCTYPE html>
             <div class="stat"><b>{years}</b><span>年跨度</span></div>
             <div class="stat"><b>{timed}</b><span>精确到秒</span></div>
         </div>
-        <div class="spark" aria-hidden="true">{spark}</div>
+        <div class="spectrum-box">
+            <div class="spectrum-meta">
+                <span class="spectrum-title"><i class="eq-icon" aria-hidden="true"></i>AUDIO SPECTRUM // 创作频段</span>
+                <span class="spectrum-legend">PEAK: {peak_year} ({peak_count} 首)</span>
+            </div>
+            <div class="spark" role="img" aria-label="各年份投稿数量音频频谱图">{spark}</div>
+            <div class="spectrum-axis">
+                <span>{span}</span>
+                <span>{mid_year}</span>
+                <span>{end}</span>
+            </div>
+        </div>
     </header>
 
     <div class="toolbar">
-        <input class="search" type="search" placeholder="搜歌名…" aria-label="按歌名搜索">
+        <input class="search" type="search" placeholder="搜歌名、传说、殿堂…" aria-label="按歌名搜索">
         <nav class="years" aria-label="按年份跳转">{nav}</nav>
     </div>
 
