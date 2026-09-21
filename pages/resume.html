@@ -165,7 +165,7 @@
                         <strong>协议逆向与流解析：</strong>抖音直播弹幕 wss signature 计算与 protobuf 消息体二进制解包，打通实时互动链路<span class="evidence">[弹幕鸭]</span>
                     </li>
                     <li>
-                        <strong>定时与自动化流水线：</strong>APScheduler 定时采集、核验、Markdown 树型渲染与自动化报纸归档（39期无断更）<span class="evidence">[hanako/QQ-bot]</span>
+                        <strong>定时与自动化流水线：</strong>APScheduler 定时采集、核验、Markdown 树型渲染与自动化报纸归档（45+ 期无断更）<span class="evidence">[hanako/QQ-bot]</span>
                     </li>
                 </ul>
             </div>
@@ -265,13 +265,13 @@
                     </div>
                     <ul class="proj-highlights-list">
                         <li>
-                            <strong>结构化契约与自我修复：</strong>基于 pydantic 建立前后端唯一的 route JSON schema 契约；结合 Agent 反思重试机制，在模型输出校验失败时携带精准错误信息回灌纠错，构建可靠的闭环自愈环路。
+                            <strong>结构化契约与自我修复：</strong>基于 pydantic 定义 route JSON schema，作为生成 / 编辑 / 导出三端唯一数据源（前端类型为手工同步，计划以 openapi-typescript 生成）；结合 Agent 反思重试机制，在模型输出校验失败时携带精准错误信息回灌纠错，构建可靠的闭环自愈环路。
                         </li>
                         <li>
                             <strong>高可靠六级坐标降级链路与熔断保护：</strong>确立按「可信度优先」的六级降级架构（用户记忆真值 → 高德 POI 检索 → 模型知识库 → 联网搜索兜底 → 城市中心表 → 明确报错），每级打上来源与置信度溯源徽标；配备高德 8s 超时与单路线 40 次请求配额熔断，绝不因单点异常阻塞主生成链。
                         </li>
                         <li>
-                            <strong>主动核验与区域闸门防御：</strong>对模型产出坐标直查高德核验，偏差 ≤1.5km 自动校正（消除模型固有 113m~1.2km 同城偏差）；设置地理省市闸门，以目的地中心为锚点（≤200km 闸门）智能拦截同名误匹配，实现离位地点自主改回，彻底杜绝“异地飞线漂移”事故。
+                            <strong>主动核验与区域闸门防御：</strong>对模型产出坐标直查高德核验，偏差 ≤1.5km 自动校正（消除模型固有 113m~1.2km 同城偏差）；设置地理省市闸门，以目的地中心为锚点（≤200km 闸门）智能拦截同名误匹配，实现离位地点自主改回，修掉过 7 个长沙地点被搬往外省的真实事故。
                         </li>
                         <li>
                             <strong>确定性代码消除幻觉：</strong>闭馆日冲突检查刻意设计为<strong>零 LLM、零网络</strong>的纯算术模块（坚持“治幻觉的第一原则是绝不引入新幻觉”）；出发日期从自由文本智能推断并显式标记“推断可改”，无法判定如实提示，不假装通过。
@@ -296,7 +296,7 @@
                         </div>
                         <div class="proj-links-cluster">
                             <a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer" class="proj-link-item">在线体验 ↗</a>
-                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="proj-link-item">GitHub 仓库 ↗</a>
+                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="proj-link-item">GitHub 主页 ↗</a>
                         </div>
                     </div>
                 </div>
@@ -308,7 +308,7 @@
                     <div class="proj-title-box">
                         <span class="proj-index-tag">工程实践 · 02</span>
                         <h3 class="proj-main-title">弹幕鸭 (dycast-reply) — AI 直播弹幕交互工具</h3>
-                        <span class="proj-role-badge">独立开发 (全链路实现)</span>
+                        <span class="proj-role-badge">二次开发 (基于开源 dycast)</span>
                         <span class="state calm">开源工具</span>
                     </div>
                     <div class="proj-period-tag">2025</div>
@@ -395,11 +395,11 @@
                 </div>
                 <div class="proj-body-content">
                     <p class="proj-oneline-summary">
-                        国家级/省级大创研究项目落地系统：通过两阶段深度学习模型识别羊肚菌品种与成熟度阶段，标注目标边界框并持久化溯源记录，辅助种植农户精确把握采摘时机。
+                        大学生创新创业训练计划（大创）项目落地系统：通过两阶段深度学习模型识别羊肚菌品种与成熟度阶段，标注目标边界框并持久化溯源记录，辅助种植农户精确把握采摘时机。
                     </p>
                     <ul class="proj-highlights-list">
                         <li>
-                            <strong>两阶段检测分类架构：</strong>对比实验 YOLOv5/6/8/10/11n 后选用 YOLOv11n 完成区域精确定位（mAP50 85.05%），再送入 DINOv3 ViT-B/16 双头结构进行成熟度与品种多任务识别（综合准确率 92.01%）。
+                            <strong>两阶段检测分类架构：</strong>对比实验 YOLOv5/6/8/10/11n 后选用 YOLOv11n 完成区域精确定位（mAP50 85.05%），再送入 DINOv3 ViT-B/16 双头结构进行成熟度与品种多任务识别（综合准确率 92.01%，模型微调部分由团队成员完成）。
                         </li>
                         <li>
                             <strong>全栈工程与软著登记：</strong>基于 Flask + SQLAlchemy + OpenCV 独立搭建检测推理平台与历史追溯后台；成果获评数字媒体科技作品竞赛陕西三等奖，取得软件著作权（登记号：<code>2026SR0492487</code>）。
@@ -440,7 +440,7 @@
                             <strong>自研 Godot 节点式叙事编辑器：</strong>基于 Godot 4 自研 EditorPlugin 编辑器插件，利用 GraphEdit 实现可视化拼装任务图谱并直接导出 JSON 数据，彻底实现“策划改数值不碰代码”。
                         </li>
                         <li>
-                            <strong>高压项目管理与交付：</strong>作为队长与主程，在 21 天 GameJam 节奏下制定跨职能数值契约与 PR 规范，完成全套程序交付文档与单元测试，成功在好游快爆官方上线并开放试玩。
+                            <strong>高压项目管理与交付：</strong>作为队长与主程，在 21 天 GameJam 节奏下制定跨职能数值契约与 PR 规范，完成全套程序交付文档与边界用例自检，成功在好游快爆官方上线并开放试玩。
                         </li>
                     </ul>
                     <div class="proj-bottom-bar">
@@ -505,13 +505,13 @@
                         <span class="proj-index-tag">个人站 · 内容管线</span>
                         <h3 class="proj-main-title">hanako 箱庭日报 — 零依赖标准库个人门户与自动化管线</h3>
                         <span class="proj-role-badge">独立开发与自运维</span>
-                        <span class="state calm">39期连续更新</span>
+                        <span class="state calm">45+ 期连续更新</span>
                     </div>
                     <div class="proj-period-tag">2026.08 – 至今</div>
                 </div>
                 <div class="proj-body-content">
                     <p class="proj-oneline-summary">
-                        个人自托管箱庭门户（https://dragonzhi.xyz/hanako/）：创刊至今连续 39 期无断更，由 AI Agent 定时自动聚合科技与游戏圈动态，排印为复古报纸形态，全栈零第三方依赖原生构建。
+                        个人自托管箱庭门户（https://dragonzhi.xyz/hanako/）：创刊至今连续 45+ 期无断更，由 AI Agent 定时自动聚合科技与游戏圈动态，排印为复古报纸形态，全栈零第三方依赖原生构建。
                     </p>
                     <ul class="proj-highlights-list">
                         <li>
@@ -628,7 +628,7 @@
             <div class="dossier-box">
                 <h3 class="dossier-box-title">
                     <span>竞赛与获奖荣誉</span>
-                    <span class="count">省部级及以上</span>
+                    <span class="count">6 项</span>
                 </h3>
                 <ul class="award-list">
                     <li>
@@ -640,7 +640,7 @@
                         <span class="award-rank">校级一等奖 · 2025</span>
                     </li>
                     <li>
-                        <span class="award-name">蓝桥杯全国软件和信息技术人才大赛 (Python)</span>
+                        <span class="award-name">蓝桥杯全国软件和信息技术专业人才大赛 (Python)</span>
                         <span class="award-rank">省赛二等奖 · 2024</span>
                     </li>
                     <li>
@@ -650,6 +650,10 @@
                     <li>
                         <span class="award-name">034 GameJam 极限游戏开发大赛</span>
                         <span class="award-rank">最战斗爽塔防游戏奖 · 2025</span>
+                    </li>
+                    <li>
+                        <span class="award-name">数字媒体科技作品竞赛（菌兴慧农 · 羊肚菌智慧大棚）</span>
+                        <span class="award-rank">陕西赛区三等奖 · 2025</span>
                     </li>
                 </ul>
             </div>
