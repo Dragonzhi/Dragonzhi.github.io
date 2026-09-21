@@ -12,6 +12,257 @@
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+<!-- 年度灵魂意象背景舞台（SVG + CSS 风格化矢量动效） -->
+
+<div class="vector-stage" id="vectorStage" aria-hidden="true">
+    <!-- 默认/顶部总览场景：洛天依标志八卦碧玉光轮 -->
+    <div class="vector-scene is-active" data-year="hero">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g class="anim-spin-slow" style="transform-origin: 800px 220px;">
+                <circle cx="800" cy="220" r="250" stroke="#66ccff" stroke-width="1.5" stroke-dasharray="6 8" opacity="0.45"/>
+                <circle cx="800" cy="220" r="220" stroke="#66ccff" stroke-width="1" opacity="0.6"/>
+                <circle cx="800" cy="220" r="180" stroke="#66ccff" stroke-width="2" stroke-dasharray="1 10" opacity="0.5"/>
+                <circle cx="800" cy="220" r="130" stroke="#66ccff" stroke-width="1.5" opacity="0.7"/>
+                <path d="M 800 130 A 45 45 0 0 1 800 220 A 45 45 0 0 0 800 310 A 90 90 0 0 1 800 130" stroke="#66ccff" stroke-width="2" fill="none" opacity="0.65"/>
+                <circle cx="800" cy="175" r="7" fill="#66ccff"/>
+                <circle cx="800" cy="265" r="7" stroke="#66ccff" stroke-width="2" fill="none"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2024: 数字蝶变 · Connect【洛天依的构成】与《蝴蝶》 -->
+    <div class="vector-scene" data-year="2024">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <circle cx="750" cy="280" r="220" stroke="#66ccff" stroke-width="1" stroke-dasharray="4 6" class="anim-pulse"/>
+            <circle cx="750" cy="280" r="160" stroke="#66ccff" stroke-width="1.5" opacity="0.5"/>
+            <g class="anim-flutter" style="transform-origin: 750px 280px;">
+                <path d="M 750 280 Q 640 160 560 180 Q 520 260 620 310 Q 680 340 750 280" stroke="#66ccff" stroke-width="2.5" fill="rgba(102,204,255,0.06)"/>
+                <path d="M 750 280 Q 650 340 590 390 Q 630 450 710 390 Q 730 350 750 280" stroke="#66ccff" stroke-width="2" fill="rgba(102,204,255,0.04)"/>
+                <line x1="750" y1="280" x2="570" y2="200" stroke="#66ccff" stroke-width="1" stroke-dasharray="2 4"/>
+                <line x1="750" y1="280" x2="610" y2="400" stroke="#66ccff" stroke-width="1" stroke-dasharray="2 4"/>
+                <path d="M 750 280 Q 860 160 940 180 Q 980 260 880 310 Q 820 340 750 280" stroke="#66ccff" stroke-width="2.5" fill="rgba(102,204,255,0.06)"/>
+                <path d="M 750 280 Q 850 340 910 390 Q 870 450 790 390 Q 770 350 750 280" stroke="#66ccff" stroke-width="2" fill="rgba(102,204,255,0.04)"/>
+                <line x1="750" y1="280" x2="930" y2="200" stroke="#66ccff" stroke-width="1" stroke-dasharray="2 4"/>
+                <line x1="750" y1="240" x2="750" y2="320" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 750 240 Q 735 215 720 210" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+                <path d="M 750 240 Q 765 215 780 210" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2023: 太空纪元 · 《登陆宇宙》与《聚光》 -->
+    <div class="vector-scene" data-year="2023">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <path d="M 100 600 Q 650 360 1150 460" stroke="#66ccff" stroke-width="2" fill="none" opacity="0.8"/>
+            <path d="M 100 600 Q 650 360 1150 460 L 1150 600 Z" fill="rgba(102,204,255,0.03)"/>
+            <circle cx="800" cy="220" r="140" stroke="#66ccff" stroke-width="1" stroke-dasharray="3 6" opacity="0.5" class="anim-spin-slow" style="transform-origin: 800px 220px;"/>
+            <circle cx="800" cy="220" r="70" stroke="#66ccff" stroke-width="1.5" opacity="0.6"/>
+            <line x1="800" y1="80" x2="800" y2="360" stroke="#66ccff" stroke-width="1" stroke-dasharray="4 4" opacity="0.4"/>
+            <polygon points="620,0 840,0 1060,600 520,600" fill="url(#spotlightGrad)" opacity="0.14"/>
+        </svg>
+    </div>
+
+    <!-- 2022: 纪元回溯 · 《倒转四十六亿年》与《你和我的篇章》 -->
+    <div class="vector-scene" data-year="2022">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g class="anim-spin-slow" style="transform-origin: 640px 280px;">
+                <circle cx="640" cy="280" r="80" stroke="#66ccff" stroke-width="2" fill="none"/>
+                <circle cx="640" cy="280" r="30" stroke="#66ccff" stroke-width="1"/>
+                <line x1="640" y1="200" x2="640" y2="360" stroke="#66ccff" stroke-width="1" stroke-dasharray="4 4"/>
+            </g>
+            <g class="anim-spin-slow" style="transform-origin: 860px 280px; animation-direction: reverse;">
+                <circle cx="860" cy="280" r="80" stroke="#66ccff" stroke-width="2" fill="none"/>
+                <circle cx="860" cy="280" r="30" stroke="#66ccff" stroke-width="1"/>
+                <line x1="860" y1="200" x2="860" y2="360" stroke="#66ccff" stroke-width="1" stroke-dasharray="4 4"/>
+            </g>
+            <line x1="640" y1="200" x2="860" y2="200" stroke="#66ccff" stroke-width="2" opacity="0.7"/>
+            <line x1="640" y1="360" x2="860" y2="360" stroke="#66ccff" stroke-width="2" opacity="0.7"/>
+            <path d="M 350 350 Q 600 120 850 350 T 1200 350" stroke="#66ccff" stroke-width="1" stroke-dasharray="6 8" opacity="0.45"/>
+        </svg>
+    </div>
+
+    <!-- 2021: 失重空间 · 《失重博物馆》与《人间定律》 -->
+    <div class="vector-scene" data-year="2021">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g class="anim-float" style="transform-origin: 760px 250px;">
+                <rect x="680" y="140" width="160" height="220" rx="4" stroke="#66ccff" stroke-width="2" fill="rgba(102,204,255,0.03)" transform="rotate(-15 760 250)"/>
+                <rect x="700" y="160" width="120" height="180" stroke="#66ccff" stroke-width="1" stroke-dasharray="4 4" fill="none" transform="rotate(-15 760 250)"/>
+            </g>
+            <g transform="translate(540, 200) rotate(25)" class="anim-float" style="animation-delay: -2.5s;">
+                <polygon points="50,15 90,35 50,55 10,35" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+                <polygon points="50,55 90,35 90,80 50,100" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+                <polygon points="50,55 10,35 10,80 50,100" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2020: 曲速航行 · 《夜航星》与《万古生香》 -->
+    <div class="vector-scene" data-year="2020">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g style="transform-origin: 750px 300px;">
+                <circle cx="750" cy="300" r="180" stroke="#66ccff" stroke-width="1.5" stroke-dasharray="12 12" opacity="0.6" class="anim-spin-slow"/>
+                <circle cx="750" cy="300" r="130" stroke="#ffe680" stroke-width="1" opacity="0.5"/>
+                <circle cx="750" cy="300" r="80" stroke="#66ccff" stroke-width="2" opacity="0.8"/>
+                <circle cx="750" cy="300" r="8" fill="#fff" class="anim-pulse"/>
+                <line x1="750" y1="300" x2="280" y2="70" stroke="#66ccff" stroke-width="1.5" stroke-dasharray="10 15" opacity="0.5"/>
+                <line x1="750" y1="300" x2="220" y2="300" stroke="#66ccff" stroke-width="2" stroke-dasharray="15 20" opacity="0.6"/>
+                <line x1="750" y1="300" x2="300" y2="530" stroke="#66ccff" stroke-width="1.5" stroke-dasharray="10 15" opacity="0.5"/>
+                <line x1="750" y1="300" x2="1100" y2="50" stroke="#66ccff" stroke-width="1.5" stroke-dasharray="20 10" opacity="0.4"/>
+                <line x1="750" y1="300" x2="1160" y2="490" stroke="#66ccff" stroke-width="1.5" stroke-dasharray="20 10" opacity="0.4"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2019: 誓约红线 · 《勾指起誓》与《大氿歌》 -->
+    <div class="vector-scene" data-year="2019">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <path d="M 150 350 C 420 180, 560 420, 750 280 C 860 200, 960 320, 1120 240" stroke="#ff6b81" stroke-width="2.5" fill="none" class="anim-wave" opacity="0.75"/>
+            <path d="M 150 350 C 420 180, 560 420, 750 280 C 860 200, 960 320, 1120 240" stroke="#ff8da1" stroke-width="6" fill="none" opacity="0.16" filter="blur(3px)"/>
+            <circle cx="750" cy="280" r="18" stroke="#ff6b81" stroke-width="2" fill="rgba(255,107,129,0.08)" class="anim-pulse"/>
+            <circle cx="750" cy="280" r="36" stroke="#66ccff" stroke-width="1" stroke-dasharray="3 5" opacity="0.5"/>
+            <line x1="880" y1="80" x2="880" y2="520" stroke="#66ccff" stroke-width="1.5" opacity="0.3" stroke-dasharray="45 4"/>
+            <line x1="920" y1="120" x2="920" y2="480" stroke="#66ccff" stroke-width="1" opacity="0.2" stroke-dasharray="35 3"/>
+        </svg>
+    </div>
+
+    <!-- 2018: 深海繁花 · 《一花依世界》与《深海少女》 -->
+    <div class="vector-scene" data-year="2018">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <circle cx="680" cy="450" r="14" stroke="#66ccff" stroke-width="1.5" fill="rgba(102,204,255,0.06)" class="anim-bubble" style="animation-delay: 0s;"/>
+            <circle cx="740" cy="380" r="22" stroke="#66ccff" stroke-width="1.5" fill="rgba(102,204,255,0.04)" class="anim-bubble" style="animation-delay: -1.5s;"/>
+            <circle cx="820" cy="480" r="18" stroke="#66ccff" stroke-width="1.5" fill="rgba(102,204,255,0.05)" class="anim-bubble" style="animation-delay: -3s;"/>
+            <g transform="translate(760, 220)" class="anim-pulse">
+                <path d="M 0 0 C -30 -60, -70 -70, -70 -110 C -70 -150, 0 -180, 0 -180 C 0 -180, 70 -150, 70 -110 C 70 -70, 30 -60, 0 0" stroke="#66ccff" stroke-width="2" fill="rgba(102,204,255,0.04)"/>
+                <path d="M 0 0 C -50 -30, -110 -20, -130 -60 C -150 -100, -80 -130, -80 -130 C -80 -130, -30 -90, 0 0" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+                <path d="M 0 0 C 50 -30, 110 -20, 130 -60 C 150 -100, 80 -130, 80 -130 C 80 -130, 30 -90, 0 0" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2017: 舞台追光与魔性圣剑 · 《达拉崩吧》与《追光使者》 -->
+    <div class="vector-scene" data-year="2017">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <polygon points="480,0 650,0 950,600 600,600" fill="url(#spotlightGrad)" opacity="0.18"/>
+            <g transform="translate(760, 240) rotate(45)">
+                <line x1="0" y1="-120" x2="0" y2="80" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+                <line x1="0" y1="-120" x2="0" y2="80" stroke="#66ccff" stroke-width="10" opacity="0.3" stroke-linecap="round"/>
+                <line x1="-30" y1="30" x2="30" y2="30" stroke="#ffe680" stroke-width="3" stroke-linecap="round"/>
+                <circle cx="0" cy="30" r="5" fill="#ffe680"/>
+                <path d="M -20 -40 Q -120 -80 -180 -20 Q -140 40 -80 10" stroke="#66ccff" stroke-width="1.5" fill="none" opacity="0.5"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2016: 末世落日与铁轨 · 《世末歌者》 -->
+    <div class="vector-scene" data-year="2016">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <circle cx="750" cy="320" r="130" stroke="#ff7744" stroke-width="2" fill="url(#sunsetGrad)" opacity="0.35" class="anim-pulse"/>
+            <line x1="350" y1="320" x2="1050" y2="320" stroke="#ff7744" stroke-width="1.5" opacity="0.6"/>
+            <line x1="750" y1="320" x2="520" y2="600" stroke="#66ccff" stroke-width="2" opacity="0.7"/>
+            <line x1="750" y1="320" x2="980" y2="600" stroke="#66ccff" stroke-width="2" opacity="0.7"/>
+            <line x1="700" y1="380" x2="800" y2="380" stroke="#66ccff" stroke-width="1" opacity="0.4"/>
+            <line x1="640" y1="440" x2="860" y2="440" stroke="#66ccff" stroke-width="1.5" opacity="0.5"/>
+            <line x1="580" y1="510" x2="920" y2="510" stroke="#66ccff" stroke-width="2" opacity="0.6"/>
+            <line x1="880" y1="200" x2="880" y2="420" stroke="#66ccff" stroke-width="2" opacity="0.6"/>
+            <line x1="850" y1="220" x2="910" y2="220" stroke="#66ccff" stroke-width="2" opacity="0.6"/>
+        </svg>
+    </div>
+
+    <!-- 2015: 金戈霜雪 · 《权御天下》与《霜雪千年》 -->
+    <div class="vector-scene" data-year="2015">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g transform="translate(680, 180) rotate(-20)">
+                <line x1="0" y1="0" x2="0" y2="340" stroke="#ffe680" stroke-width="3" opacity="0.7"/>
+                <polygon points="0,20 130,70 0,120" stroke="#ffe680" stroke-width="2" fill="rgba(255,207,64,0.08)"/>
+                <circle cx="0" cy="0" r="6" fill="#ffe680"/>
+            </g>
+            <g transform="translate(850, 200)" class="anim-spin-slow">
+                <line x1="-35" y1="0" x2="35" y2="0" stroke="#66ccff" stroke-width="2"/>
+                <line x1="0" y1="-35" x2="0" y2="35" stroke="#66ccff" stroke-width="2"/>
+                <line x1="-25" y1="-25" x2="25" y2="25" stroke="#66ccff" stroke-width="1.5"/>
+                <line x1="-25" y1="25" x2="25" y2="-25" stroke="#66ccff" stroke-width="1.5"/>
+                <circle cx="0" cy="0" r="7" stroke="#66ccff" stroke-width="1.5" fill="none"/>
+            </g>
+            <g transform="translate(740, 390) scale(0.6)" class="anim-spin-slow" style="animation-direction: reverse;">
+                <line x1="-35" y1="0" x2="35" y2="0" stroke="#66ccff" stroke-width="2"/>
+                <line x1="0" y1="-35" x2="0" y2="35" stroke="#66ccff" stroke-width="2"/>
+                <line x1="-25" y1="-25" x2="25" y2="25" stroke="#66ccff" stroke-width="1.5"/>
+                <line x1="-25" y1="25" x2="25" y2="-25" stroke="#66ccff" stroke-width="1.5"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2014: 展翅光轨 · 《逐梦之翼》与《CONNECT》 -->
+    <div class="vector-scene" data-year="2014">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g transform="translate(720, 260) scale(1.1)">
+                <path d="M 0 0 L 60 -70 L 140 -80 L 110 -30 L 180 -30 L 130 20 L 200 30 L 140 70 L 60 40 Z" stroke="#66ccff" stroke-width="2" fill="rgba(102,204,255,0.05)" class="anim-pulse"/>
+                <line x1="0" y1="0" x2="140" y2="-80" stroke="#66ccff" stroke-width="1.5"/>
+                <line x1="0" y1="0" x2="180" y2="-30" stroke="#66ccff" stroke-width="1.5"/>
+                <line x1="0" y1="0" x2="200" y2="30" stroke="#66ccff" stroke-width="1.5"/>
+                <circle cx="0" cy="0" r="16" stroke="#66ccff" stroke-width="2" fill="#060b12"/>
+                <circle cx="0" cy="0" r="6" fill="#fff"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 2013: 烟雨青巷与月白倒影 · 《巷》与《月白色倒影的少女》 -->
+    <div class="vector-scene" data-year="2013">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <path d="M 620 450 L 620 280 L 670 280 L 670 230 L 730 230 L 730 180 L 800 180 L 800 130 L 880 130 L 880 450" stroke="#66ccff" stroke-width="2" fill="rgba(102,204,255,0.03)" opacity="0.6"/>
+            <ellipse cx="750" cy="460" rx="90" ry="16" stroke="#66ccff" stroke-width="1.5" fill="none" opacity="0.5" class="anim-pulse"/>
+            <path d="M 850 80 A 40 40 0 0 1 890 120 A 40 40 0 1 0 850 80 Z" stroke="#66ccff" stroke-width="2" fill="rgba(232,240,248,0.12)"/>
+        </svg>
+    </div>
+
+    <!-- 2012: 江南烟雨与油纸伞 · 《三月雨》与《千年食谱颂》 -->
+    <div class="vector-scene" data-year="2012">
+        <svg viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice">
+            <g stroke="#66ccff" stroke-width="1.5" opacity="0.45" stroke-linecap="round" class="anim-pulse">
+                <line x1="550" y1="60" x2="520" y2="150"/>
+                <line x1="680" y1="40" x2="650" y2="130"/>
+                <line x1="790" y1="80" x2="760" y2="170"/>
+                <line x1="610" y1="200" x2="580" y2="290"/>
+                <line x1="740" y1="180" x2="710" y2="270"/>
+                <line x1="860" y1="210" x2="830" y2="300"/>
+                <line x1="670" y1="340" x2="640" y2="430"/>
+                <line x1="800" y1="320" x2="770" y2="410"/>
+                <line x1="920" y1="350" x2="890" y2="440"/>
+            </g>
+            <g transform="translate(780, 240) rotate(15)">
+                <path d="M -130 40 Q 0 -60 130 40 Q 0 15 -130 40 Z" stroke="#66ccff" stroke-width="2.5" fill="rgba(102,204,255,0.06)"/>
+                <line x1="0" y1="-25" x2="-130" y2="40" stroke="#66ccff" stroke-width="1.2"/>
+                <line x1="0" y1="-25" x2="-65" y2="30" stroke="#66ccff" stroke-width="1.2"/>
+                <line x1="0" y1="-25" x2="0" y2="20" stroke="#66ccff" stroke-width="1.2"/>
+                <line x1="0" y1="-25" x2="65" y2="30" stroke="#66ccff" stroke-width="1.2"/>
+                <line x1="0" y1="-25" x2="130" y2="40" stroke="#66ccff" stroke-width="1.2"/>
+                <line x1="0" y1="-38" x2="0" y2="140" stroke="#66ccff" stroke-width="2" stroke-linecap="round"/>
+                <ellipse cx="0" cy="180" rx="40" ry="8" stroke="#66ccff" stroke-width="1.5" fill="none" opacity="0.6" class="anim-pulse"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- 渐变定义 -->
+    <svg width="0" height="0" style="position: absolute;">
+        <defs>
+            <radialGradient id="sunsetGrad" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stop-color="#ff7744" stop-opacity="0.6"/>
+                <stop offset="60%" stop-color="#ff4477" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#060b13" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="spotlightGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" stop-color="#66ccff" stop-opacity="0.4"/>
+                <stop offset="40%" stop-color="#ffe680" stop-opacity="0.2"/>
+                <stop offset="100%" stop-color="#66ccff" stop-opacity="0"/>
+            </linearGradient>
+        </defs>
+    </svg>
+</div>
+
+
+<!-- 动态星尘与声波涟漪画布 -->
+<canvas id="stardustCanvas" aria-hidden="true"></canvas>
+
 <div class="page">
 
     <header class="hero">

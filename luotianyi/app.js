@@ -106,10 +106,24 @@
                 sparkBars.forEach(function (bar) {
                     bar.classList.toggle('is-active', bar.getAttribute('data-year') === year);
                 });
+
+                // 触发对应年份灵魂意象背景切换
+                switchVectorScene(year);
             });
         }, { rootMargin: '-14% 0px -72% 0px', threshold: 0 });
 
         sections.forEach(function (sec) { io.observe(sec); });
+
+        // 顶部 Hero 回滚监听：回到顶部时恢复标志性八卦星环
+        var hero = document.querySelector('.hero');
+        if (hero) {
+            var heroIo = new IntersectionObserver(function (entries) {
+                if (entries[0].isIntersecting) {
+                    switchVectorScene('hero');
+                }
+            }, { rootMargin: '0px 0px -60% 0px', threshold: 0 });
+            heroIo.observe(hero);
+        }
     }
 
     // 年份链接平滑对齐
@@ -130,6 +144,110 @@
             }
         });
     });
+
+    /* ---------------------------------------------------------- 🌟 动态星尘与声波涟漪画布 (方案二) */
+    var stardustCanvas = document.getElementById('stardustCanvas');
+    if (stardustCanvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        var sCtx = stardustCanvas.getContext('2d');
+        var sw, sh;
+        var stars = [];
+        var ripples = [];
+        var starCount = 65;
+
+        function resizeStardust() {
+            sw = stardustCanvas.width = window.innerWidth;
+            sh = stardustCanvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeStardust);
+        resizeStardust();
+
+        for (var si = 0; si < starCount; si++) {
+            stars.push({
+                x: Math.random() * sw,
+                y: Math.random() * sh,
+                r: Math.random() * 1.5 + 0.5,
+                alpha: Math.random() * 0.7 + 0.2,
+                dAlpha: (Math.random() * 0.015 + 0.005) * (Math.random() > 0.5 ? 1 : -1),
+                vy: -(Math.random() * 0.22 + 0.08),
+                vx: (Math.random() - 0.5) * 0.12,
+                color: Math.random() > 0.35 ? '102, 204, 255' : '235, 245, 255'
+            });
+        }
+
+        window.addEventListener('pointermove', function(e) {
+            if (Math.random() > 0.72) {
+                ripples.push({
+                    x: e.clientX,
+                    y: e.clientY,
+                    r: 4,
+                    maxR: 45 + Math.random() * 25,
+                    alpha: 0.36
+                });
+            }
+        });
+
+        function stardustLoop() {
+            if (document.hidden) {
+                requestAnimationFrame(stardustLoop);
+                return;
+            }
+            sCtx.clearRect(0, 0, sw, sh);
+
+            // 绘制星尘
+            for (var i = 0; i < stars.length; i++) {
+                var s = stars[i];
+                s.alpha += s.dAlpha;
+                if (s.alpha > 0.85 || s.alpha < 0.15) s.dAlpha *= -1;
+
+                s.y += s.vy;
+                s.x += s.vx;
+                if (s.y < -10) { s.y = sh + 10; s.x = Math.random() * sw; }
+                if (s.x < -10) s.x = sw + 10;
+                if (s.x > sw + 10) s.x = -10;
+
+                sCtx.beginPath();
+                sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+                sCtx.fillStyle = 'rgba(' + s.color + ',' + s.alpha + ')';
+                sCtx.shadowBlur = s.r * 3;
+                sCtx.shadowColor = '#66ccff';
+                sCtx.fill();
+            }
+
+            // 绘制鼠标声波涟漪
+            for (var j = ripples.length - 1; j >= 0; j--) {
+                var rp = ripples[j];
+                rp.r += 1.2;
+                rp.alpha *= 0.95;
+                if (rp.alpha < 0.02 || rp.r > rp.maxR) {
+                    ripples.splice(j, 1);
+                    continue;
+                }
+                sCtx.beginPath();
+                sCtx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
+                sCtx.strokeStyle = 'rgba(102, 204, 255, ' + rp.alpha + ')';
+                sCtx.lineWidth = 1;
+                sCtx.stroke();
+            }
+
+            requestAnimationFrame(stardustLoop);
+        }
+        stardustLoop();
+    }
+
+    /* ---------------------------------------------------------- 🎨 年度灵魂意象背景切换引擎 */
+    var vectorStage = document.getElementById('vectorStage');
+    var allVectorScenes = vectorStage ? Array.prototype.slice.call(vectorStage.querySelectorAll('.vector-scene')) : [];
+    var activeVectorYear = 'hero';
+
+    function switchVectorScene(year) {
+        if (!vectorStage || activeVectorYear === year) return;
+        activeVectorYear = year;
+
+        allVectorScenes.forEach(function (scene) {
+            var match = scene.getAttribute('data-year') === String(year);
+            scene.classList.toggle('is-active', match);
+        });
+    }
 
     /* ---------------------------------------------------------- 🥟 投喂包子吃货彩蛋 */
     var bunBtn = document.getElementById('bunBtn');
