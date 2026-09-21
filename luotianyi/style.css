@@ -1,0 +1,364 @@
+/* ===========================================================
+   洛天依歌单 · 独立页面样式
+   锚色天依蓝 #66CCFF，底色取夜空；与主站「工房纸面」完全分开，
+   自成一体（同 /itertrip/ 与主站的关系）。
+   =========================================================== */
+
+:root {
+    --bg: #080d15;
+    --ink: #e8f0f8;
+    --ink-soft: rgba(232, 240, 248, .52);
+    --ink-faint: rgba(232, 240, 248, .26);
+    --ink-ghost: rgba(232, 240, 248, .12);
+
+    --tianyi: #66ccff;
+    --tianyi-soft: rgba(102, 204, 255, .62);
+    --tianyi-24: rgba(102, 204, 255, .24);
+    --tianyi-12: rgba(102, 204, 255, .12);
+    --tianyi-06: rgba(102, 204, 255, .06);
+
+    --line: rgba(232, 240, 248, .08);
+
+    --mono: "JetBrains Mono", "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    --serif: "Noto Serif SC", Georgia, "Songti SC", STSong, serif;
+    --sans: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+
+    --wrap: 820px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+    font-family: var(--sans);
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--ink);
+    background-color: var(--bg);
+    /* 顶部两处极淡的光，像夜空的一角，不是发光特效 */
+    background-image:
+        radial-gradient(900px 540px at 50% -14%, rgba(102, 204, 255, .11), transparent 62%),
+        radial-gradient(640px 380px at 86% 3%, rgba(102, 204, 255, .05), transparent 58%);
+    background-repeat: no-repeat;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+::selection { background: rgba(102, 204, 255, .3); color: #fff; }
+
+.page {
+    max-width: var(--wrap);
+    margin: 0 auto;
+    padding: 0 24px 72px;
+}
+
+/* ---------------------------------------------------------- 头部 */
+
+.hero { padding: 92px 0 38px; }
+
+.eyebrow {
+    font-family: var(--mono);
+    font-size: 11.5px;
+    letter-spacing: .24em;
+    color: var(--tianyi);
+    text-transform: uppercase;
+}
+
+.hero h1 {
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(34px, 7.5vw, 58px);
+    line-height: 1.12;
+    letter-spacing: .01em;
+    margin: 16px 0 14px;
+}
+
+.lede {
+    color: var(--ink-soft);
+    font-size: 14.5px;
+    max-width: 48ch;
+}
+
+.lede code {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--tianyi-soft);
+}
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 13px 34px;
+    margin-top: 30px;
+}
+
+.stat b {
+    display: block;
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 21px;
+    color: var(--tianyi);
+    letter-spacing: .01em;
+}
+
+.stat span {
+    font-size: 11px;
+    letter-spacing: .12em;
+    color: var(--ink-faint);
+}
+
+/* 十二年产量微缩图：时间正向（2012 → 2024），2020 的峰值一眼可见 */
+.spark {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    height: 36px;
+    margin-top: 30px;
+}
+
+.spark i {
+    display: block;
+    width: 6px;
+    border-radius: 1px 1px 0 0;
+    background: linear-gradient(180deg, rgba(102, 204, 255, .72), rgba(102, 204, 255, .14));
+    transition: background .2s;
+}
+
+.spark i:hover {
+    background: linear-gradient(180deg, var(--tianyi), rgba(102, 204, 255, .3));
+}
+
+/* ---------------------------------------------------------- 工具条 */
+
+.toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    margin: 0 -24px;
+    padding: 14px 24px 10px;
+    background: rgba(8, 13, 21, .84);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+}
+
+.search {
+    width: 100%;
+    background: none;
+    border: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 9px 0;
+    color: var(--ink);
+    font-family: var(--sans);
+    font-size: 15px;
+    border-radius: 0;
+    transition: border-color .2s;
+}
+
+.search::placeholder { color: var(--ink-faint); }
+.search:focus { outline: none; border-bottom-color: var(--tianyi-soft); }
+
+.years {
+    display: flex;
+    gap: 15px;
+    overflow-x: auto;
+    padding: 11px 0 1px;
+    scrollbar-width: none;
+}
+
+.years::-webkit-scrollbar { display: none; }
+
+.years a {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--ink-faint);
+    text-decoration: none;
+    white-space: nowrap;
+    padding: 2px 0;
+    border-bottom: 1px solid transparent;
+    transition: color .18s, border-color .18s;
+}
+
+.years a:hover { color: var(--ink); }
+.years a.is-active { color: var(--tianyi); border-bottom-color: var(--tianyi-soft); }
+
+/* ---------------------------------------------------------- 时间轴 */
+
+.timeline {
+    position: relative;
+    padding-left: 26px;
+    margin-top: 30px;
+}
+
+.timeline::before {
+    content: "";
+    position: absolute;
+    left: 5px;
+    top: 8px;
+    bottom: 8px;
+    width: 1px;
+    background: linear-gradient(180deg,
+            rgba(102, 204, 255, .55) 0%,
+            rgba(102, 204, 255, .22) 45%,
+            rgba(102, 204, 255, .04) 100%);
+}
+
+.year { position: relative; padding-top: 36px; }
+.year:first-child { padding-top: 4px; }
+.year[hidden] { display: none; }
+
+.year-node {
+    position: absolute;
+    left: -24px;
+    top: 48px;
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1px solid var(--tianyi);
+    box-shadow: 0 0 0 4px rgba(102, 204, 255, .06);
+}
+
+.year:first-child .year-node { top: 16px; }
+
+.year-head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 13px;
+}
+
+.year-num {
+    flex: none;
+    font-family: var(--serif);
+    font-weight: 700;
+    font-size: clamp(25px, 5vw, 36px);
+    line-height: 1;
+    color: var(--tianyi);
+    letter-spacing: .01em;
+}
+
+.year-bar {
+    flex: 1;
+    height: 2px;
+    min-width: 24px;
+    border-radius: 1px;
+    background: linear-gradient(90deg, rgba(102, 204, 255, .46), rgba(102, 204, 255, .06));
+}
+
+.year-count {
+    flex: none;
+    font-family: var(--mono);
+    font-size: 11.5px;
+    color: rgba(232, 240, 248, .34);
+}
+
+/* ---------------------------------------------------------- 曲目 */
+
+.songs { list-style: none; }
+
+.songs li {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 7px 12px;
+    margin-left: -12px;
+    border-radius: 6px;
+    transition: background .16s;
+}
+
+.songs li[hidden] { display: none; }
+.songs li:hover { background: var(--tianyi-06); }
+
+.song-title {
+    flex: 1;
+    font-size: 15px;
+    color: var(--ink);
+    transition: color .16s;
+    word-break: break-word;
+}
+
+.songs li:hover .song-title { color: var(--tianyi); }
+
+.song-note {
+    flex: none;
+    font-size: 11.5px;
+    color: var(--ink-faint);
+    margin-left: 8px;
+}
+
+.song-date {
+    flex: none;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    font-variant-numeric: tabular-nums;
+    color: rgba(232, 240, 248, .44);
+    white-space: nowrap;
+}
+
+.song-time { color: var(--tianyi-soft); margin-left: 5px; }
+
+mark {
+    background: rgba(102, 204, 255, .2);
+    color: var(--tianyi);
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+.empty {
+    text-align: center;
+    padding: 72px 0;
+    font-size: 13.5px;
+    color: var(--ink-faint);
+}
+
+.empty[hidden] { display: none; }
+
+/* ---------------------------------------------------------- 页脚 */
+
+.colophon {
+    margin-top: 78px;
+    padding-top: 22px;
+    border-top: 1px solid var(--line);
+    font-size: 12.5px;
+    line-height: 2;
+    color: var(--ink-faint);
+}
+
+.colophon a {
+    color: var(--ink-soft);
+    text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    transition: color .18s, border-color .18s;
+}
+
+.colophon a:hover { color: var(--tianyi); border-bottom-color: var(--tianyi-24); }
+
+.back {
+    display: inline-block;
+    margin-bottom: 14px;
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: .06em;
+}
+
+/* ---------------------------------------------------------- 窄屏 */
+
+@media (max-width: 560px) {
+    .page { padding: 0 18px 56px; }
+    .hero { padding: 64px 0 30px; }
+    .toolbar { margin: 0 -18px; padding: 12px 18px 9px; }
+
+    .timeline { padding-left: 20px; }
+    .timeline::before { left: 3px; }
+    .year-node { left: -20px; width: 9px; height: 9px; }
+    .songs li { gap: 10px; padding: 6px 8px; margin-left: -8px; }
+    .song-title { font-size: 14.5px; }
+    .song-date { font-size: 11.5px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    * { transition: none !important; }
+}
