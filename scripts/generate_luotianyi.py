@@ -395,39 +395,41 @@ def build_html(songs):
             note = ('<span class="song-note">%s</span>' % html.escape(s["note"])) if s["note"] else ""
             tm = ('<span class="song-time">%s</span>' % tl) if tl else ""
 
-            # 殿堂 / 传说曲徽标与标记
+            # 殿堂 / 传说：单字朱印（搜索仍靠 is-hall / is-legend 类）
             badge_html = ""
             classes = []
             if s["title"] in LEGEND_SONGS:
                 classes.append("is-legend")
-                badge_html = '<span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span>'
+                badge_html = '<span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span>'
             elif s["title"] in HALL_SONGS:
                 classes.append("is-hall")
-                badge_html = '<span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span>'
+                badge_html = '<span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span>'
 
             class_attr = (' class="%s"' % " ".join(classes)) if classes else ""
 
             items.append(
                 '                <li%s data-title="%s">'
                 '<span class="song-title">%s</span>%s%s'
+                '<span class="leader" aria-hidden="true"></span>'
                 '<span class="song-date">%s%s</span>'
                 '</li>' % (class_attr, html.escape(s["title"], quote=True), html.escape(s["title"]), badge_html, note, dl, tm)
             )
         bar_grow = max(6, round(len(rows) * 100 / peak))
         blocks.append(
             '        <section class="year" id="y%d">\n'
-            '            <span class="year-node"></span>\n'
             '            <div class="year-head">\n'
+            '                <span class="year-node" aria-hidden="true"></span>\n'
             '                <span class="year-num">%d</span>\n'
-            '                <span class="year-bar" style="flex-grow:%d"></span>\n'
+            '                <span class="year-bar" style="flex-grow:%d" aria-hidden="true"></span>\n'
             '                <span class="year-count">%d 首</span>\n'
             '            </div>\n'
             '            <ol class="songs">\n%s\n            </ol>\n'
             '        </section>' % (y, y, bar_grow, len(rows), "\n".join(items))
         )
 
-    lede = ("十二年，从《%s》到《%s》。按投稿日期倒序排列，同一天按投稿时间倒序。"
+    lede = ("十二年，从《%s》到《%s》。"
             % (html.escape(first["title"]), html.escape(last["title"])))
+    lede_note = "按投稿日期倒序 · 同一天按投稿时间倒序"
 
     # 产量音频频谱仪（EQ Spectrum Visualizer）
     sorted_years = sorted(grouped)
@@ -450,6 +452,7 @@ def build_html(songs):
 
     return TEMPLATE.format(
         lede=lede,
+        lede_note=lede_note,
         nav=nav,
         count=len(songs),
         span=years[-1],
@@ -474,50 +477,74 @@ TEMPLATE = """<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>洛天依歌单 · ZLOONG 工房</title>
 <meta name="description" content="十二年，{count} 首。按投稿日期整理的洛天依曲目编年史。">
-<meta name="theme-color" content="#080d15">
+<meta name="theme-color" content="#f5f0e6">
 <link rel="icon" href="../images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.cn">
-<link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- 年度灵魂意象背景舞台（SVG + CSS 风格化矢量动效） -->
+<!-- 年度灵魂意象场景：纸面上的淡碧铅印插图（逐年切换，见 style.css） -->
 {vector_scenes}
-
-<!-- 动态星尘与声波涟漪画布 -->
-<canvas id="stardustCanvas" aria-hidden="true"></canvas>
 
 <div class="page">
 
-    <header class="hero">
-        <div class="hero-top">
-            <div class="eyebrow">{span} &mdash; {end}</div>
-            <button class="tianyi-bun-btn" type="button" id="bunBtn" title="投喂吃货大人小笼包" aria-label="投喂天依">
-                <span class="bun-icon" aria-hidden="true">🥟</span>
-                <span class="bun-text">投喂天依</span>
-                <span class="bun-badge" id="bunCount" hidden>0</span>
-            </button>
-        </div>
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 档案室 <span class="live">● 常开</span></span>
+        <span>{span} &mdash; {end}</span>
+        <span>整理：ZLOONG · 排印：Hanako</span>
+    </div>
+
+    <header class="hero wall">
+        <span class="seal samp" aria-hidden="true">天依<br>TIAN YI</span>
         <h1>洛天依歌单</h1>
-        <p class="lede">{lede}</p>
-        <div class="stats">
-            <div class="stat"><b>{count}</b><span>曲目</span></div>
-            <div class="stat"><b>{years}</b><span>年跨度</span></div>
-            <div class="stat"><b>{timed}</b><span>精确到秒</span></div>
-        </div>
-        <div class="spectrum-box">
-            <div class="spectrum-meta">
-                <span class="spectrum-title"><i class="eq-icon" aria-hidden="true"></i>AUDIO SPECTRUM // 创作频段</span>
-                <span class="spectrum-legend">PEAK: {peak_year} ({peak_count} 首)</span>
-            </div>
-            <div class="spark" role="img" aria-label="各年份投稿数量音频频谱图">{spark}</div>
-            <div class="spectrum-axis">
-                <span>{span}</span>
-                <span>{mid_year}</span>
-                <span>{end}</span>
-            </div>
+        <div class="sub samp">LUO TIAN YI &middot; SONGBOOK</div>
+        <!-- 天依标志：手绘碧色双音符 -->
+        <div class="ornament" aria-hidden="true">
+            <svg viewBox="0 0 44 28" width="44" height="28" fill="none" stroke="#2e7fa6" stroke-width="1.4">
+                <path d="M11 21 V7 L33 3.6 V17.6"/>
+                <path d="M11 9 L33 5.6" stroke-width="3.2"/>
+                <ellipse cx="8" cy="21" rx="3.4" ry="2.5" fill="#2e7fa6" stroke="none"/>
+                <ellipse cx="30" cy="17.6" rx="3.4" ry="2.5" fill="#2e7fa6" stroke="none"/>
+            </svg>
         </div>
     </header>
+    <div class="rule-double"></div>
+
+    <div class="daily">
+        <div class="quote">「{lede}」</div>
+        <div class="who">{lede_note}</div>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><b>{count}</b><span>曲目</span></div>
+        <div class="stat"><b>{years}</b><span>年跨度</span></div>
+        <div class="stat"><b>{timed}</b><span>精确到秒</span></div>
+    </div>
+
+    <div class="spectrum-box">
+        <div class="spectrum-meta">
+            <span class="spectrum-title samp"><span class="eq-icon" aria-hidden="true"><i></i></span>逐年产量 · 创作频段</span>
+            <span class="spectrum-legend samp">峰值 {peak_year} · {peak_count} 首</span>
+        </div>
+        <div class="spark" role="img" aria-label="各年份投稿数量柱状图">{spark}</div>
+        <div class="spectrum-axis samp">
+            <span>{span}</span>
+            <span>{mid_year}</span>
+            <span>{end}</span>
+        </div>
+    </div>
+
+    <div class="bench-label">
+        <span class="t">歌单卷</span>
+        <span class="en samp">SONGBOOK</span>
+        <button class="tianyi-bun-btn" type="button" id="bunBtn" title="投喂吃货大人小笼包" aria-label="投喂天依">
+            <span class="bun-icon" aria-hidden="true">🥟</span>
+            <span class="bun-text">投喂天依</span>
+            <span class="bun-badge" id="bunCount" hidden>0</span>
+        </button>
+    </div>
 
     <div class="toolbar">
         <input class="search" type="search" placeholder="搜歌名、传说、殿堂…" aria-label="按歌名搜索">
@@ -533,6 +560,7 @@ TEMPLATE = """<!DOCTYPE html>
     <footer class="colophon">
         <a class="back" href="../">&larr; 回 ZLOONG 工房</a><br>
         数据截止 {last_date} · 生成于 {built}<br>
+        <span class="credit">歌迷整理 · 曲目版权归各创作者及版权方所有</span><br>
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a>
     </footer>
 

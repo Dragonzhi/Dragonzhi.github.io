@@ -5,14 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>洛天依歌单 · ZLOONG 工房</title>
 <meta name="description" content="十二年，421 首。按投稿日期整理的洛天依曲目编年史。">
-<meta name="theme-color" content="#080d15">
+<meta name="theme-color" content="#f5f0e6">
 <link rel="icon" href="../images/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.cn">
-<link rel="stylesheet" href="https://fonts.googleapis.cn/css2?family=Noto+Serif+SC:wght@500;700&family=JetBrains+Mono:wght@400;500&display=swap">
+<link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<!-- 年度灵魂意象背景舞台（SVG + CSS 风格化矢量动效） -->
+<!-- 年度灵魂意象场景：纸面上的淡碧铅印插图（逐年切换，见 style.css） -->
 
 <div class="vector-stage" id="vectorStage" aria-hidden="true">
     <!-- 默认/顶部总览场景：洛天依标志八卦碧玉光轮 -->
@@ -260,40 +261,63 @@
 </div>
 
 
-<!-- 动态星尘与声波涟漪画布 -->
-<canvas id="stardustCanvas" aria-hidden="true"></canvas>
-
 <div class="page">
 
-    <header class="hero">
-        <div class="hero-top">
-            <div class="eyebrow">2012 &mdash; 2024</div>
-            <button class="tianyi-bun-btn" type="button" id="bunBtn" title="投喂吃货大人小笼包" aria-label="投喂天依">
-                <span class="bun-icon" aria-hidden="true">🥟</span>
-                <span class="bun-text">投喂天依</span>
-                <span class="bun-badge" id="bunCount" hidden>0</span>
-            </button>
-        </div>
+    <div class="eyebrow">
+        <span>ZLOONG 工房 · 档案室 <span class="live">● 常开</span></span>
+        <span>2012 &mdash; 2024</span>
+        <span>整理：ZLOONG · 排印：Hanako</span>
+    </div>
+
+    <header class="hero wall">
+        <span class="seal samp" aria-hidden="true">天依<br>TIAN YI</span>
         <h1>洛天依歌单</h1>
-        <p class="lede">十二年，从《step on your heart》到《蝴蝶》。按投稿日期倒序排列，同一天按投稿时间倒序。</p>
-        <div class="stats">
-            <div class="stat"><b>421</b><span>曲目</span></div>
-            <div class="stat"><b>13</b><span>年跨度</span></div>
-            <div class="stat"><b>85</b><span>精确到秒</span></div>
-        </div>
-        <div class="spectrum-box">
-            <div class="spectrum-meta">
-                <span class="spectrum-title"><i class="eq-icon" aria-hidden="true"></i>AUDIO SPECTRUM // 创作频段</span>
-                <span class="spectrum-legend">PEAK: 2020 (79 首)</span>
-            </div>
-            <div class="spark" role="img" aria-label="各年份投稿数量音频频谱图"><a href="#y2012" class="spark-bar" style="height:27%" data-year="2012" title="2012 年 · 12 首" aria-label="2012 年 · 12 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2013" class="spark-bar" style="height:24%" data-year="2013" title="2013 年 · 9 首" aria-label="2013 年 · 9 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2014" class="spark-bar" style="height:24%" data-year="2014" title="2014 年 · 9 首" aria-label="2014 年 · 9 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2015" class="spark-bar" style="height:27%" data-year="2015" title="2015 年 · 12 首" aria-label="2015 年 · 12 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2016" class="spark-bar" style="height:38%" data-year="2016" title="2016 年 · 22 首" aria-label="2016 年 · 22 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2017" class="spark-bar" style="height:50%" data-year="2017" title="2017 年 · 33 首" aria-label="2017 年 · 33 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2018" class="spark-bar" style="height:73%" data-year="2018" title="2018 年 · 54 首" aria-label="2018 年 · 54 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2019" class="spark-bar" style="height:70%" data-year="2019" title="2019 年 · 51 首" aria-label="2019 年 · 51 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2020" class="spark-bar is-peak" style="height:100%" data-year="2020" title="2020 年 · 79 首 · 巅峰" aria-label="2020 年 · 79 首 · 巅峰"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2021" class="spark-bar" style="height:40%" data-year="2021" title="2021 年 · 24 首" aria-label="2021 年 · 24 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2022" class="spark-bar" style="height:67%" data-year="2022" title="2022 年 · 49 首" aria-label="2022 年 · 49 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2023" class="spark-bar" style="height:46%" data-year="2023" title="2023 年 · 29 首" aria-label="2023 年 · 29 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2024" class="spark-bar" style="height:55%" data-year="2024" title="2024 年 · 38 首" aria-label="2024 年 · 38 首"><span class="spark-cap"></span><span class="spark-fill"></span></a></div>
-            <div class="spectrum-axis">
-                <span>2012</span>
-                <span>2018</span>
-                <span>2024</span>
-            </div>
+        <div class="sub samp">LUO TIAN YI &middot; SONGBOOK</div>
+        <!-- 天依标志：手绘碧色双音符 -->
+        <div class="ornament" aria-hidden="true">
+            <svg viewBox="0 0 44 28" width="44" height="28" fill="none" stroke="#2e7fa6" stroke-width="1.4">
+                <path d="M11 21 V7 L33 3.6 V17.6"/>
+                <path d="M11 9 L33 5.6" stroke-width="3.2"/>
+                <ellipse cx="8" cy="21" rx="3.4" ry="2.5" fill="#2e7fa6" stroke="none"/>
+                <ellipse cx="30" cy="17.6" rx="3.4" ry="2.5" fill="#2e7fa6" stroke="none"/>
+            </svg>
         </div>
     </header>
+    <div class="rule-double"></div>
+
+    <div class="daily">
+        <div class="quote">「十二年，从《step on your heart》到《蝴蝶》。」</div>
+        <div class="who">按投稿日期倒序 · 同一天按投稿时间倒序</div>
+    </div>
+
+    <div class="stats">
+        <div class="stat"><b>421</b><span>曲目</span></div>
+        <div class="stat"><b>13</b><span>年跨度</span></div>
+        <div class="stat"><b>85</b><span>精确到秒</span></div>
+    </div>
+
+    <div class="spectrum-box">
+        <div class="spectrum-meta">
+            <span class="spectrum-title samp"><span class="eq-icon" aria-hidden="true"><i></i></span>逐年产量 · 创作频段</span>
+            <span class="spectrum-legend samp">峰值 2020 · 79 首</span>
+        </div>
+        <div class="spark" role="img" aria-label="各年份投稿数量柱状图"><a href="#y2012" class="spark-bar" style="height:27%" data-year="2012" title="2012 年 · 12 首" aria-label="2012 年 · 12 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2013" class="spark-bar" style="height:24%" data-year="2013" title="2013 年 · 9 首" aria-label="2013 年 · 9 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2014" class="spark-bar" style="height:24%" data-year="2014" title="2014 年 · 9 首" aria-label="2014 年 · 9 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2015" class="spark-bar" style="height:27%" data-year="2015" title="2015 年 · 12 首" aria-label="2015 年 · 12 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2016" class="spark-bar" style="height:38%" data-year="2016" title="2016 年 · 22 首" aria-label="2016 年 · 22 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2017" class="spark-bar" style="height:50%" data-year="2017" title="2017 年 · 33 首" aria-label="2017 年 · 33 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2018" class="spark-bar" style="height:73%" data-year="2018" title="2018 年 · 54 首" aria-label="2018 年 · 54 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2019" class="spark-bar" style="height:70%" data-year="2019" title="2019 年 · 51 首" aria-label="2019 年 · 51 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2020" class="spark-bar is-peak" style="height:100%" data-year="2020" title="2020 年 · 79 首 · 巅峰" aria-label="2020 年 · 79 首 · 巅峰"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2021" class="spark-bar" style="height:40%" data-year="2021" title="2021 年 · 24 首" aria-label="2021 年 · 24 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2022" class="spark-bar" style="height:67%" data-year="2022" title="2022 年 · 49 首" aria-label="2022 年 · 49 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2023" class="spark-bar" style="height:46%" data-year="2023" title="2023 年 · 29 首" aria-label="2023 年 · 29 首"><span class="spark-cap"></span><span class="spark-fill"></span></a><a href="#y2024" class="spark-bar" style="height:55%" data-year="2024" title="2024 年 · 38 首" aria-label="2024 年 · 38 首"><span class="spark-cap"></span><span class="spark-fill"></span></a></div>
+        <div class="spectrum-axis samp">
+            <span>2012</span>
+            <span>2018</span>
+            <span>2024</span>
+        </div>
+    </div>
+
+    <div class="bench-label">
+        <span class="t">歌单卷</span>
+        <span class="en samp">SONGBOOK</span>
+        <button class="tianyi-bun-btn" type="button" id="bunBtn" title="投喂吃货大人小笼包" aria-label="投喂天依">
+            <span class="bun-icon" aria-hidden="true">🥟</span>
+            <span class="bun-text">投喂天依</span>
+            <span class="bun-badge" id="bunCount" hidden>0</span>
+        </button>
+    </div>
 
     <div class="toolbar">
         <input class="search" type="search" placeholder="搜歌名、传说、殿堂…" aria-label="按歌名搜索">
@@ -302,554 +326,554 @@
 
     <main class="timeline">
         <section class="year" id="y2024">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2024</span>
-                <span class="year-bar" style="flex-grow:48"></span>
+                <span class="year-bar" style="flex-grow:48" aria-hidden="true"></span>
                 <span class="year-count">38 首</span>
             </div>
             <ol class="songs">
-                <li data-title="蝴蝶"><span class="song-title">蝴蝶</span><span class="song-date">09-15</span></li>
-                <li data-title="熬夜失恋指南"><span class="song-title">熬夜失恋指南</span><span class="song-date">08-21</span></li>
-                <li data-title="小孩的歌"><span class="song-title">小孩的歌</span><span class="song-date">08-18</span></li>
-                <li data-title="宅宅不乐水"><span class="song-title">宅宅不乐水</span><span class="song-date">08-14</span></li>
-                <li data-title="星球卑"><span class="song-title">星球卑</span><span class="song-date">08-12</span></li>
-                <li data-title="雨点"><span class="song-title">雨点</span><span class="song-date">08-09</span></li>
-                <li data-title="落笔"><span class="song-title">落笔</span><span class="song-date">07-24</span></li>
-                <li data-title="心事搁浅"><span class="song-title">心事搁浅</span><span class="song-date">07-22</span></li>
-                <li data-title="关注洛天依谢谢喵"><span class="song-title">关注洛天依谢谢喵</span><span class="song-date">07-13</span></li>
-                <li data-title="行旅人间"><span class="song-title">行旅人间</span><span class="song-date">07-12<span class="song-time">17:30</span></span></li>
-                <li data-title="奇遇与你"><span class="song-title">奇遇与你</span><span class="song-date">07-12<span class="song-time">17:00</span></span></li>
-                <li class="is-hall" data-title="Connect【洛天依的构成】"><span class="song-title">Connect【洛天依的构成】</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">07-12<span class="song-time">13:00</span></span></li>
-                <li data-title="彼得潘（VOCALOID版）"><span class="song-title">彼得潘（VOCALOID版）</span><span class="song-date">07-05</span></li>
-                <li data-title="夏日无尽蓝"><span class="song-title">夏日无尽蓝</span><span class="song-date">06-14</span></li>
-                <li data-title="再生"><span class="song-title">再生</span><span class="song-date">06-11</span></li>
-                <li data-title="最后150秒"><span class="song-title">最后150秒</span><span class="song-date">05-26</span></li>
-                <li data-title="旋转人偶"><span class="song-title">旋转人偶</span><span class="song-date">05-21<span class="song-time">19:30</span></span></li>
-                <li data-title="千金胧梦"><span class="song-title">千金胧梦</span><span class="song-date">05-21<span class="song-time">12:00</span></span></li>
-                <li data-title="此刻Memories"><span class="song-title">此刻Memories</span><span class="song-date">05-18</span></li>
-                <li data-title="迷航在最熟悉的世界"><span class="song-title">迷航在最熟悉的世界</span><span class="song-date">05-13</span></li>
-                <li data-title="不经意丢失一上午"><span class="song-title">不经意丢失一上午</span><span class="song-date">05-04<span class="song-time">20:15</span></span></li>
-                <li data-title="舔狗别哭了"><span class="song-title">舔狗别哭了</span><span class="song-date">05-04<span class="song-time">11:30</span></span></li>
-                <li data-title="蜜桃味"><span class="song-title">蜜桃味</span><span class="song-date">05-03</span></li>
-                <li data-title="十二月的思想病患者"><span class="song-title">十二月的思想病患者</span><span class="song-date">05-01</span></li>
-                <li data-title="无法触及"><span class="song-title">无法触及</span><span class="song-date">04-27</span></li>
-                <li data-title="别君赋"><span class="song-title">别君赋</span><span class="song-date">04-18<span class="song-time">23:24</span></span></li>
-                <li data-title="天山之外"><span class="song-title">天山之外</span><span class="song-date">04-18<span class="song-time">12:00</span></span></li>
-                <li data-title="黔歌行"><span class="song-title">黔歌行</span><span class="song-date">04-11</span></li>
-                <li data-title="雪山之眼"><span class="song-title">雪山之眼</span><span class="song-date">04-03</span></li>
-                <li data-title="淋完这场雨就忘记你吧"><span class="song-title">淋完这场雨就忘记你吧</span><span class="song-date">03-16</span></li>
-                <li data-title="XXX原创"><span class="song-title">XXX原创</span><span class="song-date">02-28</span></li>
-                <li data-title="云转盐雨转歌"><span class="song-title">云转盐雨转歌</span><span class="song-date">02-24</span></li>
-                <li data-title="云海"><span class="song-title">云海</span><span class="song-date">02-23</span></li>
-                <li data-title="大哉乾元"><span class="song-title">大哉乾元</span><span class="song-date">02-09<span class="song-time">20:31</span></span></li>
-                <li data-title="停滞之音"><span class="song-title">停滞之音</span><span class="song-date">02-09<span class="song-time">08:00</span></span></li>
-                <li data-title="踏雪寻春"><span class="song-title">踏雪寻春</span><span class="song-date">01-29<span class="song-time">22:59</span></span></li>
-                <li data-title="奈何花落"><span class="song-title">奈何花落</span><span class="song-date">01-29<span class="song-time">20:17</span></span></li>
-                <li data-title="天上的风"><span class="song-title">天上的风</span><span class="song-date">01-03</span></li>
+                <li data-title="蝴蝶"><span class="song-title">蝴蝶</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-15</span></li>
+                <li data-title="熬夜失恋指南"><span class="song-title">熬夜失恋指南</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-21</span></li>
+                <li data-title="小孩的歌"><span class="song-title">小孩的歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-18</span></li>
+                <li data-title="宅宅不乐水"><span class="song-title">宅宅不乐水</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-14</span></li>
+                <li data-title="星球卑"><span class="song-title">星球卑</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-12</span></li>
+                <li data-title="雨点"><span class="song-title">雨点</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-09</span></li>
+                <li data-title="落笔"><span class="song-title">落笔</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-24</span></li>
+                <li data-title="心事搁浅"><span class="song-title">心事搁浅</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-22</span></li>
+                <li data-title="关注洛天依谢谢喵"><span class="song-title">关注洛天依谢谢喵</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-13</span></li>
+                <li data-title="行旅人间"><span class="song-title">行旅人间</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">17:30</span></span></li>
+                <li data-title="奇遇与你"><span class="song-title">奇遇与你</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">17:00</span></span></li>
+                <li class="is-hall" data-title="Connect【洛天依的构成】"><span class="song-title">Connect【洛天依的构成】</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">13:00</span></span></li>
+                <li data-title="彼得潘（VOCALOID版）"><span class="song-title">彼得潘（VOCALOID版）</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-05</span></li>
+                <li data-title="夏日无尽蓝"><span class="song-title">夏日无尽蓝</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-14</span></li>
+                <li data-title="再生"><span class="song-title">再生</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-11</span></li>
+                <li data-title="最后150秒"><span class="song-title">最后150秒</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-26</span></li>
+                <li data-title="旋转人偶"><span class="song-title">旋转人偶</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-21<span class="song-time">19:30</span></span></li>
+                <li data-title="千金胧梦"><span class="song-title">千金胧梦</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-21<span class="song-time">12:00</span></span></li>
+                <li data-title="此刻Memories"><span class="song-title">此刻Memories</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-18</span></li>
+                <li data-title="迷航在最熟悉的世界"><span class="song-title">迷航在最熟悉的世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-13</span></li>
+                <li data-title="不经意丢失一上午"><span class="song-title">不经意丢失一上午</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-04<span class="song-time">20:15</span></span></li>
+                <li data-title="舔狗别哭了"><span class="song-title">舔狗别哭了</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-04<span class="song-time">11:30</span></span></li>
+                <li data-title="蜜桃味"><span class="song-title">蜜桃味</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-03</span></li>
+                <li data-title="十二月的思想病患者"><span class="song-title">十二月的思想病患者</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-01</span></li>
+                <li data-title="无法触及"><span class="song-title">无法触及</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-27</span></li>
+                <li data-title="别君赋"><span class="song-title">别君赋</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-18<span class="song-time">23:24</span></span></li>
+                <li data-title="天山之外"><span class="song-title">天山之外</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-18<span class="song-time">12:00</span></span></li>
+                <li data-title="黔歌行"><span class="song-title">黔歌行</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-11</span></li>
+                <li data-title="雪山之眼"><span class="song-title">雪山之眼</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-03</span></li>
+                <li data-title="淋完这场雨就忘记你吧"><span class="song-title">淋完这场雨就忘记你吧</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-16</span></li>
+                <li data-title="XXX原创"><span class="song-title">XXX原创</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-28</span></li>
+                <li data-title="云转盐雨转歌"><span class="song-title">云转盐雨转歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-24</span></li>
+                <li data-title="云海"><span class="song-title">云海</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-23</span></li>
+                <li data-title="大哉乾元"><span class="song-title">大哉乾元</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-09<span class="song-time">20:31</span></span></li>
+                <li data-title="停滞之音"><span class="song-title">停滞之音</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-09<span class="song-time">08:00</span></span></li>
+                <li data-title="踏雪寻春"><span class="song-title">踏雪寻春</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-29<span class="song-time">22:59</span></span></li>
+                <li data-title="奈何花落"><span class="song-title">奈何花落</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-29<span class="song-time">20:17</span></span></li>
+                <li data-title="天上的风"><span class="song-title">天上的风</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-03</span></li>
             </ol>
         </section>
         <section class="year" id="y2023">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2023</span>
-                <span class="year-bar" style="flex-grow:37"></span>
+                <span class="year-bar" style="flex-grow:37" aria-hidden="true"></span>
                 <span class="year-count">29 首</span>
             </div>
             <ol class="songs">
-                <li data-title="我约等于世界"><span class="song-title">我约等于世界</span><span class="song-date">12-01<span class="song-time">19:00</span></span></li>
-                <li data-title="梦华叹"><span class="song-title">梦华叹</span><span class="song-date">11-28</span></li>
-                <li data-title="铁道彗星"><span class="song-title">铁道彗星</span><span class="song-date">11-27</span></li>
-                <li data-title="小星球RE"><span class="song-title">小星球RE</span><span class="song-date">11-17</span></li>
-                <li data-title="原来神明听不见"><span class="song-title">原来神明听不见</span><span class="song-date">10-10<span class="song-time">17:00</span></span></li>
-                <li class="is-hall" data-title="登陆宇宙"><span class="song-title">登陆宇宙</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">10-10<span class="song-time">12:00</span></span></li>
-                <li data-title="某天我也会死去吧"><span class="song-title">某天我也会死去吧</span><span class="song-date">09-09</span></li>
-                <li data-title="歌行四方"><span class="song-title">歌行四方</span><span class="song-date">09-01</span></li>
-                <li data-title="好了现在可以哭了"><span class="song-title">好了现在可以哭了</span><span class="song-date">08-26</span></li>
-                <li data-title="人造透明和天界线"><span class="song-title">人造透明和天界线</span><span class="song-date">08-12<span class="song-time">17:00</span></span></li>
-                <li data-title="兜售默契"><span class="song-title">兜售默契</span><span class="song-date">08-12<span class="song-time">00:25</span></span></li>
-                <li data-title="涟漪微微动"><span class="song-title">涟漪微微动</span><span class="song-date">08-09</span></li>
-                <li data-title="夏日的第三次结束"><span class="song-title">夏日的第三次结束</span><span class="song-date">07-31</span></li>
-                <li data-title="夜茧"><span class="song-title">夜茧</span><span class="song-date">07-12<span class="song-time">17:43</span></span></li>
-                <li data-title="脐"><span class="song-title">脐</span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
-                <li data-title="我值得吗？"><span class="song-title">我值得吗？</span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
-                <li data-title="月华舞"><span class="song-title">月华舞</span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
-                <li data-title="请你留下"><span class="song-title">请你留下</span><span class="song-date">04-29</span></li>
-                <li data-title="Next Chapter"><span class="song-title">Next Chapter</span><span class="song-date">04-19</span></li>
-                <li data-title="怀春少女日记"><span class="song-title">怀春少女日记</span><span class="song-date">04-18</span></li>
-                <li data-title="聚光【BDF2023主题曲】"><span class="song-title">聚光【BDF2023主题曲】</span><span class="song-date">04-15</span></li>
-                <li data-title="告别Performance"><span class="song-title">告别Performance</span><span class="song-date">04-01</span></li>
-                <li data-title="新·神明对话日记"><span class="song-title">新·神明对话日记</span><span class="song-date">02-05</span></li>
-                <li data-title="闭眼，我触碰幻想的边界"><span class="song-title">闭眼，我触碰幻想的边界</span><span class="song-date">01-21</span></li>
-                <li data-title="有你刚刚好"><span class="song-title">有你刚刚好</span><span class="song-date">01-20</span></li>
-                <li data-title="呆呆一呆呆"><span class="song-title">呆呆一呆呆</span><span class="song-date">01-19</span></li>
-                <li data-title="万物有灵"><span class="song-title">万物有灵</span><span class="song-date">01-18</span></li>
-                <li data-title="爱与恨的世界"><span class="song-title">爱与恨的世界</span><span class="song-date">01-09</span></li>
-                <li data-title="国道217"><span class="song-title">国道217</span><span class="song-date">01-01</span></li>
+                <li data-title="我约等于世界"><span class="song-title">我约等于世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-01<span class="song-time">19:00</span></span></li>
+                <li data-title="梦华叹"><span class="song-title">梦华叹</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-28</span></li>
+                <li data-title="铁道彗星"><span class="song-title">铁道彗星</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-27</span></li>
+                <li data-title="小星球RE"><span class="song-title">小星球RE</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-17</span></li>
+                <li data-title="原来神明听不见"><span class="song-title">原来神明听不见</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-10<span class="song-time">17:00</span></span></li>
+                <li class="is-hall" data-title="登陆宇宙"><span class="song-title">登陆宇宙</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-10<span class="song-time">12:00</span></span></li>
+                <li data-title="某天我也会死去吧"><span class="song-title">某天我也会死去吧</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-09</span></li>
+                <li data-title="歌行四方"><span class="song-title">歌行四方</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-01</span></li>
+                <li data-title="好了现在可以哭了"><span class="song-title">好了现在可以哭了</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-26</span></li>
+                <li data-title="人造透明和天界线"><span class="song-title">人造透明和天界线</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-12<span class="song-time">17:00</span></span></li>
+                <li data-title="兜售默契"><span class="song-title">兜售默契</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-12<span class="song-time">00:25</span></span></li>
+                <li data-title="涟漪微微动"><span class="song-title">涟漪微微动</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-09</span></li>
+                <li data-title="夏日的第三次结束"><span class="song-title">夏日的第三次结束</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-31</span></li>
+                <li data-title="夜茧"><span class="song-title">夜茧</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">17:43</span></span></li>
+                <li data-title="脐"><span class="song-title">脐</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
+                <li data-title="我值得吗？"><span class="song-title">我值得吗？</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
+                <li data-title="月华舞"><span class="song-title">月华舞</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
+                <li data-title="请你留下"><span class="song-title">请你留下</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-29</span></li>
+                <li data-title="Next Chapter"><span class="song-title">Next Chapter</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-19</span></li>
+                <li data-title="怀春少女日记"><span class="song-title">怀春少女日记</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-18</span></li>
+                <li data-title="聚光【BDF2023主题曲】"><span class="song-title">聚光【BDF2023主题曲】</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-15</span></li>
+                <li data-title="告别Performance"><span class="song-title">告别Performance</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-01</span></li>
+                <li data-title="新·神明对话日记"><span class="song-title">新·神明对话日记</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-05</span></li>
+                <li data-title="闭眼，我触碰幻想的边界"><span class="song-title">闭眼，我触碰幻想的边界</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-21</span></li>
+                <li data-title="有你刚刚好"><span class="song-title">有你刚刚好</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-20</span></li>
+                <li data-title="呆呆一呆呆"><span class="song-title">呆呆一呆呆</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-19</span></li>
+                <li data-title="万物有灵"><span class="song-title">万物有灵</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-18</span></li>
+                <li data-title="爱与恨的世界"><span class="song-title">爱与恨的世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-09</span></li>
+                <li data-title="国道217"><span class="song-title">国道217</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-01</span></li>
             </ol>
         </section>
         <section class="year" id="y2022">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2022</span>
-                <span class="year-bar" style="flex-grow:62"></span>
+                <span class="year-bar" style="flex-grow:62" aria-hidden="true"></span>
                 <span class="year-count">49 首</span>
             </div>
             <ol class="songs">
-                <li data-title="大家一起入土吧"><span class="song-title">大家一起入土吧</span><span class="song-date">12-31<span class="song-time">23:44</span></span></li>
-                <li data-title="恍惚-AI"><span class="song-title">恍惚-AI</span><span class="song-date">12-31<span class="song-time">18:00</span></span></li>
-                <li data-title="恍惚-V4"><span class="song-title">恍惚-V4</span><span class="song-date">12-31<span class="song-time">18:00</span></span></li>
-                <li data-title="热带夜,视线网,喃木诺娜"><span class="song-title">热带夜,视线网,喃木诺娜</span><span class="song-date">12-29</span></li>
-                <li data-title="非常非议"><span class="song-title">非常非议</span><span class="song-date">12-25</span></li>
-                <li data-title="无理无智"><span class="song-title">无理无智</span><span class="song-date">12-11</span></li>
-                <li data-title="倒转四十六亿年"><span class="song-title">倒转四十六亿年</span><span class="song-date">11-11</span></li>
-                <li data-title="灰色鹦鹉"><span class="song-title">灰色鹦鹉</span><span class="song-date">11-01</span></li>
-                <li data-title="片刻也是永恒"><span class="song-title">片刻也是永恒</span><span class="song-date">10-28</span></li>
-                <li data-title="梦"><span class="song-title">梦</span><span class="song-date">10-27</span></li>
-                <li data-title="∞ TIMEs"><span class="song-title">∞ TIMEs</span><span class="song-date">10-03</span></li>
-                <li data-title="深蓝"><span class="song-title">深蓝</span><span class="song-date">10-02</span></li>
-                <li data-title="4&#x27;∞”"><span class="song-title">4&#x27;∞”</span><span class="song-date">10-01</span></li>
-                <li data-title="暧昧Philosopher"><span class="song-title">暧昧Philosopher</span><span class="song-date">09-30</span></li>
-                <li data-title="TOFFEE"><span class="song-title">TOFFEE</span><span class="song-date">09-21</span></li>
-                <li data-title="哈雷彗星"><span class="song-title">哈雷彗星</span><span class="song-date">09-17<span class="song-time">08:00</span></span></li>
-                <li data-title="加油最卖力的女同学"><span class="song-title">加油最卖力的女同学</span><span class="song-date">09-17<span class="song-time">03:33</span></span></li>
-                <li data-title="天方夜谭漫游指南"><span class="song-title">天方夜谭漫游指南</span><span class="song-date">08-31</span></li>
-                <li data-title="想和你迎着台风去看海"><span class="song-title">想和你迎着台风去看海</span><span class="song-date">08-29</span></li>
-                <li data-title="情有独钟"><span class="song-title">情有独钟</span><span class="song-date">08-21</span></li>
-                <li data-title="无夏之城"><span class="song-title">无夏之城</span><span class="song-date">08-20</span></li>
-                <li data-title="可否将你比作夏日"><span class="song-title">可否将你比作夏日</span><span class="song-date">08-14</span></li>
-                <li data-title="人鱼电台"><span class="song-title">人鱼电台</span><span class="song-date">08-12<span class="song-time">19:00</span></span></li>
-                <li data-title="I LOVE U TOO"><span class="song-title">I LOVE U TOO</span><span class="song-date">08-12<span class="song-time">12:00</span></span></li>
-                <li data-title="红灯笼"><span class="song-title">红灯笼</span><span class="song-date">08-06</span></li>
-                <li data-title="一秒的梦"><span class="song-title">一秒的梦</span><span class="song-date">08-04</span></li>
-                <li data-title="所以我戴上了耳机"><span class="song-title">所以我戴上了耳机</span><span class="song-date">07-27</span></li>
-                <li data-title="最忧解"><span class="song-title">最忧解</span><span class="song-date">07-19</span></li>
-                <li data-title="光与影的对白"><span class="song-title">光与影的对白</span><span class="song-date">07-12<span class="song-time">21:30</span></span></li>
-                <li data-title="十色"><span class="song-title">十色</span><span class="song-date">07-12<span class="song-time">13:00</span></span></li>
-                <li data-title="宇宙诞生的第一天"><span class="song-title">宇宙诞生的第一天</span><span class="song-date">07-12<span class="song-time">09:30</span></span></li>
-                <li data-title="你和我的篇章"><span class="song-title">你和我的篇章</span><span class="song-date">07-12<span class="song-time">00:09</span></span></li>
-                <li data-title="啥 啊"><span class="song-title">啥 啊</span><span class="song-date">07-12<span class="song-time">00:00</span></span></li>
-                <li data-title="听雨"><span class="song-title">听雨</span><span class="song-date">07-09</span></li>
-                <li data-title="春游"><span class="song-title">春游</span><span class="song-date">06-17</span></li>
-                <li data-title="贝加尔湖畔"><span class="song-title">贝加尔湖畔</span><span class="song-date">06-02</span></li>
-                <li data-title="Reeeee"><span class="song-title">Reeeee</span><span class="song-date">05-29</span></li>
-                <li data-title="万物与我同归于寂"><span class="song-title">万物与我同归于寂</span><span class="song-date">05-22</span></li>
-                <li data-title="秋江枫月夜"><span class="song-title">秋江枫月夜</span><span class="song-date">05-08</span></li>
-                <li data-title="一刻"><span class="song-title">一刻</span><span class="song-date">05-04</span></li>
-                <li data-title="白鸟过河滩"><span class="song-title">白鸟过河滩</span><span class="song-date">05-02</span></li>
-                <li data-title="罗汉拳"><span class="song-title">罗汉拳</span><span class="song-date">04-29</span></li>
-                <li data-title="夜苏打"><span class="song-title">夜苏打</span><span class="song-date">03-25</span></li>
-                <li data-title="心跳光谱"><span class="song-title">心跳光谱</span><span class="song-date">03-24</span></li>
-                <li data-title="圆圈之外"><span class="song-title">圆圈之外</span><span class="song-date">03-11</span></li>
-                <li data-title="Time to Shine"><span class="song-title">Time to Shine</span><span class="song-date">02-02</span></li>
-                <li data-title="哎呦喂"><span class="song-title">哎呦喂</span><span class="song-date">02-01</span></li>
-                <li data-title="一梦千宵"><span class="song-title">一梦千宵</span><span class="song-date">01-21</span></li>
-                <li data-title="虚拟Paradise"><span class="song-title">虚拟Paradise</span><span class="song-date">01-20</span></li>
+                <li data-title="大家一起入土吧"><span class="song-title">大家一起入土吧</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-31<span class="song-time">23:44</span></span></li>
+                <li data-title="恍惚-AI"><span class="song-title">恍惚-AI</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-31<span class="song-time">18:00</span></span></li>
+                <li data-title="恍惚-V4"><span class="song-title">恍惚-V4</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-31<span class="song-time">18:00</span></span></li>
+                <li data-title="热带夜,视线网,喃木诺娜"><span class="song-title">热带夜,视线网,喃木诺娜</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-29</span></li>
+                <li data-title="非常非议"><span class="song-title">非常非议</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-25</span></li>
+                <li data-title="无理无智"><span class="song-title">无理无智</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-11</span></li>
+                <li data-title="倒转四十六亿年"><span class="song-title">倒转四十六亿年</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-11</span></li>
+                <li data-title="灰色鹦鹉"><span class="song-title">灰色鹦鹉</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-01</span></li>
+                <li data-title="片刻也是永恒"><span class="song-title">片刻也是永恒</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-28</span></li>
+                <li data-title="梦"><span class="song-title">梦</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-27</span></li>
+                <li data-title="∞ TIMEs"><span class="song-title">∞ TIMEs</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-03</span></li>
+                <li data-title="深蓝"><span class="song-title">深蓝</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-02</span></li>
+                <li data-title="4&#x27;∞”"><span class="song-title">4&#x27;∞”</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-01</span></li>
+                <li data-title="暧昧Philosopher"><span class="song-title">暧昧Philosopher</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-30</span></li>
+                <li data-title="TOFFEE"><span class="song-title">TOFFEE</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-21</span></li>
+                <li data-title="哈雷彗星"><span class="song-title">哈雷彗星</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-17<span class="song-time">08:00</span></span></li>
+                <li data-title="加油最卖力的女同学"><span class="song-title">加油最卖力的女同学</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-17<span class="song-time">03:33</span></span></li>
+                <li data-title="天方夜谭漫游指南"><span class="song-title">天方夜谭漫游指南</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-31</span></li>
+                <li data-title="想和你迎着台风去看海"><span class="song-title">想和你迎着台风去看海</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-29</span></li>
+                <li data-title="情有独钟"><span class="song-title">情有独钟</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-21</span></li>
+                <li data-title="无夏之城"><span class="song-title">无夏之城</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-20</span></li>
+                <li data-title="可否将你比作夏日"><span class="song-title">可否将你比作夏日</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-14</span></li>
+                <li data-title="人鱼电台"><span class="song-title">人鱼电台</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-12<span class="song-time">19:00</span></span></li>
+                <li data-title="I LOVE U TOO"><span class="song-title">I LOVE U TOO</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-12<span class="song-time">12:00</span></span></li>
+                <li data-title="红灯笼"><span class="song-title">红灯笼</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-06</span></li>
+                <li data-title="一秒的梦"><span class="song-title">一秒的梦</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-04</span></li>
+                <li data-title="所以我戴上了耳机"><span class="song-title">所以我戴上了耳机</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-27</span></li>
+                <li data-title="最忧解"><span class="song-title">最忧解</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-19</span></li>
+                <li data-title="光与影的对白"><span class="song-title">光与影的对白</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">21:30</span></span></li>
+                <li data-title="十色"><span class="song-title">十色</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">13:00</span></span></li>
+                <li data-title="宇宙诞生的第一天"><span class="song-title">宇宙诞生的第一天</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">09:30</span></span></li>
+                <li data-title="你和我的篇章"><span class="song-title">你和我的篇章</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">00:09</span></span></li>
+                <li data-title="啥 啊"><span class="song-title">啥 啊</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">00:00</span></span></li>
+                <li data-title="听雨"><span class="song-title">听雨</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-09</span></li>
+                <li data-title="春游"><span class="song-title">春游</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-17</span></li>
+                <li data-title="贝加尔湖畔"><span class="song-title">贝加尔湖畔</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-02</span></li>
+                <li data-title="Reeeee"><span class="song-title">Reeeee</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-29</span></li>
+                <li data-title="万物与我同归于寂"><span class="song-title">万物与我同归于寂</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-22</span></li>
+                <li data-title="秋江枫月夜"><span class="song-title">秋江枫月夜</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-08</span></li>
+                <li data-title="一刻"><span class="song-title">一刻</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-04</span></li>
+                <li data-title="白鸟过河滩"><span class="song-title">白鸟过河滩</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-02</span></li>
+                <li data-title="罗汉拳"><span class="song-title">罗汉拳</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-29</span></li>
+                <li data-title="夜苏打"><span class="song-title">夜苏打</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-25</span></li>
+                <li data-title="心跳光谱"><span class="song-title">心跳光谱</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-24</span></li>
+                <li data-title="圆圈之外"><span class="song-title">圆圈之外</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-11</span></li>
+                <li data-title="Time to Shine"><span class="song-title">Time to Shine</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-02</span></li>
+                <li data-title="哎呦喂"><span class="song-title">哎呦喂</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-01</span></li>
+                <li data-title="一梦千宵"><span class="song-title">一梦千宵</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-21</span></li>
+                <li data-title="虚拟Paradise"><span class="song-title">虚拟Paradise</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-20</span></li>
             </ol>
         </section>
         <section class="year" id="y2021">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2021</span>
-                <span class="year-bar" style="flex-grow:30"></span>
+                <span class="year-bar" style="flex-grow:30" aria-hidden="true"></span>
                 <span class="year-count">24 首</span>
             </div>
             <ol class="songs">
-                <li data-title="红丝绒蛋糕"><span class="song-title">红丝绒蛋糕</span><span class="song-date">12-03</span></li>
-                <li data-title="滞留，空城——七月下"><span class="song-title">滞留，空城——七月下</span><span class="song-date">11-16</span></li>
-                <li data-title="你的心愿"><span class="song-title">你的心愿</span><span class="song-date">11-06</span></li>
-                <li data-title="失重博物馆"><span class="song-title">失重博物馆</span><span class="song-date">10-16</span></li>
-                <li data-title="火花"><span class="song-title">火花</span><span class="song-date">08-13</span></li>
-                <li data-title="不眠灯"><span class="song-title">不眠灯</span><span class="song-date">07-30</span></li>
-                <li data-title="月亮船"><span class="song-title">月亮船</span><span class="song-date">07-27</span></li>
-                <li data-title="想"><span class="song-title">想</span><span class="song-date">07-12<span class="song-time">22:18</span></span></li>
-                <li data-title="无题"><span class="song-title">无题</span><span class="song-date">07-12<span class="song-time">17:20</span></span></li>
-                <li data-title="纯蓝"><span class="song-title">纯蓝</span><span class="song-date">07-12<span class="song-time">16:40</span></span></li>
-                <li data-title="夏虫"><span class="song-title">夏虫</span><span class="song-date">07-12<span class="song-time">12:25</span></span></li>
-                <li data-title="纪念【重置】"><span class="song-title">纪念【重置】</span><span class="song-date">07-12<span class="song-time">07:30</span></span></li>
-                <li data-title="到你身边"><span class="song-title">到你身边</span><span class="song-date">07-03</span></li>
-                <li data-title="将遗憾写成歌"><span class="song-title">将遗憾写成歌</span><span class="song-date">07-02</span></li>
-                <li data-title="第三次失眠"><span class="song-title">第三次失眠</span><span class="song-date">05-21</span></li>
-                <li data-title="人间定律"><span class="song-title">人间定律</span><span class="song-date">05-14</span></li>
-                <li data-title="失落星球"><span class="song-title">失落星球</span><span class="song-date">04-30</span></li>
-                <li data-title="积雪"><span class="song-title">积雪</span><span class="song-date">02-17</span></li>
-                <li data-title="小遥"><span class="song-title">小遥</span><span class="song-date">02-13</span></li>
-                <li data-title="蝶云"><span class="song-title">蝶云</span><span class="song-date">02-04</span></li>
-                <li data-title="蔚蓝"><span class="song-title">蔚蓝</span><span class="song-date">01-22</span></li>
-                <li data-title="洗衣机里的人鱼"><span class="song-title">洗衣机里的人鱼</span><span class="song-date">01-16</span></li>
-                <li data-title="“我买下了夜晚的所有光”"><span class="song-title">“我买下了夜晚的所有光”</span><span class="song-date">01-02</span></li>
-                <li data-title="我无法用我的语言"><span class="song-title">我无法用我的语言</span><span class="song-date">01-01</span></li>
+                <li data-title="红丝绒蛋糕"><span class="song-title">红丝绒蛋糕</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-03</span></li>
+                <li data-title="滞留，空城——七月下"><span class="song-title">滞留，空城——七月下</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-16</span></li>
+                <li data-title="你的心愿"><span class="song-title">你的心愿</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-06</span></li>
+                <li data-title="失重博物馆"><span class="song-title">失重博物馆</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-16</span></li>
+                <li data-title="火花"><span class="song-title">火花</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-13</span></li>
+                <li data-title="不眠灯"><span class="song-title">不眠灯</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-30</span></li>
+                <li data-title="月亮船"><span class="song-title">月亮船</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-27</span></li>
+                <li data-title="想"><span class="song-title">想</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">22:18</span></span></li>
+                <li data-title="无题"><span class="song-title">无题</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">17:20</span></span></li>
+                <li data-title="纯蓝"><span class="song-title">纯蓝</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">16:40</span></span></li>
+                <li data-title="夏虫"><span class="song-title">夏虫</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:25</span></span></li>
+                <li data-title="纪念【重置】"><span class="song-title">纪念【重置】</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">07:30</span></span></li>
+                <li data-title="到你身边"><span class="song-title">到你身边</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-03</span></li>
+                <li data-title="将遗憾写成歌"><span class="song-title">将遗憾写成歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-02</span></li>
+                <li data-title="第三次失眠"><span class="song-title">第三次失眠</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-21</span></li>
+                <li data-title="人间定律"><span class="song-title">人间定律</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-14</span></li>
+                <li data-title="失落星球"><span class="song-title">失落星球</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-30</span></li>
+                <li data-title="积雪"><span class="song-title">积雪</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-17</span></li>
+                <li data-title="小遥"><span class="song-title">小遥</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-13</span></li>
+                <li data-title="蝶云"><span class="song-title">蝶云</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-04</span></li>
+                <li data-title="蔚蓝"><span class="song-title">蔚蓝</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-22</span></li>
+                <li data-title="洗衣机里的人鱼"><span class="song-title">洗衣机里的人鱼</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-16</span></li>
+                <li data-title="“我买下了夜晚的所有光”"><span class="song-title">“我买下了夜晚的所有光”</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-02</span></li>
+                <li data-title="我无法用我的语言"><span class="song-title">我无法用我的语言</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-01</span></li>
             </ol>
         </section>
         <section class="year" id="y2020">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2020</span>
-                <span class="year-bar" style="flex-grow:100"></span>
+                <span class="year-bar" style="flex-grow:100" aria-hidden="true"></span>
                 <span class="year-count">79 首</span>
             </div>
             <ol class="songs">
-                <li class="is-legend" data-title="夜航星"><span class="song-title">夜航星</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">12-31</span></li>
-                <li data-title="迷航"><span class="song-title">迷航</span><span class="song-date">12-26</span></li>
-                <li data-title="枫糖牛奶"><span class="song-title">枫糖牛奶</span><span class="song-date">12-19</span></li>
-                <li data-title="地平论"><span class="song-title">地平论</span><span class="song-date">12-06</span></li>
-                <li data-title="神说"><span class="song-title">神说</span><span class="song-date">11-27</span></li>
-                <li data-title="所以我选择被人讨厌"><span class="song-title">所以我选择被人讨厌</span><span class="song-date">11-08</span></li>
-                <li data-title="唱给世界的歌"><span class="song-title">唱给世界的歌</span><span class="song-date">10-30</span></li>
-                <li data-title="看，流星"><span class="song-title">看，流星</span><span class="song-date">10-18</span></li>
-                <li data-title="地表生物v2.0"><span class="song-title">地表生物v2.0</span><span class="song-date">10-06</span></li>
-                <li data-title="独处"><span class="song-title">独处</span><span class="song-date">10-03</span></li>
-                <li data-title="一直在一起"><span class="song-title">一直在一起</span><span class="song-date">09-12</span></li>
-                <li data-title="万能诊听器"><span class="song-title">万能诊听器</span><span class="song-date">09-11</span></li>
-                <li data-title="睡梦中死去的幼芽"><span class="song-title">睡梦中死去的幼芽</span><span class="song-date">09-02</span></li>
-                <li data-title="非真实"><span class="song-title">非真实</span><span class="song-date">08-28<span class="song-time">16:40</span></span></li>
-                <li data-title="反骨100%"><span class="song-title">反骨100%</span><span class="song-date">08-28<span class="song-time">16:22</span></span></li>
-                <li data-title="浴血重临"><span class="song-title">浴血重临</span><span class="song-date">08-25</span></li>
-                <li data-title="感性细腻亦可撑起世界"><span class="song-title">感性细腻亦可撑起世界</span><span class="song-date">08-22<span class="song-time">14:00</span></span></li>
-                <li data-title="如果梦"><span class="song-title">如果梦</span><span class="song-date">08-21</span></li>
-                <li data-title="死肥宅的快乐生活"><span class="song-title">死肥宅的快乐生活</span><span class="song-date">08-18</span></li>
-                <li data-title="返夏"><span class="song-title">返夏</span><span class="song-date">08-16</span></li>
-                <li data-title="还"><span class="song-title">还</span><span class="song-date">08-15<span class="song-time">22:44</span></span></li>
-                <li data-title="流年烹茶"><span class="song-title">流年烹茶</span><span class="song-date">08-15<span class="song-time">20:30</span></span></li>
-                <li data-title="你总要有些"><span class="song-title">你总要有些</span><span class="song-date">08-11</span></li>
-                <li data-title="夏の嵐と消える彗星"><span class="song-title">夏の嵐と消える彗星</span><span class="song-date">07-30</span></li>
-                <li data-title="非完美"><span class="song-title">非完美</span><span class="song-date">07-26</span></li>
-                <li data-title="光"><span class="song-title">光</span><span class="song-date">07-18</span></li>
-                <li data-title="难熬"><span class="song-title">难熬</span><span class="song-date">07-13</span></li>
-                <li class="is-hall" data-title="Henceforth"><span class="song-title">Henceforth</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">07-12<span class="song-time">20:55</span></span></li>
-                <li data-title="心洛"><span class="song-title">心洛</span><span class="song-date">07-12<span class="song-time">12:02</span></span></li>
-                <li data-title="从今往后"><span class="song-title">从今往后</span><span class="song-date">07-12<span class="song-time">10:00</span></span></li>
-                <li data-title="牵一半"><span class="song-title">牵一半</span><span class="song-date">07-10<span class="song-time">20:00</span></span></li>
-                <li data-title="流星车手"><span class="song-title">流星车手</span><span class="song-date">07-10<span class="song-time">18:30</span></span></li>
-                <li data-title="我从未逃离人间"><span class="song-title">我从未逃离人间</span><span class="song-date">07-10<span class="song-time">17:00</span></span></li>
-                <li data-title="琉璃光岛"><span class="song-title">琉璃光岛</span><span class="song-date">07-05</span></li>
-                <li data-title="平行"><span class="song-title">平行</span><span class="song-date">07-03</span></li>
-                <li data-title="你和我的绝对恋爱规则"><span class="song-title">你和我的绝对恋爱规则</span><span class="song-date">06-26</span></li>
-                <li data-title="活着是件温柔的小事"><span class="song-title">活着是件温柔的小事</span><span class="song-date">06-25</span></li>
-                <li data-title="可以恋爱"><span class="song-title">可以恋爱</span><span class="song-date">06-16</span></li>
-                <li data-title="遙遙"><span class="song-title">遙遙</span><span class="song-date">06-13</span></li>
-                <li data-title="人海"><span class="song-title">人海</span><span class="song-date">06-01</span></li>
-                <li data-title="失重"><span class="song-title">失重</span><span class="song-date">05-31</span></li>
-                <li data-title="我的最好的你"><span class="song-title">我的最好的你</span><span class="song-date">05-29</span></li>
-                <li data-title="山遥路远"><span class="song-title">山遥路远</span><span class="song-date">05-25</span></li>
-                <li data-title="希望明天的我变成你流下的眼泪"><span class="song-title">希望明天的我变成你流下的眼泪</span><span class="song-date">05-20</span></li>
-                <li data-title="褪色"><span class="song-title">褪色</span><span class="song-date">05-15</span></li>
-                <li data-title="睡吧，我在"><span class="song-title">睡吧，我在</span><span class="song-date">04-25</span></li>
-                <li data-title="黎明"><span class="song-title">黎明</span><span class="song-date">04-19</span></li>
-                <li data-title="一开始我们都陌生"><span class="song-title">一开始我们都陌生</span><span class="song-date">04-18</span></li>
-                <li data-title="我的悲伤是水做的"><span class="song-title">我的悲伤是水做的</span><span class="song-date">04-10<span class="song-time">18:10</span></span></li>
-                <li data-title="褪色的梦"><span class="song-title">褪色的梦</span><span class="song-date">04-10<span class="song-time">16:00</span></span></li>
-                <li data-title="因为你喜欢上这个世界"><span class="song-title">因为你喜欢上这个世界</span><span class="song-date">03-28</span></li>
-                <li data-title="Memory"><span class="song-title">Memory</span><span class="song-date">03-26</span></li>
-                <li data-title="社畜烧酒"><span class="song-title">社畜烧酒</span><span class="song-date">03-25</span></li>
-                <li data-title="我是你的魔鬼"><span class="song-title">我是你的魔鬼</span><span class="song-date">03-19</span></li>
-                <li data-title="忌念"><span class="song-title">忌念</span><span class="song-date">03-17</span></li>
-                <li data-title="心碎烧酒"><span class="song-title">心碎烧酒</span><span class="song-date">03-11</span></li>
-                <li data-title="信号塔"><span class="song-title">信号塔</span><span class="song-date">03-08<span class="song-time">20:00</span></span></li>
-                <li data-title="夏天快要过去了"><span class="song-title">夏天快要过去了</span><span class="song-date">03-08<span class="song-time">19:22</span></span></li>
-                <li data-title="雨行差"><span class="song-title">雨行差</span><span class="song-date">03-02</span></li>
-                <li data-title="懒人"><span class="song-title">懒人</span><span class="song-date">03-01</span></li>
-                <li data-title="阿弥陀佛头摇摇"><span class="song-title">阿弥陀佛头摇摇</span><span class="song-date">02-28</span></li>
-                <li data-title="Hollow"><span class="song-title">Hollow</span><span class="song-date">02-26</span></li>
-                <li data-title="彩色轨迹"><span class="song-title">彩色轨迹</span><span class="song-date">02-19</span></li>
-                <li data-title="关于我喜欢的男孩是个傻蛋"><span class="song-title">关于我喜欢的男孩是个傻蛋</span><span class="song-date">02-16</span></li>
-                <li data-title="过去的歌"><span class="song-title">过去的歌</span><span class="song-date">02-15</span></li>
-                <li data-title="追"><span class="song-title">追</span><span class="song-date">02-14</span></li>
-                <li data-title="toy box"><span class="song-title">toy box</span><span class="song-date">02-09<span class="song-time">21:02</span></span></li>
-                <li data-title="阴转小雨"><span class="song-title">阴转小雨</span><span class="song-date">02-09</span></li>
-                <li data-title="Nightension"><span class="song-title">Nightension</span><span class="song-date">02-07</span></li>
-                <li class="is-hall" data-title="梦回古城"><span class="song-title">梦回古城</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">02-05</span></li>
-                <li data-title="Shyuwa shyuwa"><span class="song-title">Shyuwa shyuwa</span><span class="song-date">02-04</span></li>
-                <li data-title="幸存"><span class="song-title">幸存</span><span class="song-date">02-01</span></li>
-                <li data-title="Come Back"><span class="song-title">Come Back</span><span class="song-date">01-31</span></li>
-                <li data-title="绿绮歌"><span class="song-title">绿绮歌</span><span class="song-date">01-26</span></li>
-                <li class="is-legend" data-title="万古生香"><span class="song-title">万古生香</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">01-24</span></li>
-                <li data-title="回家吧"><span class="song-title">回家吧</span><span class="song-date">01-18<span class="song-time">23:33</span></span></li>
-                <li data-title="艾米"><span class="song-title">艾米</span><span class="song-date">01-18</span></li>
-                <li class="is-hall" data-title="遥远的相遇"><span class="song-title">遥远的相遇</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">01-17</span></li>
-                <li data-title="告白/告别"><span class="song-title">告白/告别</span><span class="song-date">01-12</span></li>
+                <li class="is-legend" data-title="夜航星"><span class="song-title">夜航星</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-31</span></li>
+                <li data-title="迷航"><span class="song-title">迷航</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-26</span></li>
+                <li data-title="枫糖牛奶"><span class="song-title">枫糖牛奶</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-19</span></li>
+                <li data-title="地平论"><span class="song-title">地平论</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-06</span></li>
+                <li data-title="神说"><span class="song-title">神说</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-27</span></li>
+                <li data-title="所以我选择被人讨厌"><span class="song-title">所以我选择被人讨厌</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-08</span></li>
+                <li data-title="唱给世界的歌"><span class="song-title">唱给世界的歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-30</span></li>
+                <li data-title="看，流星"><span class="song-title">看，流星</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-18</span></li>
+                <li data-title="地表生物v2.0"><span class="song-title">地表生物v2.0</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-06</span></li>
+                <li data-title="独处"><span class="song-title">独处</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-03</span></li>
+                <li data-title="一直在一起"><span class="song-title">一直在一起</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-12</span></li>
+                <li data-title="万能诊听器"><span class="song-title">万能诊听器</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-11</span></li>
+                <li data-title="睡梦中死去的幼芽"><span class="song-title">睡梦中死去的幼芽</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-02</span></li>
+                <li data-title="非真实"><span class="song-title">非真实</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-28<span class="song-time">16:40</span></span></li>
+                <li data-title="反骨100%"><span class="song-title">反骨100%</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-28<span class="song-time">16:22</span></span></li>
+                <li data-title="浴血重临"><span class="song-title">浴血重临</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-25</span></li>
+                <li data-title="感性细腻亦可撑起世界"><span class="song-title">感性细腻亦可撑起世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-22<span class="song-time">14:00</span></span></li>
+                <li data-title="如果梦"><span class="song-title">如果梦</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-21</span></li>
+                <li data-title="死肥宅的快乐生活"><span class="song-title">死肥宅的快乐生活</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-18</span></li>
+                <li data-title="返夏"><span class="song-title">返夏</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-16</span></li>
+                <li data-title="还"><span class="song-title">还</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-15<span class="song-time">22:44</span></span></li>
+                <li data-title="流年烹茶"><span class="song-title">流年烹茶</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-15<span class="song-time">20:30</span></span></li>
+                <li data-title="你总要有些"><span class="song-title">你总要有些</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-11</span></li>
+                <li data-title="夏の嵐と消える彗星"><span class="song-title">夏の嵐と消える彗星</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-30</span></li>
+                <li data-title="非完美"><span class="song-title">非完美</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-26</span></li>
+                <li data-title="光"><span class="song-title">光</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-18</span></li>
+                <li data-title="难熬"><span class="song-title">难熬</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-13</span></li>
+                <li class="is-hall" data-title="Henceforth"><span class="song-title">Henceforth</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">20:55</span></span></li>
+                <li data-title="心洛"><span class="song-title">心洛</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:02</span></span></li>
+                <li data-title="从今往后"><span class="song-title">从今往后</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">10:00</span></span></li>
+                <li data-title="牵一半"><span class="song-title">牵一半</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-10<span class="song-time">20:00</span></span></li>
+                <li data-title="流星车手"><span class="song-title">流星车手</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-10<span class="song-time">18:30</span></span></li>
+                <li data-title="我从未逃离人间"><span class="song-title">我从未逃离人间</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-10<span class="song-time">17:00</span></span></li>
+                <li data-title="琉璃光岛"><span class="song-title">琉璃光岛</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-05</span></li>
+                <li data-title="平行"><span class="song-title">平行</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-03</span></li>
+                <li data-title="你和我的绝对恋爱规则"><span class="song-title">你和我的绝对恋爱规则</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-26</span></li>
+                <li data-title="活着是件温柔的小事"><span class="song-title">活着是件温柔的小事</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-25</span></li>
+                <li data-title="可以恋爱"><span class="song-title">可以恋爱</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-16</span></li>
+                <li data-title="遙遙"><span class="song-title">遙遙</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-13</span></li>
+                <li data-title="人海"><span class="song-title">人海</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-01</span></li>
+                <li data-title="失重"><span class="song-title">失重</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-31</span></li>
+                <li data-title="我的最好的你"><span class="song-title">我的最好的你</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-29</span></li>
+                <li data-title="山遥路远"><span class="song-title">山遥路远</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-25</span></li>
+                <li data-title="希望明天的我变成你流下的眼泪"><span class="song-title">希望明天的我变成你流下的眼泪</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-20</span></li>
+                <li data-title="褪色"><span class="song-title">褪色</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-15</span></li>
+                <li data-title="睡吧，我在"><span class="song-title">睡吧，我在</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-25</span></li>
+                <li data-title="黎明"><span class="song-title">黎明</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-19</span></li>
+                <li data-title="一开始我们都陌生"><span class="song-title">一开始我们都陌生</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-18</span></li>
+                <li data-title="我的悲伤是水做的"><span class="song-title">我的悲伤是水做的</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-10<span class="song-time">18:10</span></span></li>
+                <li data-title="褪色的梦"><span class="song-title">褪色的梦</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-10<span class="song-time">16:00</span></span></li>
+                <li data-title="因为你喜欢上这个世界"><span class="song-title">因为你喜欢上这个世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-28</span></li>
+                <li data-title="Memory"><span class="song-title">Memory</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-26</span></li>
+                <li data-title="社畜烧酒"><span class="song-title">社畜烧酒</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-25</span></li>
+                <li data-title="我是你的魔鬼"><span class="song-title">我是你的魔鬼</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-19</span></li>
+                <li data-title="忌念"><span class="song-title">忌念</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-17</span></li>
+                <li data-title="心碎烧酒"><span class="song-title">心碎烧酒</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-11</span></li>
+                <li data-title="信号塔"><span class="song-title">信号塔</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-08<span class="song-time">20:00</span></span></li>
+                <li data-title="夏天快要过去了"><span class="song-title">夏天快要过去了</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-08<span class="song-time">19:22</span></span></li>
+                <li data-title="雨行差"><span class="song-title">雨行差</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-02</span></li>
+                <li data-title="懒人"><span class="song-title">懒人</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-01</span></li>
+                <li data-title="阿弥陀佛头摇摇"><span class="song-title">阿弥陀佛头摇摇</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-28</span></li>
+                <li data-title="Hollow"><span class="song-title">Hollow</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-26</span></li>
+                <li data-title="彩色轨迹"><span class="song-title">彩色轨迹</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-19</span></li>
+                <li data-title="关于我喜欢的男孩是个傻蛋"><span class="song-title">关于我喜欢的男孩是个傻蛋</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-16</span></li>
+                <li data-title="过去的歌"><span class="song-title">过去的歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-15</span></li>
+                <li data-title="追"><span class="song-title">追</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-14</span></li>
+                <li data-title="toy box"><span class="song-title">toy box</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-09<span class="song-time">21:02</span></span></li>
+                <li data-title="阴转小雨"><span class="song-title">阴转小雨</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-09</span></li>
+                <li data-title="Nightension"><span class="song-title">Nightension</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-07</span></li>
+                <li class="is-hall" data-title="梦回古城"><span class="song-title">梦回古城</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-05</span></li>
+                <li data-title="Shyuwa shyuwa"><span class="song-title">Shyuwa shyuwa</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-04</span></li>
+                <li data-title="幸存"><span class="song-title">幸存</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-01</span></li>
+                <li data-title="Come Back"><span class="song-title">Come Back</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-31</span></li>
+                <li data-title="绿绮歌"><span class="song-title">绿绮歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-26</span></li>
+                <li class="is-legend" data-title="万古生香"><span class="song-title">万古生香</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-24</span></li>
+                <li data-title="回家吧"><span class="song-title">回家吧</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-18<span class="song-time">23:33</span></span></li>
+                <li data-title="艾米"><span class="song-title">艾米</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-18</span></li>
+                <li class="is-hall" data-title="遥远的相遇"><span class="song-title">遥远的相遇</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-17</span></li>
+                <li data-title="告白/告别"><span class="song-title">告白/告别</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-12</span></li>
             </ol>
         </section>
         <section class="year" id="y2019">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2019</span>
-                <span class="year-bar" style="flex-grow:65"></span>
+                <span class="year-bar" style="flex-grow:65" aria-hidden="true"></span>
                 <span class="year-count">51 首</span>
             </div>
             <ol class="songs">
-                <li data-title="一点一点"><span class="song-title">一点一点</span><span class="song-date">12-25</span></li>
-                <li data-title="一万万"><span class="song-title">一万万</span><span class="song-date">12-21</span></li>
-                <li data-title="透明"><span class="song-title">透明</span><span class="song-date">12-20</span></li>
-                <li data-title="晚安，世界"><span class="song-title">晚安，世界</span><span class="song-date">12-07</span></li>
-                <li data-title="化作繁星"><span class="song-title">化作繁星</span><span class="song-date">12-06</span></li>
-                <li data-title="途闻"><span class="song-title">途闻</span><span class="song-date">11-22</span></li>
-                <li data-title="青春追梦人"><span class="song-title">青春追梦人</span><span class="song-date">11-18</span></li>
-                <li data-title="T.A.O"><span class="song-title">T.A.O</span><span class="song-date">10-18</span></li>
-                <li data-title="流浪"><span class="song-title">流浪</span><span class="song-date">10-09</span></li>
-                <li data-title="以微笑之名"><span class="song-title">以微笑之名</span><span class="song-date">09-06</span></li>
-                <li data-title="阴霾"><span class="song-title">阴霾</span><span class="song-date">08-31</span></li>
-                <li data-title="Himawari"><span class="song-title">Himawari</span><span class="song-date">08-30</span></li>
-                <li data-title="Time Traveler"><span class="song-title">Time Traveler</span><span class="song-date">08-29</span></li>
-                <li data-title="萤"><span class="song-title">萤</span><span class="song-date">08-22<span class="song-time">12:29</span></span></li>
-                <li data-title="渺小祈愿"><span class="song-title">渺小祈愿</span><span class="song-date">08-15</span></li>
-                <li data-title="精灵别归去"><span class="song-title">精灵别归去</span><span class="song-date">07-27</span></li>
-                <li data-title="惜别离"><span class="song-title">惜别离</span><span class="song-date">07-21</span></li>
-                <li data-title="雨在一直下"><span class="song-title">雨在一直下</span><span class="song-date">07-19</span></li>
-                <li data-title="双星轨迹"><span class="song-title">双星轨迹</span><span class="song-date">07-18<span class="song-time">20:54</span></span></li>
-                <li data-title="星芒"><span class="song-title">星芒</span><span class="song-date">07-18</span></li>
-                <li data-title="初心依然"><span class="song-title">初心依然</span><span class="song-date">07-14</span></li>
-                <li data-title="洛水天依"><span class="song-title">洛水天依</span><span class="song-date">07-12<span class="song-time">17:04</span></span></li>
-                <li data-title="啵唧"><span class="song-title">啵唧</span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
-                <li class="is-hall" data-title="starlight"><span class="song-title">starlight</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-note">全站排行榜最高第39名</span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
-                <li data-title="百分百女孩"><span class="song-title">百分百女孩</span><span class="song-date">07-11</span></li>
-                <li data-title="若汐轩"><span class="song-title">若汐轩</span><span class="song-date">07-08</span></li>
-                <li data-title="我"><span class="song-title">我</span><span class="song-date">07-07</span></li>
-                <li data-title="老街北"><span class="song-title">老街北</span><span class="song-date">07-05</span></li>
-                <li data-title="No Title"><span class="song-title">No Title</span><span class="song-date">06-21</span></li>
-                <li data-title="不老不死"><span class="song-title">不老不死</span><span class="song-date">06-18</span></li>
-                <li data-title="Rainy Bunny"><span class="song-title">Rainy Bunny</span><span class="song-date">06-14</span></li>
-                <li data-title="海"><span class="song-title">海</span><span class="song-date">05-18</span></li>
-                <li data-title="秘宝"><span class="song-title">秘宝</span><span class="song-date">05-17</span></li>
-                <li data-title="神のまにまに"><span class="song-title">神のまにまに</span><span class="song-date">04-19</span></li>
-                <li data-title="你好，世界"><span class="song-title">你好，世界</span><span class="song-date">04-03</span></li>
-                <li data-title="次元列车"><span class="song-title">次元列车</span><span class="song-date">03-27</span></li>
-                <li data-title="ササノマリイ 一"><span class="song-title">ササノマリイ 一</span><span class="song-date">03-15</span></li>
-                <li data-title="绽放白色的花"><span class="song-title">绽放白色的花</span><span class="song-date">03-14</span></li>
-                <li data-title="Say No"><span class="song-title">Say No</span><span class="song-date">03-13</span></li>
-                <li class="is-legend" data-title="大氿歌"><span class="song-title">大氿歌</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">03-01</span></li>
-                <li data-title="夜间出租车"><span class="song-title">夜间出租车</span><span class="song-date">02-21</span></li>
-                <li data-title="约会宣言"><span class="song-title">约会宣言</span><span class="song-date">02-14</span></li>
-                <li class="is-legend" data-title="勾指起誓"><span class="song-title">勾指起誓</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">02-13</span></li>
-                <li data-title="BLUE"><span class="song-title">BLUE</span><span class="song-date">02-10</span></li>
-                <li data-title="当明天到来的时候"><span class="song-title">当明天到来的时候</span><span class="song-date">02-05</span></li>
-                <li data-title="你所不知道的"><span class="song-title">你所不知道的</span><span class="song-date">02-01</span></li>
-                <li data-title="象牙塔少女"><span class="song-title">象牙塔少女</span><span class="song-date">01-31</span></li>
-                <li data-title="Pilot"><span class="song-title">Pilot</span><span class="song-date">01-25</span></li>
-                <li class="is-hall" data-title="夜行者们"><span class="song-title">夜行者们</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">01-22</span></li>
-                <li data-title="闪耀"><span class="song-title">闪耀</span><span class="song-date">01-11</span></li>
-                <li data-title="永 眠"><span class="song-title">永 眠</span><span class="song-date">01-05</span></li>
+                <li data-title="一点一点"><span class="song-title">一点一点</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-25</span></li>
+                <li data-title="一万万"><span class="song-title">一万万</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-21</span></li>
+                <li data-title="透明"><span class="song-title">透明</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-20</span></li>
+                <li data-title="晚安，世界"><span class="song-title">晚安，世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-07</span></li>
+                <li data-title="化作繁星"><span class="song-title">化作繁星</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-06</span></li>
+                <li data-title="途闻"><span class="song-title">途闻</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-22</span></li>
+                <li data-title="青春追梦人"><span class="song-title">青春追梦人</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-18</span></li>
+                <li data-title="T.A.O"><span class="song-title">T.A.O</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-18</span></li>
+                <li data-title="流浪"><span class="song-title">流浪</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-09</span></li>
+                <li data-title="以微笑之名"><span class="song-title">以微笑之名</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-06</span></li>
+                <li data-title="阴霾"><span class="song-title">阴霾</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-31</span></li>
+                <li data-title="Himawari"><span class="song-title">Himawari</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-30</span></li>
+                <li data-title="Time Traveler"><span class="song-title">Time Traveler</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-29</span></li>
+                <li data-title="萤"><span class="song-title">萤</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-22<span class="song-time">12:29</span></span></li>
+                <li data-title="渺小祈愿"><span class="song-title">渺小祈愿</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-15</span></li>
+                <li data-title="精灵别归去"><span class="song-title">精灵别归去</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-27</span></li>
+                <li data-title="惜别离"><span class="song-title">惜别离</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-21</span></li>
+                <li data-title="雨在一直下"><span class="song-title">雨在一直下</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-19</span></li>
+                <li data-title="双星轨迹"><span class="song-title">双星轨迹</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-18<span class="song-time">20:54</span></span></li>
+                <li data-title="星芒"><span class="song-title">星芒</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-18</span></li>
+                <li data-title="初心依然"><span class="song-title">初心依然</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-14</span></li>
+                <li data-title="洛水天依"><span class="song-title">洛水天依</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">17:04</span></span></li>
+                <li data-title="啵唧"><span class="song-title">啵唧</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
+                <li class="is-hall" data-title="starlight"><span class="song-title">starlight</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="song-note">全站排行榜最高第39名</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
+                <li data-title="百分百女孩"><span class="song-title">百分百女孩</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-11</span></li>
+                <li data-title="若汐轩"><span class="song-title">若汐轩</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-08</span></li>
+                <li data-title="我"><span class="song-title">我</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-07</span></li>
+                <li data-title="老街北"><span class="song-title">老街北</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-05</span></li>
+                <li data-title="No Title"><span class="song-title">No Title</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-21</span></li>
+                <li data-title="不老不死"><span class="song-title">不老不死</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-18</span></li>
+                <li data-title="Rainy Bunny"><span class="song-title">Rainy Bunny</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-14</span></li>
+                <li data-title="海"><span class="song-title">海</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-18</span></li>
+                <li data-title="秘宝"><span class="song-title">秘宝</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-17</span></li>
+                <li data-title="神のまにまに"><span class="song-title">神のまにまに</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-19</span></li>
+                <li data-title="你好，世界"><span class="song-title">你好，世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-03</span></li>
+                <li data-title="次元列车"><span class="song-title">次元列车</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-27</span></li>
+                <li data-title="ササノマリイ 一"><span class="song-title">ササノマリイ 一</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-15</span></li>
+                <li data-title="绽放白色的花"><span class="song-title">绽放白色的花</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-14</span></li>
+                <li data-title="Say No"><span class="song-title">Say No</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-13</span></li>
+                <li class="is-legend" data-title="大氿歌"><span class="song-title">大氿歌</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-01</span></li>
+                <li data-title="夜间出租车"><span class="song-title">夜间出租车</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-21</span></li>
+                <li data-title="约会宣言"><span class="song-title">约会宣言</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-14</span></li>
+                <li class="is-legend" data-title="勾指起誓"><span class="song-title">勾指起誓</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-13</span></li>
+                <li data-title="BLUE"><span class="song-title">BLUE</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-10</span></li>
+                <li data-title="当明天到来的时候"><span class="song-title">当明天到来的时候</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-05</span></li>
+                <li data-title="你所不知道的"><span class="song-title">你所不知道的</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-01</span></li>
+                <li data-title="象牙塔少女"><span class="song-title">象牙塔少女</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-31</span></li>
+                <li data-title="Pilot"><span class="song-title">Pilot</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-25</span></li>
+                <li class="is-hall" data-title="夜行者们"><span class="song-title">夜行者们</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-22</span></li>
+                <li data-title="闪耀"><span class="song-title">闪耀</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-11</span></li>
+                <li data-title="永 眠"><span class="song-title">永 眠</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-05</span></li>
             </ol>
         </section>
         <section class="year" id="y2018">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2018</span>
-                <span class="year-bar" style="flex-grow:68"></span>
+                <span class="year-bar" style="flex-grow:68" aria-hidden="true"></span>
                 <span class="year-count">54 首</span>
             </div>
             <ol class="songs">
-                <li data-title="夜行"><span class="song-title">夜行</span><span class="song-date">12-29</span></li>
-                <li data-title="致还未遇见的你"><span class="song-title">致还未遇见的你</span><span class="song-date">11-23</span></li>
-                <li data-title="告别曲"><span class="song-title">告别曲</span><span class="song-date">11-16</span></li>
-                <li data-title="Come to Me"><span class="song-title">Come to Me</span><span class="song-date">11-14</span></li>
-                <li data-title="白雪皇后"><span class="song-title">白雪皇后</span><span class="song-date">11-10</span></li>
-                <li data-title="远方的诗"><span class="song-title">远方的诗</span><span class="song-date">10-24</span></li>
-                <li data-title="一封孤岛的信"><span class="song-title">一封孤岛的信</span><span class="song-date">10-19<span class="song-time">17:00</span></span></li>
-                <li data-title="伴宅日记"><span class="song-title">伴宅日记</span><span class="song-date">10-19<span class="song-time">15:58</span></span></li>
-                <li data-title="英雄出征"><span class="song-title">英雄出征</span><span class="song-date">10-15</span></li>
-                <li data-title="朝汐"><span class="song-title">朝汐</span><span class="song-date">10-03</span></li>
-                <li data-title="夏日延长战"><span class="song-title">夏日延长战</span><span class="song-date">09-21</span></li>
-                <li data-title="故友"><span class="song-title">故友</span><span class="song-date">08-31</span></li>
-                <li data-title="莫吉托女孩的盛夏"><span class="song-title">莫吉托女孩的盛夏</span><span class="song-date">08-29</span></li>
-                <li data-title="消失在雨季"><span class="song-title">消失在雨季</span><span class="song-date">08-24</span></li>
-                <li data-title="眉间不点砂"><span class="song-title">眉间不点砂</span><span class="song-date">08-23</span></li>
-                <li data-title="倘若有天我辞了这人世"><span class="song-title">倘若有天我辞了这人世</span><span class="song-date">08-20</span></li>
-                <li data-title="你的笑意"><span class="song-title">你的笑意</span><span class="song-date">08-19</span></li>
-                <li data-title="Every Summer With You"><span class="song-title">Every Summer With You</span><span class="song-date">08-18</span></li>
-                <li data-title="遗忘的相簿"><span class="song-title">遗忘的相簿</span><span class="song-date">08-17</span></li>
-                <li data-title="那一朵悄然绽放的花"><span class="song-title">那一朵悄然绽放的花</span><span class="song-date">08-14</span></li>
-                <li data-title="人间失宠"><span class="song-title">人间失宠</span><span class="song-date">08-13</span></li>
-                <li data-title="一路繁花"><span class="song-title">一路繁花</span><span class="song-date">08-11</span></li>
-                <li data-title="希望你能听到"><span class="song-title">希望你能听到</span><span class="song-date">08-04</span></li>
-                <li data-title="影子小姐"><span class="song-title">影子小姐</span><span class="song-date">07-28</span></li>
-                <li data-title="无敌"><span class="song-title">无敌</span><span class="song-date">07-26</span></li>
-                <li data-title="星海彼岸"><span class="song-title">星海彼岸</span><span class="song-date">07-12<span class="song-time">13:44</span></span></li>
-                <li class="is-hall" data-title="一花依世界"><span class="song-title">一花依世界</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
-                <li data-title="未完成的·乐章"><span class="song-title">未完成的·乐章</span><span class="song-date">07-12<span class="song-time">00:00</span></span></li>
-                <li data-title="双向倾诉"><span class="song-title">双向倾诉</span><span class="song-date">07-11</span></li>
-                <li data-title="嘘つきは恋のはじまり"><span class="song-title">嘘つきは恋のはじまり</span><span class="song-date">07-08<span class="song-time">21:35</span></span></li>
-                <li data-title="为谁而为"><span class="song-title">为谁而为</span><span class="song-date">07-08<span class="song-time">11:18</span></span></li>
-                <li data-title="叮铃铃铃"><span class="song-title">叮铃铃铃</span><span class="song-date">06-21</span></li>
-                <li data-title="依依"><span class="song-title">依依</span><span class="song-date">06-18</span></li>
-                <li data-title="黑凤梨"><span class="song-title">黑凤梨</span><span class="song-date">06-15</span></li>
-                <li data-title="零六零五"><span class="song-title">零六零五</span><span class="song-date">06-05</span></li>
-                <li data-title="青春Calling"><span class="song-title">青春Calling</span><span class="song-date">06-03</span></li>
-                <li data-title="きみも悪い人でよかった"><span class="song-title">きみも悪い人でよかった</span><span class="song-date">06-01</span></li>
-                <li data-title="致……"><span class="song-title">致……</span><span class="song-date">06-01</span></li>
-                <li data-title="幻想生物"><span class="song-title">幻想生物</span><span class="song-date">05-27</span></li>
-                <li class="is-hall" data-title="深海少女"><span class="song-title">深海少女</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">05-26</span></li>
-                <li data-title="白羊座"><span class="song-title">白羊座</span><span class="song-date">05-17</span></li>
-                <li data-title="纸船漂"><span class="song-title">纸船漂</span><span class="song-date">05-12</span></li>
-                <li data-title="青春纪"><span class="song-title">青春纪</span><span class="song-date">05-03</span></li>
-                <li data-title="傲娇先生"><span class="song-title">傲娇先生</span><span class="song-date">04-27</span></li>
-                <li data-title="Death And Dormancy"><span class="song-title">Death And Dormancy</span><span class="song-date">04-21</span></li>
-                <li data-title="绝体绝命"><span class="song-title">绝体绝命</span><span class="song-date">04-04</span></li>
-                <li data-title="安乐"><span class="song-title">安乐</span><span class="song-date">03-26</span></li>
-                <li data-title="Moments"><span class="song-title">Moments</span><span class="song-date">03-16</span></li>
-                <li data-title="不知者"><span class="song-title">不知者</span><span class="song-date">03-12</span></li>
-                <li data-title="若许年"><span class="song-title">若许年</span><span class="song-date">03-07</span></li>
-                <li data-title="时间旅行"><span class="song-title">时间旅行</span><span class="song-date">02-21</span></li>
-                <li data-title="Melty Land Nightmare"><span class="song-title">Melty Land Nightmare</span><span class="song-date">02-17</span></li>
-                <li data-title="Our age"><span class="song-title">Our age</span><span class="song-date">01-19</span></li>
-                <li data-title="私人港湾"><span class="song-title">私人港湾</span><span class="song-date">01-13</span></li>
+                <li data-title="夜行"><span class="song-title">夜行</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-29</span></li>
+                <li data-title="致还未遇见的你"><span class="song-title">致还未遇见的你</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-23</span></li>
+                <li data-title="告别曲"><span class="song-title">告别曲</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-16</span></li>
+                <li data-title="Come to Me"><span class="song-title">Come to Me</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-14</span></li>
+                <li data-title="白雪皇后"><span class="song-title">白雪皇后</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-10</span></li>
+                <li data-title="远方的诗"><span class="song-title">远方的诗</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-24</span></li>
+                <li data-title="一封孤岛的信"><span class="song-title">一封孤岛的信</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-19<span class="song-time">17:00</span></span></li>
+                <li data-title="伴宅日记"><span class="song-title">伴宅日记</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-19<span class="song-time">15:58</span></span></li>
+                <li data-title="英雄出征"><span class="song-title">英雄出征</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-15</span></li>
+                <li data-title="朝汐"><span class="song-title">朝汐</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-03</span></li>
+                <li data-title="夏日延长战"><span class="song-title">夏日延长战</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-21</span></li>
+                <li data-title="故友"><span class="song-title">故友</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-31</span></li>
+                <li data-title="莫吉托女孩的盛夏"><span class="song-title">莫吉托女孩的盛夏</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-29</span></li>
+                <li data-title="消失在雨季"><span class="song-title">消失在雨季</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-24</span></li>
+                <li data-title="眉间不点砂"><span class="song-title">眉间不点砂</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-23</span></li>
+                <li data-title="倘若有天我辞了这人世"><span class="song-title">倘若有天我辞了这人世</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-20</span></li>
+                <li data-title="你的笑意"><span class="song-title">你的笑意</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-19</span></li>
+                <li data-title="Every Summer With You"><span class="song-title">Every Summer With You</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-18</span></li>
+                <li data-title="遗忘的相簿"><span class="song-title">遗忘的相簿</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-17</span></li>
+                <li data-title="那一朵悄然绽放的花"><span class="song-title">那一朵悄然绽放的花</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-14</span></li>
+                <li data-title="人间失宠"><span class="song-title">人间失宠</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-13</span></li>
+                <li data-title="一路繁花"><span class="song-title">一路繁花</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-11</span></li>
+                <li data-title="希望你能听到"><span class="song-title">希望你能听到</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-04</span></li>
+                <li data-title="影子小姐"><span class="song-title">影子小姐</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-28</span></li>
+                <li data-title="无敌"><span class="song-title">无敌</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-26</span></li>
+                <li data-title="星海彼岸"><span class="song-title">星海彼岸</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">13:44</span></span></li>
+                <li class="is-hall" data-title="一花依世界"><span class="song-title">一花依世界</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">12:00</span></span></li>
+                <li data-title="未完成的·乐章"><span class="song-title">未完成的·乐章</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12<span class="song-time">00:00</span></span></li>
+                <li data-title="双向倾诉"><span class="song-title">双向倾诉</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-11</span></li>
+                <li data-title="嘘つきは恋のはじまり"><span class="song-title">嘘つきは恋のはじまり</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-08<span class="song-time">21:35</span></span></li>
+                <li data-title="为谁而为"><span class="song-title">为谁而为</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-08<span class="song-time">11:18</span></span></li>
+                <li data-title="叮铃铃铃"><span class="song-title">叮铃铃铃</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-21</span></li>
+                <li data-title="依依"><span class="song-title">依依</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-18</span></li>
+                <li data-title="黑凤梨"><span class="song-title">黑凤梨</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-15</span></li>
+                <li data-title="零六零五"><span class="song-title">零六零五</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-05</span></li>
+                <li data-title="青春Calling"><span class="song-title">青春Calling</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-03</span></li>
+                <li data-title="きみも悪い人でよかった"><span class="song-title">きみも悪い人でよかった</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-01</span></li>
+                <li data-title="致……"><span class="song-title">致……</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-01</span></li>
+                <li data-title="幻想生物"><span class="song-title">幻想生物</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-27</span></li>
+                <li class="is-hall" data-title="深海少女"><span class="song-title">深海少女</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-26</span></li>
+                <li data-title="白羊座"><span class="song-title">白羊座</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-17</span></li>
+                <li data-title="纸船漂"><span class="song-title">纸船漂</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-12</span></li>
+                <li data-title="青春纪"><span class="song-title">青春纪</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-03</span></li>
+                <li data-title="傲娇先生"><span class="song-title">傲娇先生</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-27</span></li>
+                <li data-title="Death And Dormancy"><span class="song-title">Death And Dormancy</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-21</span></li>
+                <li data-title="绝体绝命"><span class="song-title">绝体绝命</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-04</span></li>
+                <li data-title="安乐"><span class="song-title">安乐</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-26</span></li>
+                <li data-title="Moments"><span class="song-title">Moments</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-16</span></li>
+                <li data-title="不知者"><span class="song-title">不知者</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-12</span></li>
+                <li data-title="若许年"><span class="song-title">若许年</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-07</span></li>
+                <li data-title="时间旅行"><span class="song-title">时间旅行</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-21</span></li>
+                <li data-title="Melty Land Nightmare"><span class="song-title">Melty Land Nightmare</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-17</span></li>
+                <li data-title="Our age"><span class="song-title">Our age</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-19</span></li>
+                <li data-title="私人港湾"><span class="song-title">私人港湾</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-13</span></li>
             </ol>
         </section>
         <section class="year" id="y2017">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2017</span>
-                <span class="year-bar" style="flex-grow:42"></span>
+                <span class="year-bar" style="flex-grow:42" aria-hidden="true"></span>
                 <span class="year-count">33 首</span>
             </div>
             <ol class="songs">
-                <li class="is-hall" data-title="天行健"><span class="song-title">天行健</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">12-26</span></li>
-                <li data-title="N.N"><span class="song-title">N.N</span><span class="song-date">10-28</span></li>
-                <li data-title="当我们踏上花丛"><span class="song-title">当我们踏上花丛</span><span class="song-date">10-26<span class="song-time">13:53</span></span></li>
-                <li data-title="无法接通"><span class="song-title">无法接通</span><span class="song-date">10-26<span class="song-time">09:44</span></span></li>
-                <li data-title="漂亮面对"><span class="song-title">漂亮面对</span><span class="song-date">10-24</span></li>
-                <li data-title="感NONE"><span class="song-title">感NONE</span><span class="song-date">09-26</span></li>
-                <li data-title="S的恋爱守则"><span class="song-title">S的恋爱守则</span><span class="song-date">09-25</span></li>
-                <li data-title="寻你"><span class="song-title">寻你</span><span class="song-date">09-17</span></li>
-                <li data-title="逆光"><span class="song-title">逆光</span><span class="song-date">09-08</span></li>
-                <li data-title="Say a Good Bye"><span class="song-title">Say a Good Bye</span><span class="song-date">08-26</span></li>
-                <li data-title="心空"><span class="song-title">心空</span><span class="song-date">08-17</span></li>
-                <li data-title="寄夏予你"><span class="song-title">寄夏予你</span><span class="song-date">08-15</span></li>
-                <li data-title="夏日的原风景"><span class="song-title">夏日的原风景</span><span class="song-date">07-20</span></li>
-                <li data-title="亲爱的"><span class="song-title">亲爱的</span><span class="song-date">07-12</span></li>
-                <li data-title="-独行·Travel Alone-"><span class="song-title">-独行·Travel Alone-</span><span class="song-date">06-29<span class="song-time">21:27</span></span></li>
-                <li data-title="可视化"><span class="song-title">可视化</span><span class="song-date">06-29<span class="song-time">02:06</span></span></li>
-                <li data-title="春风来"><span class="song-title">春风来</span><span class="song-date">06-21</span></li>
-                <li data-title="举头三尺"><span class="song-title">举头三尺</span><span class="song-date">06-17</span></li>
-                <li data-title="咸咸的"><span class="song-title">咸咸的</span><span class="song-date">06-16</span></li>
-                <li data-title="男子，将灵魂交付恶魔"><span class="song-title">男子，将灵魂交付恶魔</span><span class="song-date">06-06</span></li>
-                <li data-title="跟着旋律"><span class="song-title">跟着旋律</span><span class="song-date">06-05</span></li>
-                <li data-title="田园·寻梦小调"><span class="song-title">田园·寻梦小调</span><span class="song-date">04-09</span></li>
-                <li data-title="视界linking"><span class="song-title">视界linking</span><span class="song-date">03-26</span></li>
-                <li data-title="星电感应"><span class="song-title">星电感应</span><span class="song-date">03-25<span class="song-time">23:50</span></span></li>
-                <li class="is-legend" data-title="达拉崩吧"><span class="song-title">达拉崩吧</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">03-25<span class="song-time">04:32</span></span></li>
-                <li data-title="心里有鬼"><span class="song-title">心里有鬼</span><span class="song-date">03-23<span class="song-time">19:17</span></span></li>
-                <li data-title="噗呦噗呦"><span class="song-title">噗呦噗呦</span><span class="song-date">03-23<span class="song-time">18:29</span></span></li>
-                <li data-title="β受体阻滞剂与星辰"><span class="song-title">β受体阻滞剂与星辰</span><span class="song-date">02-23</span></li>
-                <li data-title="青城【V2.0】"><span class="song-title">青城【V2.0】</span><span class="song-date">02-22</span></li>
-                <li data-title="初见INTRO"><span class="song-title">初见INTRO</span><span class="song-date">01-04<span class="song-time">22:23</span></span></li>
-                <li class="is-hall" data-title="追光使者"><span class="song-title">追光使者</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">01-04<span class="song-time">12:00</span></span></li>
-                <li data-title="Good Bye&amp;Good Night"><span class="song-title">Good Bye&amp;Good Night</span><span class="song-date">01-02</span></li>
-                <li data-title="月球偏心率"><span class="song-title">月球偏心率</span><span class="song-date">01-01</span></li>
+                <li class="is-hall" data-title="天行健"><span class="song-title">天行健</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-26</span></li>
+                <li data-title="N.N"><span class="song-title">N.N</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-28</span></li>
+                <li data-title="当我们踏上花丛"><span class="song-title">当我们踏上花丛</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-26<span class="song-time">13:53</span></span></li>
+                <li data-title="无法接通"><span class="song-title">无法接通</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-26<span class="song-time">09:44</span></span></li>
+                <li data-title="漂亮面对"><span class="song-title">漂亮面对</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-24</span></li>
+                <li data-title="感NONE"><span class="song-title">感NONE</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-26</span></li>
+                <li data-title="S的恋爱守则"><span class="song-title">S的恋爱守则</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-25</span></li>
+                <li data-title="寻你"><span class="song-title">寻你</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-17</span></li>
+                <li data-title="逆光"><span class="song-title">逆光</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-08</span></li>
+                <li data-title="Say a Good Bye"><span class="song-title">Say a Good Bye</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-26</span></li>
+                <li data-title="心空"><span class="song-title">心空</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-17</span></li>
+                <li data-title="寄夏予你"><span class="song-title">寄夏予你</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-15</span></li>
+                <li data-title="夏日的原风景"><span class="song-title">夏日的原风景</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-20</span></li>
+                <li data-title="亲爱的"><span class="song-title">亲爱的</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12</span></li>
+                <li data-title="-独行·Travel Alone-"><span class="song-title">-独行·Travel Alone-</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-29<span class="song-time">21:27</span></span></li>
+                <li data-title="可视化"><span class="song-title">可视化</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-29<span class="song-time">02:06</span></span></li>
+                <li data-title="春风来"><span class="song-title">春风来</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-21</span></li>
+                <li data-title="举头三尺"><span class="song-title">举头三尺</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-17</span></li>
+                <li data-title="咸咸的"><span class="song-title">咸咸的</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-16</span></li>
+                <li data-title="男子，将灵魂交付恶魔"><span class="song-title">男子，将灵魂交付恶魔</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-06</span></li>
+                <li data-title="跟着旋律"><span class="song-title">跟着旋律</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-05</span></li>
+                <li data-title="田园·寻梦小调"><span class="song-title">田园·寻梦小调</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-09</span></li>
+                <li data-title="视界linking"><span class="song-title">视界linking</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-26</span></li>
+                <li data-title="星电感应"><span class="song-title">星电感应</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-25<span class="song-time">23:50</span></span></li>
+                <li class="is-legend" data-title="达拉崩吧"><span class="song-title">达拉崩吧</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-25<span class="song-time">04:32</span></span></li>
+                <li data-title="心里有鬼"><span class="song-title">心里有鬼</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-23<span class="song-time">19:17</span></span></li>
+                <li data-title="噗呦噗呦"><span class="song-title">噗呦噗呦</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-23<span class="song-time">18:29</span></span></li>
+                <li data-title="β受体阻滞剂与星辰"><span class="song-title">β受体阻滞剂与星辰</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-23</span></li>
+                <li data-title="青城【V2.0】"><span class="song-title">青城【V2.0】</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-22</span></li>
+                <li data-title="初见INTRO"><span class="song-title">初见INTRO</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-04<span class="song-time">22:23</span></span></li>
+                <li class="is-hall" data-title="追光使者"><span class="song-title">追光使者</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-04<span class="song-time">12:00</span></span></li>
+                <li data-title="Good Bye&amp;Good Night"><span class="song-title">Good Bye&amp;Good Night</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-02</span></li>
+                <li data-title="月球偏心率"><span class="song-title">月球偏心率</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-01</span></li>
             </ol>
         </section>
         <section class="year" id="y2016">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2016</span>
-                <span class="year-bar" style="flex-grow:28"></span>
+                <span class="year-bar" style="flex-grow:28" aria-hidden="true"></span>
                 <span class="year-count">22 首</span>
             </div>
             <ol class="songs">
-                <li data-title="深夜诗人"><span class="song-title">深夜诗人</span><span class="song-date">12-05</span></li>
-                <li data-title="Touched"><span class="song-title">Touched</span><span class="song-date">11-26</span></li>
-                <li data-title="星宿计时"><span class="song-title">星宿计时</span><span class="song-date">11-10</span></li>
-                <li data-title="翡翠色旋律"><span class="song-title">翡翠色旋律</span><span class="song-date">10-15<span class="song-time">23:20</span></span></li>
-                <li data-title="别傻啦，我才不会想你。会想念你。"><span class="song-title">别傻啦，我才不会想你。会想念你。</span><span class="song-date">10-15<span class="song-time">11:14</span></span></li>
-                <li data-title="曲者"><span class="song-title">曲者</span><span class="song-date">09-24</span></li>
-                <li data-title="流光"><span class="song-title">流光</span><span class="song-date">09-14</span></li>
-                <li data-title="初雪"><span class="song-title">初雪</span><span class="song-date">08-26</span></li>
-                <li class="is-legend" data-title="世末歌者"><span class="song-title">世末歌者</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">08-25</span></li>
-                <li data-title="Destination"><span class="song-title">Destination</span><span class="song-date">08-20</span></li>
-                <li data-title="无名的小情歌"><span class="song-title">无名的小情歌</span><span class="song-date">08-19</span></li>
-                <li data-title="百日"><span class="song-title">百日</span><span class="song-date">08-09</span></li>
-                <li class="is-hall" data-title="心跳同步的时光"><span class="song-title">心跳同步的时光</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">07-19<span class="song-time">11:34</span></span></li>
-                <li data-title="纪念"><span class="song-title">纪念</span><span class="song-date">07-19<span class="song-time">03:36</span></span></li>
-                <li data-title="为了你唱下去"><span class="song-title">为了你唱下去</span><span class="song-date">07-12</span></li>
-                <li data-title="生"><span class="song-title">生</span><span class="song-date">06-17</span></li>
-                <li data-title="心加心"><span class="song-title">心加心</span><span class="song-date">05-20</span></li>
-                <li class="is-hall" data-title="九尾妖狐"><span class="song-title">九尾妖狐</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">05-02</span></li>
-                <li data-title="我喜欢的你"><span class="song-title">我喜欢的你</span><span class="song-date">04-28</span></li>
-                <li data-title="异样的风暴中心"><span class="song-title">异样的风暴中心</span><span class="song-date">03-05</span></li>
-                <li data-title="雨后的世界"><span class="song-title">雨后的世界</span><span class="song-date">01-28</span></li>
-                <li data-title="如旧"><span class="song-title">如旧</span><span class="song-date">01-25</span></li>
+                <li data-title="深夜诗人"><span class="song-title">深夜诗人</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-05</span></li>
+                <li data-title="Touched"><span class="song-title">Touched</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-26</span></li>
+                <li data-title="星宿计时"><span class="song-title">星宿计时</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-10</span></li>
+                <li data-title="翡翠色旋律"><span class="song-title">翡翠色旋律</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-15<span class="song-time">23:20</span></span></li>
+                <li data-title="别傻啦，我才不会想你。会想念你。"><span class="song-title">别傻啦，我才不会想你。会想念你。</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-15<span class="song-time">11:14</span></span></li>
+                <li data-title="曲者"><span class="song-title">曲者</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-24</span></li>
+                <li data-title="流光"><span class="song-title">流光</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-14</span></li>
+                <li data-title="初雪"><span class="song-title">初雪</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-26</span></li>
+                <li class="is-legend" data-title="世末歌者"><span class="song-title">世末歌者</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-25</span></li>
+                <li data-title="Destination"><span class="song-title">Destination</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-20</span></li>
+                <li data-title="无名的小情歌"><span class="song-title">无名的小情歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-19</span></li>
+                <li data-title="百日"><span class="song-title">百日</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-09</span></li>
+                <li class="is-hall" data-title="心跳同步的时光"><span class="song-title">心跳同步的时光</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-19<span class="song-time">11:34</span></span></li>
+                <li data-title="纪念"><span class="song-title">纪念</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-19<span class="song-time">03:36</span></span></li>
+                <li data-title="为了你唱下去"><span class="song-title">为了你唱下去</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12</span></li>
+                <li data-title="生"><span class="song-title">生</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-17</span></li>
+                <li data-title="心加心"><span class="song-title">心加心</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-20</span></li>
+                <li class="is-hall" data-title="九尾妖狐"><span class="song-title">九尾妖狐</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-02</span></li>
+                <li data-title="我喜欢的你"><span class="song-title">我喜欢的你</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-28</span></li>
+                <li data-title="异样的风暴中心"><span class="song-title">异样的风暴中心</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-05</span></li>
+                <li data-title="雨后的世界"><span class="song-title">雨后的世界</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-28</span></li>
+                <li data-title="如旧"><span class="song-title">如旧</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-25</span></li>
             </ol>
         </section>
         <section class="year" id="y2015">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2015</span>
-                <span class="year-bar" style="flex-grow:15"></span>
+                <span class="year-bar" style="flex-grow:15" aria-hidden="true"></span>
                 <span class="year-count">12 首</span>
             </div>
             <ol class="songs">
-                <li data-title="写给我第一个喜欢的女孩的歌"><span class="song-title">写给我第一个喜欢的女孩的歌</span><span class="song-date">12-24</span></li>
-                <li data-title="hello&amp;bye,days"><span class="song-title">hello&amp;bye,days</span><span class="song-date">12-17</span></li>
-                <li data-title="四秒之眷"><span class="song-title">四秒之眷</span><span class="song-date">12-12</span></li>
-                <li data-title="礼物"><span class="song-title">礼物</span><span class="song-date">10-23</span></li>
-                <li class="is-legend" data-title="霜雪千年"><span class="song-title">霜雪千年</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">10-14</span></li>
-                <li class="is-legend" data-title="干物女"><span class="song-title">干物女</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">09-25</span></li>
-                <li data-title="亚得里亚海的黎明"><span class="song-title">亚得里亚海的黎明</span><span class="song-date">08-19</span></li>
-                <li data-title="二人三角"><span class="song-title">二人三角</span><span class="song-date">08-05</span></li>
-                <li data-title="莎图温的裙摆"><span class="song-title">莎图温的裙摆</span><span class="song-date">07-10</span></li>
-                <li class="is-legend" data-title="东京不太热"><span class="song-title">东京不太热</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">04-24</span></li>
-                <li class="is-legend" data-title="权御天下"><span class="song-title">权御天下</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">03-05</span></li>
-                <li data-title="一梦千朝"><span class="song-title">一梦千朝</span><span class="song-date">01-10</span></li>
+                <li data-title="写给我第一个喜欢的女孩的歌"><span class="song-title">写给我第一个喜欢的女孩的歌</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-24</span></li>
+                <li data-title="hello&amp;bye,days"><span class="song-title">hello&amp;bye,days</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-17</span></li>
+                <li data-title="四秒之眷"><span class="song-title">四秒之眷</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-12</span></li>
+                <li data-title="礼物"><span class="song-title">礼物</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-23</span></li>
+                <li class="is-legend" data-title="霜雪千年"><span class="song-title">霜雪千年</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-14</span></li>
+                <li class="is-legend" data-title="干物女"><span class="song-title">干物女</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-25</span></li>
+                <li data-title="亚得里亚海的黎明"><span class="song-title">亚得里亚海的黎明</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-19</span></li>
+                <li data-title="二人三角"><span class="song-title">二人三角</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-05</span></li>
+                <li data-title="莎图温的裙摆"><span class="song-title">莎图温的裙摆</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-10</span></li>
+                <li class="is-legend" data-title="东京不太热"><span class="song-title">东京不太热</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-24</span></li>
+                <li class="is-legend" data-title="权御天下"><span class="song-title">权御天下</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-05</span></li>
+                <li data-title="一梦千朝"><span class="song-title">一梦千朝</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-10</span></li>
             </ol>
         </section>
         <section class="year" id="y2014">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2014</span>
-                <span class="year-bar" style="flex-grow:11"></span>
+                <span class="year-bar" style="flex-grow:11" aria-hidden="true"></span>
                 <span class="year-count">9 首</span>
             </div>
             <ol class="songs">
-                <li data-title="彼岸花"><span class="song-title">彼岸花</span><span class="song-date">12-13</span></li>
-                <li data-title="绝对孤独少女"><span class="song-title">绝对孤独少女</span><span class="song-date">10-09</span></li>
-                <li data-title="洛天鱼"><span class="song-title">洛天鱼</span><span class="song-date">10-03</span></li>
-                <li data-title="Brightness"><span class="song-title">Brightness</span><span class="song-date">07-12</span></li>
-                <li data-title="八辈子"><span class="song-title">八辈子</span><span class="song-date">07-03<span class="song-time">09:19</span></span></li>
-                <li data-title="逐梦之翼"><span class="song-title">逐梦之翼</span><span class="song-date">07-03</span></li>
-                <li data-title="CONNECT"><span class="song-title">CONNECT</span><span class="song-date">06-26</span></li>
-                <li data-title="最后的夏季"><span class="song-title">最后的夏季</span><span class="song-date">05-30</span></li>
-                <li data-title="透明色的夏天"><span class="song-title">透明色的夏天</span><span class="song-date">01-21</span></li>
+                <li data-title="彼岸花"><span class="song-title">彼岸花</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-13</span></li>
+                <li data-title="绝对孤独少女"><span class="song-title">绝对孤独少女</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-09</span></li>
+                <li data-title="洛天鱼"><span class="song-title">洛天鱼</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-03</span></li>
+                <li data-title="Brightness"><span class="song-title">Brightness</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12</span></li>
+                <li data-title="八辈子"><span class="song-title">八辈子</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-03<span class="song-time">09:19</span></span></li>
+                <li data-title="逐梦之翼"><span class="song-title">逐梦之翼</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-03</span></li>
+                <li data-title="CONNECT"><span class="song-title">CONNECT</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-26</span></li>
+                <li data-title="最后的夏季"><span class="song-title">最后的夏季</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-30</span></li>
+                <li data-title="透明色的夏天"><span class="song-title">透明色的夏天</span><span class="leader" aria-hidden="true"></span><span class="song-date">01-21</span></li>
             </ol>
         </section>
         <section class="year" id="y2013">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2013</span>
-                <span class="year-bar" style="flex-grow:11"></span>
+                <span class="year-bar" style="flex-grow:11" aria-hidden="true"></span>
                 <span class="year-count">9 首</span>
             </div>
             <ol class="songs">
-                <li data-title="芝麻香"><span class="song-title">芝麻香</span><span class="song-date">12-13</span></li>
-                <li data-title="巷"><span class="song-title">巷</span><span class="song-date">10-20</span></li>
-                <li data-title="牛仔少女"><span class="song-title">牛仔少女</span><span class="song-date">09-19</span></li>
-                <li data-title="月白色倒影的少女"><span class="song-title">月白色倒影的少女</span><span class="song-date">05-24</span></li>
-                <li data-title="I LOVE YOU"><span class="song-title">I LOVE YOU</span><span class="song-date">04-20</span></li>
-                <li data-title="今生如梦"><span class="song-title">今生如梦</span><span class="song-date">03-07</span></li>
-                <li data-title="一半一半"><span class="song-title">一半一半</span><span class="song-date">02-22</span></li>
-                <li data-title="夢想→World→歌唱"><span class="song-title">夢想→World→歌唱</span><span class="song-date">02-05</span></li>
-                <li data-title="Wonderful Pain"><span class="song-title">Wonderful Pain</span><span class="song-date">02-04</span></li>
+                <li data-title="芝麻香"><span class="song-title">芝麻香</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-13</span></li>
+                <li data-title="巷"><span class="song-title">巷</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-20</span></li>
+                <li data-title="牛仔少女"><span class="song-title">牛仔少女</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-19</span></li>
+                <li data-title="月白色倒影的少女"><span class="song-title">月白色倒影的少女</span><span class="leader" aria-hidden="true"></span><span class="song-date">05-24</span></li>
+                <li data-title="I LOVE YOU"><span class="song-title">I LOVE YOU</span><span class="leader" aria-hidden="true"></span><span class="song-date">04-20</span></li>
+                <li data-title="今生如梦"><span class="song-title">今生如梦</span><span class="leader" aria-hidden="true"></span><span class="song-date">03-07</span></li>
+                <li data-title="一半一半"><span class="song-title">一半一半</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-22</span></li>
+                <li data-title="夢想→World→歌唱"><span class="song-title">夢想→World→歌唱</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-05</span></li>
+                <li data-title="Wonderful Pain"><span class="song-title">Wonderful Pain</span><span class="leader" aria-hidden="true"></span><span class="song-date">02-04</span></li>
             </ol>
         </section>
         <section class="year" id="y2012">
-            <span class="year-node"></span>
             <div class="year-head">
+                <span class="year-node" aria-hidden="true"></span>
                 <span class="year-num">2012</span>
-                <span class="year-bar" style="flex-grow:15"></span>
+                <span class="year-bar" style="flex-grow:15" aria-hidden="true"></span>
                 <span class="year-count">12 首</span>
             </div>
             <ol class="songs">
-                <li class="is-hall" data-title="明日DISCO"><span class="song-title">明日DISCO</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">12-27</span></li>
-                <li class="is-hall" data-title="末日DISCO"><span class="song-title">末日DISCO</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">12-14</span></li>
-                <li class="is-hall" data-title="夏风"><span class="song-title">夏风</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">11-27</span></li>
-                <li class="is-hall" data-title="前尘如梦"><span class="song-title">前尘如梦</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">10-19<span class="song-time">20:04</span></span></li>
-                <li class="is-legend" data-title="三月雨"><span class="song-title">三月雨</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传说</span><span class="song-date">10-19</span></li>
-                <li class="is-hall" data-title="66ccff"><span class="song-title">66ccff</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">09-22</span></li>
-                <li data-title="欠一个拥抱"><span class="song-title">欠一个拥抱</span><span class="song-date">08-24</span></li>
-                <li data-title="走马灯"><span class="song-title">走马灯</span><span class="song-date">07-21<span class="song-time">17:28</span></span></li>
-                <li class="is-hall" data-title="夏夕空"><span class="song-title">夏夕空</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">07-21</span></li>
-                <li class="is-hall" data-title="千年食谱颂"><span class="song-title">千年食谱颂</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">07-13</span></li>
-                <li data-title="Feel Your Dream"><span class="song-title">Feel Your Dream</span><span class="song-date">07-12</span></li>
-                <li class="is-hall" data-title="step on your heart"><span class="song-title">step on your heart</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿堂</span><span class="song-date">06-06</span></li>
+                <li class="is-hall" data-title="明日DISCO"><span class="song-title">明日DISCO</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-27</span></li>
+                <li class="is-hall" data-title="末日DISCO"><span class="song-title">末日DISCO</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">12-14</span></li>
+                <li class="is-hall" data-title="夏风"><span class="song-title">夏风</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">11-27</span></li>
+                <li class="is-hall" data-title="前尘如梦"><span class="song-title">前尘如梦</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-19<span class="song-time">20:04</span></span></li>
+                <li class="is-legend" data-title="三月雨"><span class="song-title">三月雨</span><span class="song-badge badge-legend" title="VOCALOID 中文传说曲（百万达成）">传</span><span class="leader" aria-hidden="true"></span><span class="song-date">10-19</span></li>
+                <li class="is-hall" data-title="66ccff"><span class="song-title">66ccff</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">09-22</span></li>
+                <li data-title="欠一个拥抱"><span class="song-title">欠一个拥抱</span><span class="leader" aria-hidden="true"></span><span class="song-date">08-24</span></li>
+                <li data-title="走马灯"><span class="song-title">走马灯</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-21<span class="song-time">17:28</span></span></li>
+                <li class="is-hall" data-title="夏夕空"><span class="song-title">夏夕空</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-21</span></li>
+                <li class="is-hall" data-title="千年食谱颂"><span class="song-title">千年食谱颂</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-13</span></li>
+                <li data-title="Feel Your Dream"><span class="song-title">Feel Your Dream</span><span class="leader" aria-hidden="true"></span><span class="song-date">07-12</span></li>
+                <li class="is-hall" data-title="step on your heart"><span class="song-title">step on your heart</span><span class="song-badge badge-hall" title="VOCALOID 中文殿堂曲">殿</span><span class="leader" aria-hidden="true"></span><span class="song-date">06-06</span></li>
             </ol>
         </section>
     </main>
@@ -858,7 +882,8 @@
 
     <footer class="colophon">
         <a class="back" href="../">&larr; 回 ZLOONG 工房</a><br>
-        数据截止 2024-09-15 · 生成于 2026-09-21<br>
+        数据截止 2024-09-15 · 生成于 2026-09-23<br>
+        <span class="credit">歌迷整理 · 曲目版权归各创作者及版权方所有</span><br>
         <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a>
     </footer>
 

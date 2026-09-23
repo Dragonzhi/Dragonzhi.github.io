@@ -1,9 +1,10 @@
-/* 洛天依歌单 · 交互
+/* 洛天依歌单 · 交互（工房纸面版）
    页面本身是静态渲染的，没有 JS 也能完整阅读；
    增强功能：
    1. 歌名与「传说/殿堂」标签快捷搜索过滤
-   2. 时间轴电音导轨 + 年份导航 + 顶部 EQ 频谱仪三重联动
-   3. 🥟 吃货大人「投喂天依」彩蛋互动与语音气泡 */
+   2. 年份导航、编年清单与顶部产量卡三重联动（滚到哪年，哪年亮起）
+   3. 年度铅印插图的逐年切换
+   4. 🥟 吃货大人「投喂天依」彩蛋互动与语音气泡 */
 
 (function () {
     'use strict';
@@ -144,95 +145,6 @@
             }
         });
     });
-
-    /* ---------------------------------------------------------- 🌟 动态星尘与声波涟漪画布 (方案二) */
-    var stardustCanvas = document.getElementById('stardustCanvas');
-    if (stardustCanvas && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        var sCtx = stardustCanvas.getContext('2d');
-        var sw, sh;
-        var stars = [];
-        var ripples = [];
-        var starCount = 65;
-
-        function resizeStardust() {
-            sw = stardustCanvas.width = window.innerWidth;
-            sh = stardustCanvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeStardust);
-        resizeStardust();
-
-        for (var si = 0; si < starCount; si++) {
-            stars.push({
-                x: Math.random() * sw,
-                y: Math.random() * sh,
-                r: Math.random() * 1.5 + 0.5,
-                alpha: Math.random() * 0.7 + 0.2,
-                dAlpha: (Math.random() * 0.015 + 0.005) * (Math.random() > 0.5 ? 1 : -1),
-                vy: -(Math.random() * 0.22 + 0.08),
-                vx: (Math.random() - 0.5) * 0.12,
-                color: Math.random() > 0.35 ? '102, 204, 255' : '235, 245, 255'
-            });
-        }
-
-        window.addEventListener('pointermove', function(e) {
-            if (Math.random() > 0.72) {
-                ripples.push({
-                    x: e.clientX,
-                    y: e.clientY,
-                    r: 4,
-                    maxR: 45 + Math.random() * 25,
-                    alpha: 0.36
-                });
-            }
-        });
-
-        function stardustLoop() {
-            if (document.hidden) {
-                requestAnimationFrame(stardustLoop);
-                return;
-            }
-            sCtx.clearRect(0, 0, sw, sh);
-
-            // 绘制星尘
-            for (var i = 0; i < stars.length; i++) {
-                var s = stars[i];
-                s.alpha += s.dAlpha;
-                if (s.alpha > 0.85 || s.alpha < 0.15) s.dAlpha *= -1;
-
-                s.y += s.vy;
-                s.x += s.vx;
-                if (s.y < -10) { s.y = sh + 10; s.x = Math.random() * sw; }
-                if (s.x < -10) s.x = sw + 10;
-                if (s.x > sw + 10) s.x = -10;
-
-                sCtx.beginPath();
-                sCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-                sCtx.fillStyle = 'rgba(' + s.color + ',' + s.alpha + ')';
-                sCtx.shadowBlur = s.r * 3;
-                sCtx.shadowColor = '#66ccff';
-                sCtx.fill();
-            }
-
-            // 绘制鼠标声波涟漪
-            for (var j = ripples.length - 1; j >= 0; j--) {
-                var rp = ripples[j];
-                rp.r += 1.2;
-                rp.alpha *= 0.95;
-                if (rp.alpha < 0.02 || rp.r > rp.maxR) {
-                    ripples.splice(j, 1);
-                    continue;
-                }
-                sCtx.beginPath();
-                sCtx.arc(rp.x, rp.y, rp.r, 0, Math.PI * 2);
-                sCtx.strokeStyle = 'rgba(102, 204, 255, ' + rp.alpha + ')';
-                sCtx.lineWidth = 1;
-                sCtx.stroke();
-            }
-
-            requestAnimationFrame(stardustLoop);
-        }
-        stardustLoop();
-    }
 
     /* ---------------------------------------------------------- 🎨 年度灵魂意象背景切换引擎 */
     var vectorStage = document.getElementById('vectorStage');
