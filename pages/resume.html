@@ -121,7 +121,6 @@
                 <span>核心技术矩阵</span>
                 <span class="sec-en">SKILLS MATRIX</span>
             </h2>
-            <span class="section-hint samp">每一项均有已交付项目佐证</span>
         </div>
         <div class="skills-grid" id="skills-matrix">
             <!-- 技能卡 1：AI / 大模型应用工程 -->
@@ -160,7 +159,7 @@
                 </div>
                 <ul class="skill-list">
                     <li>
-                        <strong>Web 框架与异步：</strong>熟练使用 Python (FastAPI, Flask, WebSocket, httpx, SQLAlchemy, SQLite)<span class="evidence">[IterTrip/羊肚菌]</span>
+                        <strong>Web 框架与异步：</strong>Python (FastAPI, Flask, WebSocket, httpx, SQLAlchemy, SQLite)<span class="evidence">[IterTrip/羊肚菌]</span>
                     </li>
                     <li>
                         <strong>纯标准库零依赖服务：</strong>手写 Python 纯标准库 Web 服务（710行，HMAC 恒时比较防时序鉴权，私域内容保护）<span class="evidence">[hanako日报站]</span>
@@ -169,7 +168,7 @@
                         <strong>协议逆向与流解析：</strong>抖音直播弹幕 wss signature 计算与 protobuf 消息体二进制解包，打通实时互动链路<span class="evidence">[弹幕鸭]</span>
                     </li>
                     <li>
-                        <strong>定时与自动化流水线：</strong>APScheduler 定时采集、核验、Markdown 树型渲染与自动化报纸归档（45+ 期无断更）<span class="evidence">[hanako/QQ-bot]</span>
+                        <strong>定时与自动化流水线：</strong>APScheduler 定时采集、核验、Markdown 树型渲染与自动化报纸归档（50+ 期无断更）<span class="evidence">[hanako/QQ-bot]</span>
                     </li>
                 </ul>
             </div>
@@ -188,7 +187,7 @@
                         <strong>响应式与状态管理：</strong>Vue 3 + TypeScript 可视化配置面板、Web Audio API 语音合成流式播放<span class="evidence">[弹幕鸭]</span>
                     </li>
                     <li>
-                        <strong>原生高水准排印：</strong>纯原生 HTML5/CSS3（CSS变量、Flexbox/Grid、A4打印排版），坚持零重度依赖构建高质量体验<span class="evidence">[工房主站]</span>
+                        <strong>原生排印：</strong>纯原生 HTML5/CSS3（CSS变量、Flexbox/Grid、A4打印排版），坚持零重度依赖<span class="evidence">[工房主站]</span>
                     </li>
                 </ul>
             </div>
@@ -201,7 +200,7 @@
                 </div>
                 <ul class="skill-list">
                     <li>
-                        <strong>Godot 4 引擎：</strong>精通 GDScript、Resource (.tres) 数据驱动设计、Autoload 信号解耦、对象池与 A* 动态寻路<span class="evidence">[免疫联结/TriHorny]</span>
+                        <strong>Godot 4 引擎：</strong>GDScript、Resource (.tres) 数据驱动设计、Autoload 信号解耦、对象池与 A* 动态寻路<span class="evidence">[免疫联结/TriHorny]</span>
                     </li>
                     <li>
                         <strong>自研编辑器插件：</strong>使用 Godot EditorPlugin + GraphEdit 研发节点式叙事编辑器，实现策划改数不碰代码<span class="evidence">[智能优化中]</span>
@@ -210,7 +209,7 @@
                         <strong>Minecraft Forge Mod：</strong>Kotlin / Java 开发，3D 实体角速度物理翻滚、Set 算法烟雾生成、TACZ 枪械穿烟包围盒检测<span class="evidence">[CSG模组]</span>
                     </li>
                     <li>
-                        <strong>通用语言基础：</strong>C++、C# (Unity 2D 火影项目角色技能机)、Python、Kotlin 均有真实交付成果。
+                        <strong>通用语言基础：</strong>C++、C# (Unity 2D 火影项目角色技能机)、Python、Kotlin 均有交付成果。
                     </li>
                 </ul>
             </div>
@@ -229,7 +228,7 @@
                         <strong>容器化与生产运维：</strong>Docker 镜像打包与轻量隔离、Nginx 子路径反代、腾讯云 Linux 自托管运维实践<span class="evidence">[IterTrip部署]</span>
                     </li>
                     <li>
-                        <strong>开源与持续构建：</strong>近一年 GitHub 1,900+ Commits、Pull Shark ×2 徽章，扎实的代码审美与自驱力。
+                        <strong>开源与持续构建：</strong>近一年 GitHub 1,900+ Commits、Pull Shark ×2 徽章。
                     </li>
                 </ul>
             </div>
@@ -244,7 +243,7 @@
                 <span>重点项目经历</span>
                 <span class="sec-en">KEY PROJECTS</span>
             </h2>
-            <span class="section-hint samp">可复现代码量 · 真实在线可测</span>
+            <span class="section-hint samp">可复现代码量 · 在线可测</span>
         </div>
 
         <div class="projects-dossier-list" id="projects-list">
@@ -272,10 +271,10 @@
                             <strong>结构化契约与自我修复：</strong>基于 pydantic 定义 route JSON schema，作为生成 / 编辑 / 导出三端唯一数据源（前端类型为手工同步，计划以 openapi-typescript 生成）；结合 Agent 反思重试机制，在模型输出校验失败时携带精准错误信息回灌纠错，构建可靠的闭环自愈环路。
                         </li>
                         <li>
-                            <strong>高可靠六级坐标降级链路与熔断保护：</strong>确立按「可信度优先」的六级降级架构（用户记忆真值 → 高德 POI 检索 → 模型知识库 → 联网搜索兜底 → 城市中心表 → 明确报错），每级打上来源与置信度溯源徽标；配备高德 8s 超时与单路线 40 次请求配额熔断，绝不因单点异常阻塞主生成链。
+                            <strong>高可靠六级坐标降级链路与熔断保护：</strong>确立按「可信度优先」的六级降级架构（用户记忆真值 → 高德 POI 检索 → 模型知识库 → 联网搜索兜底 → 城市中心表 → 明确报错），每级打上来源与置信度溯源徽标；配备高德 8s 超时与单路线 40 次请求配额熔断，单点异常不阻塞主生成链。
                         </li>
                         <li>
-                            <strong>主动核验与区域闸门防御：</strong>对模型产出坐标直查高德核验，偏差 ≤1.5km 自动校正（消除模型固有 113m~1.2km 同城偏差）；设置地理省市闸门，以目的地中心为锚点（≤200km 闸门）智能拦截同名误匹配，实现离位地点自主改回，修掉过 7 个长沙地点被搬往外省的真实事故。
+                            <strong>主动核验与区域闸门防御：</strong>对模型产出坐标直查高德核验，偏差 ≤1.5km 自动校正（消除模型固有 113m~1.2km 同城偏差）；设置地理省市闸门，以目的地中心为锚点（≤200km 闸门）智能拦截同名误匹配，实现离位地点自主改回，修掉过 7 个长沙地点被搬往外省的事故。
                         </li>
                         <li>
                             <strong>确定性代码消除幻觉：</strong>闭馆日冲突检查刻意设计为<strong>零 LLM、零网络</strong>的纯算术模块（坚持“治幻觉的第一原则是绝不引入新幻觉”）；出发日期从自由文本智能推断并显式标记“推断可改”，无法判定如实提示，不假装通过。
@@ -284,7 +283,7 @@
                             <strong>实体级 RAG 长期记忆库：</strong>按 place_card 与 trip_summary 实体级切分攻略（不做定长粗暴切片），通过本地 fastembed (bge-small-zh-v1.5) 生成 512 维向量，结合 SQLite 向量索引实现高精准检索注入（严格限制 ≤6 条/≤1200 字防上下文污染）。
                         </li>
                         <li>
-                            <strong>SSE 决策轨迹可观测工程：</strong>整轮流式推送 <code>event: trace</code> 决策轨迹，前端可视化呈现可折叠「🧭 决策过程」（包含使用的模型、记忆命中条数、坐标来源、闭馆日检测等），将传统黑盒静默兜底全面升级为透明可见的工程决策。
+                            <strong>SSE 决策轨迹可观测工程：</strong>整轮流式推送 <code>event: trace</code> 决策轨迹，前端可视化呈现可折叠「🧭 决策过程」（包含使用的模型、记忆命中条数、坐标来源、闭馆日检测等），将黑盒静默兜底升级为可见的工程决策。
                         </li>
                     </ul>
                     <div class="proj-bottom-bar">
@@ -441,10 +440,10 @@
                     </p>
                     <ul class="proj-highlights-list">
                         <li>
-                            <strong>自研 Godot 节点式叙事编辑器：</strong>基于 Godot 4 自研 EditorPlugin 编辑器插件，利用 GraphEdit 实现可视化拼装任务图谱并直接导出 JSON 数据，彻底实现“策划改数值不碰代码”。
+                            <strong>自研 Godot 节点式叙事编辑器：</strong>基于 Godot 4 自研 EditorPlugin 编辑器插件，利用 GraphEdit 实现可视化拼装任务图谱并直接导出 JSON 数据，实现“策划改数值不碰代码”。
                         </li>
                         <li>
-                            <strong>高压项目管理与交付：</strong>作为队长与主程，在 21 天 GameJam 节奏下制定跨职能数值契约与 PR 规范，完成全套程序交付文档与边界用例自检，成功在好游快爆官方上线并开放试玩。
+                            <strong>高压项目管理与交付：</strong>作为队长与主程，在 21 天 GameJam 节奏下制定跨职能数值契约与 PR 规范，完成全套程序交付文档与边界用例自检，已在好游快爆官方上线并开放试玩。
                         </li>
                     </ul>
                     <div class="proj-bottom-bar">
@@ -509,20 +508,20 @@
                         <span class="proj-index-tag">个人站 · 内容管线</span>
                         <h3 class="proj-main-title">hanako 箱庭日报 — 零依赖标准库个人门户与自动化管线</h3>
                         <span class="proj-role-badge">独立开发与自运维</span>
-                        <span class="state calm">45+ 期连续更新</span>
+                        <span class="state calm">50+ 期连续更新</span>
                     </div>
                     <div class="proj-period-tag">2026.08 – 至今</div>
                 </div>
                 <div class="proj-body-content">
                     <p class="proj-oneline-summary">
-                        个人自托管箱庭门户（https://dragonzhi.xyz/hanako/）：创刊至今连续 45+ 期无断更，由 AI Agent 定时自动聚合科技与游戏圈动态，排印为复古报纸形态，全栈零第三方依赖原生构建。
+                        个人自托管箱庭门户（https://dragonzhi.xyz/hanako/）：创刊至今连续 50+ 期无断更，由 AI Agent 定时自动聚合科技与游戏圈动态，排印为复古报纸形态，全栈零第三方依赖原生构建。
                     </p>
                     <ul class="proj-highlights-list">
                         <li>
                             <strong>纯 Python 标准库服务端：</strong>零 pip 依赖构建多页面门户与鉴权服务（710 行 server.py），运用 HMAC 恒时比较抵御时序攻击，cookie 仅存派生摘要。
                         </li>
                         <li>
-                            <strong>自动化内容生产流水线：</strong>每日晨间定时触发 Agent 抓取新闻源、信息比对与交叉核验，生成 Markdown 树型结构自动编排归档，展现极强自驱力与原生工程把控力。
+                            <strong>自动化内容生产流水线：</strong>每日晨间定时触发 Agent 抓取新闻源、信息比对与交叉核验，生成 Markdown 树型结构自动编排归档。
                         </li>
                     </ul>
                     <div class="proj-bottom-bar">
@@ -552,7 +551,7 @@
                 </div>
                 <div class="proj-body-content">
                     <p class="proj-oneline-summary">
-                        Minecraft 1.20.1 Forge 模组：把 CS2 的高爆、烟雾、闪光、燃烧等投掷物机制高度还原至 MC 中，追求真实角速度碰撞物理、独立 3D 渲染与 TACZ 枪械模组兼容穿烟。
+                        Minecraft 1.20.1 Forge 模组：把 CS2 的高爆、烟雾、闪光、燃烧等投掷物机制还原至 MC 中，追求真实角速度碰撞物理、独立 3D 渲染与 TACZ 枪械模组兼容穿烟。
                     </p>
                     <ul class="proj-highlights-list">
                         <li>
@@ -590,7 +589,6 @@
                 <span>软件著作权与竞赛荣誉</span>
                 <span class="sec-en">IP &amp; HONORS</span>
             </h2>
-            <span class="section-hint samp">证书已下达 · 登记号真实可查</span>
         </div>
 
         <div class="ip-awards-grid">
