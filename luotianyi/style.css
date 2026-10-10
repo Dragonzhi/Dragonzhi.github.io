@@ -1,29 +1,30 @@
-/* ===========================================================
-   洛天依歌单 · 工房纸面版
-   与首页 css/workshop.css 同谱系：米黄纸底 + 红墨标题 + 等宽小字，
-   报眉 → 报头墙 → 一言 → 产量卡 → 工具行 → 编年清单 → 报尾。
-
-   本页唯一专属点缀色：洛天依碧。
-   纸上不用荧光 #66ccff，转成「碧墨」--tianyi-ink，与工房红并置。
-   =========================================================== */
+/* ==========================================================================
+   洛天依歌单 · 精修编年目录 (Refined Chronicle Directory)
+   设计策略：
+   1. 双轴分栏排版：左侧常驻紧凑目录索引轨（含年度刻度柱、实时匹配反馈），右侧编年曲目长流。
+   2. 彻底解决长歌名截断：歌名自适应多行自然展开，虚线导引自适应弹性断点，右侧日期时刻固定等宽。
+   3. 完备状态反馈：即时搜索、快捷标签过滤、空状态引导、无障碍播报。
+   4. 工房纸面美学：米黄纸底、红墨朱砂、天依碧印、金石印章。
+   ========================================================================== */
 
 :root {
-    /* —— 工房纸面（与首页同源） —— */
     --desk: #f5f0e6;
     --card: #fbf8f2;
+    --card-hover: #ffffff;
     --ink: #26221c;
-    --ink-soft: rgba(38, 34, 28, .68);
-    --ink-faint: rgba(38, 34, 28, .42);
+    --ink-soft: rgba(38, 34, 28, .72);
+    --ink-faint: rgba(38, 34, 28, .46);
     --ink-ghost: rgba(38, 34, 28, .16);
     --line: rgba(38, 34, 28, .18);
+    --line-light: rgba(38, 34, 28, .08);
     --red: #8b2c1f;
+    --red-soft: rgba(139, 44, 31, .12);
     --blue: #2f5d8a;
     --amber: #d98e4a;
 
-    /* —— 洛天依碧：本页专属点缀 —— */
     --tianyi: #66ccff;
     --tianyi-ink: #2e7fa6;
-    --tianyi-soft: rgba(46, 127, 166, .62);
+    --tianyi-soft: rgba(46, 127, 166, .65);
     --tianyi-24: rgba(46, 127, 166, .24);
     --tianyi-12: rgba(46, 127, 166, .12);
     --tianyi-06: rgba(46, 127, 166, .06);
@@ -33,10 +34,9 @@
     --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
     --display: "Averia Gruesa Libre", var(--hand);
 
-    --wrap: 840px;
-    --gap: 16px;
-    --fs-xs: 11.5px;
-    --fs-sm: 12.5px;
+    --fs-xs: 12px;
+    --fs-sm: 13px;
+    --fs-base: 15px;
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,8 +45,8 @@ html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--hand);
-    font-size: 15.5px;
-    line-height: 1.75;
+    font-size: var(--fs-base);
+    line-height: 1.7;
     color: var(--ink);
     background-color: var(--desk);
     background-image:
@@ -54,710 +54,561 @@ body {
         linear-gradient(90deg, rgba(139, 44, 31, .022) 1px, transparent 1px);
     background-size: 26px 26px;
     min-height: 100vh;
-    overflow-x: hidden;
+    padding: 24px 20px 80px;
     -webkit-font-smoothing: antialiased;
-    font-feature-settings: "kern" 1, "liga" 1, "calt" 1;
-    text-rendering: optimizeLegibility;
 }
-
-::selection { background: var(--tianyi-24); color: var(--ink); }
-
-h1, h2, h3 { text-wrap: balance; }
-
-a { color: var(--blue); text-decoration: none; }
-a:hover { color: var(--red); }
 
 .samp { font-family: var(--mono); }
 
-/* ----------------------------------------------------------
-   年度灵魂意象场景：由夜空特效降级为纸面淡碧铅印插图
-   （SVG 里写死的 #66ccff 由下方 CSS 覆盖为碧墨）
-   ---------------------------------------------------------- */
-
-.vector-stage {
-    position: fixed;
-    inset: 0;
-    pointer-events: none;
-    z-index: 0;
-    overflow: hidden;
-}
-
-.vector-scene {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0;
-    transform: scale(.99);
-    transition: opacity .85s cubic-bezier(.4, 0, .2, 1), transform .85s cubic-bezier(.4, 0, .2, 1);
-    will-change: opacity, transform;
-    mix-blend-mode: multiply;
-}
-
-.vector-scene.is-active {
-    opacity: .10;
-    transform: scale(1);
-}
-
-.vector-scene svg { width: 100%; height: 100%; display: block; }
-
-/* 覆盖 SVG 里写死的描边色（presentation attribute 优先级低于 CSS） */
-.vector-scene svg [stroke] { stroke: #4a8fb0; }
-
-@keyframes spin-slow {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-@keyframes pulse-soft {
-    0%, 100% { opacity: .6; transform: scale(1); }
-    50% { opacity: 1; transform: scale(1.05); }
-}
-
-@keyframes float-gentle {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-14px); }
-}
-
-@keyframes flutter-wing {
-    0%, 100% { transform: scaleX(1); }
-    50% { transform: scaleX(.86); }
-}
-
-@keyframes bubble-up {
-    0% { transform: translateY(0); opacity: .2; }
-    50% { opacity: .7; }
-    100% { transform: translateY(-60px); opacity: 0; }
-}
-
-@keyframes wave-float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-8px); }
-}
-
-.anim-spin-slow { animation: spin-slow 90s linear infinite; }
-.anim-pulse { transform-origin: center center; animation: pulse-soft 3.6s ease-in-out infinite; }
-.anim-float { animation: float-gentle 6s ease-in-out infinite; }
-.anim-flutter { animation: flutter-wing 2.2s ease-in-out infinite; }
-.anim-bubble { animation: bubble-up 5s ease-in-out infinite; }
-.anim-wave { animation: wave-float 4.5s ease-in-out infinite; }
-
-/* ---------------------------------------------------------- 页面容器 */
-
-.page {
-    position: relative;
-    z-index: 1;
-    max-width: var(--wrap);
+/* 容器双栏布局 */
+.layout-container {
+    max-width: 1180px;
     margin: 0 auto;
-    padding: 0 24px 72px;
-}
-
-/* ===== 报眉 ===== */
-.eyebrow {
-    display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    flex-wrap: wrap;
-    font-size: var(--fs-xs);
-    font-family: var(--mono);
-    color: var(--ink-soft);
-    letter-spacing: 2px;
-    border-bottom: 1px solid var(--line);
-    padding: 12px 0 8px;
-}
-
-.eyebrow .live { color: var(--red); }
-
-/* ===== 报头墙 ===== */
-.hero.wall {
-    position: relative;
-    text-align: center;
-    padding: 46px 0 26px;
-}
-
-.hero.wall h1 {
-    font-family: var(--serif);
-    font-size: clamp(34px, 6.2vw, 56px);
-    font-weight: 800;
-    color: var(--red);
-    letter-spacing: 16px;
-    line-height: 1.2;
-    text-indent: 16px;
-}
-
-.hero.wall .sub {
-    margin-top: 10px;
-    font-size: var(--fs-xs);
-    color: var(--ink-faint);
-    letter-spacing: 6px;
-    text-indent: 6px;
-}
-
-/* 印章：呼应首页「常开」印 */
-.hero.wall .seal {
-    position: absolute;
-    right: 2%;
-    top: 30px;
-    font-size: 10.5px;
-    line-height: 1.3;
-    color: var(--red);
-    border: 2px solid var(--red);
-    border-radius: 3px;
-    padding: 5px 9px;
-    letter-spacing: 2px;
-    text-align: center;
-    transform: rotate(7deg);
-    opacity: .85;
-}
-
-/* 洛天依标志：手绘双音符（碧墨） */
-.hero.wall .ornament {
-    margin-top: 12px;
-    display: flex;
-    justify-content: center;
-    opacity: .9;
-}
-
-.hero.wall .ornament svg { display: block; }
-
-/* ===== 双线 ===== */
-.rule-double {
-    border-top: 3px solid var(--ink);
-    border-bottom: 1px solid var(--ink);
-    height: 5px;
-    margin-bottom: 24px;
-}
-
-/* ===== 今日一言 ===== */
-.daily {
-    text-align: center;
-    padding: 6px 0 18px;
-    border-bottom: 1px solid var(--line);
-    margin-bottom: 26px;
-}
-
-.daily .quote { font-size: 16px; letter-spacing: 1.5px; }
-.daily .who { margin-top: 7px; font-size: var(--fs-xs); font-family: var(--mono); color: var(--ink-faint); letter-spacing: 2px; }
-
-/* ===== 统计三格 ===== */
-.stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 12px;
-    margin-bottom: 22px;
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 36px;
+    align-items: flex-start;
 }
 
-.stat {
+/* ================== 左侧常驻索引轨 (Sticky Catalog Rail) ================== */
+.sidebar {
+    position: sticky;
+    top: 20px;
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 12px 8px 10px;
-    text-align: center;
-    box-shadow: 0 1px 0 rgba(38, 34, 28, .05), 0 10px 22px -16px rgba(38, 34, 28, .5);
+    border-radius: 6px;
+    box-shadow: 0 4px 16px rgba(38, 34, 28, .04);
+    padding: 20px 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
 }
 
-.stat b {
-    display: block;
+.sidebar-brand {
+    border-bottom: 1px solid var(--line-light);
+    padding-bottom: 14px;
+}
+.sidebar-tag {
+    display: inline-block;
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--tianyi-ink);
+    letter-spacing: 1.5px;
+    margin-bottom: 4px;
+}
+.sidebar-title {
     font-family: var(--serif);
-    font-size: 27px;
+    font-size: 19px;
     font-weight: 700;
-    color: var(--red);
-    line-height: 1.15;
+    color: var(--ink);
     letter-spacing: 1px;
 }
 
-.stat span {
-    display: block;
-    margin-top: 2px;
-    font-family: var(--mono);
-    font-size: var(--fs-xs);
-    color: var(--ink-soft);
-    letter-spacing: 2px;
-}
-
-/* ===== 逐年产量卡 ===== */
-.spectrum-box {
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 4px;
-    padding: 13px 16px 9px;
-    margin-bottom: 26px;
-    box-shadow: 0 1px 0 rgba(38, 34, 28, .05), 0 10px 22px -16px rgba(38, 34, 28, .5);
-}
-
-.spectrum-meta {
+/* 搜索与快捷过滤 */
+.search-box {
     display: flex;
-    justify-content: space-between;
-    gap: 10px;
-    align-items: center;
-    font-size: var(--fs-xs);
-    color: var(--ink-soft);
-    letter-spacing: 1.5px;
-    padding-bottom: 8px;
-    border-bottom: 1px dashed var(--line);
+    flex-direction: column;
+    gap: 8px;
 }
-
-.spectrum-title { display: inline-flex; align-items: center; gap: 7px; }
-
-/* 三条碧色声柱，替代原来的 EQ 图标 */
-.eq-icon {
-    display: inline-flex;
-    align-items: flex-end;
-    gap: 2px;
-    height: 11px;
-}
-
-.eq-icon::before,
-.eq-icon::after,
-.eq-icon i {
-    content: "";
-    display: block;
-    width: 2px;
-    background: var(--tianyi-ink);
-    animation: eq-blink 1.1s ease-in-out infinite;
-}
-
-.eq-icon::before { height: 5px; animation-delay: 0s; }
-.eq-icon i { height: 11px; animation-delay: .18s; }
-.eq-icon::after { height: 7px; animation-delay: .36s; }
-
-@keyframes eq-blink {
-    0%, 100% { transform: scaleY(.45); }
-    50% { transform: scaleY(1); }
-}
-
-.spectrum-legend { color: var(--ink-faint); }
-
-.spark {
-    display: flex;
-    align-items: flex-end;
-    gap: 4px;
-    height: 92px;
-    padding-top: 12px;
-    margin-top: 6px;
-    border-bottom: 1px solid var(--line);
-}
-
-.spark-bar {
+.search-input-wrap {
     position: relative;
-    display: block;
-    flex: 1 1 0;
-    height: 100%;
-    min-height: 14px;
-    text-decoration: none;
-}
-
-.spark-fill {
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    height: 100%;
-    background: var(--tianyi-24);
-    border: 1px solid var(--tianyi-soft);
-    border-radius: 2px 2px 0 0;
-    transition: background .18s ease, border-color .18s ease;
-}
-
-.spark-bar:hover .spark-fill { background: var(--tianyi-soft); border-color: var(--tianyi-ink); }
-
-.spark-cap {
-    position: absolute;
-    left: 50%;
-    top: -6px;
-    width: 5px;
-    height: 5px;
-    border-radius: 50%;
-    background: var(--ink-ghost);
-    transform: translateX(-50%);
-    transition: background .18s ease;
-}
-
-.spark-bar.is-active .spark-fill { background: var(--tianyi); border-color: var(--tianyi-ink); }
-.spark-bar.is-active .spark-cap { background: var(--tianyi-ink); }
-
-.spark-bar.is-peak .spark-fill { background: var(--red); border-color: #6d2117; }
-.spark-bar.is-peak .spark-cap { background: var(--red); }
-.spark-bar.is-peak.is-active .spark-fill { background: var(--red); border-color: var(--tianyi-ink); }
-
-.spectrum-axis {
-    display: flex;
-    justify-content: space-between;
-    padding-top: 6px;
-    font-size: var(--fs-xs);
-    color: var(--ink-faint);
-    letter-spacing: 2px;
-}
-
-/* ===== 歌单卷标注行 ===== */
-.bench-label {
     display: flex;
     align-items: center;
-    gap: 10px;
-    margin: 0 0 12px;
 }
-
-.bench-label .t { font-size: 15px; letter-spacing: 3px; color: var(--ink); }
-
-.bench-label .en {
-    font-size: var(--fs-xs);
-    color: var(--red);
-    letter-spacing: 3px;
-    border-left: 2px solid var(--red);
-    padding-left: 8px;
-}
-
-/* 投喂彩蛋按钮：纸面小签 */
-.tianyi-bun-btn {
-    margin-left: auto;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
+.search-input {
+    width: 100%;
+    padding: 8px 30px 8px 12px;
     font-family: var(--hand);
     font-size: var(--fs-sm);
-    color: var(--ink-soft);
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-radius: 3px;
-    padding: 4px 10px;
-    cursor: pointer;
-    transition: color .18s ease, border-color .18s ease, transform .18s ease;
-}
-
-.tianyi-bun-btn:hover { color: var(--red); border-color: var(--red); }
-.tianyi-bun-btn:active { transform: scale(.96); }
-
-.bun-icon { font-size: 14px; transition: transform .28s cubic-bezier(.2, .8, .3, 1); }
-.tianyi-bun-btn:hover .bun-icon { transform: translateY(-2px) rotate(-8deg); }
-
-.bun-badge {
-    font-family: var(--mono);
-    font-size: 10px;
-    min-width: 16px;
-    text-align: center;
-    color: var(--card);
-    background: var(--red);
-    border-radius: 8px;
-    padding: 0 4px;
-}
-
-/* ===== 工具行：搜索 + 年份索引 ===== */
-.toolbar {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-    padding: 10px 0;
-    margin-bottom: 24px;
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-}
-
-.search {
-    flex: 1 1 210px;
-    min-width: 150px;
-    font-family: var(--hand);
-    font-size: 14px;
     color: var(--ink);
-    background: var(--card);
+    background: var(--desk);
     border: 1px solid var(--line);
-    border-radius: 3px;
-    padding: 6px 10px;
-}
-
-.search::placeholder { color: var(--ink-faint); }
-
-.search:focus {
+    border-radius: 4px;
     outline: none;
-    border-color: var(--tianyi-soft);
-    box-shadow: 0 0 0 3px var(--tianyi-06);
+    transition: border-color .2s, box-shadow .2s;
+}
+.search-input:focus {
+    border-color: var(--tianyi-ink);
+    box-shadow: 0 0 0 2px var(--tianyi-24);
+}
+.search-clear {
+    position: absolute;
+    right: 8px;
+    background: none;
+    border: none;
+    font-size: 16px;
+    color: var(--ink-faint);
+    cursor: pointer;
+    line-height: 1;
+    padding: 2px;
+}
+.search-clear:hover { color: var(--red); }
+
+.filter-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+.chip-btn {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    background: var(--desk);
+    border: 1px solid var(--line);
+    color: var(--ink-soft);
+    padding: 2px 7px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .15s;
+}
+.chip-btn:hover {
+    color: var(--ink);
+    border-color: var(--tianyi-ink);
+}
+.chip-btn.is-active {
+    background: var(--tianyi-ink);
+    border-color: var(--tianyi-ink);
+    color: #ffffff;
 }
 
-.years { display: flex; flex-wrap: wrap; gap: 2px; }
-
-.years a {
+/* 状态播报条 */
+.search-status {
     font-family: var(--mono);
     font-size: var(--fs-xs);
     color: var(--ink-faint);
-    padding: 2px 6px;
-    border-bottom: 1px dotted transparent;
-    transition: color .15s ease, border-color .15s ease;
+    padding: 4px 6px;
+    background: var(--desk);
+    border-radius: 3px;
+    border-left: 2px solid var(--tianyi-ink);
 }
 
-.years a:hover { color: var(--ink); }
-
-.years a.is-active {
-    color: var(--tianyi-ink);
-    border-bottom-color: var(--tianyi-soft);
+/* 逐年刻度轨 */
+.rail-list {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    border-top: 1px solid var(--line-light);
+    padding-top: 12px;
+    overflow-y: auto;
 }
-
-/* ===== 编年清单 ===== */
-.timeline {
-    position: relative;
-    padding-left: 26px;
+.rail-heading {
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    color: var(--ink-faint);
+    letter-spacing: 1px;
+    margin-bottom: 4px;
+    text-transform: uppercase;
 }
-
-.timeline::before {
-    content: "";
-    position: absolute;
-    left: 5px;
-    top: 10px;
-    bottom: 10px;
-    border-left: 1px dashed var(--tianyi-24);
-}
-
-.year { position: relative; margin-bottom: 32px; }
-.year:last-child { margin-bottom: 12px; }
-.year[hidden] { display: none; }
-
-.year-head {
-    position: relative;
+.rail-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding-bottom: 6px;
+    gap: 8px;
+    padding: 5px 8px;
+    text-decoration: none;
+    color: var(--ink-soft);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: var(--fs-xs);
+    transition: background .15s, color .15s;
+    position: relative;
+}
+.rail-item:hover {
+    background: var(--tianyi-06);
+    color: var(--ink);
+}
+.rail-item.is-active {
+    background: var(--tianyi-12);
+    color: var(--red);
+    font-weight: 600;
+}
+.rail-indicator {
+    width: 4px;
+    height: 12px;
+    background: transparent;
+    border-radius: 2px;
+    transition: background .2s;
+}
+.rail-item.is-active .rail-indicator {
+    background: var(--red);
+}
+.rail-year {
+    width: 36px;
+    flex-shrink: 0;
+}
+.rail-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: rgba(38, 34, 28, .06);
+    border-radius: 2px;
+    overflow: hidden;
+}
+.rail-bar-fill {
+    display: block;
+    height: 100%;
+    background: var(--tianyi-soft);
+    border-radius: 2px;
+}
+.rail-item.is-active .rail-bar-fill {
+    background: var(--red);
+}
+.rail-count {
+    color: var(--ink-faint);
+    width: 28px;
+    text-align: right;
+}
+.rail-match-count {
+    color: var(--red);
+    font-weight: 700;
+    font-size: 11px;
+}
+.rail-item.is-empty {
+    opacity: .35;
+    pointer-events: none;
+}
+
+/* ================== 右侧主流 (Chronicle Stream) ================== */
+.main-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+    min-width: 0;
+}
+
+/* 报头区 */
+.stream-hero {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 32px 36px 28px;
+    box-shadow: 0 4px 16px rgba(38, 34, 28, .04);
+    position: relative;
+}
+.stream-hero-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     border-bottom: 1px solid var(--line);
+    padding-bottom: 12px;
+    margin-bottom: 20px;
+    font-size: var(--fs-xs);
+    font-family: var(--mono);
+    color: var(--ink-faint);
 }
-
-/* 时间轴节点：红圈碧芯 */
-.year-node {
-    position: absolute;
-    left: -26px;
-    top: 50%;
-    margin-top: -6px;
-    width: 11px;
-    height: 11px;
-    border: 2px solid var(--red);
-    border-radius: 50%;
-    background: var(--desk);
-    transition: box-shadow .3s ease;
+.stream-hero-title-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
 }
-
-.year-node::after {
-    content: "";
-    position: absolute;
-    inset: 2.5px;
-    border-radius: 50%;
-    background: var(--tianyi);
-}
-
-.year.is-active .year-node { box-shadow: 0 0 0 4px rgba(102, 204, 255, .22); }
-
-.year-num {
+.stream-title-group h1 {
     font-family: var(--serif);
-    font-size: 23px;
+    font-size: 34px;
     font-weight: 700;
     color: var(--ink);
-    letter-spacing: 2px;
-    line-height: 1;
-    transition: color .25s ease;
+    letter-spacing: 4px;
+    margin-bottom: 6px;
 }
-
-.year.is-active .year-num { color: var(--red); }
-
-.year-bar {
-    flex: 1 1 0;
-    min-width: 20px;
-    height: 0;
-    border-top: 1px dotted var(--tianyi-soft);
-    opacity: .8;
-}
-
-.year-count {
+.stream-subtitle {
     font-family: var(--mono);
     font-size: var(--fs-xs);
+    color: var(--tianyi-ink);
+    letter-spacing: 2.5px;
+}
+.stream-ornament svg {
+    display: block;
+}
+.stream-quote {
+    margin-top: 18px;
+    padding: 12px 18px;
+    background: var(--desk);
+    border-left: 3px solid var(--red);
+    border-radius: 0 4px 4px 0;
+    font-size: 14px;
+    color: var(--ink-soft);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+.stream-stats {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-top: 20px;
+    border-top: 1px solid var(--line-light);
+    padding-top: 18px;
+}
+.stat-pill {
+    text-align: center;
+    background: var(--desk);
+    border: 1px solid var(--line-light);
+    padding: 10px 6px;
+    border-radius: 4px;
+}
+.stat-pill b {
+    display: block;
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--ink);
+    line-height: 1.2;
+}
+.stat-pill span {
+    font-size: var(--fs-xs);
     color: var(--ink-faint);
-    letter-spacing: 1.5px;
 }
 
-/* 曲目：歌本目录式排布（点线引导 + 右对齐日期） */
-.songs {
+/* 年份区块 */
+.year-section {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 24px 28px 28px;
+    box-shadow: 0 2px 12px rgba(38, 34, 28, .03);
+    scroll-margin-top: 30px;
+    transition: border-color .2s;
+}
+.year-section.is-focused-section {
+    border-color: var(--tianyi-ink);
+}
+
+.year-header {
+    margin-bottom: 20px;
+}
+.year-title-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+.year-seal {
+    font-family: var(--serif);
+    font-size: 12px;
+    color: var(--red);
+    border: 1px solid var(--red);
+    padding: 1px 4px;
+    border-radius: 2px;
+    line-height: 1;
+    transform: rotate(-3deg);
+}
+.year-num {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--ink);
+    letter-spacing: 1px;
+    line-height: 1;
+}
+.year-meta {
+    font-size: var(--fs-xs);
+    color: var(--ink-faint);
+    letter-spacing: .5px;
+}
+.year-rule {
+    margin-top: 10px;
+    height: 1px;
+    background: linear-gradient(90deg, var(--line) 0%, rgba(38, 34, 28, .04) 100%);
+}
+
+/* 曲目列表：双列网格与换行保护 */
+.song-list {
     list-style: none;
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    column-gap: 24px;
-    margin-top: 8px;
+    column-gap: 30px;
+    row-gap: 8px;
 }
 
-.songs li {
+.song-row {
     display: flex;
     align-items: baseline;
-    gap: 5px;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: 4px;
+    background: transparent;
+    transition: background .15s;
     min-width: 0;
-    padding: 2.5px 7px;
-    border-radius: 2px;
-    transition: background .15s ease;
+}
+.song-row:hover {
+    background: var(--desk);
+}
+.song-row[hidden] {
+    display: none;
 }
 
-.songs li[hidden] { display: none; }
-.songs li:hover { background: var(--tianyi-06); }
-
-.song-title {
+/* 歌名与印章包装 */
+.song-main {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 6px;
     flex: 0 1 auto;
     min-width: 0;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    transition: color .15s ease;
+}
+.song-title {
+    font-weight: 500;
+    color: var(--ink);
+    word-break: break-word;
+    line-height: 1.45;
+    transition: color .15s;
+}
+.song-row:hover .song-title {
+    color: var(--tianyi-ink);
 }
 
-.songs li:hover .song-title { color: var(--tianyi-ink); }
+/* 印章：传说/殿堂 */
+.badge {
+    font-family: var(--serif);
+    font-size: 11px;
+    line-height: 1.2;
+    padding: 1px 4px;
+    border-radius: 2px;
+    flex-shrink: 0;
+    transform: translateY(-1px);
+}
+.badge-legend {
+    color: var(--red);
+    background: rgba(139, 44, 31, .08);
+    border: 1px solid var(--red);
+    font-weight: 700;
+}
+.badge-hall {
+    color: var(--tianyi-ink);
+    background: var(--tianyi-06);
+    border: 1px solid var(--tianyi-ink);
+    font-weight: 600;
+}
 
-/* 目录引导点线 */
-.leader {
+/* 虚线引线 */
+.song-leader {
     flex: 1 1 12px;
     min-width: 8px;
-    align-self: center;
-    height: 0;
     border-bottom: 1px dotted var(--ink-ghost);
+    height: 0;
+    align-self: center;
     position: relative;
     top: -2px;
 }
 
-/* 殿堂 / 传说：单字朱印 */
-.song-badge {
-    flex: 0 0 auto;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    line-height: 1.35;
-    padding: 0 3px;
-    border: 1px solid currentColor;
-    border-radius: 2px;
-    transform: rotate(-2deg);
-    opacity: .82;
-}
-
-.badge-hall {
-    color: var(--tianyi-ink);
-    background: var(--tianyi-06);
-}
-
-.badge-legend {
-    color: var(--red);
-    background: rgba(139, 44, 31, .05);
-}
-
-.songs li.is-hall:hover .badge-hall,
-.songs li.is-legend:hover .badge-legend {
-    opacity: 1;
-}
-
-.songs li.is-legend .song-title { color: #5c1f16; }
-
-.song-note {
-    flex: 0 0 auto;
-    font-size: var(--fs-xs);
-    color: var(--ink-faint);
-}
-
-.song-date {
-    flex: 0 0 auto;
+/* 日期与时刻 */
+.song-date-wrap {
+    flex-shrink: 0;
     font-family: var(--mono);
     font-size: var(--fs-xs);
     color: var(--ink-faint);
-    letter-spacing: .5px;
     white-space: nowrap;
+    text-align: right;
+}
+.song-date {
+    letter-spacing: .5px;
+}
+.song-time {
+    margin-left: 6px;
+    color: var(--tianyi-soft);
 }
 
-.song-time { color: var(--tianyi-soft); margin-left: 5px; }
+/* 行内备注（数据源中个别曲目的排行备注） */
+.song-note {
+    font-size: 11px;
+    color: var(--ink-faint);
+}
 
-mark { background: var(--tianyi-24); color: var(--ink); padding: 0 1px; border-radius: 1px; }
+/* 搜索高亮 */
+mark {
+    background: var(--tianyi-24);
+    color: var(--ink);
+    border-radius: 2px;
+    padding: 0 2px;
+}
 
-.empty {
+/* 空结果提示 */
+.empty-box {
+    background: var(--card);
+    border: 1px dashed var(--line);
+    border-radius: 6px;
+    padding: 48px 24px;
     text-align: center;
+    color: var(--ink-faint);
+}
+.empty-box p {
+    font-size: 15px;
+    margin-bottom: 14px;
+}
+.reset-btn {
     font-family: var(--mono);
     font-size: var(--fs-sm);
-    color: var(--ink-faint);
-    letter-spacing: 2px;
-    padding: 44px 0;
+    background: var(--tianyi-ink);
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    padding: 6px 14px;
+    cursor: pointer;
+}
+.reset-btn:hover {
+    background: var(--blue);
 }
 
-.empty[hidden] { display: none; }
-
-/* ===== 报尾 ===== */
-.colophon {
-    margin-top: 44px;
-    padding-top: 16px;
+/* 页脚 */
+.stream-colophon {
     border-top: 1px solid var(--line);
+    padding-top: 24px;
     text-align: center;
     font-family: var(--mono);
     font-size: var(--fs-xs);
     color: var(--ink-soft);
-    letter-spacing: 1.5px;
-    line-height: 2;
+    line-height: 1.8;
+}
+.stream-colophon a {
+    color: var(--tianyi-ink);
+    text-decoration: none;
+}
+.stream-colophon a:hover {
+    color: var(--red);
+    text-decoration: underline;
 }
 
-.colophon .credit { color: var(--ink-faint); }
+.stream-colophon .credit { color: var(--ink-faint); }
+.stream-colophon .back { letter-spacing: 2px; }
 
-.colophon a { color: var(--ink-soft); border-bottom: 1px dotted var(--line); }
-.colophon a:hover { color: var(--red); border-bottom-color: var(--red); }
-
-.back { letter-spacing: 2px; }
-
-/* ===== 🥟 投喂天依：纸面气泡与落物 ===== */
-.falling-bun {
-    position: fixed;
-    top: -32px;
-    z-index: 60;
-    font-size: 20px;
-    pointer-events: none;
-    animation: bun-fall 1.5s cubic-bezier(.3, .1, .6, 1) forwards;
+/* 键盘 Focus 样式 */
+a:focus-visible, button:focus-visible, input:focus-visible {
+    outline: 2px solid var(--tianyi-ink);
+    outline-offset: 2px;
 }
 
-@keyframes bun-fall {
-    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
-    12% { opacity: 1; }
-    100% { transform: translateY(105vh) rotate(200deg); opacity: 0; }
+/* 响应式适配 */
+@media (max-width: 960px) {
+    .layout-container {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+    .sidebar {
+        position: static;
+        max-height: none;
+    }
+    .rail-list {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(90px, 1fr));
+        gap: 6px;
+    }
+    .rail-bar-wrap { display: none; }
+    .song-list {
+        grid-template-columns: 1fr;
+    }
+    .stream-stats {
+        grid-template-columns: repeat(3, 1fr);
+    }
 }
 
-.bun-toast {
-    position: fixed;
-    left: 50%;
-    bottom: 34px;
-    z-index: 60;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    max-width: min(88vw, 460px);
-    font-family: var(--hand);
-    font-size: 13.5px;
-    color: var(--ink);
-    background: var(--card);
-    border: 1px solid var(--line);
-    border-left: 3px solid var(--tianyi-ink);
-    border-radius: 3px;
-    padding: 9px 14px;
-    box-shadow: 0 12px 28px -14px rgba(38, 34, 28, .55);
-    opacity: 0;
-    transform: translate(-50%, 12px);
-    transition: opacity .32s ease, transform .32s cubic-bezier(.2, .8, .3, 1);
-    pointer-events: none;
-}
-
-.bun-toast.is-show { opacity: 1; transform: translate(-50%, 0); }
-
-/* ===== 响应式 ===== */
-@media (max-width: 760px) {
-    .songs { grid-template-columns: 1fr; column-gap: 0; }
-    .hero.wall h1 { letter-spacing: 10px; text-indent: 10px; }
-    .hero.wall .seal { top: 18px; }
-    .bench-label .en { display: none; }
-}
-
-@media (max-width: 560px) {
-    .page { padding: 0 16px 56px; }
-    .stats { gap: 8px; }
-    .stat b { font-size: 22px; }
-    .hero.wall .seal { display: none; }
-    .toolbar { gap: 8px; }
-    .songs li { padding: 3px 5px; }
+@media (max-width: 600px) {
+    body { padding: 12px 10px 60px; }
+    .stream-hero { padding: 20px 18px; }
+    .stream-title-group h1 { font-size: 26px; }
+    .year-section { padding: 18px 14px; }
+    .stream-stats { grid-template-columns: repeat(2, 1fr); }
 }
 
 @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
-    .anim-spin-slow, .anim-pulse, .anim-float,
-    .anim-flutter, .anim-bubble, .anim-wave,
-    .eq-icon::before, .eq-icon::after, .eq-icon i { animation: none; }
-    .vector-scene { transition: opacity .01s linear; }
-    .falling-bun { animation-duration: .6s; }
+    * { transition: none !important; }
 }
