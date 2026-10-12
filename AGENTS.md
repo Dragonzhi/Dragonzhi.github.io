@@ -10,7 +10,7 @@
 - `legacy/`：旧站存档，不得删除（退役博客 `blog.html` + `posts/`，仍 fetch 根 `data/posts.json`；旧主题首页快照与旧作品集 demo）。博客已于 2026-09-30 退役并整体迁入 `legacy/`，根目录 `posts/` 已删除。
 - `pages/resume.html` + `css/resume-workshop.css`：求职简历页（招聘方入口：首页 resume.md 档案卡与导览牌伍；`resume/index.html` 只是跳转页）。信息架构是为「筛选者扫读」设计的（求职意向 → 技能矩阵 → 关键项目 → 软著与荣誉 → 教育），与作品展示的叙事分开；改文案直接改 `pages/resume.html`。**简历 PDF 一律不托管到站上**，只保留邮件索取通道，不要往仓库里放。
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
-- `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（工房纸面 · 精修编年目录：左侧常驻年份索引轨 + 右侧编年曲目长流，天依碧印点缀）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成（`style.css` 与 `app.js` 是静态伴生文件，不随脚本生成）。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。首页入口是 `files/luotianyi.md` 走自发现机制成的卡。
+- `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（工房纸面 · 精修编年目录：左侧常驻年份索引轨 + 右侧编年曲目长流，天依碧印点缀）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成（`style.css` 与 `app.js` 是静态伴生文件，不随脚本生成）。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。首页入口在 `files/links.md` 的链接卡里（「洛天依歌单」行）。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
 - `pages/`：工房风格子页面（画廊版 / 档案架 / 技术履历），在用；`data/portfolio.json` 是档案架子页的数据。`legacy/` 存档见上条，勿删。
 - 合规红线：`<title>` 固定为「ZLOONG 工房 · Hanako箱庭」，页脚备案号「闽ICP备20260330551号-1」不得删改。
