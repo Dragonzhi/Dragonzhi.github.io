@@ -1,4 +1,3 @@
-- [blog / 博客 ↗](pages/blog.html)
 - [gallery / 洛天依画廊 ↗](pages/gallery.html)
 - [portfolio / 作品集 ↗](pages/portfolio.html)
 - [resume / 技术履历 ↗](pages/resume.html)

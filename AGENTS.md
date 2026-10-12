@@ -5,24 +5,24 @@
 
 ## 项目速览
 
-- `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/` + `data/files-manifest.json`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`，`files/` 新增 `.md` 通过 `scripts/generate_manifest.py` 生成的索引自动成为档案架卡片，样式按内容自动判型：链接列表/圆点列表/便签/段落）。
-- `css/seal.css` + `js/seal.js`：工房印章（3D 单物件方向）——视口右下角一枚 three.js 印章，拖到纸卡上按下即盖章；印子存 localStorage（`zloong-seal-v1`，只记坐标与随机种子，最多 48 枚），清除键 `#seal-clear` 贴在印章上方；窄屏不出现、不加载 three.js，已存印子也不渲染；无 WebGL 退化为 2D 印章。**全站唯一的第三方依赖就在这里**（见工作约定 6）。
-- `posts/` + `data/posts.json`：博客文章（Markdown + JSON 索引）。
-- `resume/` + `css/resume-workshop.css`：求职简历页 `/resume/`（招聘方入口，首页 hero 与导览牌各有一个入口）。信息架构是为「筛选者扫读」设计的（定位 → 摘要 → 技能矩阵 → 项目 → 凭证 → 教育），与作品展示的叙事分开；改文案直接改 `resume/index.html`。**简历 PDF 一律不托管到站上**，只保留邮件索取通道，不要往仓库里放。
+- `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/` + `data/files-manifest.json`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`，`files/` 新增 `.md` 通过 `scripts/generate_manifest.py` 生成的索引自动成为档案架卡片，外观由 manifest 条目的 `style` 字段手动指定（links / list / quote / doc 四型，不写或非法值默认 doc，不做内容判型与随机）。
+- `css/seal.css` + `js/seal.js`：工房印章（3D 单物件方向）——视口右下角一枚 three.js 印章，拖到纸卡上按下即盖章；印子存 localStorage（`zloong-seal-v1`，只记坐标与随机种子，最多 48 枚），清除键 `#seal-clear` 贴在印章上方；窄屏不出现、不加载 three.js，已存印子也不渲染；无 WebGL 退化为 2D 印章。**全站唯一的第三方依赖就在这里**（见工作约定 5）。
+- `legacy/`：旧站存档，不得删除（退役博客 `blog.html` + `posts/`，仍 fetch 根 `data/posts.json`；旧主题首页快照与旧作品集 demo）。博客已于 2026-09-30 退役并整体迁入 `legacy/`，根目录 `posts/` 已删除。
+- `pages/resume.html` + `css/resume-workshop.css`：求职简历页（招聘方入口：首页 resume.md 档案卡与导览牌伍；`resume/index.html` 只是跳转页）。信息架构是为「筛选者扫读」设计的（求职意向 → 技能矩阵 → 关键项目 → 软著与荣誉 → 教育），与作品展示的叙事分开；改文案直接改 `pages/resume.html`。**简历 PDF 一律不托管到站上**，只保留邮件索取通道，不要往仓库里放。
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
+- `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（工房纸面 · 精修编年目录：左侧常驻年份索引轨 + 右侧编年曲目长流，天依碧印点缀）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成（`style.css` 与 `app.js` 是静态伴生文件，不随脚本生成）。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。首页入口是 `files/luotianyi.md` 走自发现机制成的卡。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
-- `pages/`、`legacy/`、`data/portfolio.json`：旧主题子页面与存档，改动需谨慎。
+- `pages/`：工房风格子页面（画廊版 / 档案架 / 技术履历），在用；`data/portfolio.json` 是档案架子页的数据。`legacy/` 存档见上条，勿删。
 - 合规红线：`<title>` 固定为「ZLOONG 工房 · Hanako箱庭」，页脚备案号「闽ICP备20260330551号-1」不得删改。
 
 ## 工作约定
 
 1. 遵循现有「工房 Workshop」设计定稿：暖纸台面 + 朱砂点缀 + 双轨编号；发光效果只允许出现在 SIGNAL 彩蛋一处，不要新增。
 2. 改文案：about / now / links / motto / 今日一言改 `files/` 下的源文件（`about.md` / `now.md` / `links.md` / `motto.txt` / `daily.txt`），打字机句子改 `data/content.js` 的 `phrases`；不要直接改 HTML（HTML 里的静态内容只是无 JS 兜底，可不同步）。
-3. 发新博客：在 `posts/` 建 Markdown，并在 `data/posts.json` 登记记录。
-4. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
-5. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。
-6. 无构建工具，**首页保持零依赖原生实现**；唯一例外是工房印章 `js/seal.js` 按需加载的 three.js r159 UMD（窄屏不加载、无 WebGL 或加载失败退化为 2D 印章，功能不丢）。除此之外不得引入任何打包器、框架或 npm 依赖；新增依赖前必须先征得同意并同步更新本条。
-7. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。
+3. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
+4. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。
+5. 无构建工具，**首页保持零依赖原生实现**；唯一例外是工房印章 `js/seal.js` 按需加载的 three.js r159 UMD（窄屏不加载、无 WebGL 或加载失败退化为 2D 印章，功能不丢）。除此之外不得引入任何打包器、框架或 npm 依赖；新增依赖前必须先征得同意并同步更新本条。
+6. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。
 
 ## 硬性约束
 

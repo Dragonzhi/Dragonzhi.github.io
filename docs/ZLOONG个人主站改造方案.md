@@ -1,11 +1,12 @@
 # ZLOONG 个人主站改造方案
 
-> 状态：**已定稿 · 主站已部署上线** · 2026-08-30
+> 状态：**已定稿 · 已实施完毕 · 设计存档** · 2026-08-30 定稿，2026-10-12 复核标注
 > 背景：看到 lvy010（GitHub: lvy010）的 GitHub 主页与个人网站，触发对自身 GitHub 主页、个人主站、箱庭关系的重新规划。
-> 设计定稿：`preview-workshop-v5.html`（与本文件同目录树，见下）
-> 部署状态：主站已上线 https://dragonzhi.xyz/（腾讯云 nginx，git clone 部署），箱庭互链完成
+> 设计定稿：`preview-workshop-v5.html`（定稿后已从仓库删除，其结构/样式/文案已落地为 `index.html` + `css/workshop.css`）
+> 部署状态：主站已上线 https://dragonzhi.xyz/（腾讯云 nginx），箱庭互链完成
+> 复核说明：本文是设计过程的存档记录。文中的「交接实施说明」「实施清单」均已执行完毕，仅保留作历史参照；日常维护规范以 [AGENTS.md](../AGENTS.md)、[配置手册](配置手册.md)、[项目结构与模块总览](项目结构与模块总览.md) 为准。上线后新增的模块（工房印章 / 技术履历页 / 洛天依歌单页）与博客退役不在本文范围内，见总览文档。
 
-## 〇、交接实施说明（给 Harness）
+## 〇、交接实施说明（给 Harness）· 已执行完毕，历史存档
 
 可直接使用的材料：
 
@@ -113,12 +114,13 @@ Dragonzhi/Dragonzhi.github.io（一份源码）
 - 工房 = `dragonzhi.xyz/`（/var/www/dragonzhi，nginx 静态）
 - 箱庭 = `dragonzhi.xyz/hanako/`（systemd 端口 8421，不动）
 
-### 日常更新流程（本地改 → push → 服务器 pull）
+### 日常更新流程（2026-10-12 复核：已自动化）
 
-1. 本地/云端改代码，push 到 GitHub `Dragonzhi/Dragonzhi.github.io`
-2. 服务器执行：`cd /var/www/dragonzhi && git pull`
-3. 属主已是 ubuntu，普通用户可直接 pull（无需 sudo）；仅首次部署需要 sudo
-4. nginx 无需 reload（静态文件直接生效），仅在改 nginx 配置时才 `sudo nginx -t && sudo systemctl reload nginx`
+1. 本地/云端改代码，push 到 GitHub `Dragonzhi/Dragonzhi.github.io` 的 `main` 分支
+2. GitHub Actions（`.github/workflows/deploy.yml`）自动 SSH 到服务器执行 `ci-pull.sh`（内部 `git pull` 到 `/var/www/dragonzhi`），属主 ubuntu 无需 sudo
+3. nginx 无需 reload（静态文件直接生效），仅在改 nginx 配置时才 `sudo nginx -t && sudo systemctl reload nginx`
+
+（最初的手动「服务器执行 git pull」流程已被上述 Actions 管线取代，手动 pull 仅在 Actions 故障时兜底使用。）
 
 ### 已完成的互链
 
@@ -127,9 +129,11 @@ Dragonzhi/Dragonzhi.github.io（一份源码）
 
 ## 七、GitHub 个人页（已完成项）
 
-`Dragonzhi/Dragonzhi` 同名仓库 README 已是 lvy010 风格（typing-svg + code 标签 + samp 链接行 + 洛天依彩蛋）。待小改：Home 链接从 dragonzhi.github.io 改为 dragonzhi.xyz；定位语可加上「工房」概念。
+`Dragonzhi/Dragonzhi` 同名仓库 README 已是 lvy010 风格（typing-svg + code 标签 + samp 链接行 + 洛天依彩蛋）。待小改（外部仓库，2026-10-12 复核时未再核实）：Home 链接从 dragonzhi.github.io 改为 dragonzhi.xyz；定位语可加上「工房」概念。
 
-## 八、实施清单
+## 八、实施清单 · 已执行完毕（存档，2026-10-12 复核）
+
+唯一未勾项属箱庭仓库（外部），其余全部落地：
 
 - [x] index.html 按 v5 重写（Harness 施工完成，已验收）
 - [x] v5 内联样式抽取为 css/workshop.css
