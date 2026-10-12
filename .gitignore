@@ -1,0 +1,6 @@
+# Python
+__pycache__/
+*.pyc
+
+# 生成产物预览
+_preview_*.pdf

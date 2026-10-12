@@ -118,7 +118,7 @@
             <span class="sub-state calm">已上线</span>
             <span class="arrow">→</span>
         </a>
-        <a class="sub-dir-item" href="gallery.html">
+        <a class="sub-dir-item" href="../pages/gallery.html">
             <span class="no">叁</span>
             <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊</span></span>
             <span class="sub-state calm">已上线</span>
@@ -420,7 +420,7 @@ function calcReadTime(text) {
             }
 
             /* 2. 加载 Markdown 内容 */
-            return fetch("../" + post.file)
+            return fetch(post.file)
                 .then(function(r) {
                     if (!r.ok) throw new Error("HTTP " + r.status);
                     return r.text();
