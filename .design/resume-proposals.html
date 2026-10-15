@@ -1,0 +1,2333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>技术履历视觉重构提案 · ZLOONG 工房</title>
+    <link rel="preconnect" href="https://fonts.googleapis.cn">
+    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
+    <style>
+        /* ============================================================
+           提案预览器控制台 (Proposal Switcher Topbar)
+           ============================================================ */
+        :root {
+            --switch-bg: #211e19;
+            --switch-text: #eae3d2;
+            --switch-accent: #d34936;
+            --switch-border: rgba(255, 255, 255, 0.12);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        /* 吸顶切换控制台 */
+        .proposal-bar {
+            position: sticky;
+            top: 0;
+            z-index: 99999;
+            background: var(--switch-bg);
+            color: var(--switch-text);
+            padding: 10px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            font-size: 13px;
+            border-bottom: 2px solid var(--switch-accent);
+        }
+
+        .proposal-bar-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .proposal-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .proposal-badge {
+            background: var(--switch-accent);
+            color: #fff;
+            padding: 2px 7px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 1px;
+        }
+
+        .proposal-title {
+            font-weight: 700;
+            font-size: 14px;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .proposal-nav {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(255, 255, 255, 0.06);
+            padding: 3px;
+            border-radius: 6px;
+            border: 1px solid var(--switch-border);
+        }
+
+        .proposal-btn {
+            background: transparent;
+            border: none;
+            color: #c5bca9;
+            padding: 6px 14px;
+            border-radius: 4px;
+            font-size: 12.5px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.18s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .proposal-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.08);
+        }
+
+        .proposal-btn.active {
+            background: #fff;
+            color: #1a1713;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
+        }
+
+        .proposal-tools {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .proposal-tool-btn {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid var(--switch-border);
+            color: #d6cebf;
+            padding: 5px 11px;
+            border-radius: 4px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .proposal-tool-btn:hover {
+            background: rgba(255, 255, 255, 0.16);
+            color: #fff;
+        }
+
+        /* 方案解析抽屉 */
+        .proposal-drawer {
+            display: none;
+            background: #181512;
+            color: #d2c8b6;
+            padding: 16px 24px;
+            border-bottom: 1px solid var(--switch-border);
+            font-size: 13px;
+            line-height: 1.7;
+        }
+
+        .proposal-drawer.open {
+            display: block;
+            animation: drawerIn 0.2s ease;
+        }
+
+        @keyframes drawerIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .drawer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .drawer-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 6px;
+            padding: 14px 16px;
+        }
+
+        .drawer-card h4 {
+            color: #f5eedf;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13.5px;
+        }
+
+        .drawer-card p {
+            color: #a79d8c;
+            font-size: 12px;
+        }
+
+        .drawer-card ul {
+            padding-left: 16px;
+            margin-top: 6px;
+            color: #b8af9f;
+            font-size: 12px;
+        }
+
+        /* ============================================================
+           全方案基础变量与重置 (Base Tokens)
+           ============================================================ */
+        :root {
+            --desk: #f5f0e6;
+            --paper-main: #fdfbf7;
+            --card: #fbf8f2;
+            --ink: #26221c;
+            --ink-soft: rgba(38, 34, 28, 0.68);
+            --ink-muted: rgba(38, 34, 28, 0.45);
+            --line: rgba(38, 34, 28, 0.16);
+            --line-subtle: rgba(38, 34, 28, 0.08);
+            --red: #8b2c1f;
+            --red-hover: #b03626;
+            --red-soft: rgba(139, 44, 31, 0.08);
+            --red-border: rgba(139, 44, 31, 0.28);
+            --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+            --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+            --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+            --display: "Averia Gruesa Libre", var(--hand);
+            --wrap: 1060px;
+        }
+
+        body {
+            background: var(--desk);
+            background-image:
+                linear-gradient(rgba(139, 44, 31, 0.02) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139, 44, 31, 0.02) 1px, transparent 1px);
+            background-size: 24px 24px;
+            color: var(--ink);
+            font-family: var(--hand);
+            font-size: 15px;
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            text-rendering: optimizeLegibility;
+            min-height: 100vh;
+        }
+
+        .dossier-wrap {
+            max-width: var(--wrap);
+            margin: 0 auto;
+            padding: 24px 20px 80px;
+            transition: all 0.25s ease;
+        }
+
+        /* 顶部公用报眉 */
+        .sub-eyebrow {
+            font-size: 12px;
+            color: var(--ink-soft);
+            letter-spacing: 1.5px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--line);
+            padding: 8px 0 14px;
+            margin-bottom: 24px;
+            font-family: var(--mono);
+        }
+
+        .sub-eyebrow .live { color: var(--red); }
+        .sub-eyebrow a {
+            color: var(--ink-soft);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        .sub-eyebrow a:hover { color: var(--red); }
+
+        .eyebrow-actions {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .resume-print-btn {
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 0.5px;
+            color: var(--red);
+            background: var(--red-soft);
+            border: 1px solid var(--red-border);
+            border-radius: 3px;
+            padding: 3px 9px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .resume-print-btn:hover {
+            background: var(--red);
+            color: #fff;
+        }
+
+        /* 共同通用标签 */
+        .samp { font-family: var(--mono); }
+        .state {
+            display: inline-block;
+            font-family: var(--mono);
+            font-size: 11px;
+            border-radius: 3px;
+            padding: 2px 7px;
+            border: 1px solid var(--line);
+            background: rgba(38, 34, 28, 0.04);
+            color: var(--ink-soft);
+        }
+        .state.hot {
+            background: var(--red);
+            color: #fff;
+            border-color: var(--red);
+            font-weight: 600;
+        }
+        .state.calm {
+            background: rgba(38, 34, 28, 0.06);
+            color: var(--ink);
+            border-color: var(--line);
+        }
+
+        /* 复制邮箱按钮 */
+        .email-copy-pill {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--red);
+            background: var(--red-soft);
+            border: 1px solid var(--red-border);
+            border-radius: 3px;
+            padding: 1px 7px;
+            cursor: pointer;
+            margin-left: 6px;
+            transition: all 0.15s ease;
+        }
+        .email-copy-pill:hover,
+        .email-copy-pill.copied {
+            background: var(--red);
+            color: #fff;
+        }
+
+        /* 章节公用 */
+        .resume-section { margin-bottom: 40px; }
+
+        /* 过滤隐藏状态 */
+        .dossier-proj-item.is-filtered-out {
+            display: none !important;
+        }
+
+        /* ============================================================
+           方案 A：【精炼档案卷 · 现代典雅风】(theme-a-dossier) [推荐]
+           特点：彻底归正、极细灰线边框、现代杂志档案排版、等高矩阵、阅读阻力极低
+           ============================================================ */
+        .theme-a-dossier .main-sheet {
+            background: #fffdf9;
+            border: 1px solid rgba(38, 34, 28, 0.2);
+            border-radius: 4px;
+            box-shadow: 0 4px 20px rgba(38, 34, 28, 0.06), 0 1px 3px rgba(38, 34, 28, 0.04);
+            padding: 36px 42px;
+        }
+
+        /* 顶部方向选项卡：清爽平直的档案分类签，无晃动，无大口袋 */
+        .theme-a-dossier .track-tabs-bar {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            margin-bottom: -1px; /* 紧贴下沿 */
+            padding-left: 8px;
+        }
+
+        .theme-a-dossier .track-tab {
+            background: #e7dfcc;
+            border: 1px solid rgba(38, 34, 28, 0.22);
+            border-bottom: 1px solid rgba(38, 34, 28, 0.2);
+            border-radius: 4px 4px 0 0;
+            padding: 9px 20px;
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: all 0.18s ease;
+            position: relative;
+            top: 1px;
+            z-index: 1;
+        }
+
+        .theme-a-dossier .track-tab:hover {
+            background: #eee8db;
+            color: var(--ink);
+        }
+
+        .theme-a-dossier .track-tab.active {
+            background: #fffdf9;
+            border-color: rgba(38, 34, 28, 0.2);
+            border-bottom: 1px solid #fffdf9; /* 融入纸面 */
+            color: var(--red);
+            font-weight: 700;
+            padding-top: 11px; /* 微抬高突出活动感 */
+            z-index: 3;
+            box-shadow: 0 -2px 6px rgba(0,0,0,0.03);
+        }
+
+        .theme-a-dossier .track-tab.active::after {
+            content: "";
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: var(--red);
+            border-radius: 4px 4px 0 0;
+        }
+
+        /* 档案顶部元信息条 */
+        .theme-a-dossier .sheet-status-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-soft);
+            letter-spacing: 1px;
+        }
+        .theme-a-dossier .sheet-status-strip .doc-code {
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        /* 头部档案大卡 */
+        .theme-a-dossier .profile-header {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            align-items: start;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 30px;
+        }
+
+        .theme-a-dossier .name-title-area h1 {
+            font-family: var(--serif);
+            font-size: 34px;
+            color: var(--ink);
+            letter-spacing: 2px;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+        }
+
+        .theme-a-dossier .name-title-area h1 .en-tag {
+            font-family: var(--display);
+            font-size: 18px;
+            color: var(--ink-soft);
+            font-weight: 400;
+            letter-spacing: 1.5px;
+        }
+
+        .theme-a-dossier .target-role-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(139, 44, 31, 0.05);
+            border: 1px solid var(--red-border);
+            padding: 5px 12px;
+            border-radius: 4px;
+            font-size: 13.5px;
+            margin-top: 4px;
+            margin-bottom: 14px;
+        }
+
+        .theme-a-dossier .target-role-pill .label {
+            color: var(--ink-soft);
+            font-family: var(--mono);
+            font-size: 12px;
+        }
+
+        .theme-a-dossier .target-role-pill .value {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        /* 核心摘要网格 */
+        .theme-a-dossier .profile-meta-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px 20px;
+            font-size: 13px;
+        }
+
+        .theme-a-dossier .meta-cell {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .theme-a-dossier .meta-cell .k {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        .theme-a-dossier .meta-cell .v {
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        .theme-a-dossier .meta-cell a {
+            color: var(--ink);
+            text-decoration: none;
+            transition: color 0.15s ease;
+        }
+        .theme-a-dossier .meta-cell a:hover { color: var(--red); }
+
+        /* 头部右侧微章印章 */
+        .theme-a-dossier .profile-badge-side {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 10px;
+        }
+
+        .theme-a-dossier .seal-box {
+            border: 2px solid var(--red);
+            color: var(--red);
+            padding: 4px 10px;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            line-height: 1.3;
+            text-align: center;
+            border-radius: 3px;
+            background: rgba(139, 44, 31, 0.03);
+        }
+
+        .theme-a-dossier .highlights-summary-box {
+            background: #faf6ec;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 10px 14px;
+            font-size: 12px;
+            max-width: 260px;
+            text-align: right;
+            line-height: 1.5;
+            color: var(--ink-soft);
+        }
+        .theme-a-dossier .highlights-summary-box strong {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        /* 板块标题：现代工坊细线规范（平整、利落、双轨编号） */
+        .theme-a-dossier .sec-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding-bottom: 8px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--ink);
+            position: relative;
+        }
+
+        .theme-a-dossier .sec-header::after {
+            content: "";
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 42px;
+            height: 2px;
+            background: var(--red);
+        }
+
+        .theme-a-dossier .sec-title-group {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+
+        .theme-a-dossier .sec-no {
+            font-family: var(--mono);
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--red);
+        }
+
+        .theme-a-dossier .sec-title-text {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 1px;
+        }
+
+        .theme-a-dossier .sec-title-en {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            letter-spacing: 1.5px;
+        }
+
+        .theme-a-dossier .sec-desc {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-soft);
+        }
+
+        /* 教育背景栏 */
+        .theme-a-dossier .edu-card {
+            background: #fbf8f2;
+            border: 1px solid var(--line);
+            border-left: 3px solid var(--red);
+            border-radius: 3px;
+            padding: 14px 18px;
+        }
+
+        .theme-a-dossier .edu-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 6px;
+        }
+
+        .theme-a-dossier .edu-school {
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .theme-a-dossier .edu-major {
+            font-size: 14px;
+            color: var(--ink-soft);
+            margin-left: 8px;
+        }
+
+        .theme-a-dossier .edu-period {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--red);
+            font-weight: 600;
+        }
+
+        .theme-a-dossier .edu-courses {
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.6;
+        }
+        .theme-a-dossier .edu-courses strong { color: var(--ink); }
+
+        /* 技能矩阵：彻底解决高低不齐！2列对齐结构卡 */
+        .theme-a-dossier .skills-deck {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .theme-a-dossier .skill-panel {
+            background: #fcfbf7;
+            border: 1px solid var(--line);
+            border-top: 2px solid var(--red);
+            border-radius: 3px;
+            padding: 16px 18px;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.2s ease;
+        }
+
+        .theme-a-dossier .skill-panel:hover {
+            box-shadow: 0 4px 14px rgba(38, 34, 28, 0.08);
+            border-color: rgba(38, 34, 28, 0.28);
+        }
+
+        .theme-a-dossier .skill-panel-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 8px;
+            margin-bottom: 10px;
+            border-bottom: 1px dashed var(--line);
+        }
+
+        .theme-a-dossier .skill-panel-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            font-family: var(--serif);
+        }
+
+        .theme-a-dossier .skill-tag-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            padding: 1px 6px;
+            border-radius: 3px;
+            background: var(--red-soft);
+            color: var(--red);
+            border: 1px solid var(--red-border);
+            font-weight: 600;
+        }
+
+        .theme-a-dossier .skill-items-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            font-size: 13px;
+            line-height: 1.65;
+        }
+
+        .theme-a-dossier .skill-items-list li {
+            position: relative;
+            padding-left: 14px;
+            color: var(--ink);
+        }
+
+        .theme-a-dossier .skill-items-list li::before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-size: 14px;
+            line-height: 1;
+            top: 2px;
+        }
+
+        .theme-a-dossier .skill-items-list strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .theme-a-dossier .evidence-pill {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-soft);
+            background: rgba(38, 34, 28, 0.05);
+            padding: 0 5px;
+            border-radius: 2px;
+            margin-left: 4px;
+            white-space: nowrap;
+        }
+
+        /* 方向切换筛选时的过渡动画与表现 */
+        .theme-a-dossier .skill-panel.is-dimmed {
+            opacity: 0.28;
+            filter: grayscale(80%);
+            border-top-color: #aaa;
+        }
+
+        /* 项目卡片列表 */
+        .theme-a-dossier .projects-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .theme-a-dossier .dossier-proj-item {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            box-shadow: 0 2px 8px rgba(38, 34, 28, 0.04);
+            overflow: hidden;
+            transition: all 0.2s ease;
+        }
+
+        .theme-a-dossier .dossier-proj-item:hover {
+            box-shadow: 0 6px 18px rgba(38, 34, 28, 0.09);
+            border-color: rgba(38, 34, 28, 0.28);
+        }
+
+        .theme-a-dossier .dossier-proj-item.is-flagship {
+            border-left: 4px solid var(--red);
+            background: #fffefb;
+        }
+
+        .theme-a-dossier .proj-top-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 10px;
+            padding: 12px 20px;
+            background: #fbf8f2;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .theme-a-dossier .proj-title-box {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .theme-a-dossier .proj-category-tag {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .theme-a-dossier .proj-heading {
+            font-family: var(--display);
+            font-size: 17.5px;
+            font-weight: 700;
+            color: var(--ink);
+            margin: 0;
+        }
+
+        .theme-a-dossier .proj-role-tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            background: rgba(38, 34, 28, 0.05);
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 1px 7px;
+        }
+
+        .theme-a-dossier .proj-timeline {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+
+        .theme-a-dossier .proj-content-body {
+            padding: 18px 20px;
+        }
+
+        .theme-a-dossier .proj-summary-line {
+            font-size: 14px;
+            color: var(--ink);
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+
+        .theme-a-dossier .proj-metric-callout {
+            background: rgba(139, 44, 31, 0.035);
+            border-left: 2px solid var(--red);
+            padding: 5px 12px;
+            font-size: 12.5px;
+            color: var(--ink);
+            margin-bottom: 12px;
+            font-family: var(--mono);
+        }
+        .theme-a-dossier .proj-metric-callout strong { color: var(--red); }
+
+        .theme-a-dossier .proj-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 14px;
+            font-size: 13.5px;
+            line-height: 1.65;
+        }
+
+        .theme-a-dossier .proj-bullets li {
+            position: relative;
+            padding-left: 16px;
+            color: var(--ink);
+        }
+
+        .theme-a-dossier .proj-bullets li::before {
+            content: "▫";
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-size: 12px;
+            top: -1px;
+        }
+
+        .theme-a-dossier .proj-bullets li strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .theme-a-dossier .proj-footer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--line);
+        }
+
+        .theme-a-dossier .chips-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .theme-a-dossier .tech-chip {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            background: #faf6ec;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            padding: 2px 7px;
+        }
+
+        .theme-a-dossier .links-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-family: var(--mono);
+            font-size: 12.5px;
+        }
+
+        .theme-a-dossier .links-row a {
+            color: var(--red);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .theme-a-dossier .links-row a:hover { text-decoration: underline; }
+
+        /* 知识产权与竞赛 */
+        .theme-a-dossier .honors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .theme-a-dossier .honor-box {
+            background: #fbf8f2;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 18px 20px;
+        }
+
+        .theme-a-dossier .honor-box-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .theme-a-dossier .honor-box-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            font-family: var(--serif);
+        }
+
+        .theme-a-dossier .honor-box-head .count {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--red);
+        }
+
+        .theme-a-dossier .honor-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        .theme-a-dossier .honor-table th {
+            text-align: left;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--line);
+        }
+
+        .theme-a-dossier .honor-table td {
+            padding: 8px 6px;
+            border-bottom: 1px dashed var(--line);
+            color: var(--ink);
+        }
+        .theme-a-dossier .honor-table tr:last-child td { border-bottom: none; }
+
+        .theme-a-dossier .honor-table .reg-code {
+            font-family: var(--mono);
+            color: var(--red);
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .theme-a-dossier .award-rows {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 13px;
+        }
+
+        .theme-a-dossier .award-rows li {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--line);
+        }
+        .theme-a-dossier .award-rows li:last-child { border-bottom: none; }
+
+        .theme-a-dossier .award-rows .aname { color: var(--ink); font-weight: 500; }
+        .theme-a-dossier .award-rows .arank {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--red);
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        /* 尾部说明 */
+        .theme-a-dossier .resume-footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid var(--line);
+            text-align: center;
+            font-size: 12px;
+            color: var(--ink-soft);
+            line-height: 1.8;
+            font-family: var(--mono);
+        }
+
+
+        /* ============================================================
+           方案 B：【双轨工程手札 · 极简时间线与数据风】(theme-b-engineering)
+           特点：左侧贯穿双轨时间轴、关键工程指标(HUD)前置右上角、横向紧凑技术栈条
+           ============================================================ */
+        .theme-b-engineering .main-sheet {
+            background: #faf7f0;
+            border: 2px solid var(--ink);
+            border-radius: 0;
+            box-shadow: 4px 6px 0 rgba(38, 34, 28, 0.15);
+            padding: 34px 40px;
+            position: relative;
+        }
+
+        /* 方案 B 顶部方向切换：工程仪表盘式分段器 (Segmented Switch) */
+        .theme-b-engineering .track-tabs-bar {
+            display: flex;
+            gap: 0;
+            margin-bottom: 20px;
+            background: #e6dfce;
+            border: 2px solid var(--ink);
+            padding: 3px;
+            width: fit-content;
+        }
+
+        .theme-b-engineering .track-tab {
+            background: transparent;
+            border: none;
+            padding: 6px 18px;
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .theme-b-engineering .track-tab.active {
+            background: var(--ink);
+            color: #fff;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        .theme-b-engineering .sheet-status-strip {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--ink);
+            color: #fff;
+            padding: 6px 12px;
+            font-family: var(--mono);
+            font-size: 11px;
+            letter-spacing: 1px;
+            margin-bottom: 24px;
+        }
+        .theme-b-engineering .sheet-status-strip .doc-code { color: #f5b0a4; }
+
+        /* 方案 B 头部：工业仪表化排版 */
+        .theme-b-engineering .profile-header {
+            border: 1px solid var(--ink);
+            background: #fff;
+            padding: 24px 28px;
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 20px;
+            box-shadow: 2px 2px 0 rgba(38, 34, 28, 0.1);
+        }
+
+        .theme-b-engineering .name-title-area h1 {
+            font-family: var(--display);
+            font-size: 32px;
+            color: var(--ink);
+            letter-spacing: 1px;
+            margin-bottom: 4px;
+        }
+
+        .theme-b-engineering .target-role-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #fff4f2;
+            border-left: 3px solid var(--red);
+            padding: 4px 10px;
+            font-family: var(--mono);
+            font-size: 13px;
+            margin: 6px 0 14px;
+        }
+        .theme-b-engineering .target-role-pill .label { color: var(--ink-soft); font-size: 11px; }
+        .theme-b-engineering .target-role-pill .value { color: var(--red); font-weight: 700; }
+
+        .theme-b-engineering .profile-meta-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px 16px;
+            font-size: 12.5px;
+            border-top: 1px solid var(--line);
+            padding-top: 12px;
+        }
+
+        .theme-b-engineering .meta-cell .k {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-soft);
+        }
+        .theme-b-engineering .meta-cell .v { font-weight: 600; color: var(--ink); }
+
+        .theme-b-engineering .profile-badge-side {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            align-items: flex-end;
+        }
+
+        .theme-b-engineering .sys-indicator {
+            background: rgba(139, 44, 31, 0.08);
+            border: 1px solid var(--red);
+            color: var(--red);
+            padding: 4px 10px;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        /* 方案 B 章节标题：带工坊经典的黑红双轨标尺 */
+        .theme-b-engineering .sec-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 6px 0;
+            margin-bottom: 16px;
+            border-top: 2px solid var(--ink);
+            border-bottom: 1px solid var(--ink);
+        }
+
+        .theme-b-engineering .sec-title-group {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-b-engineering .sec-no {
+            background: var(--red);
+            color: #fff;
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            padding: 2px 6px;
+        }
+
+        .theme-b-engineering .sec-title-text {
+            font-family: var(--serif);
+            font-size: 17px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 2px;
+        }
+
+        .theme-b-engineering .sec-title-en {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        /* 方案 B 教育背景 */
+        .theme-b-engineering .edu-card {
+            border: 1px solid var(--line);
+            background: #fff;
+            padding: 12px 16px;
+            margin-bottom: 10px;
+        }
+        .theme-b-engineering .edu-top {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 4px;
+        }
+        .theme-b-engineering .edu-school { font-weight: 700; font-size: 15px; }
+        .theme-b-engineering .edu-major { color: var(--ink-soft); font-size: 13.5px; margin-left: 8px; }
+        .theme-b-engineering .edu-period { font-family: var(--mono); font-size: 12px; color: var(--red); }
+        .theme-b-engineering .edu-courses { font-size: 12.5px; color: var(--ink-soft); }
+
+        /* 方案 B 技能矩阵：横向紧凑条带 (Horizontal Tech Bands) - 极大节省空间且严整 */
+        .theme-b-engineering .skills-deck {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .theme-b-engineering .skill-panel {
+            background: #fff;
+            border: 1px solid var(--line);
+            display: grid;
+            grid-template-columns: 190px 1fr;
+            transition: all 0.18s ease;
+        }
+
+        .theme-b-engineering .skill-panel:hover {
+            border-color: var(--ink);
+            box-shadow: 2px 2px 0 rgba(38,34,28,0.1);
+        }
+
+        .theme-b-engineering .skill-panel-head {
+            background: #f4ede0;
+            border-right: 1px solid var(--line);
+            padding: 12px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .theme-b-engineering .skill-panel-title {
+            font-size: 14px;
+            font-weight: 700;
+            font-family: var(--serif);
+            color: var(--ink);
+        }
+
+        .theme-b-engineering .skill-tag-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .theme-b-engineering .skill-items-list {
+            padding: 10px 16px;
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 12.5px;
+        }
+
+        .theme-b-engineering .skill-items-list li {
+            position: relative;
+            padding-left: 12px;
+        }
+        .theme-b-engineering .skill-items-list li::before {
+            content: "■";
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-size: 7px;
+            top: 5px;
+        }
+
+        .theme-b-engineering .skill-panel.is-dimmed {
+            opacity: 0.25;
+            filter: grayscale(100%);
+        }
+
+        /* 方案 B 项目：左侧时间线轨道 (Timeline Track) */
+        .theme-b-engineering .projects-flow {
+            position: relative;
+            padding-left: 24px;
+            border-left: 2px solid var(--red);
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+            margin-left: 8px;
+        }
+
+        .theme-b-engineering .dossier-proj-item {
+            position: relative;
+            background: #fff;
+            border: 1px solid var(--ink);
+            box-shadow: 2px 3px 0 rgba(38, 34, 28, 0.12);
+        }
+
+        /* 时间线小节点 */
+        .theme-b-engineering .dossier-proj-item::before {
+            content: "";
+            position: absolute;
+            left: -31px;
+            top: 14px;
+            width: 12px;
+            height: 12px;
+            background: #fff;
+            border: 3px solid var(--red);
+            border-radius: 50%;
+        }
+
+        .theme-b-engineering .proj-top-banner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f6efe2;
+            border-bottom: 1px solid var(--ink);
+            padding: 10px 16px;
+        }
+
+        .theme-b-engineering .proj-title-box {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .theme-b-engineering .proj-heading {
+            font-size: 16.5px;
+            font-weight: 700;
+        }
+
+        .theme-b-engineering .proj-content-body { padding: 16px; }
+
+        .theme-b-engineering .proj-metric-callout {
+            background: #26221c;
+            color: #fff;
+            padding: 4px 10px;
+            font-family: var(--mono);
+            font-size: 12px;
+            margin-bottom: 12px;
+        }
+        .theme-b-engineering .proj-metric-callout strong { color: #f5b0a4; }
+
+        .theme-b-engineering .proj-bullets {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+            font-size: 13px;
+            margin-bottom: 12px;
+        }
+
+        .theme-b-engineering .proj-bullets li {
+            position: relative;
+            padding-left: 14px;
+        }
+        .theme-b-engineering .proj-bullets li::before {
+            content: "▶";
+            position: absolute;
+            left: 0;
+            color: var(--red);
+            font-size: 8px;
+            top: 4px;
+        }
+
+        .theme-b-engineering .proj-footer-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 10px;
+            border-top: 1px solid var(--line);
+        }
+
+        .theme-b-engineering .tech-chip {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            border: 1px solid var(--ink);
+            background: #fff;
+            padding: 1px 6px;
+        }
+
+        .theme-b-engineering .honors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .theme-b-engineering .honor-box {
+            border: 1px solid var(--ink);
+            background: #fff;
+            padding: 14px;
+        }
+        .theme-b-engineering .honor-box-head {
+            display: flex;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--ink);
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+        .theme-b-engineering .honor-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+        .theme-b-engineering .honor-table th { text-align: left; font-family: var(--mono); font-size: 10.5px; border-bottom: 1px solid var(--line); padding: 4px; }
+        .theme-b-engineering .honor-table td { padding: 6px 4px; border-bottom: 1px dashed var(--line); }
+        .theme-b-engineering .award-rows { list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 12.5px; }
+        .theme-b-engineering .award-rows li { display: flex; justify-content: space-between; border-bottom: 1px dashed var(--line); padding: 4px 0; }
+        .theme-b-engineering .award-rows .arank { font-family: var(--mono); color: var(--red); font-size: 11px; }
+
+        .theme-b-engineering .resume-footer {
+            margin-top: 40px;
+            border-top: 2px solid var(--ink);
+            padding-top: 16px;
+            text-align: center;
+            font-family: var(--mono);
+            font-size: 11.5px;
+            color: var(--ink-soft);
+        }
+
+
+        /* ============================================================
+           方案 C：【编年刊物排印 · 经典报章风】(theme-c-gazette)
+           特点：FT/经济学人式的严谨双线报头、经典衬线、版面通透大度、高密度且优雅
+           ============================================================ */
+        .theme-c-gazette .main-sheet {
+            background: #fffefb;
+            border: 1px solid rgba(38, 34, 28, 0.25);
+            padding: 42px 48px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+        }
+
+        .theme-c-gazette .track-tabs-bar {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 12px;
+        }
+
+        .theme-c-gazette .track-tab {
+            background: transparent;
+            border: none;
+            font-family: var(--serif);
+            font-size: 14px;
+            color: var(--ink-soft);
+            cursor: pointer;
+            padding: 4px 12px;
+            position: relative;
+            letter-spacing: 1px;
+            transition: all 0.15s ease;
+        }
+
+        .theme-c-gazette .track-tab:hover { color: var(--ink); }
+
+        .theme-c-gazette .track-tab.active {
+            color: var(--red);
+            font-weight: 700;
+        }
+
+        .theme-c-gazette .track-tab.active::after {
+            content: "◆";
+            position: absolute;
+            bottom: -13px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 10px;
+            color: var(--red);
+            background: #fffefb;
+            padding: 0 4px;
+        }
+
+        .theme-c-gazette .gazette-banner {
+            text-align: center;
+            border-top: 3px double var(--ink);
+            border-bottom: 1px solid var(--ink);
+            padding: 12px 0;
+            margin-bottom: 28px;
+        }
+
+        .theme-c-gazette .gazette-banner h1 {
+            font-family: var(--serif);
+            font-size: 38px;
+            letter-spacing: 6px;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+
+        .theme-c-gazette .gazette-sub-strip {
+            display: flex;
+            justify-content: center;
+            gap: 18px;
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+            flex-wrap: wrap;
+        }
+
+        .theme-c-gazette .profile-meta-row {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 16px;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--line);
+            margin-bottom: 30px;
+            font-size: 13px;
+        }
+
+        .theme-c-gazette .sec-header {
+            text-align: center;
+            border-bottom: 1px solid var(--ink);
+            position: relative;
+            margin-bottom: 22px;
+            padding-bottom: 6px;
+        }
+
+        .theme-c-gazette .sec-title-text {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 4px;
+            color: var(--ink);
+            background: #fffefb;
+            padding: 0 16px;
+            position: relative;
+            top: 9px;
+        }
+
+        .theme-c-gazette .sec-no { display: none; }
+        .theme-c-gazette .sec-title-en { display: none; }
+        .theme-c-gazette .sec-desc { display: none; }
+
+        .theme-c-gazette .edu-card {
+            border: 1px solid var(--line);
+            padding: 16px;
+            background: #faf6ec;
+            margin-bottom: 20px;
+        }
+
+        .theme-c-gazette .skills-deck {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 16px;
+        }
+
+        .theme-c-gazette .skill-panel {
+            border: 1px solid var(--line);
+            padding: 16px;
+            background: #fff;
+        }
+
+        .theme-c-gazette .projects-flow {
+            display: flex;
+            flex-direction: column;
+            gap: 22px;
+        }
+
+        .theme-c-gazette .dossier-proj-item {
+            border: 1px solid var(--line);
+            padding: 20px;
+            background: #fff;
+        }
+
+        .theme-c-gazette .proj-top-banner {
+            border-bottom: 1px solid var(--line);
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+        }
+
+        .theme-c-gazette .honors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .theme-c-gazette .honor-box {
+            border: 1px solid var(--line);
+            padding: 16px;
+        }
+
+        .theme-c-gazette .resume-footer {
+            margin-top: 40px;
+            border-top: 3px double var(--ink);
+            padding-top: 16px;
+            text-align: center;
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+
+        /* ============================================================
+           响应式退化规则 (Mobile & Narrow Screen)
+           ============================================================ */
+        @media (max-width: 820px) {
+            .theme-a-dossier .main-sheet,
+            .theme-b-engineering .main-sheet,
+            .theme-c-gazette .main-sheet {
+                padding: 20px 16px;
+            }
+
+            .theme-a-dossier .profile-header,
+            .theme-b-engineering .profile-header {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-a-dossier .profile-meta-row,
+            .theme-b-engineering .profile-meta-row {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .theme-a-dossier .skills-deck,
+            .theme-a-dossier .honors-grid,
+            .theme-b-engineering .honors-grid,
+            .theme-c-gazette .honors-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .theme-b-engineering .skill-panel {
+                grid-template-columns: 1fr;
+            }
+            .theme-b-engineering .skill-panel-head {
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+        }
+    </style>
+</head>
+<body class="theme-a-dossier" id="proposal-body">
+
+    <!-- ============================================================
+         方案对比控制台 (常驻吸顶，供用户直观比较三个方向)
+         ============================================================ -->
+    <header class="proposal-bar">
+        <div class="proposal-bar-inner">
+            <div class="proposal-title-group">
+                <span class="proposal-badge">DESIGN PREVIEW</span>
+                <span class="proposal-title">简历视觉优化方案对比</span>
+            </div>
+
+            <!-- 方案切换 -->
+            <nav class="proposal-nav">
+                <button type="button" class="proposal-btn active" data-theme="theme-a-dossier">
+                    <span>✨ 方案 A: 现代精炼档案 (推荐)</span>
+                </button>
+                <button type="button" class="proposal-btn" data-theme="theme-b-engineering">
+                    <span>📐 方案 B: 双轨工程手札</span>
+                </button>
+                <button type="button" class="proposal-btn" data-theme="theme-c-gazette">
+                    <span>📰 方案 C: 经典报刊排印</span>
+                </button>
+            </nav>
+
+            <!-- 辅助工具 -->
+            <div class="proposal-tools">
+                <button type="button" class="proposal-tool-btn" id="toggle-drawer-btn">💡 方案核心差异对比</button>
+                <button type="button" class="proposal-tool-btn" onclick="window.print()">🖨️ 打印预览</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- 方案解析展开抽屉 -->
+    <div class="proposal-drawer" id="proposal-drawer">
+        <div class="drawer-content">
+            <div class="drawer-card">
+                <h4>✨ 方案 A: 现代精炼档案卷 (推荐)</h4>
+                <p>将“工坊暖纸”做出现代高精工业设计感。彻底抛弃手账式的歪斜与胶带，建立纯粹利落的阅读网格。</p>
+                <ul>
+                    <li><strong>视线归正：</strong>移除所有 -0.18deg 歪斜与塑料胶带，文字对齐稳健。</li>
+                    <li><strong>标签签条：</strong>顶部卡槽式 Tabs 平滑切换，告别笨重牛皮纸袋与抽纸闪烁。</li>
+                    <li><strong>等高技能卡：</strong>2 列严整布局，技能要点+项目溯源标签一目了然。</li>
+                    <li><strong>最佳受众：</strong>大厂/高标准技术团队，兼顾工坊特色与顶级专业度。</li>
+                </ul>
+            </div>
+            <div class="drawer-card">
+                <h4>📐 方案 B: 双轨工程手札 (数据与时间线)</h4>
+                <p>强化系统研发者与架构师的交付日志质感，强调结构化、时间轴与数据量化指标。</p>
+                <ul>
+                    <li><strong>双轨时间轴：</strong>左侧贯穿红色时间线标尺，强化项目编年次序。</li>
+                    <li><strong>工程指标仪表：</strong>将代码行数、mAP 指标等前置为黑色数据框。</li>
+                    <li><strong>横向技术条：</strong>紧凑高效的一行式技术栈条带，极致利用屏幕空间。</li>
+                    <li><strong>最佳受众：</strong>注重系统级架构、工程代码量与工程交付严谨度的面试官。</li>
+                </ul>
+            </div>
+            <div class="drawer-card">
+                <h4>📰 方案 C: 经典报刊编年风</h4>
+                <p>承袭 ZLOONG 工房《hanako 箱庭日报》报头墙的排印美学，兼顾极高信息密度。</p>
+                <ul>
+                    <li><strong>双线报头：</strong>经典的学术与严肃出版物排版，庄重沉稳。</li>
+                    <li><strong>居中对称：</strong>多栏优雅排印，文字字重阶梯精细。</li>
+                    <li><strong>最佳受众：</strong>喜欢高雅人文感、文字排印严谨的筛选者。</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+         主履历页面内容区 (100% 真实数据展现)
+         ============================================================ -->
+    <div class="dossier-wrap">
+
+        <!-- 门牌 -->
+        <div class="sub-eyebrow">
+            <span>ZLOONG 工房 · 技术履历 <span class="live">● 档案常新</span></span>
+            <span id="today">2026年10月 · 履历审阅</span>
+            <span class="eyebrow-actions">
+                <button type="button" class="resume-print-btn" onclick="window.print()">🖨️ 导出 PDF</button>
+                <a href="../index.html">返回工房工作台</a>
+            </span>
+        </div>
+
+        <!-- 方案切换的标签 Bar：3 档方向筛选 (AI / 游戏 / 全景) -->
+        <div class="track-tabs-bar" id="track-tabs">
+            <button type="button" class="track-tab active" data-track="ai">🎯 AI 应用开发 (主修)</button>
+            <button type="button" class="track-tab" data-track="game">🎮 游戏与系统工程</button>
+            <button type="button" class="track-tab" data-track="all">📋 完整全景履历</button>
+        </div>
+
+        <!-- 核心阅读纸本体 -->
+        <main class="main-sheet">
+
+            <!-- 纸顶档案编号 -->
+            <div class="sheet-status-strip">
+                <span class="doc-code" id="paper-file-no">FILE / AI-2026 · 主修方向</span>
+                <span id="paper-stack-no">STACK 1 / 3 · 权威档案</span>
+            </div>
+
+            <!-- 头部：个人档案卡片 -->
+            <header class="profile-header">
+                <div class="name-title-area">
+                    <h1>徐同学 <span class="en-tag">ZLOONG</span></h1>
+                    <div class="target-role-pill">
+                        <span class="label">求职意向：</span>
+                        <span class="value" id="target-role-text">AI 应用开发实习 / 大模型应用开发实习</span>
+                        <span class="state hot" style="margin-left:6px;">寻找实习中</span>
+                    </div>
+
+                    <div class="profile-meta-row">
+                        <div class="meta-cell">
+                            <span class="k">院校/学历:</span>
+                            <span class="v">西北农林科技大学 (985) · 本科</span>
+                        </div>
+                        <div class="meta-cell">
+                            <span class="k">院系/专业:</span>
+                            <span class="v">信息工程学院 · 计算机科学与技术</span>
+                        </div>
+                        <div class="meta-cell">
+                            <span class="k">联系邮箱:</span>
+                            <span class="v">
+                                <a href="mailto:3248569738@qq.com">3248569738@qq.com</a>
+                                <button type="button" class="email-copy-pill" data-email="3248569738@qq.com">复制</button>
+                            </span>
+                        </div>
+                        <div class="meta-cell">
+                            <span class="k">技术主站:</span>
+                            <span class="v"><a href="https://dragonzhi.xyz" target="_blank" rel="noreferrer">dragonzhi.xyz (ZLOONG 工房)</a></span>
+                        </div>
+                        <div class="meta-cell">
+                            <span class="k">代码托管:</span>
+                            <span class="v"><a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">github.com/Dragonzhi</a></span>
+                        </div>
+                        <div class="meta-cell">
+                            <span class="k">B 站创作:</span>
+                            <span class="v"><a href="https://space.bilibili.com/304097408" target="_blank" rel="noreferrer">3 万粉丝 · 累计播放 480 万+</a></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-badge-side">
+                    <div class="seal-box">
+                        履历<br>RESUME
+                    </div>
+                    <div class="highlights-summary-box">
+                        <strong>硬核资质背书：</strong><br>
+                        3 项国家软件著作权<br>
+                        国家级大创 · 省级一等奖
+                    </div>
+                </div>
+            </header>
+
+            <!-- 01 · 教育背景 -->
+            <section class="resume-section">
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">01</span>
+                        <h2 class="sec-title-text">教育背景</h2>
+                        <span class="sec-title-en">EDUCATION</span>
+                    </div>
+                    <span class="sec-desc samp">2024.09 – 2028.06 · 全日制统招本科</span>
+                </div>
+
+                <div class="edu-card">
+                    <div class="edu-top">
+                        <div>
+                            <span class="edu-school">西北农林科技大学 (NWAFU · 985)</span>
+                            <span class="edu-major">信息工程学院 · 计算机科学与技术</span>
+                        </div>
+                        <span class="edu-period samp">大三在读 · 2028届</span>
+                    </div>
+                    <div class="edu-courses">
+                        <strong>核心专业课：</strong>数据结构、算法设计与分析、操作系统、计算机网络、数据库原理与应用、编译原理、计算机组成原理、C语言程序设计、离散数学
+                    </div>
+                </div>
+            </section>
+
+            <!-- 02 · 核心技术矩阵 -->
+            <section class="resume-section">
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">02</span>
+                        <h2 class="sec-title-text">核心技术矩阵</h2>
+                        <span class="sec-title-en">SKILLS MATRIX</span>
+                    </div>
+                    <span class="sec-desc samp">按项目溯源 · 拒绝无依八股</span>
+                </div>
+
+                <div class="skills-deck" id="skills-matrix">
+                    <!-- 技能 1 -->
+                    <div class="skill-panel" data-cat="ai">
+                        <div class="skill-panel-head">
+                            <h3 class="skill-panel-title">LLM / AI 应用工程</h3>
+                            <span class="skill-tag-badge">CORE</span>
+                        </div>
+                        <ul class="skill-items-list">
+                            <li>
+                                <strong>结构化输出契约：</strong>pydantic 定义 route schema 为生成/编辑/导出三端契约，校验失败回灌重试自我修复环<span class="evidence-pill">[IterTrip]</span>
+                            </li>
+                            <li>
+                                <strong>高可靠降级与容错：</strong>六级坐标降级链（用户记忆→高德POI→模型知识→搜索兜底→中心表→失败）+ 区域闸门与锚点纠偏<span class="evidence-pill">[IterTrip]</span>
+                            </li>
+                            <li>
+                                <strong>确定性逻辑消除幻觉：</strong>闭馆日冲突计算采用零 LLM、零网络的纯算术模块（坚守不引入新幻觉准则）<span class="evidence-pill">[IterTrip]</span>
+                            </li>
+                            <li>
+                                <strong>自建 RAG 长期记忆库：</strong>实体级切分 + fastembed 本地向量化（512维）+ SQLite 单文件向量检索<span class="evidence-pill">[IterTrip]</span>
+                            </li>
+                            <li>
+                                <strong>流式可观测工程：</strong>SSE 逐帧透传 60 步决策轨迹（event: trace），静默兜底一律升级为可见工程决策<span class="evidence-pill">[IterTrip]</span>
+                            </li>
+                            <li>
+                                <strong>多模型接入编排：</strong>Coze 工作流编排、豆包视觉推理与文生图、多角色 Persona 配置与情绪驱动<span class="evidence-pill">[木偶助手/弹幕鸭]</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 技能 2 -->
+                    <div class="skill-panel" data-cat="ai-backend">
+                        <div class="skill-panel-head">
+                            <h3 class="skill-panel-title">后端服务与协议</h3>
+                            <span class="skill-tag-badge">BACKEND</span>
+                        </div>
+                        <ul class="skill-items-list">
+                            <li>
+                                <strong>Web 框架与异步：</strong>Python (FastAPI, Flask, WebSocket, httpx, SQLAlchemy, SQLite)<span class="evidence-pill">[IterTrip/羊肚菌]</span>
+                            </li>
+                            <li>
+                                <strong>纯标准库零依赖服务：</strong>手写 Python 纯标准库 Web 服务（710行，HMAC 恒时比较防时序攻击）<span class="evidence-pill">[hanako日报站]</span>
+                            </li>
+                            <li>
+                                <strong>协议逆向与流解析：</strong>抖音直播弹幕 wss signature 计算与 protobuf 消息体二进制解包，打通实时链路<span class="evidence-pill">[弹幕鸭]</span>
+                            </li>
+                            <li>
+                                <strong>定时自动化流水线：</strong>APScheduler 定时采集、核验、Markdown 树型渲染与自动归档（50+ 期无断更）<span class="evidence-pill">[hanako/QQ-bot]</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 技能 3 -->
+                    <div class="skill-panel" data-cat="frontend">
+                        <div class="skill-panel-head">
+                            <h3 class="skill-panel-title">前端工程与可视化</h3>
+                            <span class="skill-tag-badge">FRONTEND</span>
+                        </div>
+                        <ul class="skill-items-list">
+                            <li>
+                                <strong>现代化前端生态：</strong>React 18、Vite、TypeScript、Tailwind CSS、Leaflet 瓦片地图路径渲染<span class="evidence-pill">[IterTrip]</span>
+                            </li>
+                            <li>
+                                <strong>响应式与状态管理：</strong>Vue 3 + TypeScript 可视化配置面板、Web Audio API 语音流式合成播放<span class="evidence-pill">[弹幕鸭]</span>
+                            </li>
+                            <li>
+                                <strong>原生排印规范：</strong>纯原生 HTML5/CSS3（CSS变量、Flexbox/Grid、A4打印排版），坚守轻量性能<span class="evidence-pill">[工房主站]</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 技能 4 -->
+                    <div class="skill-panel" data-cat="game">
+                        <div class="skill-panel-head">
+                            <h3 class="skill-panel-title">游戏研发与系统工程</h3>
+                            <span class="skill-tag-badge">GAMES</span>
+                        </div>
+                        <ul class="skill-items-list">
+                            <li>
+                                <strong>Godot 4 引擎：</strong>GDScript、Resource (.tres) 数据驱动设计、Autoload 信号解耦、对象池与 A* 寻路<span class="evidence-pill">[免疫联结]</span>
+                            </li>
+                            <li>
+                                <strong>自研编辑器插件：</strong>使用 Godot EditorPlugin + GraphEdit 研发节点式叙事编辑器，实现策划改数不碰代码<span class="evidence-pill">[智能优化中]</span>
+                            </li>
+                            <li>
+                                <strong>Minecraft Forge 模组：</strong>Kotlin/Java 开发，3D 实体角速度物理、Set 算法烟雾生成、TACZ 穿烟判定<span class="evidence-pill">[CSG模组]</span>
+                            </li>
+                            <li>
+                                <strong>多语言工程基础：</strong>C++、C# (Unity 2D 火影项目角色技能机)、Python、Kotlin 均有上线交付成果。
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- 技能 5 -->
+                    <div class="skill-panel" data-cat="eng" style="grid-column: 1 / -1;">
+                        <div class="skill-panel-head">
+                            <h3 class="skill-panel-title">工程化与跨职能交付素养</h3>
+                            <span class="skill-tag-badge">DELIVERY</span>
+                        </div>
+                        <ul class="skill-items-list" style="display:grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 10px;">
+                            <li>
+                                <strong>跨职能团队管理：</strong>担任 8 人 GameJam 队伍程序负责人兼队长，主导交付文档，推行数值契约走 PR 评审<span class="evidence-pill">[金海豚大赛]</span>
+                            </li>
+                            <li>
+                                <strong>容器化生产运维：</strong>Docker 镜像打包轻量隔离、Nginx 反向代理配置、腾讯云 Linux 自托管运维实践<span class="evidence-pill">[IterTrip部署]</span>
+                            </li>
+                            <li>
+                                <strong>开源活跃度：</strong>近一年 GitHub 1,900+ Commits、Pull Shark ×2 徽章，高度自驱。
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 03 · 重点项目经历 -->
+            <section class="resume-section">
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">03</span>
+                        <h2 class="sec-title-text">重点项目经历</h2>
+                        <span class="sec-title-en">KEY PROJECTS</span>
+                    </div>
+                    <span class="sec-desc samp">可复现代码量 · 在线可测</span>
+                </div>
+
+                <div class="projects-flow" id="projects-list">
+
+                    <!-- 项目 1：IterTrip (主打项目) -->
+                    <article class="dossier-proj-item is-flagship" data-cat="ai">
+                        <div class="proj-top-banner">
+                            <div class="proj-title-box">
+                                <span class="proj-category-tag">主打工程 · AI应用</span>
+                                <h3 class="proj-heading">IterTrip — AI 旅行攻略结构化落地应用</h3>
+                                <span class="proj-role-tag">独立开发 (全栈+部署)</span>
+                                <span class="state hot">已真实部署上线</span>
+                            </div>
+                            <div class="proj-timeline">2026.08 – 至今 (持续迭代至 M24)</div>
+                        </div>
+
+                        <div class="proj-content-body">
+                            <p class="proj-summary-line">
+                                解决旅游碎片攻略非结构化痛点：将图文截图与长文本智能解析提取为严格结构化路线，并在交互式地图上呈现；支持自然语言多轮编辑、手动拖拽与一键导出。
+                            </p>
+                            <div class="proj-metric-callout">
+                                <strong>代码规模实测（git 追踪口径）：</strong>约 <strong>1.34 万行</strong>（后端 Python 4,824 行/29模块 + 前端 TS/TSX 6,619 行/43文件 + 导出模板；另有 1.3 万行验证套件与探针）
+                            </div>
+                            <ul class="proj-bullets">
+                                <li>
+                                    <strong>结构化契约与闭环自我修复：</strong>基于 pydantic 定义 route JSON schema 作为生成/编辑/导出三端唯一数据契约；结合 Agent 反思重试机制，在模型输出校验失败时携带精准错误信息回灌纠错，构建可靠的闭环自愈环路。
+                                </li>
+                                <li>
+                                    <strong>高可靠六级坐标降级链路与熔断：</strong>确立「可信度优先」的六级降级架构（用户记忆真值 → 高德 POI 检索 → 模型知识库 → 联网搜索兜底 → 城市中心表 → 明确报错），每级打上来源徽标；配备高德 8s 超时与单路线 40 次配额熔断。
+                                </li>
+                                <li>
+                                    <strong>主动核验与区域闸门防御：</strong>对模型产出坐标直查高德核验，偏差 ≤1.5km 自动校正（消除模型 113m~1.2km 同城偏差）；设置地理省市闸门（≤200km 锚点）智能拦截同名误匹配，成功杜绝异地同名地点漂移事故。
+                                </li>
+                                <li>
+                                    <strong>确定性代码消除幻觉：</strong>闭馆日冲突检查刻意设计为<strong>零 LLM、零网络</strong>的纯算术模块（坚守“治理幻觉的第一原则是绝不引入新幻觉”）；出发日期推断显式标记“推断可改”，无法判定如实提示。
+                                </li>
+                                <li>
+                                    <strong>实体级 RAG 长期记忆库：</strong>按 place_card 实体级切分攻略，通过本地 fastembed (bge-small-zh-v1.5) 生成 512 维向量，结合 SQLite 向量索引实现精准检索注入（严格限制 ≤6 条/≤1200 字防上下文污染）。
+                                </li>
+                                <li>
+                                    <strong>SSE 决策轨迹可观测工程：</strong>流式推送 <code>event: trace</code> 决策轨迹，前端可视化呈现可折叠「🧭 决策过程」（包含模型选型、记忆命中、坐标来源等），将黑盒静默兜底升级为透明工程决策。
+                                </li>
+                            </ul>
+
+                            <div class="proj-footer-bar">
+                                <div class="chips-row">
+                                    <span class="tech-chip">FastAPI</span>
+                                    <span class="tech-chip">React 18</span>
+                                    <span class="tech-chip">TypeScript</span>
+                                    <span class="tech-chip">Leaflet瓦片地图</span>
+                                    <span class="tech-chip">SQLite 向量检索</span>
+                                    <span class="tech-chip">SSE流式</span>
+                                    <span class="tech-chip">高德API</span>
+                                    <span class="tech-chip">Docker</span>
+                                </div>
+                                <div class="links-row">
+                                    <a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer">在线体验 ↗</a>
+                                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub 主页 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 项目 2：弹幕鸭 -->
+                    <article class="dossier-proj-item" data-cat="ai">
+                        <div class="proj-top-banner">
+                            <div class="proj-title-box">
+                                <span class="proj-category-tag">工程实践 · 02</span>
+                                <h3 class="proj-heading">弹幕鸭 (dycast-reply) — AI 直播弹幕交互工具</h3>
+                                <span class="proj-role-tag">二次开发 (基于开源 dycast)</span>
+                                <span class="state calm">开源工具</span>
+                            </div>
+                            <div class="proj-timeline">2025</div>
+                        </div>
+                        <div class="proj-content-body">
+                            <p class="proj-summary-line">
+                                面向直播场景的 AI 伴播互动工具：实时捕获直播间弹幕，经过智能清洗与过滤后，驱动大模型回复、阿里云语音合成 (TTS) 播报并同步触发 CSS 角色情绪头像动画。
+                            </p>
+                            <ul class="proj-bullets">
+                                <li>
+                                    <strong>弹幕逆向协议解析：</strong>实现 WebSocket 握手签名 (wss signature) 计算与二进制 protobuf 消息体解包，打通高频实时弹幕抓取链路。
+                                </li>
+                                <li>
+                                    <strong>双响应机制与多角色架构：</strong>设计“关键词规则优先 + LLM 自由问答”双模式架构；构建多 Persona 配置系统，支持按主播风格动态热切换回复人设。
+                                </li>
+                                <li>
+                                    <strong>多模态情绪联动：</strong>模型生成文本同时输出情绪标签 (mood)，在前端通过 Web Audio API 流式播放 WAV 语音的同时驱动头像 CSS 骨骼帧动画，实现声画一体反馈。
+                                </li>
+                            </ul>
+                            <div class="proj-footer-bar">
+                                <div class="chips-row">
+                                    <span class="tech-chip">Python</span>
+                                    <span class="tech-chip">Vue 3</span>
+                                    <span class="tech-chip">TypeScript</span>
+                                    <span class="tech-chip">DashScope TTS</span>
+                                    <span class="tech-chip">Protobuf</span>
+                                    <span class="tech-chip">WebSocket</span>
+                                </div>
+                                <div class="links-row">
+                                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub 源码 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 项目 3：合阳提线木偶小助手 -->
+                    <article class="dossier-proj-item" data-cat="ai">
+                        <div class="proj-top-banner">
+                            <div class="proj-title-box">
+                                <span class="proj-category-tag">软著落地 · 03</span>
+                                <h3 class="proj-heading">合阳提线木偶小助手 — 非遗 AI 创作共创应用</h3>
+                                <span class="proj-role-tag">队长 / 第一作者</span>
+                                <span class="state hot">国家软著 · 省级一等奖</span>
+                            </div>
+                            <div class="proj-timeline">2025 – 2026</div>
+                        </div>
+                        <div class="proj-content-body">
+                            <p class="proj-summary-line">
+                                基于扣子 Coze 平台编排的多模态非遗文化 AI 助手，面向创作者与大众提供剧本工坊、文化文生图、木偶识别解读与非遗垂直 RAG 知识问答四大功能。
+                            </p>
+                            <ul class="proj-bullets">
+                                <li>
+                                    <strong>端到端工作流编排：</strong>串联豆包 1.5 Pro 视觉模型、DeepSeek 系列模型与文生图管线；自建 6 类合阳非遗垂直结构化知识库，实现高相关度文化内容生成。
+                                </li>
+                                <li>
+                                    <strong>软著成果与竞赛落地：</strong>独立负责核心 Python 逻辑编写与工作流拓扑编排，获<strong>乡村振兴非遗创新赋能大赛一等奖</strong>，成功取得国家软件著作权（登记号：<code>2026SR0131171</code>）。
+                                </li>
+                            </ul>
+                            <div class="proj-footer-bar">
+                                <div class="chips-row">
+                                    <span class="tech-chip">Coze 工作流</span>
+                                    <span class="tech-chip">Python</span>
+                                    <span class="tech-chip">RAG 知识库</span>
+                                    <span class="tech-chip">视觉推理</span>
+                                    <span class="tech-chip">文生图</span>
+                                </div>
+                                <div class="links-row">
+                                    <span style="color:var(--ink-soft);font-size:12px;">软著登记号: 2026SR0131171</span>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 项目 4：智能优化中 (游戏与系统主打) -->
+                    <article class="dossier-proj-item" data-cat="game">
+                        <div class="proj-top-banner">
+                            <div class="proj-title-box">
+                                <span class="proj-category-tag">游戏主打 · 队长</span>
+                                <h3 class="proj-heading">智能优化中 (OPTIMIZED) — 反乌托邦像素叙事游戏</h3>
+                                <span class="proj-role-tag">程序负责人兼队长 (8人队伍)</span>
+                                <span class="state hot">好游快爆上线</span>
+                            </div>
+                            <div class="proj-timeline">2026.07 (21天极限开发)</div>
+                        </div>
+                        <div class="proj-content-body">
+                            <p class="proj-summary-line">
+                                金海豚 2026 游戏大赛参赛作品：反乌托邦多结局叙事游戏。玩家扮演被 AI 优化后返聘的“训练师”，在试用期内平衡人性与产出，选择驱动“侵蚀值”决定可见世界真相与分支结局。
+                            </p>
+                            <ul class="proj-bullets">
+                                <li>
+                                    <strong>自研 Godot 节点式叙事编辑器：</strong>基于 Godot 4 自研 EditorPlugin 编辑器插件，利用 GraphEdit 实现可视化拼装任务图谱并直接导出 JSON 数据，实现“策划改数值不碰代码”。
+                                </li>
+                                <li>
+                                    <strong>高压项目管理与交付：</strong>作为队长与主程，在 21 天 GameJam 节奏下制定跨职能数值契约与 PR 规范，完成全套程序交付文档与边界用例自检，已在好游快爆官方上线并开放试玩。
+                                </li>
+                            </ul>
+                            <div class="proj-footer-bar">
+                                <div class="chips-row">
+                                    <span class="tech-chip">Godot 4</span>
+                                    <span class="tech-chip">GDScript</span>
+                                    <span class="tech-chip">自研 EditorPlugin</span>
+                                    <span class="tech-chip">数据驱动</span>
+                                    <span class="tech-chip">项目管理</span>
+                                </div>
+                                <div class="links-row">
+                                    <a href="https://www.3839.com/a/201212.htm" target="_blank" rel="noreferrer">好游快爆试玩 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                    <!-- 项目 5：免疫联结 -->
+                    <article class="dossier-proj-item" data-cat="game">
+                        <div class="proj-top-banner">
+                            <div class="proj-title-box">
+                                <span class="proj-category-tag">获奖游戏代表作</span>
+                                <h3 class="proj-heading">免疫联结 ImmuneLink — 2D 桥梁网络塔防</h3>
+                                <span class="proj-role-tag">独立开发 (设计+程序+美术)</span>
+                                <span class="state">卡赢杯最佳创意游戏奖</span>
+                            </div>
+                            <div class="proj-timeline">2025</div>
+                        </div>
+                        <div class="proj-content-body">
+                            <p class="proj-summary-line">
+                                2025 卡赢杯公益游戏开发大赛获奖作品：以“桥梁”为核心玩法的创新塔防——桥梁既是需要保护的目标，也是生命管道与可升级防御设施；支持自定义关卡 JSON 导出与加载。
+                            </p>
+                            <ul class="proj-bullets">
+                                <li>
+                                    <strong>完整架构设计：</strong>实现 GridManager 逻辑网格、BridgeBuilder 绘图拓扑连接、ConnectionManager 通路完整性校验与波次循环；支持 MOD 关卡热加载与 CRT 屏幕特效。
+                                </li>
+                            </ul>
+                            <div class="proj-footer-bar">
+                                <div class="chips-row">
+                                    <span class="tech-chip">Godot 4</span>
+                                    <span class="tech-chip">GDScript</span>
+                                    <span class="tech-chip">像素美术</span>
+                                    <span class="tech-chip">JSON关卡系统</span>
+                                </div>
+                                <div class="links-row">
+                                    <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线试玩 ↗</a>
+                                    <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">GitHub 源码 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- 04 · 软件著作权与竞赛荣誉 -->
+            <section class="resume-section">
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">04</span>
+                        <h2 class="sec-title-text">软件著作权与竞赛荣誉</h2>
+                        <span class="sec-title-en">IP &amp; HONORS</span>
+                    </div>
+                    <span class="sec-desc samp">国家版权局登记证书 · 竞赛证明</span>
+                </div>
+
+                <div class="honors-grid">
+                    <!-- 软著 -->
+                    <div class="honor-box">
+                        <div class="honor-box-head">
+                            <h3 class="honor-box-title">国家软件著作权 (3项)</h3>
+                            <span class="count samp">已获证书</span>
+                        </div>
+                        <table class="honor-table">
+                            <thead>
+                                <tr>
+                                    <th>软件全称</th>
+                                    <th>登记号</th>
+                                    <th>署名</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>菌智鉴熟软件</strong></td>
+                                    <td><span class="reg-code">2026SR0492487</span></td>
+                                    <td>第一著作人</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>格物启示录软件</strong></td>
+                                    <td><span class="reg-code">2025SR2378554</span></td>
+                                    <td>第一著作人</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>合阳提线木偶小助手软件</strong></td>
+                                    <td><span class="reg-code">2026SR0131171</span></td>
+                                    <td>第一著作人</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 竞赛 -->
+                    <div class="honor-box">
+                        <div class="honor-box-head">
+                            <h3 class="honor-box-title">竞赛与获奖荣誉</h3>
+                            <span class="count samp">6 项代表荣誉</span>
+                        </div>
+                        <ul class="award-rows">
+                            <li>
+                                <span class="aname">中国大学生计算机设计大赛（格物启示录）</span>
+                                <span class="arank">西北赛区二等奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">乡村振兴非遗创新赋能大赛（提线木偶助手）</span>
+                                <span class="arank">校级一等奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">蓝桥杯全国软件和信息技术专业人才大赛 (Python)</span>
+                                <span class="arank">省赛二等奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">卡赢杯公益游戏开发大赛（《免疫联结》）</span>
+                                <span class="arank">最佳创意游戏奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">034 GameJam 极限游戏开发大赛</span>
+                                <span class="arank">最战斗爽塔防游戏奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">数字媒体科技作品竞赛（羊肚菌智慧大棚）</span>
+                                <span class="arank">陕西赛区三等奖 · 2025</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 尾部与合规 -->
+            <footer class="resume-footer">
+                <div>— 徐同学 · ZLOONG 工房 —</div>
+                <div style="margin-top:6px;">
+                    诚挚寻求 AI 应用开发 / 大模型应用开发实习机会 · 完整简历与作品集可邮件直通<br>
+                    <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener" style="color:inherit;">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/
+                </div>
+            </footer>
+
+        </main>
+    </div>
+
+    <!-- 交互脚本：方案无缝切换、方向过滤联动、邮箱复制 -->
+    <script>
+    (function() {
+        "use strict";
+
+        var body = document.getElementById("proposal-body");
+
+        // 1. 方案切换 (方案 A / B / C)
+        var themeBtns = document.querySelectorAll(".proposal-btn[data-theme]");
+        themeBtns.forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                var theme = btn.getAttribute("data-theme");
+                themeBtns.forEach(function(b) { b.classList.remove("active"); });
+                btn.classList.add("active");
+
+                body.classList.remove("theme-a-dossier", "theme-b-engineering", "theme-c-gazette");
+                body.classList.add(theme);
+            });
+        });
+
+        // 2. 方案解析抽屉展开/折叠
+        var toggleDrawerBtn = document.getElementById("toggle-drawer-btn");
+        var drawer = document.getElementById("proposal-drawer");
+        if (toggleDrawerBtn && drawer) {
+            toggleDrawerBtn.addEventListener("click", function() {
+                drawer.classList.toggle("open");
+                toggleDrawerBtn.textContent = drawer.classList.contains("open") ? "✕ 收起方案对比" : "💡 方案核心差异对比";
+            });
+        }
+
+        // 3. 方向选择切换 (AI应用 / 游戏 / 全景)
+        var trackTabs = document.querySelectorAll(".track-tab[data-track]");
+        var projItems = document.querySelectorAll(".dossier-proj-item");
+        var skillPanels = document.querySelectorAll(".skill-panel");
+        var targetRoleText = document.getElementById("target-role-text");
+        var paperFileNo = document.getElementById("paper-file-no");
+        var paperStackNo = document.getElementById("paper-stack-no");
+
+        var TRACK_CONFIG = {
+            ai: {
+                role: "AI 应用开发实习 / 大模型应用开发实习",
+                fileNo: "FILE / AI-2026 · 主修方向",
+                stack: "STACK 1 / 3 · 权威档案",
+                activeSkills: { ai: 1, "ai-backend": 1, frontend: 1, eng: 1 }
+            },
+            game: {
+                role: "游戏开发实习 / 系统研发工程实习",
+                fileNo: "FILE / GAME-2026 · 系统工程",
+                stack: "STACK 2 / 3 · 权威档案",
+                activeSkills: { game: 1, eng: 1 }
+            },
+            all: {
+                role: "AI 应用开发 / 游戏与系统研发 (综合全景)",
+                fileNo: "FILE / ALL-2026 · 完整全景",
+                stack: "STACK 3 / 3 · 权威档案",
+                activeSkills: null
+            }
+        };
+
+        function setTrack(track) {
+            trackTabs.forEach(function(t) {
+                t.classList.toggle("active", t.getAttribute("data-track") === track);
+            });
+
+            var cfg = TRACK_CONFIG[track];
+            if (targetRoleText) targetRoleText.textContent = cfg.role;
+            if (paperFileNo) paperFileNo.textContent = cfg.fileNo;
+            if (paperStackNo) paperStackNo.textContent = cfg.stack;
+
+            // 过滤项目经历：平滑隐藏非关联项
+            projItems.forEach(function(item) {
+                var cat = item.getAttribute("data-cat");
+                var hide = (track !== "all" && cat !== track);
+                item.classList.toggle("is-filtered-out", hide);
+            });
+
+            // 联动技能卡：未选方向暗化处理
+            var activeMap = cfg.activeSkills;
+            skillPanels.forEach(function(panel) {
+                var cat = panel.getAttribute("data-cat");
+                var isDim = activeMap && !activeMap[cat];
+                panel.classList.toggle("is-dimmed", isDim);
+            });
+        }
+
+        trackTabs.forEach(function(tab) {
+            tab.addEventListener("click", function() {
+                setTrack(tab.getAttribute("data-track"));
+            });
+        });
+
+        // 4. 一键复制邮箱
+        document.querySelectorAll("[data-email]").forEach(function(btn) {
+            btn.addEventListener("click", function() {
+                var email = btn.getAttribute("data-email") || "3248569738@qq.com";
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(email).then(function() {
+                        var original = btn.textContent;
+                        btn.textContent = "已复制";
+                        btn.classList.add("copied");
+                        setTimeout(function() {
+                            btn.textContent = original;
+                            btn.classList.remove("copied");
+                        }, 1800);
+                    });
+                }
+            });
+        });
+
+    })();
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,1580 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZLOONG 工房 · 交互成果型履历 (Showcase Proposals)</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <style>
+        /* ==========================================================================
+           0. 全局变量与工房美学基础（暖纸台面 + 朱砂点缀 + 开发者控制台）
+           ========================================================================== */
+        :root {
+            --paper-bg: #f5f2ea;
+            --paper-card: #fcfbf7;
+            --paper-card-hover: #ffffff;
+            --paper-border: #dcd6c8;
+            --paper-border-deep: #c4baa7;
+            --ink-deep: #1d2125;
+            --ink-mid: #383e45;
+            --ink-soft: #636b75;
+            --ink-faint: #919aa3;
+            --cinna-red: #8b2c1f;
+            --cinna-red-soft: #ab3a2c;
+            --cinna-red-light: rgba(139, 44, 31, 0.08);
+            --dev-blue: #1e4b7a;
+            --dev-blue-light: rgba(30, 75, 122, 0.08);
+            --dev-amber: #8a571c;
+            --dev-amber-light: rgba(138, 87, 28, 0.08);
+            --dev-green: #235c3b;
+            --dev-green-light: rgba(35, 92, 59, 0.08);
+            --mono: "SF Mono", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+            --serif: "Songti SC", "Source Han Serif SC", "Noto Serif CJK SC", SimSun, STSong, serif;
+            --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            --radius-sm: 3px;
+            --radius-md: 6px;
+            --shadow-subtle: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 12px rgba(60, 50, 30, 0.03);
+            --shadow-float: 0 4px 16px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: #ebe7dd;
+            color: var(--ink-deep);
+            font-family: var(--sans);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+            padding-bottom: 80px;
+        }
+
+        /* 顶部方案比选浮动控制栏 */
+        .proposal-switcher-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(245, 242, 234, 0.94);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--paper-border-deep);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .switcher-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .switcher-logo {
+            font-family: var(--serif);
+            font-weight: bold;
+            color: var(--cinna-red);
+            font-size: 15px;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .switcher-logo span {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            background: rgba(0,0,0,0.05);
+            padding: 2px 6px;
+            border-radius: 2px;
+        }
+        .switcher-tabs {
+            display: inline-flex;
+            background: rgba(0,0,0,0.06);
+            padding: 3px;
+            border-radius: var(--radius-sm);
+            gap: 4px;
+        }
+        .switcher-btn {
+            border: none;
+            background: transparent;
+            padding: 6px 14px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink-mid);
+            cursor: pointer;
+            border-radius: var(--radius-sm);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .switcher-btn:hover {
+            color: var(--cinna-red);
+        }
+        .switcher-btn.active {
+            background: #fff;
+            color: var(--cinna-red);
+            box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+        }
+        .switcher-btn .idx {
+            font-family: var(--mono);
+            font-size: 11px;
+            opacity: 0.65;
+        }
+        .switcher-right {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+        .pdf-mail-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 5px 12px;
+            background: var(--paper-card);
+            border: 1px solid var(--cinna-red);
+            color: var(--cinna-red);
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 12px;
+            transition: all 0.2s ease;
+        }
+        .pdf-mail-pill:hover {
+            background: var(--cinna-red);
+            color: #fff;
+        }
+
+        /* 容器骨架 */
+        .page-wrapper {
+            max-width: 1040px;
+            margin: 24px auto;
+            padding: 0 16px;
+        }
+
+        /* 方案容器切换 */
+        .proposal-view {
+            display: none;
+            animation: fadeIn 0.25s ease-out;
+        }
+        .proposal-view.is-visible {
+            display: block;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 顶部设计理念提示条 */
+        .proposal-banner {
+            background: #fff;
+            border-left: 4px solid var(--cinna-red);
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            box-shadow: var(--shadow-subtle);
+            font-size: 13px;
+            color: var(--ink-mid);
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .proposal-banner strong {
+            color: var(--cinna-red);
+            font-size: 14px;
+        }
+        .proposal-banner .traits {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .trait-tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 2px 7px;
+            background: var(--paper-bg);
+            border: 1px solid var(--paper-border);
+            border-radius: 2px;
+        }
+
+        /* 纸张基底 */
+        .resume-sheet {
+            background: var(--paper-bg);
+            border: 1px solid var(--paper-border-deep);
+            box-shadow: 0 4px 24px rgba(60, 50, 30, 0.08);
+            border-radius: var(--radius-sm);
+            padding: 36px 42px;
+            position: relative;
+        }
+
+        /* 头部：基本信息与双轨印章 */
+        .header-section {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 24px;
+            border-bottom: 2px solid var(--paper-border-deep);
+            padding-bottom: 24px;
+            margin-bottom: 28px;
+            align-items: center;
+        }
+        .header-title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 12px;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+        }
+        .header-title-row h1 {
+            font-size: 26px;
+            letter-spacing: 1.5px;
+            font-weight: 700;
+        }
+        .header-title-row .en-tag {
+            font-family: var(--mono);
+            font-size: 14px;
+            color: var(--cinna-red);
+            letter-spacing: 1px;
+        }
+
+        /* 开发者胶囊徽章 (Dev Badges) */
+        .dev-badge {
+            display: inline-flex;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 11px;
+            line-height: 1.2;
+            vertical-align: middle;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid var(--paper-border-deep);
+            white-space: nowrap;
+        }
+        .dev-badge .badge-k {
+            background: #2a2d32;
+            color: #d8dee9;
+            padding: 2px 6px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+        }
+        .dev-badge .badge-v {
+            background: #fff;
+            color: var(--ink-deep);
+            padding: 2px 6px;
+            font-weight: 500;
+        }
+        .dev-badge .badge-v.red { color: var(--cinna-red); font-weight: 600; }
+        .dev-badge .badge-v.blue { color: var(--dev-blue); font-weight: 600; }
+        .dev-badge .badge-v.amber { color: var(--dev-amber); font-weight: 600; }
+        .dev-badge .badge-v.green { color: var(--dev-green); font-weight: 600; }
+
+        .header-meta-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 8px 20px;
+            font-size: 13px;
+            margin-top: 12px;
+        }
+        .header-meta-item {
+            display: flex;
+            gap: 8px;
+            align-items: baseline;
+        }
+        .header-meta-item .label {
+            color: var(--ink-faint);
+            font-family: var(--mono);
+            font-size: 11px;
+            min-width: 60px;
+        }
+        .header-meta-item a {
+            color: var(--ink-mid);
+            text-decoration: none;
+            border-bottom: 1px dashed var(--paper-border-deep);
+        }
+        .header-meta-item a:hover {
+            color: var(--cinna-red);
+            border-bottom-color: var(--cinna-red);
+        }
+
+        /* 履历通用小节标题 */
+        .section-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--paper-border-deep);
+            padding-bottom: 6px;
+            margin: 28px 0 18px 0;
+        }
+        .section-title {
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+        .section-no {
+            font-family: var(--mono);
+            font-size: 13px;
+            color: var(--cinna-red);
+            font-weight: 600;
+        }
+        .section-en {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-faint);
+            letter-spacing: 1px;
+        }
+
+        /* ==========================================================================
+           通用组件：图片占位符 (Placeholder Component)
+           ========================================================================== */
+        .media-window {
+            position: relative;
+            background: #ede8dc;
+            border: 1px solid var(--paper-border-deep);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.25s ease;
+            box-shadow: inset 0 1px 4px rgba(0,0,0,0.04);
+        }
+        .media-window:hover {
+            border-color: var(--cinna-red);
+        }
+        .media-window img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+        }
+        /* 拟真控制台窗口顶栏 */
+        .window-topbar {
+            width: 100%;
+            padding: 5px 10px;
+            background: rgba(0,0,0,0.05);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--ink-soft);
+        }
+        .window-dots {
+            display: flex;
+            gap: 4px;
+        }
+        .window-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #d4ccbd;
+        }
+        .media-window:hover .window-dot:nth-child(1) { background: #e06c75; }
+        .media-window:hover .window-dot:nth-child(2) { background: #e5c07b; }
+        .media-window:hover .window-dot:nth-child(3) { background: #98c379; }
+
+        .placeholder-box {
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            color: var(--ink-soft);
+            width: 100%;
+            background-image: 
+                radial-gradient(var(--paper-border) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+        .placeholder-icon {
+            font-size: 24px;
+            opacity: 0.7;
+        }
+        .placeholder-title {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--ink-mid);
+        }
+        .placeholder-path {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--cinna-red);
+            background: rgba(139, 44, 31, 0.06);
+            padding: 2px 8px;
+            border-radius: 2px;
+            border: 1px dashed rgba(139, 44, 31, 0.25);
+        }
+        .placeholder-spec {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--ink-faint);
+        }
+
+        /* 动作胶囊按钮 (Action Buttons) */
+        .action-capsule-group {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .action-capsule {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            border: 1px solid var(--paper-border-deep);
+            background: var(--paper-card);
+            color: var(--ink-deep);
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+        }
+        .action-capsule:hover {
+            border-color: var(--cinna-red);
+            color: var(--cinna-red);
+            transform: translateY(-1px);
+            box-shadow: 0 2px 6px rgba(139, 44, 31, 0.12);
+        }
+        .action-capsule.primary {
+            background: var(--cinna-red);
+            color: #fff;
+            border-color: var(--cinna-red);
+        }
+        .action-capsule.primary:hover {
+            background: var(--cinna-red-soft);
+            color: #fff;
+        }
+        .action-capsule .icon { font-size: 13px; }
+
+        /* 技术栈芯片 (Tech Chips) */
+        .tech-chips {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+        }
+        .tech-chip {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 2px 7px;
+            background: rgba(0,0,0,0.04);
+            border: 1px solid var(--paper-border);
+            border-radius: 2px;
+            color: var(--ink-mid);
+        }
+
+        /* 可折叠技术细节抽屉 (Collapsible Deep-dive) */
+        .deep-dive-details {
+            border-top: 1px dashed var(--paper-border-deep);
+            margin-top: 12px;
+            padding-top: 10px;
+        }
+        .deep-dive-details summary {
+            font-size: 12px;
+            color: var(--cinna-red);
+            font-family: var(--mono);
+            cursor: pointer;
+            user-select: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 3px 0;
+            font-weight: 600;
+        }
+        .deep-dive-details summary:hover {
+            text-decoration: underline;
+        }
+        .deep-dive-content {
+            margin-top: 8px;
+            padding: 10px 14px;
+            background: rgba(0,0,0,0.025);
+            border-left: 2px solid var(--cinna-red);
+            border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+            font-size: 12.5px;
+            line-height: 1.7;
+            color: var(--ink-mid);
+        }
+        .deep-dive-content ul {
+            padding-left: 16px;
+        }
+        .deep-dive-content li {
+            margin-bottom: 4px;
+        }
+
+        /* ==========================================================================
+           方案 A 独有样式：【展档画幅版 (Gallery Dossier)】
+           ========================================================================== */
+        .proposal-a .proj-dossier-card {
+            background: var(--paper-card);
+            border: 1px solid var(--paper-border);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            margin-bottom: 24px;
+            display: grid;
+            grid-template-columns: 340px 1fr;
+            gap: 22px;
+            transition: all 0.25s ease;
+            box-shadow: var(--shadow-subtle);
+        }
+        .proposal-a .proj-dossier-card:hover {
+            border-color: var(--paper-border-deep);
+            box-shadow: var(--shadow-float);
+            background: var(--paper-card-hover);
+        }
+        .proposal-a .proj-dossier-card.is-flagship {
+            border-left: 3px solid var(--cinna-red);
+        }
+        .proposal-a .media-window {
+            height: 220px;
+        }
+        .proposal-a .proj-info-col {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        .proposal-a .proj-header-row {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 6px;
+            flex-wrap: wrap;
+        }
+        .proposal-a .proj-title {
+            font-size: 17px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .proposal-a .proj-one-liner {
+            font-size: 13px;
+            color: var(--ink-mid);
+            margin-bottom: 12px;
+            line-height: 1.6;
+        }
+        .proposal-a .metrics-capsule-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 12px;
+            background: rgba(0,0,0,0.03);
+            padding: 6px 10px;
+            border-radius: var(--radius-sm);
+        }
+        .proposal-a .metrics-capsule-row .m-item {
+            display: flex;
+            gap: 4px;
+        }
+        .proposal-a .metrics-capsule-row .m-k {
+            color: var(--ink-faint);
+            font-family: var(--mono);
+        }
+        .proposal-a .metrics-capsule-row .m-v {
+            color: var(--ink-deep);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           方案 B 独有样式：【工作台双列卡片版 (Workbench Grid)】
+           ========================================================================== */
+        .proposal-b .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        .proposal-b .bento-card {
+            background: var(--paper-card);
+            border: 1px solid var(--paper-border);
+            border-radius: var(--radius-sm);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: var(--shadow-subtle);
+            transition: all 0.2s ease;
+        }
+        .proposal-b .bento-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-float);
+            border-color: var(--paper-border-deep);
+        }
+        .proposal-b .bento-card.span-2 {
+            grid-column: span 2;
+        }
+        .proposal-b .bento-card .media-window {
+            height: 180px;
+            border: none;
+            border-bottom: 1px solid var(--paper-border);
+            border-radius: 0;
+        }
+        .proposal-b .bento-card.span-2 .media-window {
+            height: 240px;
+        }
+        .proposal-b .bento-body {
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .proposal-b .bento-title-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            gap: 8px;
+        }
+        .proposal-b .bento-title {
+            font-size: 15.5px;
+            font-weight: 700;
+        }
+
+        /* ==========================================================================
+           方案 C 独有样式：【极简硬核指标流 (Minimal Proofs)】
+           ========================================================================== */
+        .proposal-c .stream-item {
+            border-bottom: 1px solid var(--paper-border-deep);
+            padding: 24px 0;
+        }
+        .proposal-c .stream-item:last-child {
+            border-bottom: none;
+        }
+        .proposal-c .stream-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .proposal-c .stream-title {
+            font-size: 18px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .proposal-c .stream-layout {
+            display: grid;
+            grid-template-columns: 1fr 280px;
+            gap: 24px;
+            align-items: start;
+        }
+        .proposal-c .proof-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            font-size: 13px;
+            margin-bottom: 16px;
+        }
+        .proposal-c .proof-list li {
+            position: relative;
+            padding-left: 18px;
+            color: var(--ink-mid);
+        }
+        .proposal-c .proof-list li::before {
+            content: "▸";
+            position: absolute;
+            left: 0;
+            color: var(--cinna-red);
+            font-weight: bold;
+        }
+        .proposal-c .media-window {
+            height: 160px;
+        }
+
+        /* ==========================================================================
+           技能矩阵与教育背景：减负改造组件
+           ========================================================================== */
+        .skill-anchor-deck {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 16px;
+        }
+        .skill-anchor-card {
+            background: var(--paper-card);
+            border: 1px solid var(--paper-border);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+        }
+        .skill-anchor-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 8px;
+            border-bottom: 1px dashed var(--paper-border);
+            padding-bottom: 4px;
+        }
+        .skill-anchor-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink-deep);
+        }
+        .skill-pill-list {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 12px;
+        }
+        .skill-evidence-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--ink-mid);
+        }
+        .evidence-link {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--cinna-red);
+            background: var(--cinna-red-light);
+            padding: 1px 5px;
+            border-radius: 2px;
+            text-decoration: none;
+        }
+        .evidence-link:hover {
+            background: var(--cinna-red);
+            color: #fff;
+        }
+
+        .edu-compact-card {
+            background: var(--paper-card);
+            border: 1px solid var(--paper-border);
+            border-radius: var(--radius-sm);
+            padding: 14px 18px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .edu-compact-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        .edu-compact-school {
+            font-size: 15px;
+            font-weight: 700;
+        }
+        .edu-compact-major {
+            font-size: 13px;
+            color: var(--ink-mid);
+        }
+
+        /* 移动端响应式 */
+        @media (max-width: 768px) {
+            .resume-sheet { padding: 20px 16px; }
+            .header-section { grid-template-columns: 1fr; }
+            .proposal-a .proj-dossier-card { grid-template-columns: 1fr; }
+            .proposal-b .bento-grid { grid-template-columns: 1fr; }
+            .proposal-b .bento-card.span-2 { grid-column: span 1; }
+            .proposal-c .stream-layout { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部方案切换导航条 -->
+    <header class="proposal-switcher-bar">
+        <div class="switcher-left">
+            <div class="switcher-logo">
+                ZLOONG 履历实验室
+                <span>SHOWCASE SPEC</span>
+            </div>
+            <div class="switcher-tabs">
+                <button type="button" class="switcher-btn active" data-target="view-a">
+                    <span class="idx">[01]</span>
+                    <span>方案 A · 展档画幅版</span>
+                </button>
+                <button type="button" class="switcher-btn" data-target="view-b">
+                    <span class="idx">[02]</span>
+                    <span>方案 B · 工作台卡片版</span>
+                </button>
+                <button type="button" class="switcher-btn" data-target="view-c">
+                    <span class="idx">[03]</span>
+                    <span>方案 C · 极简指标流</span>
+                </button>
+            </div>
+        </div>
+        <div class="switcher-right">
+            <span>（已去除打印按钮，强化实机展示与直接体验）</span>
+            <a href="mailto:3248569738@qq.com?subject=索取正式文字版PDF简历" class="pdf-mail-pill">
+                ✉️ 索取正式 PDF 简历通道
+            </a>
+        </div>
+    </header>
+
+    <div class="page-wrapper">
+
+        <!-- ==========================================================================
+             方案 A：【展档画幅版 (Gallery Dossier)】
+             特点：大面积实机窗口 + 核心一句话 + 量化参数卡 + 醒目动作按钮 + 可折叠攻坚细节
+             ========================================================================== -->
+        <section id="view-a" class="proposal-view is-visible proposal-a">
+            <div class="proposal-banner">
+                <div>
+                    <strong>方案 A · 展档画幅版 (Gallery Dossier)</strong>
+                    <span>—— 适合作为个人站主修展示：左右分栏，左侧是真实实机/占位窗，右侧突出核心突破与一键体验，将长句收归可折叠细节。</span>
+                </div>
+                <div class="traits">
+                    <span class="trait-tag">左图右文</span>
+                    <span class="trait-tag">实体体验按钮</span>
+                    <span class="trait-tag">折叠深挖</span>
+                    <span class="trait-tag">零废话</span>
+                </div>
+            </div>
+
+            <article class="resume-sheet">
+                <!-- 头部 -->
+                <header class="header-section">
+                    <div>
+                        <div class="header-title-row">
+                            <h1>徐同学 <span class="en-tag">ZLOONG</span></h1>
+                            <span class="dev-badge"><span class="badge-k">status</span><span class="badge-v red">寻找实习中</span></span>
+                            <span class="dev-badge"><span class="badge-k">role</span><span class="badge-v">AI应用开发 / 大模型应用开发</span></span>
+                        </div>
+                        <div class="header-meta-grid">
+                            <div class="header-meta-item">
+                                <span class="label">院校:</span>
+                                <span>西北农林科技大学 <span class="dev-badge"><span class="badge-k">univ</span><span class="badge-v red">985</span></span> · 本科</span>
+                            </div>
+                            <div class="header-meta-item">
+                                <span class="label">代码托管:</span>
+                                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">github.com/Dragonzhi</a>
+                                <span class="dev-badge"><span class="badge-k">commits</span><span class="badge-v blue">1.9k+ / 年</span></span>
+                            </div>
+                            <div class="header-meta-item">
+                                <span class="label">B 站主页:</span>
+                                <a href="https://space.bilibili.com/304097408" target="_blank" rel="noreferrer">智LONZ</a>
+                                <span class="dev-badge"><span class="badge-k">bilibili</span><span class="badge-v red">30k 关注 · 4.8M 播放</span></span>
+                            </div>
+                            <div class="header-meta-item">
+                                <span class="label">邮箱:</span>
+                                <a href="mailto:3248569738@qq.com">3248569738@qq.com</a>
+                            </div>
+                        </div>
+                    </div>
+                </header>
+
+                <!-- 壹 · 重点工程成果展档 -->
+                <section>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-no">01 // 壹</span>
+                            <span>重点工程成果展档</span>
+                        </div>
+                        <span class="section-en">SELECTED SHOWCASE</span>
+                    </div>
+
+                    <!-- 项目 1：IterTrip (主打项目) -->
+                    <div class="proj-dossier-card is-flagship">
+                        <!-- 左侧：媒体视窗（带占位提示） -->
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>LIVE DEMO // dragonzhi.xyz/itertrip/</span>
+                            </div>
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🗺️</span>
+                                <span class="placeholder-title">IterTrip 实机交互与瓦片地图预览</span>
+                                <span class="placeholder-path">images/projects/itertrip.png</span>
+                                <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
+                            </div>
+                        </div>
+                        <!-- 右侧：成果信息 -->
+                        <div class="proj-info-col">
+                            <div>
+                                <div class="proj-header-row">
+                                    <div class="proj-title">
+                                        IterTrip — AI 旅行攻略结构化落地应用
+                                        <span class="dev-badge"><span class="badge-k">deploy</span><span class="badge-v red">online</span></span>
+                                    </div>
+                                    <div class="dev-badge"><span class="badge-k">role</span><span class="badge-v">独立全栈</span></div>
+                                </div>
+                                <p class="proj-one-liner">
+                                    非结构化碎片攻略解析引擎：将图文智能抽取为严格结构化路线并在交互式地图上呈现，支持多轮自然语言编辑与导出。
+                                </p>
+                                <div class="metrics-capsule-row">
+                                    <div class="m-item"><span class="m-k">代码规模:</span><span class="m-v">1.34 万行</span></div>
+                                    <div class="m-item"><span class="m-k">记忆向量:</span><span class="m-v">512 维</span></div>
+                                    <div class="m-item"><span class="m-k">闭馆防幻觉:</span><span class="m-v">零 LLM 纯算术</span></div>
+                                </div>
+                                <div class="tech-chips">
+                                    <span class="tech-chip">FastAPI</span>
+                                    <span class="tech-chip">React 18</span>
+                                    <span class="tech-chip">TypeScript</span>
+                                    <span class="tech-chip">Leaflet</span>
+                                    <span class="tech-chip">SQLite 向量检索</span>
+                                    <span class="tech-chip">SSE 流</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="action-capsule-group" style="margin-top:14px;">
+                                    <a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                        <span class="icon">🚀</span> 在线体验 Demo
+                                    </a>
+                                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="action-capsule">
+                                        <span class="icon">📦</span> GitHub 源码
+                                    </a>
+                                </div>
+
+                                <!-- 可折叠技术细节抽屉 -->
+                                <details class="deep-dive-details">
+                                    <summary>▸ 查看架构攻坚与工程细节 (展开 6 项核心设计)</summary>
+                                    <div class="deep-dive-content">
+                                        <ul>
+                                            <li><strong>结构化契约与自我修复：</strong>基于 pydantic 定义 route schema；结合 Agent 反思机制，在校验失败时携带精准错误信息回灌重试。</li>
+                                            <li><strong>六级高可靠降级链路：</strong>用户记忆真值 → 高德 POI 检索 → 模型知识库 → 联网搜索 → 城市中心表 → 报错，单路线 40 次配额熔断。</li>
+                                            <li><strong>主动核验与区域闸门：</strong>对产出坐标核验偏差 ≤1.5km 自动校正；设置地理省市闸门 (≤200km 锚点) 拦截同名误匹配。</li>
+                                            <li><strong>确定性代码消除幻觉：</strong>闭馆日冲突检查刻意设计为<strong>零 LLM、零网络</strong>纯算术模块。</li>
+                                            <li><strong>实体级 RAG 长期记忆：</strong>place_card 实体级切分，本地 fastembed 生成 512 维向量检索注入。</li>
+                                            <li><strong>SSE 决策轨迹可观测：</strong>流式推送 <code>event: trace</code>，可视化前端可折叠决策过程。</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 项目 2：智能优化中 (游戏与系统) -->
+                    <div class="proj-dossier-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>RELEASE // 好游快爆试玩上线</span>
+                            </div>
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🎮</span>
+                                <span class="placeholder-title">智能优化中 游戏实机截图 / 自研叙事编辑器</span>
+                                <span class="placeholder-path">images/projects/optimized.png</span>
+                                <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
+                            </div>
+                        </div>
+                        <div class="proj-info-col">
+                            <div>
+                                <div class="proj-header-row">
+                                    <div class="proj-title">
+                                        智能优化中 (OPTIMIZED) — 反乌托邦像素叙事游戏
+                                        <span class="dev-badge"><span class="badge-k">release</span><span class="badge-v red">快爆上线</span></span>
+                                    </div>
+                                    <div class="dev-badge"><span class="badge-k">role</span><span class="badge-v">主程兼队长 (8人队伍)</span></div>
+                                </div>
+                                <p class="proj-one-liner">
+                                    金海豚 2026 大赛参赛作品：21 天 GameJam 极限周期交付。基于 Godot 4 自研 EditorPlugin 节点式叙事编辑器，实现可视化任务拓扑导出 JSON。
+                                </p>
+                                <div class="metrics-capsule-row">
+                                    <div class="m-item"><span class="m-k">周期:</span><span class="m-v">21 天极限交付</span></div>
+                                    <div class="m-item"><span class="m-k">架构:</span><span class="m-v">自研 EditorPlugin</span></div>
+                                    <div class="m-item"><span class="m-k">状态:</span><span class="m-v">好游快爆试玩</span></div>
+                                </div>
+                                <div class="tech-chips">
+                                    <span class="tech-chip">Godot 4</span>
+                                    <span class="tech-chip">GDScript</span>
+                                    <span class="tech-chip">节点式编辑器</span>
+                                    <span class="tech-chip">数据驱动</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="action-capsule-group" style="margin-top:14px;">
+                                    <a href="https://www.3839.com/a/201212.htm" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                        <span class="icon">🎮</span> 好游快爆试玩
+                                    </a>
+                                </div>
+                                <details class="deep-dive-details">
+                                    <summary>▸ 查看架构细节与交付工程</summary>
+                                    <div class="deep-dive-content">
+                                        <ul>
+                                            <li>自研 GraphEdit 可视化任务图谱，策划改数值完全不碰代码直接导出 JSON。</li>
+                                            <li>推行跨职能数值契约与严格 PR 规范，全流程交付文档化。</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 项目 3：免疫联结 ImmuneLink (真实已有图片展示) -->
+                    <div class="proj-dossier-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>PLAYABLE // 2D 塔防实机</span>
+                            </div>
+                            <!-- 真实已有的图片直接渲染 -->
+                            <img src="../images/projects/immune-link.png" alt="免疫联结游戏实机画面" loading="lazy">
+                        </div>
+                        <div class="proj-info-col">
+                            <div>
+                                <div class="proj-header-row">
+                                    <div class="proj-title">
+                                        免疫联结 ImmuneLink — 2D 桥梁网络塔防
+                                        <span class="dev-badge"><span class="badge-k">award</span><span class="badge-v red">卡赢杯最佳创意奖</span></span>
+                                    </div>
+                                    <div class="dev-badge"><span class="badge-k">role</span><span class="badge-v">独立开发 (设计+程序+美术)</span></div>
+                                </div>
+                                <p class="proj-one-liner">
+                                    卡赢杯获奖作品：桥梁既是保护目标，也是生命管道与防御设施；支持自定义关卡 JSON 导出、动态通路拓扑检验与波次自包含设计。
+                                </p>
+                                <div class="tech-chips">
+                                    <span class="tech-chip">Godot 4</span>
+                                    <span class="tech-chip">GDScript</span>
+                                    <span class="tech-chip">像素美术</span>
+                                    <span class="tech-chip">关卡导出器</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="action-capsule-group" style="margin-top:14px;">
+                                    <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                        <span class="icon">🕹️</span> 在线试玩
+                                    </a>
+                                    <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer" class="action-capsule">
+                                        <span class="icon">📦</span> GitHub 源码
+                                    </a>
+                                    <a href="https://www.bilibili.com/video/BV1Z8mFBUEk2/" target="_blank" rel="noreferrer" class="action-capsule">
+                                        <span class="icon">📺</span> B 站演示
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 项目 4：弹幕鸭 (直播伴播工具) -->
+                    <div class="proj-dossier-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>OPEN SOURCE // WebSocket + TTS</span>
+                            </div>
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🦆</span>
+                                <span class="placeholder-title">弹幕鸭 伴播界面与情绪骨骼动画截图</span>
+                                <span class="placeholder-path">images/projects/dycast.png</span>
+                                <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
+                            </div>
+                        </div>
+                        <div class="proj-info-col">
+                            <div>
+                                <div class="proj-header-row">
+                                    <div class="proj-title">
+                                        弹幕鸭 (dycast-reply) — AI 直播弹幕交互工具
+                                        <span class="dev-badge"><span class="badge-k">repo</span><span class="badge-v blue">open source</span></span>
+                                    </div>
+                                    <div class="dev-badge"><span class="badge-k">role</span><span class="badge-v">二次开发</span></div>
+                                </div>
+                                <p class="proj-one-liner">
+                                    实时抓取直播间高频弹幕（逆向握手签名与 protobuf 解包），驱动 LLM 结合语气人设实时语音回复，并联动 CSS 角色情绪帧动画。
+                                </p>
+                                <div class="tech-chips">
+                                    <span class="tech-chip">Python</span>
+                                    <span class="tech-chip">Vue 3</span>
+                                    <span class="tech-chip">DashScope TTS</span>
+                                    <span class="tech-chip">Protobuf</span>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="action-capsule-group" style="margin-top:14px;">
+                                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="action-capsule">
+                                        <span class="icon">📦</span> GitHub 源码
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- 贰 · 核心技术架构 (减负版：实证锚点卡) -->
+                <section>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-no">02 // 贰</span>
+                            <span>核心技术架构与实证</span>
+                        </div>
+                        <span class="section-en">TECHNICAL ARCHITECTURE</span>
+                    </div>
+
+                    <div class="skill-anchor-deck">
+                        <div class="skill-anchor-card">
+                            <div class="skill-anchor-head">
+                                <span class="skill-anchor-title">LLM / AI 应用工程</span>
+                                <span class="dev-badge"><span class="badge-k">track</span><span class="badge-v red">核心</span></span>
+                            </div>
+                            <div class="skill-pill-list">
+                                <div class="skill-evidence-item">
+                                    <span>Pydantic 契约与纠错自愈</span>
+                                    <span class="evidence-link">[IterTrip]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>实体级向量 RAG 长期记忆</span>
+                                    <span class="evidence-link">[IterTrip / 提线木偶]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>确定性算术消除模型幻觉</span>
+                                    <span class="evidence-link">[闭馆规则模块]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>SSE 流式决策透明化</span>
+                                    <span class="evidence-link">[Trace推送]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-anchor-card">
+                            <div class="skill-anchor-head">
+                                <span class="skill-anchor-title">全栈开发与服务治理</span>
+                                <span class="dev-badge"><span class="badge-k">stack</span><span class="badge-v blue">现代</span></span>
+                            </div>
+                            <div class="skill-pill-list">
+                                <div class="skill-evidence-item">
+                                    <span>FastAPI / Python 异步后端</span>
+                                    <span class="evidence-link">[IterTrip / 菌智鉴熟]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>React 18 / Vue 3 / TS 前端</span>
+                                    <span class="evidence-link">[多端交付]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>零依赖标准库 HTTP/HMAC 服务</span>
+                                    <span class="evidence-link">[箱庭日报 710行]</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="skill-anchor-card">
+                            <div class="skill-anchor-head">
+                                <span class="skill-anchor-title">系统与游戏工程</span>
+                                <span class="dev-badge"><span class="badge-k">engine</span><span class="badge-v amber">跨端</span></span>
+                            </div>
+                            <div class="skill-pill-list">
+                                <div class="skill-evidence-item">
+                                    <span>Godot 4 节点式叙事编辑器</span>
+                                    <span class="evidence-link">[智能优化中]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>拓扑网络与关卡热加载系统</span>
+                                    <span class="evidence-link">[免疫联结]</span>
+                                </div>
+                                <div class="skill-evidence-item">
+                                    <span>Minecraft Forge 物理与3D渲染</span>
+                                    <span class="evidence-link">[CS投掷物]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 叁 · 教育背景 (极简版) -->
+                <section>
+                    <div class="section-header">
+                        <div class="section-title">
+                            <span class="section-no">03 // 叁</span>
+                            <span>教育背景</span>
+                        </div>
+                        <span class="section-en">EDUCATION</span>
+                    </div>
+                    <div class="edu-compact-card">
+                        <div class="edu-compact-left">
+                            <span class="edu-compact-school">西北农林科技大学</span>
+                            <span class="dev-badge"><span class="badge-k">NWAFU</span><span class="badge-v red">985 · 双一流</span></span>
+                            <span class="edu-compact-major">信息工程学院 · 计算机科学与技术</span>
+                        </div>
+                        <div>
+                            <span class="dev-badge"><span class="badge-k">class</span><span class="badge-v amber">2024.09 – 2028.06 (大三在读)</span></span>
+                        </div>
+                    </div>
+                </section>
+            </article>
+        </section>
+
+
+        <!-- ==========================================================================
+             方案 B：【工作台双列卡片版 (Workbench Grid)】
+             特点：2列高密度画廊卡片流，视野开阔，极速扫读，极强的项目作品集与工具箱质感
+             ========================================================================== -->
+        <section id="view-b" class="proposal-view proposal-b">
+            <div class="proposal-banner">
+                <div>
+                    <strong>方案 B · 工作台双列卡片版 (Workbench Grid)</strong>
+                    <span>—— 类似 Bento Grid 展厅布局，一屏浏览多款产品实机，强化项目密集产出感与可玩性。</span>
+                </div>
+                <div class="traits">
+                    <span class="trait-tag">双列并排</span>
+                    <span class="trait-tag">画廊陈列</span>
+                    <span class="trait-tag">高视觉密度</span>
+                </div>
+            </div>
+
+            <article class="resume-sheet">
+                <!-- 头部 -->
+                <header class="header-section">
+                    <div>
+                        <div class="header-title-row">
+                            <h1>徐同学 <span class="en-tag">ZLOONG</span></h1>
+                            <span class="dev-badge"><span class="badge-k">role</span><span class="badge-v red">AI 应用 / 全栈工程开发</span></span>
+                        </div>
+                        <p style="font-size:13.5px; color:var(--ink-mid); margin-top:4px;">
+                            西北农林科技大学 (985) · 计算机科学与技术 · 近一年 GitHub 1,900+ Commits · 独立上线多款 AI 与游戏应用
+                        </p>
+                    </div>
+                </header>
+
+                <div class="section-header">
+                    <div class="section-title">
+                        <span class="section-no">WORKS</span>
+                        <span>工程项目成果展厅 (Showcase Grid)</span>
+                    </div>
+                    <span class="section-en">8 SELECTED PROJECTS</span>
+                </div>
+
+                <div class="bento-grid">
+                    <!-- 卡片 1：IterTrip (占2列大卡) -->
+                    <div class="bento-card span-2">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>FLAGSHIP // IterTrip 攻略落地应用</span>
+                            </div>
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🗺️</span>
+                                <span class="placeholder-title">IterTrip 大画幅实机占位</span>
+                                <span class="placeholder-path">images/projects/itertrip.png</span>
+                            </div>
+                        </div>
+                        <div class="bento-body">
+                            <div>
+                                <div class="bento-title-row">
+                                    <div class="bento-title">IterTrip — AI 旅行攻略结构化解析落地应用</div>
+                                    <span class="dev-badge"><span class="badge-k">deploy</span><span class="badge-v red">online</span></span>
+                                </div>
+                                <p style="font-size:13px; color:var(--ink-mid); margin:6px 0 10px 0;">
+                                    将非结构化攻略图文智能抽取为严格结构化路线并在交互式地图上呈现，攻克模型幻觉、同名坐标漂移与实体级记忆检索。
+                                </p>
+                                <div class="tech-chips">
+                                    <span class="tech-chip">FastAPI</span>
+                                    <span class="tech-chip">React 18</span>
+                                    <span class="tech-chip">TypeScript</span>
+                                    <span class="tech-chip">SQLite 向量检索</span>
+                                    <span class="tech-chip">SSE 推送</span>
+                                </div>
+                            </div>
+                            <div class="action-capsule-group">
+                                <a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                    <span class="icon">🚀</span> 立即在线体验
+                                </a>
+                                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="action-capsule">
+                                    <span class="icon">📦</span> 查看源码
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片 2：免疫联结 -->
+                    <div class="bento-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>PLAYABLE // 2D 桥梁塔防</span>
+                            </div>
+                            <img src="../images/projects/immune-link.png" alt="免疫联结" loading="lazy">
+                        </div>
+                        <div class="bento-body">
+                            <div>
+                                <div class="bento-title-row">
+                                    <div class="bento-title">免疫联结 ImmuneLink</div>
+                                    <span class="dev-badge"><span class="badge-k">award</span><span class="badge-v red">卡赢杯最佳创意</span></span>
+                                </div>
+                                <p style="font-size:12.5px; color:var(--ink-mid); margin:6px 0;">
+                                    以“桥梁”为核心玩法的创新塔防，支持自定义关卡 JSON 导出与完整逻辑网格系统。
+                                </p>
+                            </div>
+                            <div class="action-capsule-group">
+                                <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                    <span class="icon">🕹️</span> 在线试玩
+                                </a>
+                                <a href="https://www.bilibili.com/video/BV1Z8mFBUEk2/" target="_blank" rel="noreferrer" class="action-capsule">
+                                    <span class="icon">📺</span> 演示视频
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片 3：智能优化中 -->
+                    <div class="bento-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>RELEASE // 叙事像素游戏</span>
+                            </div>
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🎮</span>
+                                <span class="placeholder-title">智能优化中 游戏截图占位</span>
+                                <span class="placeholder-path">images/projects/optimized.png</span>
+                            </div>
+                        </div>
+                        <div class="bento-body">
+                            <div>
+                                <div class="bento-title-row">
+                                    <div class="bento-title">智能优化中 (OPTIMIZED)</div>
+                                    <span class="dev-badge"><span class="badge-k">release</span><span class="badge-v red">快爆上线</span></span>
+                                </div>
+                                <p style="font-size:12.5px; color:var(--ink-mid); margin:6px 0;">
+                                    反乌托邦叙事游戏，基于 Godot 4 自研 GraphEdit 节点式叙事编辑器。
+                                </p>
+                            </div>
+                            <div class="action-capsule-group">
+                                <a href="https://www.3839.com/a/201212.htm" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                    <span class="icon">🎮</span> 好游快爆试玩
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片 4：CS投掷物模组 -->
+                    <div class="bento-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>MOD // MC Forge 1.20.1</span>
+                            </div>
+                            <img src="../images/projects/csg.png" alt="CS模组" loading="lazy">
+                        </div>
+                        <div class="bento-body">
+                            <div>
+                                <div class="bento-title-row">
+                                    <div class="bento-title">CounterStrikeGrenades</div>
+                                    <span class="dev-badge"><span class="badge-k">mod</span><span class="badge-v blue">Kotlin</span></span>
+                                </div>
+                                <p style="font-size:12.5px; color:var(--ink-mid); margin:6px 0;">
+                                    还原 CS2 投掷物物理、独立 3D 渲染与 TACZ 枪械模组兼容穿烟判定。
+                                </p>
+                            </div>
+                            <div class="action-capsule-group">
+                                <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer" class="action-capsule">
+                                    <span class="icon">📦</span> GitHub 源码
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 卡片 5：箱庭日报 -->
+                    <div class="bento-card">
+                        <div class="media-window">
+                            <div class="window-topbar">
+                                <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                <span>PORTAL // 零依赖标准库</span>
+                            </div>
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">📰</span>
+                                <span class="placeholder-title">箱庭日报 排印界面截图占位</span>
+                                <span class="placeholder-path">images/projects/hanako.png</span>
+                            </div>
+                        </div>
+                        <div class="bento-body">
+                            <div>
+                                <div class="bento-title-row">
+                                    <div class="bento-title">hanako 箱庭日报自动化管线</div>
+                                    <span class="dev-badge"><span class="badge-k">pipe</span><span class="badge-v amber">50+期无断更</span></span>
+                                </div>
+                                <p style="font-size:12.5px; color:var(--ink-mid); margin:6px 0;">
+                                    710 行 Python 标准库零依赖自托管门户 + Agent 定时自动抓取排印管线。
+                                </p>
+                            </div>
+                            <div class="action-capsule-group">
+                                <a href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                    <span class="icon">🌐</span> 在线一览
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+
+        <!-- ==========================================================================
+             方案 C：【极简指标流 (Minimal Proofs)】
+             特点：极度通透留白，只保留硬核事实、直接体验大按钮与宽画幅视窗
+             ========================================================================== -->
+        <section id="view-c" class="proposal-view proposal-c">
+            <div class="proposal-banner">
+                <div>
+                    <strong>方案 C · 极简指标流 (Minimal Proofs)</strong>
+                    <span>—— 剔除一切修饰长句，以纯技术事实（Technical Proofs）与超宽画幅呈现，极致干净。</span>
+                </div>
+                <div class="traits">
+                    <span class="trait-tag">纯技术事实</span>
+                    <span class="trait-tag">宽幅留白</span>
+                    <span class="trait-tag">极简高级感</span>
+                </div>
+            </div>
+
+            <article class="resume-sheet">
+                <!-- 头部 -->
+                <header class="header-section">
+                    <div>
+                        <div class="header-title-row">
+                            <h1>徐同学 <span class="en-tag">ZLOONG</span></h1>
+                            <span class="dev-badge"><span class="badge-k">focus</span><span class="badge-v red">AI 应用 / 大模型工程</span></span>
+                        </div>
+                        <div style="font-size:13px; color:var(--ink-mid); margin-top:6px;">
+                            西北农林科技大学 (985) · 计科 · 独立上线 1.34 万行全栈 AI 应用 · 3 项国家软著第一著作人
+                        </div>
+                    </div>
+                </header>
+
+                <div class="stream-item">
+                    <div class="stream-topbar">
+                        <div class="stream-title">
+                            01 // IterTrip — AI 旅行攻略结构化解析应用
+                            <span class="dev-badge"><span class="badge-k">status</span><span class="badge-v red">online</span></span>
+                        </div>
+                        <div class="action-capsule-group">
+                            <a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                🚀 在线体验 Demo ↗
+                            </a>
+                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="action-capsule">
+                                📦 GitHub ↗
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="stream-layout">
+                        <div>
+                            <ul class="proof-list">
+                                <li><strong>输出纠错自愈：</strong>基于 Pydantic 唯一契约与 Agent 反思重试，阻断模型非法输出。</li>
+                                <li><strong>高可靠坐标链路：</strong>六级降级机制 + 地理省市闸门 (≤200km 锚点)，根除同名异地漂移。</li>
+                                <li><strong>确定性零幻觉：</strong>闭馆日冲突检测刻意采用<strong>零 LLM、零网络</strong>纯算术模块。</li>
+                                <li><strong>实体级 RAG：</strong>place_card 实体向量切分，本地 fastembed 生成 512 维向量长期记忆。</li>
+                                <li><strong>全栈独立交付：</strong>1.34 万行代码 (FastAPI + React 18 + TS + Leaflet + SSE)。</li>
+                            </ul>
+                            <div class="tech-chips">
+                                <span class="tech-chip">FastAPI</span>
+                                <span class="tech-chip">React 18</span>
+                                <span class="tech-chip">TypeScript</span>
+                                <span class="tech-chip">SQLite 向量</span>
+                                <span class="tech-chip">Docker</span>
+                            </div>
+                        </div>
+                        <div class="media-window">
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🗺️</span>
+                                <span class="placeholder-title">IterTrip 实机预览</span>
+                                <span class="placeholder-path">images/projects/itertrip.png</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream-item">
+                    <div class="stream-topbar">
+                        <div class="stream-title">
+                            02 // 智能优化中 (OPTIMIZED) — 反乌托邦叙事游戏
+                            <span class="dev-badge"><span class="badge-k">status</span><span class="badge-v red">快爆上线</span></span>
+                        </div>
+                        <div class="action-capsule-group">
+                            <a href="https://www.3839.com/a/201212.htm" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                🎮 好游快爆试玩 ↗
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="stream-layout">
+                        <div>
+                            <ul class="proof-list">
+                                <li><strong>自研节点编辑器：</strong>基于 Godot 4 自研 GraphEdit 插件，策划可视化拖拽直接导出 JSON。</li>
+                                <li><strong>极限交付与管理：</strong>担任 8 人团队主程兼队长，21 天限时 GameJam 完成全流程工程交付。</li>
+                            </ul>
+                            <div class="tech-chips">
+                                <span class="tech-chip">Godot 4</span>
+                                <span class="tech-chip">GDScript</span>
+                                <span class="tech-chip">EditorPlugin</span>
+                            </div>
+                        </div>
+                        <div class="media-window">
+                            <div class="placeholder-box">
+                                <span class="placeholder-icon">🎮</span>
+                                <span class="placeholder-title">智能优化中 实机预览</span>
+                                <span class="placeholder-path">images/projects/optimized.png</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stream-item">
+                    <div class="stream-topbar">
+                        <div class="stream-title">
+                            03 // 免疫联结 ImmuneLink — 2D 桥梁网络塔防
+                            <span class="dev-badge"><span class="badge-k">status</span><span class="badge-v red">卡赢杯最佳创意</span></span>
+                        </div>
+                        <div class="action-capsule-group">
+                            <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer" class="action-capsule primary">
+                                🕹️ 在线试玩 ↗
+                            </a>
+                            <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer" class="action-capsule">
+                                📦 源码 ↗
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="stream-layout">
+                        <div>
+                            <ul class="proof-list">
+                                <li><strong>网络拓扑系统：</strong>实现 GridManager 逻辑网格与动态通路完整性校验。</li>
+                                <li><strong>MOD 与热加载：</strong>支持从外部 JSON 导出并动态加载全套关卡与波次。</li>
+                            </ul>
+                            <div class="tech-chips">
+                                <span class="tech-chip">Godot 4</span>
+                                <span class="tech-chip">GDScript</span>
+                                <span class="tech-chip">关卡系统</span>
+                            </div>
+                        </div>
+                        <div class="media-window">
+                            <img src="../images/projects/immune-link.png" alt="免疫联结" loading="lazy">
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </section>
+
+    </div>
+
+    <!-- 方案切换纯原生脚本 -->
+    <script>
+        (function() {
+            var buttons = document.querySelectorAll(".switcher-btn[data-target]");
+            var views = document.querySelectorAll(".proposal-view");
+
+            buttons.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    var targetId = btn.getAttribute("data-target");
+
+                    buttons.forEach(function(b) { b.classList.remove("active"); });
+                    btn.classList.add("active");
+
+                    views.forEach(function(view) {
+                        if (view.id === targetId) {
+                            view.classList.add("is-visible");
+                        } else {
+                            view.classList.remove("is-visible");
+                        }
+                    });
+
+                    window.scrollTo({ top: 0, behavior: "smooth" });
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
+
