@@ -138,207 +138,327 @@
                 <span class="sec-title-en">TECHNICAL ARCHITECTURE</span>
             </div>
 
-            <div class="skills-deck" id="skills-matrix">
-                <!-- 技能 1：AI / 大模型应用工程 -->
-                <div class="skill-panel" data-cat="ai">
-                    <div class="skill-panel-head">
-                        <h3 class="skill-panel-title">LLM / AI 应用工程</h3>
-                        <span class="skill-tag-badge">AI-CORE</span>
-                        <span class="skill-collapse-hint samp">次要模块</span>
-                    </div>
-                    <ul class="skill-items-list">
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">Pydantic 结构化输出契约</strong>
-                                <span class="skill-sub">三端统一 Schema 约束 · 校验失败回灌纠错自愈</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">六级坐标降级与熔断防漂移</strong>
-                                <span class="skill-sub">真值→POI→知识→搜索降级链 · 省市闸门拦截误匹</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">零 LLM 纯算术根除幻觉</strong>
-                                <span class="skill-sub">闭馆日等确定性规则坚守零模型介入准则</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">实体级向量 RAG 长期记忆</strong>
-                                <span class="skill-sub">place_card 切分 · FastEmbed (512维) + SQLite 向量检索</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">决策轨迹流式可观测工程</strong>
-                                <span class="skill-sub">SSE 逐帧推送 event: trace · 黑盒静默决策可视化</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">多模态与智能体工作流编排</strong>
-                                <span class="skill-sub">Coze 管线编排 · 豆包视觉推理 · 多 Persona 状态机</span>
-                            </div>
-                            <a href="#proj-puppet" class="skill-proof-tag" title="查看对应成果">木偶助手 · 弹幕鸭 ↗</a>
-                        </li>
-                    </ul>
+            <div class="arch-workbench" id="arch-workbench">
+                <!-- 左侧活页导轨 (Left Spec Rail) -->
+                <div class="arch-rail" id="arch-rail" role="tablist" aria-label="技术架构领域">
+                    <div class="arch-rail-head">MODULE SECTOR // 活页索引</div>
+                    <button class="arch-rail-item active" role="tab" aria-selected="true" data-arch-target="ai">
+                        <span class="arch-rail-name">01 // AI 应用工程</span>
+                        <span class="arch-rail-badge" id="rail-badge-ai">6 契约 · 主修</span>
+                    </button>
+                    <button class="arch-rail-item" role="tab" aria-selected="false" data-arch-target="backend">
+                        <span class="arch-rail-name">02 // 后端服务与协议</span>
+                        <span class="arch-rail-badge" id="rail-badge-backend">4 项交付</span>
+                    </button>
+                    <button class="arch-rail-item" role="tab" aria-selected="false" data-arch-target="frontend">
+                        <span class="arch-rail-name">03 // 前端工程与可视化</span>
+                        <span class="arch-rail-badge" id="rail-badge-frontend">4 场景</span>
+                    </button>
+                    <button class="arch-rail-item" role="tab" aria-selected="false" data-arch-target="game">
+                        <span class="arch-rail-name">04 // 游戏研发与系统</span>
+                        <span class="arch-rail-badge" id="rail-badge-game">4 项自研</span>
+                    </button>
+                    <button class="arch-rail-item" role="tab" aria-selected="false" data-arch-target="eng">
+                        <span class="arch-rail-name">05 // 工程化与交付素养</span>
+                        <span class="arch-rail-badge" id="rail-badge-eng">1900+ 提交</span>
+                    </button>
                 </div>
 
-                <!-- 技能 2：后端服务与协议工程 -->
-                <div class="skill-panel" data-cat="ai-backend">
-                    <div class="skill-panel-head">
-                        <h3 class="skill-panel-title">后端服务与协议</h3>
-                        <span class="skill-tag-badge">BACKEND</span>
-                        <span class="skill-collapse-hint samp">次要模块</span>
-                    </div>
-                    <ul class="skill-items-list">
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">现代异步 Web 与数据持久化</strong>
-                                <span class="skill-sub">FastAPI / Flask / SQLAlchemy / SQLite / Docker 容器化</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip · 羊肚菌 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">纯 Python 标准库零依赖构建</strong>
-                                <span class="skill-sub">710 行手写 Web 服务 · HMAC 恒时比较防时序攻击</span>
-                            </div>
-                            <a href="#proj-hanako" class="skill-proof-tag" title="查看对应成果">箱庭日报 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">高频网络协议逆向与二进制解包</strong>
-                                <span class="skill-sub">WebSocket 握手签名计算 · Protobuf 消息体解包</span>
-                            </div>
-                            <a href="#proj-dycast" class="skill-proof-tag" title="查看对应成果">弹幕鸭 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">定时自动化内容生产管线</strong>
-                                <span class="skill-sub">APScheduler 定时采集、交叉核验与 Markdown 归档</span>
-                            </div>
-                            <a href="#proj-hanako" class="skill-proof-tag" title="查看对应成果">50+期无断更 ↗</a>
-                        </li>
-                    </ul>
-                </div>
+                <!-- 右侧展台面板容器 (Right Stage Panes - 纯静态就绪，无需JS拼接) -->
+                <div class="arch-stages-container">
 
-                <!-- 技能 3：前端工程与可视化 -->
-                <div class="skill-panel" data-cat="frontend">
-                    <div class="skill-panel-head">
-                        <h3 class="skill-panel-title">前端工程与可视化</h3>
-                        <span class="skill-tag-badge">FRONTEND</span>
-                        <span class="skill-collapse-hint samp">次要模块</span>
-                    </div>
-                    <ul class="skill-items-list">
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">现代前端生态全栈交付</strong>
-                                <span class="skill-sub">React 18 / Vue 3 / TypeScript / Vite / Tailwind CSS</span>
+                    <!-- 领域 1：LLM / AI 应用工程 -->
+                    <div class="arch-stage-pane active" id="arch-pane-ai" data-pane="ai" role="tabpanel">
+                        <div class="arch-stage-head">
+                            <div class="arch-stage-title-wrap">
+                                <h3 class="arch-stage-title">LLM / AI 应用工程</h3>
+                                <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v red">AI-CORE</span></span>
                             </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip · 弹幕鸭 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">GIS 交互式瓦片地图</strong>
-                                <span class="skill-sub">Leaflet 地图路线动态高亮 · 坐标点标记与轨迹交互</span>
-                            </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">声画一体多模态反馈</strong>
-                                <span class="skill-sub">Web Audio API 流式播放 · CSS 角色骨骼情绪动画</span>
-                            </div>
-                            <a href="#proj-dycast" class="skill-proof-tag" title="查看对应成果">弹幕鸭 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">原生规范排印与无障碍</strong>
-                                <span class="skill-sub">纯原生 HTML5/CSS3 · 零第三方框架 · 双轨刻度排版</span>
-                            </div>
-                            <a href="../index.html" class="skill-proof-tag" title="查看主站">工房主站 ↗</a>
-                        </li>
-                    </ul>
-                </div>
+                            <span class="arch-stage-sub samp">6 项架构落地经验 · 核心主修</span>
+                        </div>
 
-                <!-- 技能 4：游戏研发与系统工程 -->
-                <div class="skill-panel" data-cat="game">
-                    <div class="skill-panel-head">
-                        <h3 class="skill-panel-title">游戏研发与系统工程</h3>
-                        <span class="skill-tag-badge">SYSTEM</span>
-                        <span class="skill-collapse-hint samp">次要模块</span>
-                    </div>
-                    <ul class="skill-items-list">
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">Godot 4 核心玩法与数据驱动</strong>
-                                <span class="skill-sub">GDScript / Resource 数据驱动 / 动态寻路与对象池</span>
+                        <!-- 技术选型徽章 -->
+                        <div>
+                            <div class="arch-block-caption">TECH STACK // 核心技术选型</div>
+                            <div class="arch-badges-row">
+                                <span class="dev-badge"><span class="badge-k">contract</span><span class="badge-v red">Pydantic v2</span></span>
+                                <span class="dev-badge"><span class="badge-k">vector</span><span class="badge-v red">FastEmbed 512d</span></span>
+                                <span class="dev-badge"><span class="badge-k">rag</span><span class="badge-v red">SQLite-vec</span></span>
+                                <span class="dev-badge"><span class="badge-k">agent</span><span class="badge-v red">Coze Workflow</span></span>
+                                <span class="dev-badge"><span class="badge-k">vision</span><span class="badge-v red">YOLOv11n + DINOv3</span></span>
+                                <span class="dev-badge"><span class="badge-k">stream</span><span class="badge-v red">SSE Event Trace</span></span>
                             </div>
-                            <a href="#proj-immunelink" class="skill-proof-tag" title="查看对应成果">免疫联结 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">自研 Godot 节点式叙事编辑器</strong>
-                                <span class="skill-sub">EditorPlugin + GraphEdit 研发任务拓扑导出插件</span>
-                            </div>
-                            <a href="#proj-optimized" class="skill-proof-tag" title="查看对应成果">智能优化中 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">MC Forge 模组物理与 3D 渲染</strong>
-                                <span class="skill-sub">Kotlin/Java · 三轴角速度碰撞模拟 · 实体模型分离</span>
-                            </div>
-                            <a href="#proj-csg" class="skill-proof-tag" title="查看对应成果">CSG 模组 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">跨模组碰撞包围盒判定</strong>
-                                <span class="skill-sub">Set 中心加权沉降算法 · TACZ 枪械子弹穿烟判定</span>
-                            </div>
-                            <a href="#proj-csg" class="skill-proof-tag" title="查看对应成果">CSG 模组 ↗</a>
-                        </li>
-                    </ul>
-                </div>
+                        </div>
 
-                <!-- 技能 5：工程化与交付素养 -->
-                <div class="skill-panel" data-cat="eng">
-                    <div class="skill-panel-head">
-                        <h3 class="skill-panel-title">工程化与交付素养</h3>
-                        <span class="skill-tag-badge">DELIVERY</span>
-                        <span class="skill-collapse-hint samp">次要模块</span>
+                        <!-- 硬核攻坚单行票据栈 -->
+                        <div>
+                            <div class="arch-block-caption">ENGINEERING BREAKTHROUGHS // 硬核攻坚突破票据</div>
+                            <div class="arch-tickets-stack">
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">01</span>
+                                    <span class="arch-ticket-title">零 LLM 纯算术防幻觉</span>
+                                    <span class="arch-ticket-rule">闭馆日等确定性时序规则，坚持 <code>0 LLM 介入</code> 纯算术拦截闭环，彻底根治模型随机幻觉</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">02</span>
+                                    <span class="arch-ticket-title">高可靠六级坐标降级链</span>
+                                    <span class="arch-ticket-rule"><code>用户真值 → POI检索 → 知识库 → 搜索兜底 → 城市中心</code>，配 8s 超时熔断与省市闸门防御</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">03</span>
+                                    <span class="arch-ticket-title">实体级向量 RAG 长期记忆</span>
+                                    <span class="arch-ticket-rule">按 <code>place_card</code> 实体切分，本地 FastEmbed 生成 512 维向量并结合 SQLite 向量检索精准注入</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">04</span>
+                                    <span class="arch-ticket-title">流式决策轨迹可观测工程</span>
+                                    <span class="arch-ticket-rule">整轮流式推送 <code>event: trace</code> 决策轨迹，前端可视化呈现模型选型、记忆命中与坐标来源</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">05</span>
+                                    <span class="arch-ticket-title">端到端多模态工作流编排</span>
+                                    <span class="arch-ticket-rule">串联豆包视觉模型与文生图管线，自建 6 类非遗垂类知识库，获省级一等奖并取得国家软著</span>
+                                    <a href="#proj-puppet" class="skill-proof-tag" title="查看项目实证">提线木偶 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 落地实证直达 -->
+                        <div class="arch-linked-foot">
+                            <span>代表落地工程：<strong>IterTrip — AI 旅行攻略结构化落地应用 (1.34万行代码 · 持续迭代)</strong></span>
+                            <a href="#proj-itertrip" class="arch-linked-link">前往项目实证卡 ↗</a>
+                        </div>
                     </div>
-                    <ul class="skill-items-list">
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">跨职能敏捷团队管理</strong>
-                                <span class="skill-sub">担任 8 人队伍主程兼队长 · 主导交付文档与 PR 评审</span>
+
+                    <!-- 领域 2：后端服务与协议工程 -->
+                    <div class="arch-stage-pane" id="arch-pane-backend" data-pane="backend" role="tabpanel">
+                        <div class="arch-stage-head">
+                            <div class="arch-stage-title-wrap">
+                                <h3 class="arch-stage-title">后端服务与协议工程</h3>
+                                <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v blue">BACKEND</span></span>
                             </div>
-                            <a href="#proj-optimized" class="skill-proof-tag" title="查看对应成果">金海豚大赛 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">容器化隔离与云端自托管</strong>
-                                <span class="skill-sub">Docker 隔离打包 · Nginx 反向代理 · 腾讯云 Linux 运维</span>
+                            <span class="arch-stage-sub samp">4 项核心交付 · 稳健服务</span>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">TECH STACK // 核心技术选型</div>
+                            <div class="arch-badges-row">
+                                <span class="dev-badge"><span class="badge-k">srv</span><span class="badge-v blue">FastAPI</span></span>
+                                <span class="dev-badge"><span class="badge-k">srv</span><span class="badge-v blue">Flask</span></span>
+                                <span class="dev-badge"><span class="badge-k">zero-lib</span><span class="badge-v blue">Python 710行标准库Web</span></span>
+                                <span class="dev-badge"><span class="badge-k">proto</span><span class="badge-v blue">Protobuf + WSS逆向</span></span>
+                                <span class="dev-badge"><span class="badge-k">security</span><span class="badge-v blue">HMAC 恒时鉴权</span></span>
+                                <span class="dev-badge"><span class="badge-k">pipe</span><span class="badge-v blue">APScheduler</span></span>
                             </div>
-                            <a href="#proj-itertrip" class="skill-proof-tag" title="查看对应成果">IterTrip 部署 ↗</a>
-                        </li>
-                        <li class="skill-entry">
-                            <div class="skill-core">
-                                <strong class="skill-title">自驱构建与开源交付</strong>
-                                <span class="skill-sub">近一年 GitHub 1,900+ Commits · Pull Shark ×2 勋章</span>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">ENGINEERING BREAKTHROUGHS // 硬核攻坚突破票据</div>
+                            <div class="arch-tickets-stack">
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">01</span>
+                                    <span class="arch-ticket-title">纯标准库零依赖 Web 门户</span>
+                                    <span class="arch-ticket-rule">零 pip 依赖编写 710 行门户与鉴权服务，运用 <code>HMAC 恒时比较</code> 抵御时序攻击，cookie 仅存派生摘要</span>
+                                    <a href="#proj-hanako" class="skill-proof-tag" title="查看项目实证">箱庭日报 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">02</span>
+                                    <span class="arch-ticket-title">高频网络协议逆向与解包</span>
+                                    <span class="arch-ticket-rule">独立完成 <code>wss signature</code> 握手签名计算与二进制 <code>Protobuf</code> 实时弹幕数据包逆向反序列化</span>
+                                    <a href="#proj-dycast" class="skill-proof-tag" title="查看项目实证">弹幕鸭 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">03</span>
+                                    <span class="arch-ticket-title">现代异步 Web 与数据持久化</span>
+                                    <span class="arch-ticket-rule"><code>FastAPI / Flask</code> 异步服务，SQLAlchemy ORM + SQLite 持久化，Docker 容器化隔离交付</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip · 羊肚菌 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">04</span>
+                                    <span class="arch-ticket-title">定时自动化内容生产管线</span>
+                                    <span class="arch-ticket-rule"><code>APScheduler</code> 定时采集新闻源、交叉核验与 Markdown 树型结构自动编排归档</span>
+                                    <a href="#proj-hanako" class="skill-proof-tag" title="查看项目实证">50+期无断更 ↗</a>
+                                </div>
                             </div>
-                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="skill-proof-tag" title="访问 GitHub">GitHub ↗</a>
-                        </li>
-                    </ul>
+                        </div>
+
+                        <div class="arch-linked-foot">
+                            <span>代表落地工程：<strong>hanako 箱庭日报 (连续 50+ 期无断更) / 弹幕鸭伴播工具</strong></span>
+                            <a href="#proj-hanako" class="arch-linked-link">前往项目实证卡 ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- 领域 3：前端工程与可视化 -->
+                    <div class="arch-stage-pane" id="arch-pane-frontend" data-pane="frontend" role="tabpanel">
+                        <div class="arch-stage-head">
+                            <div class="arch-stage-title-wrap">
+                                <h3 class="arch-stage-title">前端工程与可视化</h3>
+                                <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v amber">FRONTEND</span></span>
+                            </div>
+                            <span class="arch-stage-sub samp">4 项实战场景 · 交互感知</span>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">TECH STACK // 核心技术选型</div>
+                            <div class="arch-badges-row">
+                                <span class="dev-badge"><span class="badge-k">ui</span><span class="badge-v amber">React 18</span></span>
+                                <span class="dev-badge"><span class="badge-k">ui</span><span class="badge-v amber">Vue 3</span></span>
+                                <span class="dev-badge"><span class="badge-k">lang</span><span class="badge-v amber">TypeScript</span></span>
+                                <span class="dev-badge"><span class="badge-k">gis</span><span class="badge-v amber">Leaflet 瓦片地图</span></span>
+                                <span class="dev-badge"><span class="badge-k">audio</span><span class="badge-v amber">Web Audio API</span></span>
+                                <span class="dev-badge"><span class="badge-k">css</span><span class="badge-v amber">原生双轨刻度排印</span></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">ENGINEERING BREAKTHROUGHS // 硬核攻坚突破票据</div>
+                            <div class="arch-tickets-stack">
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">01</span>
+                                    <span class="arch-ticket-title">GIS 交互式瓦片地图动态联动</span>
+                                    <span class="arch-ticket-rule">基于 <code>Leaflet</code> 实现路线动态高亮、坐标打点下钻与行程卡片双向状态关联交互</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">02</span>
+                                    <span class="arch-ticket-title">声画一体多模态实时反馈</span>
+                                    <span class="arch-ticket-rule">驱动 <code>Web Audio API</code> 流式播放 WAV 语音的同时触发 CSS 角色情绪骨骼帧动画</span>
+                                    <a href="#proj-dycast" class="skill-proof-tag" title="查看项目实证">弹幕鸭 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">03</span>
+                                    <span class="arch-ticket-title">现代前端生态全栈交付</span>
+                                    <span class="arch-ticket-rule"><code>React 18 / Vue 3 / TypeScript / Vite</code> 深度实战，Tailwind CSS 与原子化样式组织</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">04</span>
+                                    <span class="arch-ticket-title">纯原生规范排印与无障碍</span>
+                                    <span class="arch-ticket-rule">纯原生 HTML5/CSS3 零框架构建，双轨刻度排版，严格尊重 <code>prefers-reduced-motion</code></span>
+                                    <a href="../index.html" class="skill-proof-tag" title="查看主站">工房主站 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="arch-linked-foot">
+                            <span>代表落地工程：<strong>IterTrip 瓦片交互地图 / 弹幕鸭多模态伴播浮窗</strong></span>
+                            <a href="#proj-itertrip" class="arch-linked-link">前往项目实证卡 ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- 领域 4：游戏研发与系统工程 -->
+                    <div class="arch-stage-pane" id="arch-pane-game" data-pane="game" role="tabpanel">
+                        <div class="arch-stage-head">
+                            <div class="arch-stage-title-wrap">
+                                <h3 class="arch-stage-title">游戏研发与系统工程</h3>
+                                <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v green">SYSTEM</span></span>
+                            </div>
+                            <span class="arch-stage-sub samp">4 项底层自研 · 引擎机制</span>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">TECH STACK // 核心技术选型</div>
+                            <div class="arch-badges-row">
+                                <span class="dev-badge"><span class="badge-k">engine</span><span class="badge-v green">Godot 4.3</span></span>
+                                <span class="dev-badge"><span class="badge-k">lang</span><span class="badge-v green">GDScript</span></span>
+                                <span class="dev-badge"><span class="badge-k">plugin</span><span class="badge-v green">自研 GraphEdit 插件</span></span>
+                                <span class="dev-badge"><span class="badge-k">mod</span><span class="badge-v green">MC Forge 1.20.1</span></span>
+                                <span class="dev-badge"><span class="badge-k">lang</span><span class="badge-v green">Kotlin / Java</span></span>
+                                <span class="dev-badge"><span class="badge-k">algo</span><span class="badge-v green">TACZ 穿烟包围盒</span></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">ENGINEERING BREAKTHROUGHS // 硬核攻坚突破票据</div>
+                            <div class="arch-tickets-stack">
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">01</span>
+                                    <span class="arch-ticket-title">自研 Godot 节点式叙事编辑器</span>
+                                    <span class="arch-ticket-rule">基于 <code>EditorPlugin + GraphEdit</code> 研发任务拓扑导出插件，可视化拼装直接导出 JSON，策划改数值不碰代码</span>
+                                    <a href="#proj-optimized" class="skill-proof-tag" title="查看项目实证">智能优化中 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">02</span>
+                                    <span class="arch-ticket-title">实体物理与三轴角速度模拟</span>
+                                    <span class="arch-ticket-rule">实体模型与手持分离渲染；Kotlin 模拟三轴角速度抛掷物翻滚、反弹与能量衰减</span>
+                                    <a href="#proj-csg" class="skill-proof-tag" title="查看项目实证">CSG 模组 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">03</span>
+                                    <span class="arch-ticket-title">跨模组穿烟包围盒碰撞判定</span>
+                                    <span class="arch-ticket-rule"><code>Set 中心加权沉降算法</code> + 轨迹包围盒检测，使 TACZ 枪械高速子弹正确穿透烟雾</span>
+                                    <a href="#proj-csg" class="skill-proof-tag" title="查看项目实证">CSG 模组 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">04</span>
+                                    <span class="arch-ticket-title">动态寻路拓扑与关卡热加载</span>
+                                    <span class="arch-ticket-rule">实现 <code>GridManager</code> 逻辑网格、桥梁绘图拓扑连接、网络通路完整性校验与 JSON 关卡 MOD 热加载</span>
+                                    <a href="#proj-immunelink" class="skill-proof-tag" title="查看项目实证">免疫联结 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="arch-linked-foot">
+                            <span>代表落地工程：<strong>智能优化中 (好游快爆上线) / CounterStrikeGrenades 模组</strong></span>
+                            <a href="#proj-optimized" class="arch-linked-link">前往项目实证卡 ↗</a>
+                        </div>
+                    </div>
+
+                    <!-- 领域 5：工程化与交付素养 -->
+                    <div class="arch-stage-pane" id="arch-pane-eng" data-pane="eng" role="tabpanel">
+                        <div class="arch-stage-head">
+                            <div class="arch-stage-title-wrap">
+                                <h3 class="arch-stage-title">工程化与交付素养</h3>
+                                <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v graphite">DELIVERY</span></span>
+                            </div>
+                            <span class="arch-stage-sub samp">团队管理与持续交付</span>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">TECH STACK // 核心技术选型</div>
+                            <div class="arch-badges-row">
+                                <span class="dev-badge"><span class="badge-k">lead</span><span class="badge-v graphite">8人队长兼主程</span></span>
+                                <span class="dev-badge"><span class="badge-k">ops</span><span class="badge-v graphite">Docker 容器隔离</span></span>
+                                <span class="dev-badge"><span class="badge-k">server</span><span class="badge-v graphite">腾讯云 Linux / Nginx</span></span>
+                                <span class="dev-badge"><span class="badge-k">ci</span><span class="badge-v graphite">近一年 1900+ Commits</span></span>
+                                <span class="dev-badge"><span class="badge-k">badge</span><span class="badge-v graphite">Pull Shark ×2 勋章</span></span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="arch-block-caption">ENGINEERING BREAKTHROUGHS // 硬核攻坚突破票据</div>
+                            <div class="arch-tickets-stack">
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">01</span>
+                                    <span class="arch-ticket-title">跨职能敏捷团队高压交付</span>
+                                    <span class="arch-ticket-rule">21 天极限 GameJam 下担任队长兼主程，制定数值契约与 PR 评审规范，编写完整交付文档与边界自检</span>
+                                    <a href="#proj-optimized" class="skill-proof-tag" title="查看项目实证">金海豚大赛 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">02</span>
+                                    <span class="arch-ticket-title">极客自驱与自托管云服务运维</span>
+                                    <span class="arch-ticket-rule">独立配置 Linux 运维环境、Nginx 反代与 Docker 容器隔离；自建自动化生产与部署链路</span>
+                                    <a href="#proj-itertrip" class="skill-proof-tag" title="查看项目实证">IterTrip 部署 ↗</a>
+                                </div>
+                                <div class="arch-ticket-strip">
+                                    <span class="arch-ticket-no">03</span>
+                                    <span class="arch-ticket-title">高频自驱构建与开源交付</span>
+                                    <span class="arch-ticket-rule">近一年 GitHub 累计 1,900+ Commits，获 Pull Shark ×2 勋章，具备极强的代码自驱与交付定力</span>
+                                    <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="skill-proof-tag" title="访问 GitHub">GitHub ↗</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="arch-linked-foot">
+                            <span>代表落地工程：<strong>金海豚 2026 游戏大赛参赛作品 / 个人自托管服务集群</strong></span>
+                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" class="arch-linked-link">访问 GitHub ↗</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </section>
@@ -374,12 +494,7 @@
                                     <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
                                     <span>LIVE DEMO // dragonzhi.xyz/itertrip/</span>
                                 </div>
-                                <div class="placeholder-box">
-                                    <span class="placeholder-icon">🗺️</span>
-                                    <span class="placeholder-title">IterTrip 实机交互与瓦片地图预览</span>
-                                    <span class="placeholder-path">images/projects/itertrip.png</span>
-                                    <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
-                                </div>
+                                <img src="../images/projects/itertrip.png" alt="IterTrip 跟 AI 说去哪落地页实机界面" loading="lazy">
                             </div>
 
                             <!-- 右侧：成果卡信息与操作 -->
@@ -448,19 +563,7 @@
                     </div>
                     <div class="proj-content-body">
                         <div class="proj-layout-grid">
-                            <!-- 左侧：媒体实机视窗 -->
-                            <div class="media-window">
-                                <div class="window-topbar">
-                                    <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
-                                    <span>OPEN SOURCE // WebSocket + TTS</span>
-                                </div>
-                                <div class="placeholder-box">
-                                    <span class="placeholder-icon">🦆</span>
-                                    <span class="placeholder-title">弹幕鸭 伴播界面与情绪角色动画截图</span>
-                                    <span class="placeholder-path">images/projects/dycast.png</span>
-                                    <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
-                                </div>
-                            </div>
+                            <!-- 本项目不配实机图，信息单栏展示 -->
 
                             <!-- 右侧：成果卡信息与操作 -->
                             <div class="proj-info-col">
@@ -519,19 +622,7 @@
                     </div>
                     <div class="proj-content-body">
                         <div class="proj-layout-grid">
-                            <!-- 左侧：媒体视窗 -->
-                            <div class="media-window">
-                                <div class="window-topbar">
-                                    <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
-                                    <span>HONOR &amp; IP // 竞赛一等奖 · 国家软著</span>
-                                </div>
-                                <div class="placeholder-box">
-                                    <span class="placeholder-icon">🎭</span>
-                                    <span class="placeholder-title">提线木偶小助手 工作流拓扑与剧本生成界面</span>
-                                    <span class="placeholder-path">images/projects/puppet.png</span>
-                                    <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
-                                </div>
-                            </div>
+                            <!-- 本项目不配实机图，信息单栏展示 -->
 
                             <!-- 右侧：成果卡信息与操作 -->
                             <div class="proj-info-col">
@@ -597,12 +688,7 @@
                                     <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
                                     <span>NATIONAL PROJECT // 国家级大创 · 软著</span>
                                 </div>
-                                <div class="placeholder-box">
-                                    <span class="placeholder-icon">🍄</span>
-                                    <span class="placeholder-title">菌智鉴熟 检测推理与历史追溯后台截图</span>
-                                    <span class="placeholder-path">images/projects/morel.png</span>
-                                    <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
-                                </div>
+                                <img src="../images/projects/morel.jpg" alt="菌智鉴熟羊肚菌智能检测系统检测中心界面" loading="lazy">
                             </div>
 
                             <!-- 右侧：成果卡信息与操作 -->
@@ -669,12 +755,7 @@
                                     <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
                                     <span>RELEASE // 好游快爆试玩上线</span>
                                 </div>
-                                <div class="placeholder-box">
-                                    <span class="placeholder-icon">🎮</span>
-                                    <span class="placeholder-title">智能优化中 游戏实机截图 / 自研叙事编辑器</span>
-                                    <span class="placeholder-path">images/projects/optimized.png</span>
-                                    <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
-                                </div>
+                                <img src="../images/projects/optimized.jpg" alt="智能优化中像素风办公室场景" loading="lazy">
                             </div>
 
                             <!-- 右侧：成果卡信息与操作 -->
@@ -802,19 +883,7 @@
                     </div>
                     <div class="proj-content-body">
                         <div class="proj-layout-grid">
-                            <!-- 左侧：媒体视窗 -->
-                            <div class="media-window">
-                                <div class="window-topbar">
-                                    <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
-                                    <span>PORTAL // 零依赖标准库门户</span>
-                                </div>
-                                <div class="placeholder-box">
-                                    <span class="placeholder-icon">📰</span>
-                                    <span class="placeholder-title">箱庭日报 复古报纸排印主页截图</span>
-                                    <span class="placeholder-path">images/projects/hanako.png</span>
-                                    <span class="placeholder-spec">建议比例 16:9 · 尺寸约 1200×675</span>
-                                </div>
-                            </div>
+                            <!-- 本项目不配实机图，信息单栏展示 -->
 
                             <!-- 右侧：成果卡信息与操作 -->
                             <div class="proj-info-col">
@@ -1104,44 +1173,43 @@
             item.classList.toggle("is-filtered-out", hide);
         });
 
-        // 核心技术架构联动：主修模块排在最前并完整展开；非主修模块收缩、折叠内容、排序靠后
-        var activeSkills = cfg.activeSkills;
-        var activeCount = 0;
-        var collapsedCount = 0;
-
-        skillPanels.forEach(function(panel) {
-            var cat = panel.getAttribute("data-cat");
-            var isActive = (!activeSkills || !!activeSkills[cat]);
-
-            panel.classList.remove("is-expanded-manually", "is-full-width");
-
-            if (isActive) {
-                activeCount++;
-                panel.classList.remove("is-collapsed");
-                panel.style.order = activeCount; // 核心模块排在最前 (order 1, 2, 3...)
-            } else {
-                collapsedCount++;
-                panel.classList.add("is-collapsed");
-                panel.style.order = 10 + collapsedCount; // 次要模块排序靠后 (order 11, 12...)
-            }
-        });
-
-        // 针对不同模式优化网格对齐
-        if (track === "all") {
-            var engPanel = document.querySelector('.skill-panel[data-cat="eng"]');
-            if (engPanel) engPanel.classList.add("is-full-width");
-        } else if (track === "ai") {
-            var gamePanel = document.querySelector('.skill-panel[data-cat="game"]');
-            if (gamePanel) gamePanel.classList.add("is-full-width");
+        // 核心技术架构联动：切换方向时自动切至对应主修活页
+        if (track === "game") {
+            activateArchTab("game");
+            var gameBadge = document.getElementById("rail-badge-game");
+            if (gameBadge) gameBadge.textContent = "4 项自研 · 主修";
+            var aiBadge = document.getElementById("rail-badge-ai");
+            if (aiBadge) aiBadge.textContent = "6 契约";
+        } else {
+            activateArchTab("ai");
+            var gameBadge = document.getElementById("rail-badge-game");
+            if (gameBadge) gameBadge.textContent = "4 项自研";
+            var aiBadge = document.getElementById("rail-badge-ai");
+            if (aiBadge) aiBadge.textContent = (track === "ai") ? "6 契约 · 主修" : "6 契约";
         }
     }
 
-    // 次要模块支持点击临时展开/再次收起
-    skillPanels.forEach(function(panel) {
-        panel.addEventListener("click", function() {
-            if (panel.classList.contains("is-collapsed")) {
-                panel.classList.toggle("is-expanded-manually");
-            }
+    // 4. 架构活页工作台 (Arch Workbench) 切换交互
+    var archRailItems = document.querySelectorAll(".arch-rail-item[data-arch-target]");
+    var archPanes = document.querySelectorAll(".arch-stage-pane[data-pane]");
+
+    function activateArchTab(targetKey) {
+        archRailItems.forEach(function(item) {
+            var isTarget = (item.getAttribute("data-arch-target") === targetKey);
+            item.classList.toggle("active", isTarget);
+            item.setAttribute("aria-selected", isTarget ? "true" : "false");
+        });
+
+        archPanes.forEach(function(pane) {
+            var isTarget = (pane.getAttribute("data-pane") === targetKey);
+            pane.classList.toggle("active", isTarget);
+        });
+    }
+
+    archRailItems.forEach(function(item) {
+        item.addEventListener("click", function() {
+            var target = item.getAttribute("data-arch-target");
+            activateArchTab(target);
         });
     });
 
@@ -1164,8 +1232,8 @@
         });
     });
 
-    // 4. 实证锚点平滑跳转并高亮项目卡片
-    document.querySelectorAll(".skill-proof-tag[href^='#proj-']").forEach(function(anchor) {
+    // 5. 实证锚点平滑跳转并高亮项目卡片 (支持票据标签与底部直达条)
+    document.querySelectorAll(".skill-proof-tag[href^='#proj-'], .arch-linked-link[href^='#proj-']").forEach(function(anchor) {
         anchor.addEventListener("click", function(e) {
             var targetId = anchor.getAttribute("href").slice(1);
             var targetEl = document.getElementById(targetId);

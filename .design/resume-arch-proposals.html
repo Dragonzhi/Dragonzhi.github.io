@@ -1,0 +1,1630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>核心技术架构 · 4种重构方案原型对照页 | ZLOONG 工房</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <style>
+        /* ==========================================================================
+           0. 工房设计规范基础 (Tokens & Global)
+           ========================================================================== */
+        :root {
+            --desk: #f5f0e6;
+            --card: #fbf8f2;
+            --ink: #26221c;
+            --ink-soft: rgba(38, 34, 28, .68);
+            --ink-faint: rgba(38, 34, 28, .35);
+            --line: rgba(38, 34, 28, .18);
+            --line-light: rgba(38, 34, 28, .10);
+            --red: #8b2c1f;
+            --blue: #234d70;
+            --amber: #a05a20;
+            --green: #2e6040;
+            --graphite: #3d3935;
+            --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+            --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", STSong, serif;
+            --display: "Averia Gruesa Libre", "PingFang SC", sans-serif;
+            --radius: 3px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--desk);
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            background-image:
+                linear-gradient(rgba(139,44,31,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139,44,31,.025) 1px, transparent 1px);
+            background-size: 24px 24px;
+            padding-bottom: 80px;
+        }
+
+        /* 顶部控制与方案切换条 */
+        .switcher-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(245, 240, 230, 0.96);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--line);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 10px rgba(38, 34, 28, 0.05);
+        }
+
+        .switcher-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switcher-logo {
+            font-family: var(--serif);
+            font-weight: 700;
+            color: var(--red);
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        .switcher-badge {
+            font-family: var(--mono);
+            font-size: 11px;
+            background: rgba(139, 44, 31, 0.08);
+            color: var(--red);
+            padding: 2px 7px;
+            border-radius: 2px;
+            border: 1px solid rgba(139, 44, 31, 0.2);
+        }
+
+        .switcher-tabs {
+            display: flex;
+            background: rgba(38, 34, 28, 0.06);
+            padding: 3px;
+            border-radius: 3px;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 6px 13px;
+            border-radius: 2px;
+            cursor: pointer;
+            color: var(--ink-soft);
+            transition: all .16s ease;
+            font-weight: 500;
+        }
+
+        .tab-btn:hover {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: var(--red);
+            font-weight: 700;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, 0.08);
+        }
+
+        /* 主体容器 */
+        .main-container {
+            max-width: 1060px;
+            margin: 28px auto 0;
+            padding: 0 20px;
+        }
+
+        .proposal-card-frame {
+            display: none;
+            background: #fcfbf7;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 24px;
+            box-shadow: 0 4px 18px rgba(38, 34, 28, 0.05);
+            margin-bottom: 30px;
+            position: relative;
+        }
+
+        .proposal-card-frame.active {
+            display: block;
+            animation: fadeIn .25s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 方案说明横幅 */
+        .proposal-intro-bar {
+            background: #faf6ed;
+            border-left: 4px solid var(--red);
+            padding: 12px 18px;
+            margin-bottom: 24px;
+            border-radius: 0 3px 3px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .proposal-intro-text h3 {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            margin-bottom: 4px;
+        }
+
+        .proposal-intro-text p {
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.5;
+        }
+
+        .proposal-traits {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+            font-family: var(--mono);
+            font-size: 11px;
+        }
+
+        .trait-tag {
+            background: #fff;
+            border: 1px solid var(--line);
+            padding: 2px 8px;
+            border-radius: 2px;
+            color: var(--ink-soft);
+        }
+
+        .trait-tag.highlight {
+            color: var(--red);
+            border-color: rgba(139, 44, 31, 0.3);
+            background: rgba(139, 44, 31, 0.04);
+            font-weight: 600;
+        }
+
+        /* 通用工装组件：GitHub/箱庭徽章 (Dev Badges) */
+        .dev-badge {
+            display: inline-flex;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 11px;
+            line-height: 1;
+            border-radius: 3px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 34, 28, 0.18);
+            box-shadow: 0 1px 2px rgba(38, 34, 28, 0.04);
+            vertical-align: middle;
+            margin: 2px;
+            transition: transform .15s ease;
+        }
+
+        .dev-badge:hover {
+            transform: translateY(-1px);
+        }
+
+        .dev-badge .badge-k {
+            background: #2b2620;
+            color: #ebe4d5;
+            padding: 3.5px 7px;
+            font-weight: 600;
+            letter-spacing: .3px;
+        }
+
+        .dev-badge .badge-v {
+            background: #fbf8f2;
+            color: var(--ink);
+            padding: 3.5px 7px;
+            font-weight: 500;
+            border-left: 1px solid rgba(38, 34, 28, 0.12);
+        }
+
+        .dev-badge .badge-v.red { background: #8b2c1f; color: #fff; }
+        .dev-badge .badge-v.blue { background: #234d70; color: #fff; }
+        .dev-badge .badge-v.amber { background: #a05a20; color: #fff; }
+        .dev-badge .badge-v.green { background: #2e6040; color: #fff; }
+        .dev-badge .badge-v.graphite { background: #3d3935; color: #fff; }
+
+        /* 实证边注标 */
+        .proof-ref-tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            text-decoration: none;
+            border-bottom: 1px dashed rgba(38, 34, 28, 0.28);
+            padding: 1px 2px;
+            margin-left: auto;
+            flex-shrink: 0;
+            transition: all .16s ease;
+        }
+
+        .proof-ref-tag:hover {
+            color: var(--red);
+            border-bottom-color: var(--red);
+            transform: translateX(2px);
+        }
+
+        /* ==========================================================================
+           方案一专属样式：【GitHub 徽章矩阵 + 关键工程攻坚票据】
+           ========================================================================== */
+        .p1-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .p1-section-title {
+            font-family: var(--mono);
+            font-size: 11.5px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            color: var(--ink-soft);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .p1-section-title::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: var(--line);
+        }
+
+        .p1-badge-cloud {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            background: #fdfbf7;
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+        }
+
+        .p1-badge-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .p1-group-label {
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-faint);
+            font-weight: 700;
+            padding-right: 4px;
+        }
+
+        .p1-divider-dot {
+            color: var(--line);
+            padding: 0 4px;
+        }
+
+        .p1-tickets-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .p1-ticket-strip {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--ink);
+            padding: 10px 16px;
+            border-radius: 2px;
+            transition: all .18s ease;
+            box-shadow: 0 1px 3px rgba(38, 34, 28, 0.03);
+        }
+
+        .p1-ticket-strip.t-ai { border-left-color: var(--red); }
+        .p1-ticket-strip.t-backend { border-left-color: var(--blue); }
+        .p1-ticket-strip.t-game { border-left-color: var(--green); }
+        .p1-ticket-strip.t-frontend { border-left-color: var(--amber); }
+
+        .p1-ticket-strip:hover {
+            transform: translateX(3px);
+            box-shadow: 0 4px 12px rgba(38, 34, 28, 0.07);
+            border-color: rgba(38, 34, 28, 0.28);
+        }
+
+        .p1-ticket-no {
+            font-family: var(--mono);
+            font-size: 12px;
+            font-weight: 700;
+            color: var(--ink-soft);
+            width: 24px;
+            flex-shrink: 0;
+        }
+
+        .p1-ticket-title {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--ink);
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .p1-ticket-rule {
+            font-size: 12.5px;
+            color: var(--ink-soft);
+            flex: 1;
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        .p1-ticket-rule code {
+            font-family: var(--mono);
+            font-size: 11px;
+            background: rgba(38, 34, 28, 0.05);
+            padding: 1px 4px;
+            border-radius: 2px;
+            color: var(--ink);
+        }
+
+        /* ==========================================================================
+           方案二专属样式：【系统层级蓝图 / 数据流拓扑看板】
+           ========================================================================== */
+        .p2-blueprint-frame {
+            position: relative;
+            background: #fdfcf9;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            padding: 24px 20px 24px 50px;
+            background-image:
+                linear-gradient(rgba(38, 34, 28, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(38, 34, 28, 0.03) 1px, transparent 1px);
+            background-size: 16px 16px;
+        }
+
+        /* 左侧贯通的主线总线轨 (Bus Spine) */
+        .p2-bus-spine {
+            position: absolute;
+            left: 24px;
+            top: 36px;
+            bottom: 36px;
+            width: 3px;
+            background: var(--ink);
+            opacity: 0.25;
+            border-radius: 2px;
+        }
+
+        .p2-bus-node {
+            position: absolute;
+            left: -5px;
+            width: 13px;
+            height: 13px;
+            border-radius: 50%;
+            background: #fff;
+            border: 3px solid var(--ink);
+        }
+
+        .p2-bus-node.n1 { top: 38px; border-color: var(--amber); }
+        .p2-bus-node.n2 { top: 156px; border-color: var(--blue); }
+        .p2-bus-node.n3 { top: 274px; border-color: var(--red); }
+        .p2-bus-node.n4 { top: 392px; border-color: var(--green); }
+
+        .p2-layers-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .p2-layer-row {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 14px 18px;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, 0.03);
+            display: grid;
+            grid-template-columns: 180px 1fr auto;
+            gap: 18px;
+            align-items: center;
+            transition: all .18s ease;
+        }
+
+        .p2-layer-row:hover {
+            border-color: rgba(38, 34, 28, 0.35);
+            box-shadow: 0 4px 14px rgba(38, 34, 28, 0.07);
+        }
+
+        .p2-layer-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .p2-layer-code {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--ink-faint);
+            letter-spacing: .5px;
+            font-weight: 700;
+        }
+
+        .p2-layer-name {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .p2-layer-detail {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .p2-tech-pills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+        }
+
+        .p2-pill {
+            font-family: var(--mono);
+            font-size: 11px;
+            background: rgba(38, 34, 28, 0.05);
+            padding: 1px 6px;
+            border-radius: 2px;
+            border: 1px solid rgba(38, 34, 28, 0.12);
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        .p2-desc-line {
+            font-size: 12px;
+            color: var(--ink-soft);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .p2-desc-line::before {
+            content: "↳";
+            font-family: var(--mono);
+            color: var(--ink-faint);
+        }
+
+        /* 介于两层之间的总线流通说明 (Bus Pipe Indicator) */
+        .p2-pipe-tag {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--ink-soft);
+            padding-left: 12px;
+            letter-spacing: .5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* ==========================================================================
+           方案三专属样式：【工装机架插槽 / 模块化硬件控制台】
+           ========================================================================== */
+        .p3-rack-chassis {
+            background: #25221c;
+            border: 2px solid #3c372f;
+            border-radius: 4px;
+            padding: 16px;
+            box-shadow: inset 0 2px 10px rgba(0,0,0,0.5), 0 6px 20px rgba(38,34,28,0.12);
+        }
+
+        .p3-chassis-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: #a49d8f;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #3a352c;
+            margin-bottom: 14px;
+            letter-spacing: 1px;
+        }
+
+        .p3-rack-grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 12px;
+        }
+
+        @media (max-width: 900px) {
+            .p3-rack-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        .p3-blade-card {
+            background: #faf6ec;
+            border: 1px solid #c9c0b0;
+            border-radius: 2px;
+            padding: 12px 10px 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            position: relative;
+            transition: all .2s ease;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+            cursor: pointer;
+        }
+
+        .p3-blade-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 18px rgba(0,0,0,0.35);
+            background: #fff;
+            border-color: #dfd7c7;
+        }
+
+        /* 顶部模拟螺丝孔与拉手 */
+        .p3-blade-handle {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-family: var(--mono);
+            font-size: 10px;
+            color: var(--ink-soft);
+            padding-bottom: 6px;
+            border-bottom: 1px solid rgba(38,34,28,0.1);
+        }
+
+        .p3-screw {
+            color: #928a7b;
+            font-size: 9px;
+        }
+
+        .p3-led-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: #52a447;
+            box-shadow: 0 0 6px #52a447;
+            display: inline-block;
+        }
+
+        .p3-blade-card.b-red .p3-led-dot { background: #d74436; box-shadow: 0 0 6px #d74436; }
+        .p3-blade-card.b-blue .p3-led-dot { background: #3b88c3; box-shadow: 0 0 6px #3b88c3; }
+
+        .p3-blade-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.3;
+        }
+
+        .p3-blade-spec-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            font-size: 11px;
+            color: var(--ink-soft);
+            flex: 1;
+        }
+
+        .p3-blade-spec-list li {
+            background: rgba(38,34,28,0.04);
+            padding: 3px 6px;
+            border-radius: 2px;
+            border-left: 2px solid var(--ink);
+            font-family: var(--mono);
+        }
+
+        .p3-blade-spec-list li.spec-highlight {
+            border-left-color: var(--red);
+            font-weight: 600;
+            color: var(--ink);
+        }
+
+        /* 底部计量仪表条 (Telemetry Bar) */
+        .p3-meter-bar {
+            background: #201d18;
+            color: #e2d9c8;
+            font-family: var(--mono);
+            font-size: 10px;
+            padding: 4px 6px;
+            border-radius: 2px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .p3-meter-bar span { color: #f5b0a4; font-weight: 700; }
+
+        /* ==========================================================================
+           方案四专属样式：【工坊活页索引抽屉 / 交互式工作台】
+           ========================================================================== */
+        .p4-workbench-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            background: #fff;
+            overflow: hidden;
+            box-shadow: 0 2px 10px rgba(38,34,28,0.04);
+            min-height: 380px;
+        }
+
+        @media (max-width: 800px) {
+            .p4-workbench-layout { grid-template-columns: 1fr; }
+        }
+
+        /* 左侧活页导轨 */
+        .p4-side-rail {
+            background: #f7f3ea;
+            border-right: 1px solid var(--line);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .p4-rail-head {
+            padding: 12px 16px;
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            border-bottom: 1px solid var(--line);
+            letter-spacing: 1px;
+            background: rgba(38, 34, 28, 0.03);
+            font-weight: 700;
+        }
+
+        .p4-nav-item {
+            padding: 12px 16px;
+            border-bottom: 1px solid rgba(38, 34, 28, 0.08);
+            cursor: pointer;
+            transition: all .16s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .p4-nav-item:hover {
+            background: #fdfbf7;
+        }
+
+        .p4-nav-item.active {
+            background: #fff;
+            border-left: 4px solid var(--red);
+            font-weight: 700;
+            color: var(--red);
+            padding-left: 12px;
+        }
+
+        .p4-nav-name {
+            font-size: 13px;
+        }
+
+        .p4-nav-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            background: rgba(38, 34, 28, 0.06);
+            color: var(--ink-soft);
+            padding: 1px 5px;
+            border-radius: 2px;
+        }
+
+        .p4-nav-item.active .p4-nav-badge {
+            background: var(--red);
+            color: #fff;
+        }
+
+        /* 右侧操作台面 */
+        .p4-stage-pane {
+            padding: 24px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            background: #fdfbf7;
+        }
+
+        .p4-stage-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            border-bottom: 1px dashed var(--line);
+            padding-bottom: 12px;
+        }
+
+        .p4-stage-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .p4-stage-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        @media (max-width: 650px) {
+            .p4-stage-content-grid { grid-template-columns: 1fr; }
+        }
+
+        .p4-spec-box {
+            background: #fff;
+            border: 1px solid var(--line);
+            padding: 14px;
+            border-radius: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .p4-spec-box-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .p4-spec-box-body {
+            font-size: 12px;
+            color: var(--ink-soft);
+            line-height: 1.5;
+        }
+
+        .p4-linked-proj-bar {
+            background: #faf6ed;
+            border: 1px dashed var(--line);
+            padding: 10px 14px;
+            border-radius: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 12px;
+        }
+
+        /* 四案并列对照模式 */
+        .all-proposals-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 50px;
+        }
+
+        .grid-proposal-block {
+            border-top: 3px double var(--line);
+            padding-top: 30px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 顶部方案切换条 -->
+    <header class="switcher-bar">
+        <div class="switcher-title-group">
+            <span class="switcher-logo">ZLOONG 工房</span>
+            <span class="switcher-badge">SECTION 02 // 原型对照</span>
+        </div>
+        <nav class="switcher-tabs">
+            <button class="tab-btn" onclick="switchProposal('fusion')" style="color:var(--red); font-weight:700; background:rgba(139,44,31,0.06);">⭐ 方案1+4融合版（强强结合）</button>
+            <button class="tab-btn active" onclick="switchProposal('p1')">方案一：徽章+攻坚票据</button>
+            <button class="tab-btn" onclick="switchProposal('p2')">方案二：系统数据流蓝图</button>
+            <button class="tab-btn" onclick="switchProposal('p3')">方案三：工装机架控制台</button>
+            <button class="tab-btn" onclick="switchProposal('p4')">方案四：活页索引工作台</button>
+            <button class="tab-btn" onclick="switchProposal('all')">👁️ 五案同屏对比</button>
+        </nav>
+    </header>
+
+    <main class="main-container">
+
+        <!-- ==========================================================================
+             方案 1+4 强强融合版：【工坊活页索引抽屉 + 极客徽章与单行攻坚票据】
+             ========================================================================== -->
+        <section id="fusion-frame" class="proposal-card-frame">
+            <div class="proposal-intro-bar" style="border-left-color: #d98e4a;">
+                <div class="proposal-intro-text">
+                    <h3>⭐ 方案 1+4 强强融合版：【工坊活页索引轨 + GitHub 极客徽章与单行攻坚票据】</h3>
+                    <p><strong>结合了两者的最大长处</strong>：以方案 4 的“工坊活页索引抽屉”作为结构骨架（省垂直空间、整洁、无缝联动实习方向）；右侧工作台彻底消灭卡片段落文字，纯粹装载方案 1 的“双拼彩色徽章池 + 单行硬核攻坚票据”。</p>
+                </div>
+                <div class="proposal-traits">
+                    <span class="trait-tag highlight" style="color:#d98e4a; border-color:#d98e4a;">综合体验：最推荐</span>
+                    <span class="trait-tag">文字：极简单行</span>
+                    <span class="trait-tag">空间：紧凑无压迫</span>
+                </div>
+            </div>
+
+            <div class="p4-workbench-layout" id="fusion-workbench">
+                <!-- 左侧活页导轨 -->
+                <div class="p4-side-rail">
+                    <div class="p4-rail-head">ENGINEERING ARCH // 活页索引</div>
+                    <div class="p4-nav-item active fusion-rail-item" onclick="switchFusionTab(0)">
+                        <span class="p4-nav-name">01 // AI 应用工程</span>
+                        <span class="p4-nav-badge" style="background:#8b2c1f; color:#fff;">6 契约 · 主修</span>
+                    </div>
+                    <div class="p4-nav-item fusion-rail-item" onclick="switchFusionTab(1)">
+                        <span class="p4-nav-name">02 // 后端服务与协议</span>
+                        <span class="p4-nav-badge">4 项交付</span>
+                    </div>
+                    <div class="p4-nav-item fusion-rail-item" onclick="switchFusionTab(2)">
+                        <span class="p4-nav-name">03 // 前端工程与可视化</span>
+                        <span class="p4-nav-badge">4 场景</span>
+                    </div>
+                    <div class="p4-nav-item fusion-rail-item" onclick="switchFusionTab(3)">
+                        <span class="p4-nav-name">04 // 游戏研发与系统</span>
+                        <span class="p4-nav-badge">4 项自研</span>
+                    </div>
+                    <div class="p4-nav-item fusion-rail-item" onclick="switchFusionTab(4)">
+                        <span class="p4-nav-name">05 // 工程化与交付素养</span>
+                        <span class="p4-nav-badge">1900+ 提交</span>
+                    </div>
+                </div>
+
+                <!-- 右侧工作台面 (由 JS 切换内容) -->
+                <div class="p4-stage-pane" id="fusion-stage-content">
+                    <!-- 动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             方案一：【GitHub 徽章矩阵 + 关键工程攻坚票据】
+             ========================================================================== -->
+        <section id="p1-frame" class="proposal-card-frame active">
+            <div class="proposal-intro-bar">
+                <div class="proposal-intro-text">
+                    <h3>方案一：【GitHub 徽章矩阵 + 关键工程攻坚票据】（极简、零废话、Developer 原生）</h3>
+                    <p>彻底消灭传统卡片里的大段文字。上半部分用高密度双拼徽章一眼扫完技术选型；下半部分提炼为 5 条硬核的“工程攻坚单行票据”，干脆利落。</p>
+                </div>
+                <div class="proposal-traits">
+                    <span class="trait-tag highlight">文字量：极少</span>
+                    <span class="trait-tag">扫描速度：3秒</span>
+                    <span class="trait-tag">风格：极客原生</span>
+                </div>
+            </div>
+
+            <!-- 原型实物呈现 -->
+            <div class="p1-wrap">
+                <!-- 1. 核心技术栈微标云 -->
+                <div>
+                    <div class="p1-section-title">
+                        <span>TECH STACK SPECIFICATION // 核心技术选型全景</span>
+                    </div>
+                    <div class="p1-badge-cloud">
+                        <!-- AI & LLM -->
+                        <div class="p1-badge-group">
+                            <span class="p1-group-label">AI/LLM:</span>
+                            <span class="dev-badge"><span class="badge-k">contract</span><span class="badge-v red">Pydantic v2</span></span>
+                            <span class="dev-badge"><span class="badge-k">vector</span><span class="badge-v red">FastEmbed 512d</span></span>
+                            <span class="dev-badge"><span class="badge-k">rag</span><span class="badge-v red">SQLite-vec</span></span>
+                            <span class="dev-badge"><span class="badge-k">agent</span><span class="badge-v red">Coze Workflow</span></span>
+                            <span class="dev-badge"><span class="badge-k">vision</span><span class="badge-v red">YOLOv11n + DINOv3</span></span>
+                        </div>
+                        <span class="p1-divider-dot">·</span>
+                        <!-- Backend -->
+                        <div class="p1-badge-group">
+                            <span class="p1-group-label">BACKEND:</span>
+                            <span class="dev-badge"><span class="badge-k">srv</span><span class="badge-v blue">FastAPI</span></span>
+                            <span class="dev-badge"><span class="badge-k">srv</span><span class="badge-v blue">Flask</span></span>
+                            <span class="dev-badge"><span class="badge-k">zero-lib</span><span class="badge-v blue">Python 710行手写Web</span></span>
+                            <span class="dev-badge"><span class="badge-k">proto</span><span class="badge-v blue">Protobuf + WSS逆向</span></span>
+                        </div>
+                        <span class="p1-divider-dot">·</span>
+                        <!-- Frontend -->
+                        <div class="p1-badge-group">
+                            <span class="p1-group-label">WEB &amp; GIS:</span>
+                            <span class="dev-badge"><span class="badge-k">ui</span><span class="badge-v amber">React 18</span></span>
+                            <span class="dev-badge"><span class="badge-k">ui</span><span class="badge-v amber">Vue 3</span></span>
+                            <span class="dev-badge"><span class="badge-k">gis</span><span class="badge-v amber">Leaflet 瓦片地图</span></span>
+                            <span class="dev-badge"><span class="badge-k">audio</span><span class="badge-v amber">Web Audio API</span></span>
+                        </div>
+                        <span class="p1-divider-dot">·</span>
+                        <!-- System & Game -->
+                        <div class="p1-badge-group">
+                            <span class="p1-group-label">SYSTEM &amp; GAME:</span>
+                            <span class="dev-badge"><span class="badge-k">engine</span><span class="badge-v green">Godot 4.3</span></span>
+                            <span class="dev-badge"><span class="badge-k">mod</span><span class="badge-v green">MC Forge 1.20.1</span></span>
+                            <span class="dev-badge"><span class="badge-k">plugin</span><span class="badge-v green">GraphEdit叙事插件</span></span>
+                            <span class="dev-badge"><span class="badge-k">ops</span><span class="badge-v graphite">Docker + Nginx</span></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. 硬核攻坚工程票据栈 (Ticket Stack) -->
+                <div>
+                    <div class="p1-section-title">
+                        <span>ENGINEERING MILESTONES // 5 项硬核工程突破票据</span>
+                    </div>
+                    <div class="p1-tickets-stack">
+                        <!-- Ticket 1 -->
+                        <div class="p1-ticket-strip t-ai">
+                            <span class="p1-ticket-no">01</span>
+                            <span class="p1-ticket-title">零 LLM 纯算术防幻觉</span>
+                            <span class="p1-ticket-rule">闭馆日等确定性时序规则，坚持 <code>0 LLM 介入</code> 纯算术拦截闭环，彻底根治模型幻觉</span>
+                            <a href="#proj-itertrip" class="proof-ref-tag">IterTrip ↗</a>
+                        </div>
+                        <!-- Ticket 2 -->
+                        <div class="p1-ticket-strip t-ai">
+                            <span class="p1-ticket-no">02</span>
+                            <span class="p1-ticket-title">高可靠六级坐标降级链</span>
+                            <span class="p1-ticket-rule"><code>用户真值 → POI检索 → 知识库 → 搜索兜底 → 城市中心</code>，配 8s 超时熔断与区域闸门</span>
+                            <a href="#proj-itertrip" class="proof-ref-tag">IterTrip ↗</a>
+                        </div>
+                        <!-- Ticket 3 -->
+                        <div class="p1-ticket-strip t-backend">
+                            <span class="p1-ticket-no">03</span>
+                            <span class="p1-ticket-title">高频网络协议逆向与解包</span>
+                            <span class="p1-ticket-rule">独立完成 <code>wss signature</code> 握手签名计算与二进制 <code>Protobuf</code> 弹幕数据包逆向反序列化</span>
+                            <a href="#proj-dycast" class="proof-ref-tag">弹幕鸭 ↗</a>
+                        </div>
+                        <!-- Ticket 4 -->
+                        <div class="p1-ticket-strip t-game">
+                            <span class="p1-ticket-no">04</span>
+                            <span class="p1-ticket-title">自研 Godot 节点叙事编辑器</span>
+                            <span class="p1-ticket-rule">基于 <code>EditorPlugin + GraphEdit</code> 研发任务拓扑导出插件，实现“策划改数值不碰代码”</span>
+                            <a href="#proj-optimized" class="proof-ref-tag">智能优化中 ↗</a>
+                        </div>
+                        <!-- Ticket 5 -->
+                        <div class="p1-ticket-strip t-game">
+                            <span class="p1-ticket-no">05</span>
+                            <span class="p1-ticket-title">三轴角速度模拟与穿烟判定</span>
+                            <span class="p1-ticket-rule">Kotlin 实现三轴角速度物理反弹；<code>Set 中心加权沉降算法</code> 兼容 TACZ 枪械穿烟判定</span>
+                            <a href="#proj-csg" class="proof-ref-tag">CSG 模组 ↗</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             方案二：【系统层级蓝图 / 数据流拓扑看板】
+             ========================================================================== -->
+        <section id="p2-frame" class="proposal-card-frame">
+            <div class="proposal-intro-bar">
+                <div class="proposal-intro-text">
+                    <h3>方案二：【系统层级蓝图 / 数据流拓扑看板】（系统架构师视角 · 蓝图风）</h3>
+                    <p>打破零碎的技术列表，按真实的软件工程“表现层 → 服务协议层 → 智能与算法层 → 引擎底层”四层数据流排布，左侧贯穿总线总导轨，专业感极强。</p>
+                </div>
+                <div class="proposal-traits">
+                    <span class="trait-tag highlight">架构感：极强</span>
+                    <span class="trait-tag">排版：层级贯通</span>
+                    <span class="trait-tag">风格：工装蓝图</span>
+                </div>
+            </div>
+
+            <div class="p2-blueprint-frame">
+                <!-- 垂直贯穿总线导轨 -->
+                <div class="p2-bus-spine">
+                    <div class="p2-bus-node n1"></div>
+                    <div class="p2-bus-node n2"></div>
+                    <div class="p2-bus-node n3"></div>
+                    <div class="p2-bus-node n4"></div>
+                </div>
+
+                <div class="p2-layers-stack">
+                    <!-- Layer 01 -->
+                    <div class="p2-layer-row">
+                        <div class="p2-layer-meta">
+                            <span class="p2-layer-code">LAYER.01 // PRESENTATION</span>
+                            <span class="p2-layer-name">表现层与交互感知</span>
+                        </div>
+                        <div class="p2-layer-detail">
+                            <div class="p2-tech-pills">
+                                <span class="p2-pill">React 18</span>
+                                <span class="p2-pill">Vue 3</span>
+                                <span class="p2-pill">Leaflet GIS</span>
+                                <span class="p2-pill">Web Audio API</span>
+                                <span class="p2-pill">原生 CSS3 排印</span>
+                            </div>
+                            <div class="p2-desc-line">瓦片地图路线高亮 · CSS 角色骨骼情绪联动 · 零第三方依赖原生双轨排印</div>
+                        </div>
+                        <a href="#proj-itertrip" class="proof-ref-tag">IterTrip / 弹幕鸭 ↗</a>
+                    </div>
+
+                    <!-- 数据通信管道标 -->
+                    <div class="p2-pipe-tag">
+                        <span>▼ SSE 流式逐帧推送 trace / WebSocket 二进制协议抓取 / REST 严格契约</span>
+                    </div>
+
+                    <!-- Layer 02 -->
+                    <div class="p2-layer-row">
+                        <div class="p2-layer-meta">
+                            <span class="p2-layer-code">LAYER.02 // PROTOCOL &amp; WEB</span>
+                            <span class="p2-layer-name">服务网关与协议解包</span>
+                        </div>
+                        <div class="p2-layer-detail">
+                            <div class="p2-tech-pills">
+                                <span class="p2-pill">FastAPI</span>
+                                <span class="p2-pill">Flask</span>
+                                <span class="p2-pill">710行标准库 Web</span>
+                                <span class="p2-pill">Protobuf</span>
+                                <span class="p2-pill">HMAC 恒时鉴权</span>
+                            </div>
+                            <div class="p2-desc-line">WSS 握手签名计算 · 抵御时序攻击自建服务 · APScheduler 每日自动化定时归档管线</div>
+                        </div>
+                        <a href="#proj-hanako" class="proof-ref-tag">箱庭日报 / 弹幕鸭 ↗</a>
+                    </div>
+
+                    <!-- 契约校验与检索管道标 -->
+                    <div class="p2-pipe-tag">
+                        <span>▼ Pydantic 三端 Schema 约束 / FastEmbed 512维向量实体切分检索注入</span>
+                    </div>
+
+                    <!-- Layer 03 -->
+                    <div class="p2-layer-row">
+                        <div class="p2-layer-meta">
+                            <span class="p2-layer-code">LAYER.03 // MODEL &amp; ALGO</span>
+                            <span class="p2-layer-name">智能内核与模型推理</span>
+                        </div>
+                        <div class="p2-layer-detail">
+                            <div class="p2-tech-pills">
+                                <span class="p2-pill">Pydantic v2</span>
+                                <span class="p2-pill">FastEmbed</span>
+                                <span class="p2-pill">SQLite-vec</span>
+                                <span class="p2-pill">YOLOv11n</span>
+                                <span class="p2-pill">DINOv3</span>
+                            </div>
+                            <div class="p2-desc-line">校验失败带错回灌自愈 · 确定性纯算术根除幻觉 · 六级坐标防异地漂移闸门</div>
+                        </div>
+                        <a href="#proj-itertrip" class="proof-ref-tag">IterTrip / 菌智鉴熟 ↗</a>
+                    </div>
+
+                    <!-- 运行时管道标 -->
+                    <div class="p2-pipe-tag">
+                        <span>▼ 物理拟真引擎 / 数据驱动持久化 / Docker 隔离容器</span>
+                    </div>
+
+                    <!-- Layer 04 -->
+                    <div class="p2-layer-row">
+                        <div class="p2-layer-meta">
+                            <span class="p2-layer-code">LAYER.04 // ENGINE &amp; INFRA</span>
+                            <span class="p2-layer-name">底层系统与游戏引擎</span>
+                        </div>
+                        <div class="p2-layer-detail">
+                            <div class="p2-tech-pills">
+                                <span class="p2-pill">Godot 4</span>
+                                <span class="p2-pill">GDScript</span>
+                                <span class="p2-pill">Forge 1.20.1</span>
+                                <span class="p2-pill">Kotlin/Java</span>
+                                <span class="p2-pill">Docker</span>
+                            </div>
+                            <div class="p2-desc-line">自研 GraphEdit 叙事导出插件 · 三轴角速度碰撞 · TACZ 穿烟包围盒算法</div>
+                        </div>
+                        <a href="#proj-optimized" class="proof-ref-tag">智能优化中 / CSG ↗</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             方案三：【工装机架插槽 / 模块化硬件控制台】
+             ========================================================================== */
+             ========================================================================== -->
+        <section id="p3-frame" class="proposal-card-frame">
+            <div class="proposal-intro-bar">
+                <div class="proposal-intro-text">
+                    <h3>方案三：【工装机架插槽 / 模块化硬件控制台】（复古硬件机架、调音台机匣感）</h3>
+                    <p>工坊硬件质感最浓郁。将 5 个领域模拟成专业机架服务器的“刀片插卡（Rack Blades）”，带有状态指示灯、拉手孔和底部量化指标盘（Telemetry Meter），悬停微拔出。</p>
+                </div>
+                <div class="proposal-traits">
+                    <span class="trait-tag highlight">硬件感：极强</span>
+                    <span class="trait-tag">交互：拔插动效</span>
+                    <span class="trait-tag">风格：复古工控</span>
+                </div>
+            </div>
+
+            <div class="p3-rack-chassis">
+                <div class="p3-chassis-topbar">
+                    <span>UNIT-RACK // 05 BLADES ACTIVE</span>
+                    <span>BUS STATUS: OK // 60 FPS</span>
+                </div>
+
+                <div class="p3-rack-grid">
+                    <!-- Blade 1 -->
+                    <div class="p3-blade-card b-red">
+                        <div class="p3-blade-handle">
+                            <span class="p3-screw">⊕</span>
+                            <span>SLOT.01</span>
+                            <span class="p3-led-dot"></span>
+                        </div>
+                        <div class="p3-blade-title">AI / LLM 应用工程</div>
+                        <ul class="p3-blade-spec-list">
+                            <li class="spec-highlight">Pydantic 契约自愈</li>
+                            <li>6级坐标降级链</li>
+                            <li>0-LLM 纯算术防幻</li>
+                            <li>FastEmbed 向量RAG</li>
+                        </ul>
+                        <div class="p3-meter-bar">
+                            <span>512d</span> 向量维度
+                        </div>
+                        <a href="#proj-itertrip" class="proof-ref-tag" style="margin-top:4px;">IterTrip ↗</a>
+                    </div>
+
+                    <!-- Blade 2 -->
+                    <div class="p3-blade-card b-blue">
+                        <div class="p3-blade-handle">
+                            <span class="p3-screw">⊕</span>
+                            <span>SLOT.02</span>
+                            <span class="p3-led-dot"></span>
+                        </div>
+                        <div class="p3-blade-title">后端服务与协议</div>
+                        <ul class="p3-blade-spec-list">
+                            <li class="spec-highlight">FastAPI / Flask</li>
+                            <li>710行手写Web服务</li>
+                            <li>Protobuf 弹幕逆向</li>
+                            <li>APScheduler 管线</li>
+                        </ul>
+                        <div class="p3-meter-bar">
+                            <span>0-Lib</span> 标准库
+                        </div>
+                        <a href="#proj-hanako" class="proof-ref-tag" style="margin-top:4px;">箱庭日报 ↗</a>
+                    </div>
+
+                    <!-- Blade 3 -->
+                    <div class="p3-blade-card">
+                        <div class="p3-blade-handle">
+                            <span class="p3-screw">⊕</span>
+                            <span>SLOT.03</span>
+                            <span class="p3-led-dot"></span>
+                        </div>
+                        <div class="p3-blade-title">前端工程与可视化</div>
+                        <ul class="p3-blade-spec-list">
+                            <li class="spec-highlight">React 18 / Vue 3</li>
+                            <li>Leaflet 瓦片地图</li>
+                            <li>Web Audio 语音流</li>
+                            <li>双轨原生无障碍排印</li>
+                        </ul>
+                        <div class="p3-meter-bar">
+                            <span>30fps</span> 骨骼动画
+                        </div>
+                        <a href="#proj-dycast" class="proof-ref-tag" style="margin-top:4px;">弹幕鸭 ↗</a>
+                    </div>
+
+                    <!-- Blade 4 -->
+                    <div class="p3-blade-card">
+                        <div class="p3-blade-handle">
+                            <span class="p3-screw">⊕</span>
+                            <span>SLOT.04</span>
+                            <span class="p3-led-dot"></span>
+                        </div>
+                        <div class="p3-blade-title">游戏研发与系统工程</div>
+                        <ul class="p3-blade-spec-list">
+                            <li class="spec-highlight">Godot 4 核心玩法</li>
+                            <li>自研GraphEdit插件</li>
+                            <li>Forge 3D实体碰撞</li>
+                            <li>TACZ 穿烟包围盒</li>
+                        </ul>
+                        <div class="p3-meter-bar">
+                            <span>3-Axis</span> 角速度
+                        </div>
+                        <a href="#proj-optimized" class="proof-ref-tag" style="margin-top:4px;">智能优化中 ↗</a>
+                    </div>
+
+                    <!-- Blade 5 -->
+                    <div class="p3-blade-card">
+                        <div class="p3-blade-handle">
+                            <span class="p3-screw">⊕</span>
+                            <span>SLOT.05</span>
+                            <span class="p3-led-dot"></span>
+                        </div>
+                        <div class="p3-blade-title">工程化与交付素养</div>
+                        <ul class="p3-blade-spec-list">
+                            <li class="spec-highlight">8人队伍主程管理</li>
+                            <li>Docker 容器隔离</li>
+                            <li>Linux / Nginx 自运维</li>
+                            <li>近一年 GitHub 交付</li>
+                        </ul>
+                        <div class="p3-meter-bar">
+                            <span>1900+</span> Commits
+                        </div>
+                        <a href="https://github.com/Dragonzhi" target="_blank" class="proof-ref-tag" style="margin-top:4px;">GitHub ↗</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================================
+             方案四：【工坊活页索引抽屉 / 交互式工作台】
+             ========================================================================== -->
+        <section id="p4-frame" class="proposal-card-frame">
+            <div class="proposal-intro-bar">
+                <div class="proposal-intro-text">
+                    <h3>方案四：【工坊活页索引抽屉 / 交互式工作台】（紧凑收纳、左轨索引）</h3>
+                    <p>最契合站内其他页面的“左侧索引轨 + 右侧工装台”布局。垂直空间占用极小，左侧切换领域，右侧高密度展现技术栈微标、硬核攻坚与直达实证卡。</p>
+                </div>
+                <div class="proposal-traits">
+                    <span class="trait-tag highlight">空间利用：极高</span>
+                    <span class="trait-tag">互动：活页切换</span>
+                    <span class="trait-tag">风格：工坊工作台</span>
+                </div>
+            </div>
+
+            <div class="p4-workbench-layout">
+                <!-- 左侧活页导轨 -->
+                <div class="p4-side-rail">
+                    <div class="p4-rail-head">MODULE SECTOR</div>
+                    <div class="p4-nav-item active" onclick="switchP4Tab(0)">
+                        <span class="p4-nav-name">01 // AI 应用工程</span>
+                        <span class="p4-nav-badge">6 契约 · 主修</span>
+                    </div>
+                    <div class="p4-nav-item" onclick="switchP4Tab(1)">
+                        <span class="p4-nav-name">02 // 后端服务与协议</span>
+                        <span class="p4-nav-badge">4 项交付</span>
+                    </div>
+                    <div class="p4-nav-item" onclick="switchP4Tab(2)">
+                        <span class="p4-nav-name">03 // 前端工程与可视化</span>
+                        <span class="p4-nav-badge">4 场景</span>
+                    </div>
+                    <div class="p4-nav-item" onclick="switchP4Tab(3)">
+                        <span class="p4-nav-name">04 // 游戏研发与系统</span>
+                        <span class="p4-nav-badge">4 项自研</span>
+                    </div>
+                    <div class="p4-nav-item" onclick="switchP4Tab(4)">
+                        <span class="p4-nav-name">05 // 工程化与交付素养</span>
+                        <span class="p4-nav-badge">1900+ 提交</span>
+                    </div>
+                </div>
+
+                <!-- 右侧工作台面 (由 JS 切换内容) -->
+                <div class="p4-stage-pane" id="p4-stage-content">
+                    <div class="p4-stage-head">
+                        <div class="p4-stage-title">
+                            <span>LLM / AI 应用工程</span>
+                            <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v red">AI-CORE</span></span>
+                        </div>
+                        <span class="p1-group-label">6 项架构落地经验</span>
+                    </div>
+
+                    <!-- 技术栈徽章 -->
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        <span class="dev-badge"><span class="badge-k">Schema</span><span class="badge-v red">Pydantic v2</span></span>
+                        <span class="dev-badge"><span class="badge-k">Vector</span><span class="badge-v red">FastEmbed (512d)</span></span>
+                        <span class="dev-badge"><span class="badge-k">Index</span><span class="badge-v red">SQLite-vec</span></span>
+                        <span class="dev-badge"><span class="badge-k">Stream</span><span class="badge-v red">SSE Event Trace</span></span>
+                        <span class="dev-badge"><span class="badge-k">Agent</span><span class="badge-v red">Coze Workflow</span></span>
+                    </div>
+
+                    <!-- 核心攻坚要点卡片 -->
+                    <div class="p4-stage-content-grid">
+                        <div class="p4-spec-box">
+                            <span class="p4-spec-box-title">🛡️ 六级坐标降级与熔断</span>
+                            <p class="p4-spec-box-body">用户真值 → POI检索 → 知识库 → 搜索兜底 → 城市中心表。每级打溯源标，配备 8s 超时与单路线 40 次配额熔断，拦截跨省异地漂移。</p>
+                        </div>
+                        <div class="p4-spec-box">
+                            <span class="p4-spec-box-title">⚡ 纯算术根除幻觉准则</span>
+                            <p class="p4-spec-box-body">闭馆日等确定性时序冲突检查，坚决设计为<strong>零 LLM、零网络</strong>的确定性纯算术逻辑，在源头斩断模型随机幻觉。</p>
+                        </div>
+                    </div>
+
+                    <!-- 关联实证直达 -->
+                    <div class="p4-linked-proj-bar">
+                        <span>代表落地成果：<strong>IterTrip — AI 旅行攻略落地应用</strong> (1.34万行代码 · 持续迭代)</span>
+                        <a href="#proj-itertrip" class="proof-ref-tag">前往项目实证卡 ↗</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <script>
+        // 方案切换控制
+        function switchProposal(targetId) {
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+
+            const frames = document.querySelectorAll('.proposal-card-frame');
+            if (targetId === 'all') {
+                frames.forEach(f => f.classList.add('active'));
+            } else {
+                frames.forEach(f => {
+                    if (f.id === targetId + '-frame') {
+                        f.classList.add('active');
+                    } else {
+                        f.classList.remove('active');
+                    }
+                });
+            }
+        }
+
+        // 方案四抽屉切换数据
+        const P4_DATA = [
+            {
+                title: "LLM / AI 应用工程",
+                tag: "AI-CORE",
+                tagColor: "red",
+                sub: "6 项架构落地经验",
+                badges: [
+                    { k: "Schema", v: "Pydantic v2", c: "red" },
+                    { k: "Vector", v: "FastEmbed (512d)", c: "red" },
+                    { k: "Index", v: "SQLite-vec", c: "red" },
+                    { k: "Stream", v: "SSE Event Trace", c: "red" },
+                    { k: "Agent", v: "Coze Workflow", c: "red" }
+                ],
+                boxes: [
+                    { title: "🛡️ 六级坐标降级与熔断", body: "用户真值 → POI检索 → 知识库 → 搜索兜底 → 城市中心表。每级打溯源标，配备 8s 超时与单路线 40 次配额熔断，拦截跨省异地漂移。" },
+                    { title: "⚡ 纯算术根除幻觉准则", body: "闭馆日等确定性时序冲突检查，坚决设计为零 LLM、零网络的确定性纯算术逻辑，在源头斩断模型随机幻觉。" }
+                ],
+                proj: "IterTrip — AI 旅行攻略落地应用 (1.34万行代码)",
+                link: "#proj-itertrip"
+            },
+            {
+                title: "后端服务与协议工程",
+                tag: "BACKEND",
+                tagColor: "blue",
+                sub: "4 项核心交付",
+                badges: [
+                    { k: "Async", v: "FastAPI / Flask", c: "blue" },
+                    { k: "Zero-Lib", v: "710行标准库Web", c: "blue" },
+                    { k: "Reverse", v: "Protobuf + WSS", c: "blue" },
+                    { k: "Security", v: "HMAC 恒时鉴权", c: "blue" }
+                ],
+                boxes: [
+                    { title: "🔐 零依赖标准库网关", body: "纯 Python 标准库编写 710 行门户与鉴权服务，HMAC 恒时比较抵御时序攻击，Cookie 仅存派生摘要。" },
+                    { title: "📡 高频弹幕协议逆向", body: "逆向计算 WebSocket 签名，解包二进制 Protobuf 数据流，构建规则优先 + LLM 自由对话双响应机制。" }
+                ],
+                proj: "箱庭日报 (50+期无断更) / 弹幕鸭伴播工具",
+                link: "#proj-hanako"
+            },
+            {
+                title: "前端工程与可视化",
+                tag: "FRONTEND",
+                tagColor: "amber",
+                sub: "4 项场景实战",
+                badges: [
+                    { k: "UI", v: "React 18 / Vue 3", c: "amber" },
+                    { k: "GIS", v: "Leaflet 瓦片地图", c: "amber" },
+                    { k: "Sound", v: "Web Audio API", c: "amber" },
+                    { k: "CSS", v: "骨骼头像情绪动画", c: "amber" }
+                ],
+                boxes: [
+                    { title: "🗺️ GIS 交互瓦片地图联动", body: "Leaflet 地图路线动态高亮，与结构化行程卡片双向坐标关联，解决地点下钻与轨迹展示。" },
+                    { title: "🎙️ 声画一体多模态反馈", body: "模型生成情绪标签，Web Audio API 流式播放 WAV 语音的同时驱动 CSS 骨骼帧动画，形成伴播沉浸体验。" }
+                ],
+                proj: "IterTrip 交互地图 / 弹幕鸭伴播浮窗",
+                link: "#proj-itertrip"
+            },
+            {
+                title: "游戏研发与系统工程",
+                tag: "SYSTEM",
+                tagColor: "green",
+                sub: "4 项底层研发",
+                badges: [
+                    { k: "Engine", v: "Godot 4.3 (GDScript)", c: "green" },
+                    { k: "Plugin", v: "自研 GraphEdit 编辑器", c: "green" },
+                    { k: "Mod", v: "MC Forge 1.20.1", c: "green" },
+                    { k: "Algo", v: "TACZ 穿烟包围盒", c: "green" }
+                ],
+                boxes: [
+                    { title: "🎮 自研节点叙事编辑器", body: "基于 Godot 4 自研 EditorPlugin 编辑器插件，利用 GraphEdit 可视化拼装任务图谱并直接导出 JSON 数据。" },
+                    { title: "🧱 三轴角速度物理翻滚", body: "Kotlin 重构实体渲染器，三轴角速度模拟抛掷物反弹；Set 中心加权沉降算法支持子弹穿透烟雾。" }
+                ],
+                proj: "智能优化中 (好游快爆上线) / CS投掷物模组",
+                link: "#proj-optimized"
+            },
+            {
+                title: "工程化与交付素养",
+                tag: "DELIVERY",
+                tagColor: "graphite",
+                sub: "团队管理与持续交付",
+                badges: [
+                    { k: "Leader", v: "8人队长兼主程", c: "graphite" },
+                    { k: "Ops", v: "Docker 隔离容器", c: "graphite" },
+                    { k: "Server", v: "Linux / Nginx", c: "graphite" },
+                    { k: "Commits", v: "1900+ 近一年提交", c: "graphite" }
+                ],
+                boxes: [
+                    { title: "👥 敏捷团队管理与规范", body: "21 天极限 GameJam 下制定数值契约与 PR 评审规范，编写完整交付文档与边界用例，保障零延期上线。" },
+                    { title: "🚀 极客自驱与自运维", body: "独立配置腾讯云 Linux、Nginx 反代与 Docker 容器隔离；近一年 GitHub 1900+ Commits，获 Pull Shark ×2 勋章。" }
+                ],
+                proj: "金海豚游戏大赛 / 个人独立自托管集群",
+                link: "https://github.com/Dragonzhi"
+            }
+        ];
+
+        function switchP4Tab(index) {
+            document.querySelectorAll('.p4-nav-item').forEach((item, idx) => {
+                item.classList.toggle('active', idx === index);
+            });
+
+            const data = P4_DATA[index];
+            const stage = document.getElementById('p4-stage-content');
+
+            stage.innerHTML = `
+                <div class="p4-stage-head">
+                    <div class="p4-stage-title">
+                        <span>${data.title}</span>
+                        <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v ${data.tagColor}">${data.tag}</span></span>
+                    </div>
+                    <span class="p1-group-label">${data.sub}</span>
+                </div>
+                <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                    ${data.badges.map(b => `<span class="dev-badge"><span class="badge-k">${b.k}</span><span class="badge-v ${b.c}">${b.v}</span></span>`).join('')}
+                </div>
+                <div class="p4-stage-content-grid">
+                    ${data.boxes.map(box => `
+                        <div class="p4-spec-box">
+                            <span class="p4-spec-box-title">${box.title}</span>
+                            <p class="p4-spec-box-body">${box.body}</p>
+                        </div>
+                    `).join('')}
+                </div>
+                <div class="p4-linked-proj-bar">
+                    <span>代表落地成果：<strong>${data.proj}</strong></span>
+                    <a href="${data.link}" class="proof-ref-tag">前往项目实证卡 ↗</a>
+                </div>
+            `;
+        }
+
+        // ==========================================
+        // ⭐ 方案 1+4 强强融合版数据与逻辑
+        // ==========================================
+        const FUSION_DATA = [
+            {
+                title: "LLM / AI 应用工程",
+                tag: "AI-CORE",
+                tagColor: "red",
+                sub: "6 项架构落地经验 · 主修方向",
+                badges: [
+                    { k: "contract", v: "Pydantic v2", c: "red" },
+                    { k: "vector", v: "FastEmbed 512d", c: "red" },
+                    { k: "rag", v: "SQLite-vec", c: "red" },
+                    { k: "agent", v: "Coze Workflow", c: "red" },
+                    { k: "vision", v: "YOLOv11n + DINOv3", c: "red" },
+                    { k: "stream", v: "SSE Event Trace", c: "red" }
+                ],
+                tickets: [
+                    { no: "01", title: "零 LLM 纯算术防幻觉", rule: "闭馆日等确定性时序规则，坚持 <code>0 LLM 介入</code> 纯算术拦截闭环，彻底根治模型幻觉", link: "#proj-itertrip", linkText: "IterTrip ↗" },
+                    { no: "02", title: "高可靠六级坐标降级链", rule: "<code>用户真值 → POI检索 → 知识库 → 搜索兜底 → 城市中心</code>，配 8s 超时熔断与省市闸门防御", link: "#proj-itertrip", linkText: "IterTrip ↗" },
+                    { no: "03", title: "实体级向量 RAG 长期记忆", rule: "按 <code>place_card</code> 实体切分，本地 FastEmbed 生成 512 维向量并结合 SQLite-vec 检索注入", link: "#proj-itertrip", linkText: "IterTrip ↗" },
+                    { no: "04", title: "流式决策轨迹可观测工程", rule: "整轮流式推送 <code>event: trace</code>，前端可视化展示模型选型、记忆命中与坐标溯源", link: "#proj-itertrip", linkText: "IterTrip ↗" }
+                ],
+                proj: "IterTrip — AI 旅行攻略结构化落地应用 (1.34万行全栈代码 · 持续迭代)",
+                link: "#proj-itertrip"
+            },
+            {
+                title: "后端服务与协议工程",
+                tag: "BACKEND",
+                tagColor: "blue",
+                sub: "4 项核心交付",
+                badges: [
+                    { k: "srv", v: "FastAPI", c: "blue" },
+                    { k: "srv", v: "Flask", c: "blue" },
+                    { k: "zero-lib", v: "Python 710行手写Web", c: "blue" },
+                    { k: "proto", v: "Protobuf + WSS逆向", c: "blue" },
+                    { k: "auth", v: "HMAC 恒时鉴权", c: "blue" }
+                ],
+                tickets: [
+                    { no: "01", title: "纯标准库零依赖 Web 门户", rule: "零 pip 依赖构建多页面门户与鉴权服务，运用 <code>HMAC 恒时比较</code> 抵御时序攻击", link: "#proj-hanako", linkText: "箱庭日报 ↗" },
+                    { no: "02", title: "高频弹幕协议逆向与解包", rule: "逆向计算 <code>wss signature</code> 握手签名，反序列化二进制 <code>Protobuf</code> 实时弹幕数据流", link: "#proj-dycast", linkText: "弹幕鸭 ↗" },
+                    { no: "03", title: "自动化内容生产流水线", rule: "<code>APScheduler</code> 定时采集新闻源、交叉核验与 Markdown 树型结构自动编排归档", link: "#proj-hanako", linkText: "50+期无断更 ↗" }
+                ],
+                proj: "箱庭日报 (50+期无断更) / 弹幕鸭伴播工具",
+                link: "#proj-hanako"
+            },
+            {
+                title: "前端工程与可视化",
+                tag: "FRONTEND",
+                tagColor: "amber",
+                sub: "4 项场景实战",
+                badges: [
+                    { k: "ui", v: "React 18", c: "amber" },
+                    { k: "ui", v: "Vue 3", c: "amber" },
+                    { k: "gis", v: "Leaflet 瓦片地图", c: "amber" },
+                    { k: "audio", v: "Web Audio API", c: "amber" },
+                    { k: "css", v: "原生双轨刻度排印", c: "amber" }
+                ],
+                tickets: [
+                    { no: "01", title: "GIS 交互瓦片地图动态联动", rule: "基于 <code>Leaflet</code> 实现路线高亮、坐标打点下钻与行程卡片双向状态关联交互", link: "#proj-itertrip", linkText: "IterTrip ↗" },
+                    { no: "02", title: "声画一体多模态反馈体系", rule: "驱动 <code>Web Audio API</code> 流式播放 WAV 语音的同时触发 CSS 角色情绪骨骼帧动画", link: "#proj-dycast", linkText: "弹幕鸭 ↗" }
+                ],
+                proj: "IterTrip 交互地图 / 弹幕鸭伴播浮窗",
+                link: "#proj-itertrip"
+            },
+            {
+                title: "游戏研发与系统工程",
+                tag: "SYSTEM",
+                tagColor: "green",
+                sub: "4 项底层研发",
+                badges: [
+                    { k: "engine", v: "Godot 4.3", c: "green" },
+                    { k: "plugin", v: "自研 GraphEdit 插件", c: "green" },
+                    { k: "mod", v: "MC Forge 1.20.1", c: "green" },
+                    { k: "lang", v: "Kotlin / Java", c: "green" },
+                    { k: "algo", v: "TACZ 穿烟包围盒", c: "green" }
+                ],
+                tickets: [
+                    { no: "01", title: "自研节点式叙事编辑器插件", rule: "基于 <code>EditorPlugin + GraphEdit</code> 实现可视化任务图谱并导出 JSON，策划改数值不碰代码", link: "#proj-optimized", linkText: "智能优化中 ↗" },
+                    { no: "02", title: "实体物理与三轴角速度模拟", rule: "实体模型与手持分离渲染；三轴角速度模拟抛掷物翻滚、反弹与能量衰减", link: "#proj-csg", linkText: "CSG 模组 ↗" },
+                    { no: "03", title: "跨模组穿烟包围盒碰撞判定", rule: "<code>Set 中心加权沉降算法</code> + 轨迹包围盒检测，使 TACZ 枪械高速子弹正确穿透烟雾", link: "#proj-csg", linkText: "CSG 模组 ↗" }
+                ],
+                proj: "智能优化中 (好游快爆上线) / CS投掷物模组",
+                link: "#proj-optimized"
+            },
+            {
+                title: "工程化与交付素养",
+                tag: "DELIVERY",
+                tagColor: "graphite",
+                sub: "团队管理与持续交付",
+                badges: [
+                    { k: "lead", v: "8人队长兼主程", c: "graphite" },
+                    { k: "ops", v: "Docker 容器隔离", c: "graphite" },
+                    { k: "server", v: "腾讯云 Linux / Nginx", c: "graphite" },
+                    { k: "ci", v: "GitHub 1900+ 提交", c: "graphite" }
+                ],
+                tickets: [
+                    { no: "01", title: "跨职能敏捷团队高压交付", rule: "21 天极限 GameJam 下制定数值契约与 PR 规范，完成全套程序交付文档与边界自检", link: "#proj-optimized", linkText: "金海豚大赛 ↗" },
+                    { no: "02", title: "极客自驱与自托管云服务", rule: "独立配置 Linux 运维环境、Nginx 反代与 Docker 容器；近一年 1900+ 提交，获 Pull Shark ×2 勋章", link: "https://github.com/Dragonzhi", linkText: "GitHub ↗" }
+                ],
+                proj: "金海豚游戏大赛 / 个人独立自托管集群",
+                link: "https://github.com/Dragonzhi"
+            }
+        ];
+
+        function switchFusionTab(index) {
+            document.querySelectorAll('.fusion-rail-item').forEach((item, idx) => {
+                item.classList.toggle('active', idx === index);
+            });
+
+            const data = FUSION_DATA[index];
+            const stage = document.getElementById('fusion-stage-content');
+
+            stage.innerHTML = `
+                <div class="p4-stage-head">
+                    <div class="p4-stage-title">
+                        <span>${data.title}</span>
+                        <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v ${data.tagColor}">${data.tag}</span></span>
+                    </div>
+                    <span class="p1-group-label">${data.sub}</span>
+                </div>
+
+                <!-- 技术选型微标池 (Proposal 1 核心) -->
+                <div>
+                    <div style="font-family:var(--mono); font-size:11px; color:var(--ink-soft); font-weight:700; margin-bottom:6px; letter-spacing:.5px;">
+                        TECH STACK // 核心技术选型
+                    </div>
+                    <div style="display:flex; flex-wrap:wrap; gap:6px;">
+                        ${data.badges.map(b => `<span class="dev-badge"><span class="badge-k">${b.k}</span><span class="badge-v ${b.c}">${b.v}</span></span>`).join('')}
+                    </div>
+                </div>
+
+                <!-- 单行攻坚票据栈 (Proposal 1 核心) -->
+                <div>
+                    <div style="font-family:var(--mono); font-size:11px; color:var(--ink-soft); font-weight:700; margin-bottom:8px; letter-spacing:.5px;">
+                        ENGINEERING BREAKTHROUGHS // 硬核攻坚突破票据
+                    </div>
+                    <div class="p1-tickets-stack">
+                        ${data.tickets.map(t => `
+                            <div class="p1-ticket-strip t-${data.tagColor}">
+                                <span class="p1-ticket-no">${t.no}</span>
+                                <span class="p1-ticket-title">${t.title}</span>
+                                <span class="p1-ticket-rule">${t.rule}</span>
+                                <a href="${t.link}" class="proof-ref-tag">${t.linkText}</a>
+                            </div>
+                        `).join('')}
+                    </div>
+                </div>
+
+                <!-- 落地实证直达 -->
+                <div class="p4-linked-proj-bar">
+                    <span>代表落地成果：<strong>${data.proj}</strong></span>
+                    <a href="${data.link}" class="proof-ref-tag" style="color:var(--red); font-weight:600;">前往项目实证卡 ↗</a>
+                </div>
+            `;
+        }
+
+        // 页面初始化
+        switchFusionTab(0);
+        switchP4Tab(0);
+    </script>
+</body>
+</html>
+
