@@ -1,0 +1,1607 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>软件著作权与荣誉 · 3种美化重构方案原型对照页 | ZLOONG 工房</title>
+    <link rel="icon" type="image/png" href="../images/favicon.png">
+    <style>
+        /* ==========================================================================
+           0. 工房设计规范基础 (Tokens & Global)
+           ========================================================================== */
+        :root {
+            --desk: #f5f0e6;
+            --card: #fbf8f2;
+            --surface: #fdfcf9;
+            --ink: #26221c;
+            --ink-soft: rgba(38, 34, 28, .68);
+            --ink-faint: rgba(38, 34, 28, .35);
+            --line: rgba(38, 34, 28, .18);
+            --line-light: rgba(38, 34, 28, .10);
+            --red: #8b2c1f;
+            --red-soft: rgba(139, 44, 31, .08);
+            --blue: #234d70;
+            --blue-soft: rgba(35, 77, 112, .08);
+            --amber: #a05a20;
+            --amber-soft: rgba(160, 90, 32, .08);
+            --green: #2e6040;
+            --green-soft: rgba(46, 96, 64, .08);
+            --graphite: #3d3935;
+            --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+            --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", STSong, serif;
+            --radius: 3px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            background-color: var(--desk);
+            color: var(--ink);
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "PingFang SC", "Microsoft YaHei", sans-serif;
+            line-height: 1.6;
+            background-image:
+                linear-gradient(rgba(139,44,31,.025) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(139,44,31,.025) 1px, transparent 1px);
+            background-size: 24px 24px;
+            padding-bottom: 80px;
+        }
+
+        /* 顶部控制与方案切换条 */
+        .switcher-bar {
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            background: rgba(245, 240, 230, 0.96);
+            backdrop-filter: blur(10px);
+            border-bottom: 2px solid var(--line);
+            padding: 10px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 10px rgba(38, 34, 28, 0.05);
+        }
+
+        .switcher-title-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .switcher-logo {
+            font-family: var(--serif);
+            font-weight: 700;
+            color: var(--red);
+            font-size: 15px;
+            letter-spacing: 1px;
+        }
+
+        .switcher-badge {
+            font-family: var(--mono);
+            font-size: 11px;
+            background: rgba(139, 44, 31, 0.08);
+            color: var(--red);
+            padding: 2px 7px;
+            border-radius: 2px;
+            border: 1px solid rgba(139, 44, 31, 0.2);
+        }
+
+        .switcher-tabs {
+            display: flex;
+            background: rgba(38, 34, 28, 0.06);
+            padding: 3px;
+            border-radius: 3px;
+            gap: 3px;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            border: none;
+            background: transparent;
+            font-family: var(--mono);
+            font-size: 12px;
+            padding: 6px 13px;
+            border-radius: 2px;
+            color: var(--ink-soft);
+            cursor: pointer;
+            transition: all .15s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .tab-btn:hover {
+            color: var(--ink);
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .tab-btn.active {
+            background: #fff;
+            color: var(--red);
+            font-weight: 700;
+            box-shadow: 0 1px 3px rgba(38, 34, 28, 0.1);
+        }
+
+        .back-link {
+            font-family: var(--mono);
+            font-size: 12px;
+            color: var(--ink-soft);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 8px;
+            border-radius: 2px;
+            transition: all .15s;
+        }
+        .back-link:hover {
+            color: var(--red);
+            background: rgba(139, 44, 31, 0.06);
+        }
+
+        /* 页面容器 */
+        .preview-container {
+            max-width: 1040px;
+            margin: 28px auto 0;
+            padding: 0 20px;
+        }
+
+        .proto-intro {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--red);
+            padding: 16px 20px;
+            border-radius: 2px;
+            margin-bottom: 32px;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, 0.04);
+        }
+        .proto-intro h1 {
+            font-family: var(--serif);
+            font-size: 20px;
+            color: var(--ink);
+            margin-bottom: 6px;
+        }
+        .proto-intro p {
+            font-size: 13.5px;
+            color: var(--ink-soft);
+            line-height: 1.6;
+        }
+
+        /* 方案卡片包裹 */
+        .proposal-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 4px;
+            margin-bottom: 44px;
+            box-shadow: 0 2px 8px rgba(38, 34, 28, 0.06);
+            overflow: hidden;
+            transition: box-shadow .2s ease;
+        }
+        .proposal-card:hover {
+            box-shadow: 0 4px 16px rgba(38, 34, 28, 0.09);
+        }
+
+        .proposal-meta {
+            padding: 18px 24px 14px;
+            background: #faf7f0;
+            border-bottom: 1px solid var(--line);
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+        .prop-title-box h2 {
+            font-family: var(--serif);
+            font-size: 17px;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 4px;
+        }
+        .prop-desc {
+            font-size: 13px;
+            color: var(--ink-soft);
+            line-height: 1.5;
+        }
+        .prop-tags {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .prop-tag {
+            font-family: var(--mono);
+            font-size: 11px;
+            padding: 2px 7px;
+            border-radius: 2px;
+            border: 1px solid rgba(38, 34, 28, 0.15);
+            background: #fff;
+            color: var(--ink-soft);
+        }
+        .prop-tag.accent {
+            border-color: rgba(139, 44, 31, 0.3);
+            color: var(--red);
+            background: rgba(139, 44, 31, 0.05);
+            font-weight: 600;
+        }
+
+        .proposal-body {
+            padding: 28px 24px;
+            background: var(--desk);
+            min-height: 280px;
+        }
+
+        /* 公共章节头部规范 */
+        .sec-header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            padding-bottom: 7px;
+            margin-bottom: 18px;
+            border-bottom: 2px solid var(--ink);
+            position: relative;
+            flex-wrap: wrap;
+            gap: 8px 12px;
+        }
+        .sec-header::after {
+            content: "";
+            position: absolute;
+            bottom: -4px;
+            left: 0; right: 0;
+            height: 1px;
+            background: rgba(139, 44, 31, .35);
+        }
+        .sec-title-group {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+        }
+        .sec-no {
+            font-family: var(--mono);
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--red);
+            letter-spacing: 1px;
+        }
+        .sec-title-text {
+            font-family: var(--serif);
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--ink);
+            letter-spacing: 2px;
+            margin: 0;
+        }
+        .sec-title-en {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+            letter-spacing: 2px;
+        }
+
+        /* 现有工坊正规双拼徽章 (与主样式表严格一致) */
+        .dev-badge {
+            display: inline-flex;
+            align-items: center;
+            font-family: var(--mono, monospace);
+            font-size: 11px;
+            line-height: 1;
+            border-radius: 2px;
+            overflow: hidden;
+            border: 1px solid rgba(38, 34, 28, 0.16);
+            box-shadow: 0 1px 2px rgba(38, 34, 28, 0.03);
+            vertical-align: middle;
+            transition: transform .15s ease;
+            user-select: none;
+        }
+        .dev-badge:hover {
+            transform: translateY(-1px);
+        }
+        .dev-badge .badge-k {
+            background: #2b2620;
+            color: #ebe4d5;
+            padding: 3.5px 7px;
+            font-weight: 600;
+            letter-spacing: .3px;
+        }
+        .dev-badge .badge-v {
+            background: #fbf8f2;
+            color: var(--ink, #26221c);
+            padding: 3.5px 7px;
+            font-weight: 500;
+            border-left: 1px solid rgba(38, 34, 28, 0.12);
+        }
+        .dev-badge .badge-v.red { background: #8b2c1f; color: #fff; }
+        .dev-badge .badge-v.blue { background: #234d70; color: #fff; }
+        .dev-badge .badge-v.amber { background: #a05a20; color: #fff; }
+        .dev-badge .badge-v.green { background: #2e6040; color: #fff; }
+        .dev-badge .badge-v.graphite { background: #3d3935; color: #fff; }
+
+        /* 实证边注标 (与现有工坊规范保持一致的清爽风格) */
+        .proof-link-pill,
+        .skill-proof-tag {
+            font-family: var(--mono, monospace);
+            font-size: 11px;
+            color: var(--ink-soft, rgba(38, 34, 28, .55));
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed rgba(38, 34, 28, .3);
+            border-radius: 0;
+            padding: 1px 2px;
+            text-decoration: none;
+            white-space: nowrap;
+            font-weight: 500;
+            transition: all .16s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 3px;
+        }
+        .proof-link-pill:hover,
+        .skill-proof-tag:hover {
+            color: var(--red, #8b2c1f);
+            border-bottom-color: var(--red, #8b2c1f);
+            background: transparent;
+            transform: translateX(2px);
+        }
+
+        /* ==========================================================================
+           基线 BASELINE · 现有线上原版
+           ========================================================================== */
+        .base-honors-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        @media (max-width: 768px) {
+            .base-honors-grid { grid-template-columns: 1fr; }
+        }
+        .base-honor-box {
+            background: #fcfbf7;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            padding: 18px 20px;
+        }
+        .base-honor-box-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-bottom: 8px;
+            margin-bottom: 12px;
+            border-bottom: 1px solid var(--line);
+        }
+        .base-honor-box-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            font-family: var(--serif);
+            margin: 0;
+            letter-spacing: 1px;
+        }
+        .base-honor-box-head .count {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--red);
+        }
+        .base-honor-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .base-honor-table th {
+            text-align: left;
+            font-family: var(--mono);
+            font-size: 10.5px;
+            color: var(--ink-soft);
+            padding: 4px 6px;
+            border-bottom: 1px solid var(--line);
+        }
+        .base-honor-table td {
+            padding: 8px 6px;
+            border-bottom: 1px dashed var(--line);
+            color: var(--ink);
+        }
+        .base-honor-table tr:last-child td { border-bottom: none; }
+        .base-honor-table .reg-code {
+            font-family: var(--mono);
+            color: var(--red);
+            font-size: 11.5px;
+            font-weight: 600;
+        }
+        .base-award-rows {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        .base-award-rows li {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 6px 0;
+            border-bottom: 1px dashed var(--line);
+            font-size: 13px;
+        }
+        .base-award-rows li:last-child { border-bottom: none; }
+        .base-award-rows .aname {
+            color: var(--ink);
+            font-weight: 500;
+        }
+        .base-award-rows .arank {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--red);
+            white-space: nowrap;
+            margin-left: 10px;
+        }
+
+        /* ==========================================================================
+           方案 A：【官方公文存根案卷 + 竞赛功勋徽章双列】
+           设计关键词：国家版权局案卷卡 / 朱砂双圈水印印鉴 / 竞赛级别双拼徽标 / 闭环项目实证
+           ========================================================================== */
+        .plan-a-grid {
+            display: grid;
+            grid-template-columns: 1.05fr 1fr;
+            gap: 20px;
+            align-items: start;
+        }
+        @media (max-width: 820px) {
+            .plan-a-grid { grid-template-columns: 1fr; }
+        }
+
+        .pa-col {
+            background: #fdfcf9;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 18px 20px;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, 0.04);
+            background-image: radial-gradient(rgba(38, 34, 28, 0.035) 1px, transparent 1px);
+            background-size: 14px 14px;
+        }
+
+        .pa-col-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding-bottom: 10px;
+            margin-bottom: 16px;
+            border-bottom: 1.5px solid var(--ink);
+            position: relative;
+        }
+        .pa-col-head::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0; right: 0;
+            height: 1px;
+            background: rgba(139, 44, 31, .3);
+        }
+        .pa-head-title {
+            font-family: var(--serif);
+            font-size: 15.5px;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            letter-spacing: 0.5px;
+        }
+        .pa-head-meta {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        /* 方案 A 左栏：国家软著公文案卷卡片 */
+        .pa-dockets-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .pa-docket-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-left: 3.5px solid var(--red);
+            border-radius: 2px;
+            padding: 13px 15px;
+            box-shadow: 0 1px 3px rgba(38, 34, 28, .04);
+            position: relative;
+            overflow: hidden;
+            transition: all .16s ease;
+        }
+        .pa-docket-card:hover {
+            border-color: rgba(139, 44, 31, 0.45);
+            box-shadow: 0 3px 10px rgba(139, 44, 31, 0.08);
+            transform: translateY(-1px);
+        }
+        /* 背景浅朱砂受权印鉴暗纹 */
+        .pa-docket-watermark {
+            position: absolute;
+            right: 8px;
+            bottom: 4px;
+            font-family: var(--serif);
+            font-size: 26px;
+            font-weight: 900;
+            color: rgba(139, 44, 31, 0.05);
+            user-select: none;
+            pointer-events: none;
+            line-height: 1;
+            letter-spacing: 3px;
+            border: 2px dashed rgba(139, 44, 31, 0.08);
+            padding: 4px 8px;
+            border-radius: 4px;
+            transform: rotate(-6deg);
+        }
+
+        .pa-docket-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+            margin-bottom: 6px;
+        }
+        .pa-docket-name {
+            font-size: 14.5px;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .pa-author-badge {
+            font-family: var(--mono);
+            font-size: 10px;
+            padding: 1px 6px;
+            background: rgba(139, 44, 31, 0.08);
+            color: var(--red);
+            border: 1px solid rgba(139, 44, 31, 0.25);
+            border-radius: 2px;
+            font-weight: 600;
+        }
+        .pa-docket-middle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 7px;
+            flex-wrap: wrap;
+        }
+        .pa-docket-brief {
+            font-size: 12px;
+            color: var(--ink-soft);
+            line-height: 1.4;
+        }
+        .pa-docket-foot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px dashed var(--line-light);
+            padding-top: 7px;
+            margin-top: 6px;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        /* 方案 A 右栏：竞赛功勋等级条 */
+        .pa-merits-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 9px;
+        }
+        .pa-merit-strip {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            padding: 10px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            transition: all .15s ease;
+            position: relative;
+        }
+        .pa-merit-strip:hover {
+            border-color: rgba(38, 34, 28, 0.35);
+            background: #fcfbf8;
+            box-shadow: 0 2px 6px rgba(38, 34, 28, 0.05);
+        }
+        .pa-merit-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+        .pa-merit-title {
+            font-size: 13.5px;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+        .pa-merit-sub {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+        .pa-merit-proj {
+            color: var(--ink-soft);
+        }
+        .pa-merit-proj strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           方案 B：【工坊质检票据与鉴定台 (QC Tickets)】
+           设计关键词：单据条排印 / 刻度标尺边线 / 编号双拼标签 / 紧凑一体感
+           ========================================================================== */
+        .plan-b-workbench {
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            background: #fdfcf9;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, .04);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            background-image: radial-gradient(rgba(38, 34, 28, 0.035) 1px, transparent 1px);
+            background-size: 14px 14px;
+        }
+        @media (max-width: 820px) {
+            .plan-b-workbench { grid-template-columns: 1fr; }
+        }
+
+        .pb-section {
+            padding: 18px 20px;
+        }
+        .pb-section:first-child {
+            border-right: 1px solid var(--line);
+        }
+        @media (max-width: 820px) {
+            .pb-section:first-child {
+                border-right: none;
+                border-bottom: 1px solid var(--line);
+            }
+        }
+
+        .pb-sec-caption {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ink-soft);
+            letter-spacing: 1.2px;
+            margin-bottom: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--line-light);
+        }
+
+        .pb-tickets-list {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .pb-ticket-item {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            padding: 9px 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            position: relative;
+            transition: all .15s ease;
+        }
+        .pb-ticket-item:hover {
+            border-color: var(--ink);
+            box-shadow: 0 2px 6px rgba(38, 34, 28, 0.06);
+        }
+
+        .pb-ticket-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .pb-ticket-num {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--red);
+            background: rgba(139, 44, 31, 0.08);
+            padding: 1px 5px;
+            border-radius: 2px;
+        }
+        .pb-ticket-name {
+            font-size: 13.5px;
+            font-weight: 700;
+            color: var(--ink);
+        }
+
+        .pb-ticket-details {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--ink-soft);
+        }
+
+        .pb-cert-tag {
+            font-family: var(--mono);
+            font-size: 10px;
+            color: #2e6040;
+            background: rgba(46, 96, 64, 0.08);
+            border: 1px solid rgba(46, 96, 64, 0.25);
+            padding: 1px 5px;
+            border-radius: 2px;
+            font-weight: 600;
+        }
+
+        /* ==========================================================================
+           方案 C：【上下双层展开 · 宽幅证书展台 + 矩阵荣誉墙】
+           设计关键词：横向三列证书展台 / 分类荣誉矩阵 / 大气开阔 / 扫读极快
+           ========================================================================== */
+        .plan-c-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .pc-block {
+            background: #fdfcf9;
+            border: 1px solid var(--line);
+            border-radius: 3px;
+            padding: 20px 22px;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, 0.04);
+            background-image: radial-gradient(rgba(38, 34, 28, 0.035) 1px, transparent 1px);
+            background-size: 14px 14px;
+        }
+
+        .pc-block-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1.5px solid var(--ink);
+            position: relative;
+        }
+        .pc-block-head::after {
+            content: "";
+            position: absolute;
+            bottom: -3px;
+            left: 0; right: 0;
+            height: 1px;
+            background: rgba(139, 44, 31, .3);
+        }
+        .pc-head-title {
+            font-family: var(--serif);
+            font-size: 16px;
+            font-weight: 700;
+            color: var(--ink);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .pc-head-en {
+            font-family: var(--mono);
+            font-size: 11px;
+            color: var(--ink-soft);
+        }
+
+        /* 方案 C 上半层：宽幅三列证书纸卡 */
+        .pc-cert-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+        @media (max-width: 820px) {
+            .pc-cert-grid { grid-template-columns: 1fr; }
+        }
+
+        .pc-cert-card {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-top: 3.5px solid var(--red);
+            border-radius: 2px;
+            padding: 16px 16px 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            gap: 12px;
+            box-shadow: 0 1px 4px rgba(38, 34, 28, 0.05);
+            transition: all .16s ease;
+            position: relative;
+        }
+        .pc-cert-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 44, 31, 0.09);
+            border-color: rgba(139, 44, 31, 0.4);
+        }
+        .pc-cert-top-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 6px;
+        }
+        .pc-cert-title {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ink);
+            line-height: 1.35;
+        }
+        .pc-cert-seal {
+            width: 32px;
+            height: 32px;
+            border: 1.5px dashed var(--red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: var(--serif);
+            font-size: 11px;
+            font-weight: 900;
+            color: var(--red);
+            opacity: 0.75;
+            flex-shrink: 0;
+            transform: rotate(-10deg);
+        }
+        .pc-cert-reg-wrap {
+            margin: 4px 0 6px;
+        }
+        .pc-cert-brief {
+            font-size: 12px;
+            color: var(--ink-soft);
+            line-height: 1.5;
+        }
+        .pc-cert-foot {
+            border-top: 1px dashed var(--line-light);
+            padding-top: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* 方案 C 下半层：分类荣誉矩阵 (2列分栏) */
+        .pc-matrix-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 18px;
+        }
+        @media (max-width: 768px) {
+            .pc-matrix-grid { grid-template-columns: 1fr; }
+        }
+        .pc-sub-panel {
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 2px;
+            padding: 14px 16px;
+        }
+        .pc-sub-title {
+            font-family: var(--mono);
+            font-size: 11px;
+            font-weight: 700;
+            color: var(--ink-soft);
+            letter-spacing: 1px;
+            margin-bottom: 12px;
+            padding-bottom: 6px;
+            border-bottom: 1px solid var(--line-light);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .pc-award-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .pc-award-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 10px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed var(--line-light);
+        }
+        .pc-award-item:last-child {
+            padding-bottom: 0;
+            border-bottom: none;
+        }
+        .pc-award-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+        .pc-award-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--ink);
+            line-height: 1.4;
+        }
+        .pc-award-target {
+            font-size: 11.5px;
+            color: var(--ink-soft);
+        }
+        .pc-award-target strong {
+            color: var(--ink);
+            font-weight: 600;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- 顶部方案切换条 -->
+    <header class="switcher-bar">
+        <div class="switcher-title-group">
+            <span class="switcher-logo">ZLOONG 工房</span>
+            <span class="switcher-badge">SECTION 04 原型实验室</span>
+            <span style="font-size:13px; font-weight:600; color:var(--ink);">软著与荣誉 · 美化重构设计</span>
+        </div>
+
+        <div class="switcher-tabs">
+            <button class="tab-btn active" data-target="all">⚡ 全部对照</button>
+            <button class="tab-btn" data-target="base">基线: 现有线上版</button>
+            <button class="tab-btn" data-target="plan-a">方案 A: 公文案卷+功勋双列</button>
+            <button class="tab-btn" data-target="plan-b">方案 B: 工坊质检票据台</button>
+            <button class="tab-btn" data-target="plan-c">方案 C: 宽幅展台+荣誉矩阵</button>
+        </div>
+
+        <a href="../pages/resume.html#sec-honors" class="back-link">
+            ← 返回正式简历页
+        </a>
+    </header>
+
+    <main class="preview-container">
+
+        <!-- 页面说明卡 -->
+        <div class="proto-intro">
+            <h1>04 // 肆 · 软件著作权与荣誉栏目 重构提案</h1>
+            <p>
+                本页面用于对比 <strong>Section 04（软件著作权与荣誉）</strong> 的 3 种美化设计方向。
+                重点解决原版“普通三列表格 + 虚线平铺”导致的视觉平淡、软著官方含金量被弱化、以及未与上方工程项目实证形成联动闭环的痛点。
+            </p>
+        </div>
+
+        <!-- ==============================================================
+             0. 现有线上基线 (BASELINE)
+             ============================================================== -->
+        <section class="proposal-card" id="card-base" data-scheme="base">
+            <div class="proposal-meta">
+                <div class="prop-title-box">
+                    <h2>00 · 现有线上基线 (Current Baseline)</h2>
+                    <p class="prop-desc">原版 50/50 左右两栏布局：左侧软著为标准三列表格，右侧竞赛为单调的虚线排列，缺少与项目的直接联动。</p>
+                </div>
+                <div class="prop-tags">
+                    <span class="prop-tag">现行线上</span>
+                    <span class="prop-tag">纯文本表格</span>
+                </div>
+            </div>
+            <div class="proposal-body">
+                <!-- 章节标题 -->
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">04 // 肆</span>
+                        <h2 class="sec-title-text">软件著作权与荣誉</h2>
+                    </div>
+                    <span class="sec-title-en">HONORS &amp; IP (BASELINE)</span>
+                </div>
+
+                <div class="base-honors-grid">
+                    <!-- 软著 -->
+                    <div class="base-honor-box">
+                        <div class="base-honor-box-head">
+                            <h3 class="base-honor-box-title">国家软件著作权</h3>
+                            <span class="count">[ 3 项证书 ]</span>
+                        </div>
+                        <table class="base-honor-table">
+                            <thead>
+                                <tr>
+                                    <th>软件全称</th>
+                                    <th>登记号</th>
+                                    <th>署名</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>菌智鉴熟软件</strong></td>
+                                    <td><span class="reg-code">2026SR0492487</span></td>
+                                    <td>第一著作人</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>格物启示录软件</strong></td>
+                                    <td><span class="reg-code">2025SR2378554</span></td>
+                                    <td>第一著作人</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>合阳提线木偶小助手软件</strong></td>
+                                    <td><span class="reg-code">2026SR0131171</span></td>
+                                    <td>第一著作人</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 竞赛 -->
+                    <div class="base-honor-box">
+                        <div class="base-honor-box-head">
+                            <h3 class="base-honor-box-title">竞赛代表荣誉</h3>
+                            <span class="count">[ 6 项奖项 ]</span>
+                        </div>
+                        <ul class="base-award-rows">
+                            <li>
+                                <span class="aname">中国大学生计算机设计大赛（格物启示录）</span>
+                                <span class="arank">西北赛区二等奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">乡村振兴非遗创新赋能大赛（提线木偶助手）</span>
+                                <span class="arank">校级一等奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">蓝桥杯全国软件和信息技术专业人才大赛 (Python)</span>
+                                <span class="arank">省赛二等奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">G-Star 公益行 2025 卡赢杯公益游戏大赛（《免疫联结》）</span>
+                                <span class="arank">最佳创意游戏奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">034 GameJam 极限游戏开发大赛</span>
+                                <span class="arank">最战斗爽塔防游戏奖 · 2025</span>
+                            </li>
+                            <li>
+                                <span class="aname">数字媒体科技作品竞赛（羊肚菌智慧大棚）</span>
+                                <span class="arank">陕西赛区三等奖 · 2025</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             方案 A：【官方公文存根案卷 + 竞赛功勋徽章双列】(强烈推荐)
+             ============================================================== -->
+        <section class="proposal-card" id="card-plan-a" data-scheme="plan-a">
+            <div class="proposal-meta">
+                <div class="prop-title-box">
+                    <h2>方案 A · 官方公文存根案卷 + 竞赛功勋徽章双列 (文字精炼 · 直击要害版)</h2>
+                    <p class="prop-desc">
+                        【提炼重点信息】：剔除长句修饰与冗余套话，像 B 方案一样只保留「核心技术领域」与「参赛作品 + 年份 + 项目实证直达」。
+                        软著卡保留国家公文存根与 CERTIFIED 官方水印仪式感，竞赛项以双拼徽章高亮奖项级别，左右高度完美齐平、信息密度极高。
+                    </p>
+                </div>
+                <div class="prop-tags">
+                    <span class="prop-tag accent">推荐方案</span>
+                    <span class="prop-tag">版权公文质感</span>
+                    <span class="prop-tag">双拼等级徽章</span>
+                    <span class="prop-tag">项目闭环锚点</span>
+                </div>
+            </div>
+            <div class="proposal-body">
+                <!-- 章节标题 -->
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">04 // 肆</span>
+                        <h2 class="sec-title-text">软件著作权与荣誉</h2>
+                    </div>
+                    <span class="sec-title-en">CERTIFIED IP &amp; COMPETITION MERITS</span>
+                </div>
+
+                <div class="plan-a-grid">
+                    <!-- 左栏：国家软著公文案卷卡 -->
+                    <div class="pa-col">
+                        <div class="pa-col-head">
+                            <h3 class="pa-head-title">
+                                <span>国家软件著作权</span>
+                                <span class="dev-badge"><span class="badge-k">NCAC</span><span class="badge-v red">3项第壹著作人</span></span>
+                            </h3>
+                        </div>
+
+                        <div class="pa-dockets-stack">
+                            <!-- 软著 1：菌智鉴熟 -->
+                            <div class="pa-docket-card">
+                                <div class="pa-docket-watermark">CERTIFIED</div>
+                                <div class="pa-docket-top">
+                                    <div class="pa-docket-name">菌智鉴熟软件</div>
+                                    <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0492487</span></span>
+                                </div>
+                                <div class="pa-docket-foot">
+                                    <span class="pa-docket-brief">机器视觉与大棚环控 · YOLOv8</span>
+                                    <a href="../pages/resume.html#proj-morel" class="proof-link-pill" title="查看对应重点项目">
+                                        菌智大棚 ↗
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- 软著 2：格物启示录 -->
+                            <div class="pa-docket-card">
+                                <div class="pa-docket-watermark">CERTIFIED</div>
+                                <div class="pa-docket-top">
+                                    <div class="pa-docket-name">格物启示录软件</div>
+                                    <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2025SR2378554</span></span>
+                                </div>
+                                <div class="pa-docket-foot">
+                                    <span class="pa-docket-brief">交互式科学探索 · 剧情推理引擎</span>
+                                    <a href="portfolio.html" class="proof-link-pill" title="查看作品集档案">
+                                        作品档案 ↗
+                                    </a>
+                                </div>
+                            </div>
+
+                            <!-- 软著 3：合阳提线木偶小助手 -->
+                            <div class="pa-docket-card">
+                                <div class="pa-docket-watermark">CERTIFIED</div>
+                                <div class="pa-docket-top">
+                                    <div class="pa-docket-name">合阳提线木偶小助手软件</div>
+                                    <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0131171</span></span>
+                                </div>
+                                <div class="pa-docket-foot">
+                                    <span class="pa-docket-brief">乡村振兴非遗数字化 · Flutter 跨平台</span>
+                                    <a href="../pages/resume.html#proj-puppet" class="proof-link-pill" title="查看对应重点项目">
+                                        提线木偶 ↗
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右栏：竞赛功勋等级条 (精炼文字) -->
+                    <div class="pa-col">
+                        <div class="pa-col-head">
+                            <h3 class="pa-head-title">
+                                <span>竞赛代表荣誉</span>
+                                <span class="dev-badge"><span class="badge-k">AWARDS</span><span class="badge-v graphite">6项精选赛绩</span></span>
+                            </h3>
+                        </div>
+
+                        <div class="pa-merits-stack">
+                            <!-- 荣誉 1：卡赢杯 -->
+                            <div class="pa-merit-strip">
+                                <div class="pa-merit-top">
+                                    <span class="pa-merit-title">卡赢杯公益游戏大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">WINNER</span><span class="badge-v red">最佳创意奖</span></span>
+                                </div>
+                                <div class="pa-merit-sub">
+                                    <span class="pa-merit-proj">《免疫联结》微观塔防 · 2025</span>
+                                    <a href="../pages/resume.html#proj-immunelink" class="proof-link-pill">免疫联结 ↗</a>
+                                </div>
+                            </div>
+
+                            <!-- 荣誉 2：中国大学生计算机设计大赛 -->
+                            <div class="pa-merit-strip">
+                                <div class="pa-merit-top">
+                                    <span class="pa-merit-title">中国大学生计算机设计大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">PROV</span><span class="badge-v blue">西北二等奖</span></span>
+                                </div>
+                                <div class="pa-merit-sub">
+                                    <span class="pa-merit-proj">《格物启示录》· 2025</span>
+                                    <a href="portfolio.html" class="proof-link-pill">作品档案 ↗</a>
+                                </div>
+                            </div>
+
+                            <!-- 荣誉 3：034 GameJam -->
+                            <div class="pa-merit-strip">
+                                <div class="pa-merit-top">
+                                    <span class="pa-merit-title">034 GameJam 极限游戏开发大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">JAM</span><span class="badge-v red">最战斗爽奖</span></span>
+                                </div>
+                                <div class="pa-merit-sub">
+                                    <span class="pa-merit-proj">72h 极限独立验证 · 2025</span>
+                                    <a href="../pages/resume.html#proj-immunelink" class="proof-link-pill">实机验证 ↗</a>
+                                </div>
+                            </div>
+
+                            <!-- 荣誉 4：蓝桥杯 -->
+                            <div class="pa-merit-strip">
+                                <div class="pa-merit-top">
+                                    <span class="pa-merit-title">蓝桥杯全国软件和信息技术大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">PROV</span><span class="badge-v blue">省二等奖</span></span>
+                                </div>
+                                <div class="pa-merit-sub">
+                                    <span class="pa-merit-proj">Python 大学组软件开发 · 2025</span>
+                                </div>
+                            </div>
+
+                            <!-- 荣誉 5：乡村振兴非遗大赛 -->
+                            <div class="pa-merit-strip">
+                                <div class="pa-merit-top">
+                                    <span class="pa-merit-title">乡村振兴非遗创新赋能大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">TIER-1</span><span class="badge-v green">校一等奖</span></span>
+                                </div>
+                                <div class="pa-merit-sub">
+                                    <span class="pa-merit-proj">合阳提线木偶小助手 · 2025</span>
+                                    <a href="../pages/resume.html#proj-puppet" class="proof-link-pill">提线木偶 ↗</a>
+                                </div>
+                            </div>
+
+                            <!-- 荣誉 6：数媒科技作品竞赛 -->
+                            <div class="pa-merit-strip">
+                                <div class="pa-merit-top">
+                                    <span class="pa-merit-title">数字媒体科技作品竞赛</span>
+                                    <span class="dev-badge"><span class="badge-k">REGION</span><span class="badge-v graphite">省三等奖</span></span>
+                                </div>
+                                <div class="pa-merit-sub">
+                                    <span class="pa-merit-proj">羊肚菌智慧大棚环控系统 · 2025</span>
+                                    <a href="../pages/resume.html#proj-morel" class="proof-link-pill">菌智大棚 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             方案 B：【工坊质检票据与鉴定台 (QC Tickets)】
+             ============================================================== -->
+        <section class="proposal-card" id="card-plan-b" data-scheme="plan-b">
+            <div class="proposal-meta">
+                <div class="prop-title-box">
+                    <h2>方案 B · 工坊质检票据与鉴定台 (QC Tickets)</h2>
+                    <p class="prop-desc">
+                        【工装一体感】：与核心技术架构完全共享设计语言，左右两栏均采用带有双轨刻度标尺与单行票据（Ticket Strip）的极客质检排布，
+                        整洁精密，视觉契合度极高。
+                    </p>
+                </div>
+                <div class="prop-tags">
+                    <span class="prop-tag">极客工装风</span>
+                    <span class="prop-tag">精密单据条</span>
+                    <span class="prop-tag">风格完全一致</span>
+                </div>
+            </div>
+            <div class="proposal-body">
+                <!-- 章节标题 -->
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">04 // 肆</span>
+                        <h2 class="sec-title-text">软件著作权与荣誉</h2>
+                    </div>
+                    <span class="sec-title-en">QUALITY ASSURANCE &amp; CREDENTIALS</span>
+                </div>
+
+                <div class="plan-b-workbench">
+                    <!-- 左侧：软著核准单据 -->
+                    <div class="pb-section">
+                        <div class="pb-sec-caption">
+                            <span>INTELLECTUAL PROPERTIES // 国家软著认证</span>
+                            <span class="dev-badge"><span class="badge-k">QC</span><span class="badge-v green">PASS 3/3</span></span>
+                        </div>
+
+                        <div class="pb-tickets-list">
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">IP-01</span>
+                                    <span class="pb-ticket-name">菌智鉴熟软件</span>
+                                    <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0492487</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>独占第一著作人 · 机器视觉与大棚环控</span>
+                                    <a href="../pages/resume.html#proj-morel" class="proof-link-pill">菌智大棚 ↗</a>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">IP-02</span>
+                                    <span class="pb-ticket-name">格物启示录软件</span>
+                                    <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2025SR2378554</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>独占第一著作人 · 交互探索与推理引擎</span>
+                                    <a href="portfolio.html" class="proof-link-pill">作品档案 ↗</a>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">IP-03</span>
+                                    <span class="pb-ticket-name">合阳提线木偶小助手软件</span>
+                                    <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0131171</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>独占第一著作人 · 乡村振兴非遗数字化</span>
+                                    <a href="../pages/resume.html#proj-puppet" class="proof-link-pill">提线木偶 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 右侧：竞赛荣誉工票 -->
+                    <div class="pb-section">
+                        <div class="pb-sec-caption">
+                            <span>COMPETITION HONORS // 代表性竞赛战绩</span>
+                            <span class="dev-badge"><span class="badge-k">LOG</span><span class="badge-v graphite">2025 FILED</span></span>
+                        </div>
+
+                        <div class="pb-tickets-list">
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">AW-01</span>
+                                    <span class="pb-ticket-name">卡赢杯公益游戏大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">AWARD</span><span class="badge-v red">最佳创意游戏</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>《免疫联结》微观免疫塔防</span>
+                                    <a href="../pages/resume.html#proj-immunelink" class="proof-link-pill">免疫联结 ↗</a>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">AW-02</span>
+                                    <span class="pb-ticket-name">中国大学生计算机设计大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">PROV</span><span class="badge-v blue">西北二等奖</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>《格物启示录》互动探索系统</span>
+                                    <span class="pb-cert-tag">教育部 A 类</span>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">AW-03</span>
+                                    <span class="pb-ticket-name">034 GameJam 极限游戏开发</span>
+                                    <span class="dev-badge"><span class="badge-k">JAM</span><span class="badge-v red">最战斗爽塔防</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>72h 极限独立验证与关卡设计</span>
+                                    <a href="../pages/resume.html#proj-immunelink" class="proof-link-pill">实机验证 ↗</a>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">AW-04</span>
+                                    <span class="pb-ticket-name">蓝桥杯全国软件大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">PROV</span><span class="badge-v blue">省二等奖</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>Python 软件开发大学组</span>
+                                    <span class="pb-cert-tag">算法竞赛</span>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">AW-05</span>
+                                    <span class="pb-ticket-name">乡村振兴非遗创新赋能大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">TIER-1</span><span class="badge-v green">校一等奖</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>合阳提线木偶小助手数字化工程</span>
+                                    <a href="../pages/resume.html#proj-puppet" class="proof-link-pill">提线木偶 ↗</a>
+                                </div>
+                            </div>
+
+                            <div class="pb-ticket-item">
+                                <div class="pb-ticket-header">
+                                    <span class="pb-ticket-num">AW-06</span>
+                                    <span class="pb-ticket-name">数字媒体科技作品竞赛</span>
+                                    <span class="dev-badge"><span class="badge-k">REGION</span><span class="badge-v graphite">省三等奖</span></span>
+                                </div>
+                                <div class="pb-ticket-details">
+                                    <span>羊肚菌智慧大棚环控与检测</span>
+                                    <a href="../pages/resume.html#proj-morel" class="proof-link-pill">菌智大棚 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==============================================================
+             方案 C：【上下双层展开 · 宽幅证书展台 + 矩阵荣誉墙】
+             ============================================================== -->
+        <section class="proposal-card" id="card-plan-c" data-scheme="plan-c">
+            <div class="proposal-meta">
+                <div class="prop-title-box">
+                    <h2>方案 C · 宽幅证书展台 + 矩阵荣誉墙 (大气舒展)</h2>
+                    <p class="prop-desc">
+                        【空间破局】：彻底打破左右 50/50 的窄幅拥挤感。上层横向三列陈列国家软著实体证书展台，字号更大、气场更足；
+                        下层将竞赛按“学术/学科权威赛事”与“创新/GameJam 专项”左右分栏，层级明晰。
+                    </p>
+                </div>
+                <div class="prop-tags">
+                    <span class="prop-tag">上下分层</span>
+                    <span class="prop-tag">三列横排证书</span>
+                    <span class="prop-tag">双域荣誉矩阵</span>
+                </div>
+            </div>
+            <div class="proposal-body">
+                <!-- 章节标题 -->
+                <div class="sec-header">
+                    <div class="sec-title-group">
+                        <span class="sec-no">04 // 肆</span>
+                        <h2 class="sec-title-text">软件著作权与荣誉</h2>
+                    </div>
+                    <span class="sec-title-en">IP REPOSITORY &amp; HONORS MATRIX</span>
+                </div>
+
+                <div class="plan-c-wrapper">
+                    <!-- 上层：宽幅三列证书展台 -->
+                    <div class="pc-block">
+                        <div class="pc-block-head">
+                            <h3 class="pc-head-title">
+                                <span>国家版权局软件著作权核准展台</span>
+                                <span class="dev-badge"><span class="badge-k">AUTH</span><span class="badge-v red">第壹著作人</span></span>
+                            </h3>
+                            <span class="pc-head-en samp">[ 3 CERTIFICATES DULY REGISTERED ]</span>
+                        </div>
+
+                        <div class="pc-cert-grid">
+                            <!-- 证书 1 -->
+                            <div class="pc-cert-card">
+                                <div>
+                                    <div class="pc-cert-top-row">
+                                        <div class="pc-cert-title">菌智鉴熟软件</div>
+                                        <div class="pc-cert-seal">著</div>
+                                    </div>
+                                    <div class="pc-cert-reg-wrap">
+                                        <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0492487</span></span>
+                                    </div>
+                                    <p class="pc-cert-brief">基于 YOLOv8 的食用菌成熟度智能分选判定与大棚环控数据融合系统。</p>
+                                </div>
+                                <div class="pc-cert-foot">
+                                    <span class="dev-badge"><span class="badge-k">ROLE</span><span class="badge-v graphite">第一著作人</span></span>
+                                    <a href="../pages/resume.html#proj-morel" class="proof-link-pill">菌智大棚 ↗</a>
+                                </div>
+                            </div>
+
+                            <!-- 证书 2 -->
+                            <div class="pc-cert-card">
+                                <div>
+                                    <div class="pc-cert-top-row">
+                                        <div class="pc-cert-title">格物启示录软件</div>
+                                        <div class="pc-cert-seal">著</div>
+                                    </div>
+                                    <div class="pc-cert-reg-wrap">
+                                        <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2025SR2378554</span></span>
+                                    </div>
+                                    <p class="pc-cert-brief">中国大学生计算机设计大赛获奖作品：互动式科学探索交互程序与剧情推理引擎。</p>
+                                </div>
+                                <div class="pc-cert-foot">
+                                    <span class="dev-badge"><span class="badge-k">ROLE</span><span class="badge-v graphite">第一著作人</span></span>
+                                    <a href="portfolio.html" class="proof-link-pill">作品档案 ↗</a>
+                                </div>
+                            </div>
+
+                            <!-- 证书 3 -->
+                            <div class="pc-cert-card">
+                                <div>
+                                    <div class="pc-cert-top-row">
+                                        <div class="pc-cert-title">合阳提线木偶小助手</div>
+                                        <div class="pc-cert-seal">著</div>
+                                    </div>
+                                    <div class="pc-cert-reg-wrap">
+                                        <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0131171</span></span>
+                                    </div>
+                                    <p class="pc-cert-brief">乡村振兴非遗数字化：基于 Flutter 的戏曲唱腔与三维皮影交互演示应用。</p>
+                                </div>
+                                <div class="pc-cert-foot">
+                                    <span class="dev-badge"><span class="badge-k">ROLE</span><span class="badge-v graphite">第一著作人</span></span>
+                                    <a href="../pages/resume.html#proj-puppet" class="proof-link-pill">提线木偶 ↗</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 下层：分类荣誉矩阵 (双栏网格) -->
+                    <div class="pc-block">
+                        <div class="pc-block-head">
+                            <h3 class="pc-head-title">
+                                <span>竞赛代表荣誉矩阵</span>
+                                <span class="dev-badge"><span class="badge-k">MERIT</span><span class="badge-v graphite">6 AWARDS</span></span>
+                            </h3>
+                            <span class="pc-head-en samp">[ 学科权威赛题 + 极客创新赛道 ]</span>
+                        </div>
+
+                        <div class="pc-matrix-grid">
+                            <!-- 分组 1：学科与权威软件竞赛 -->
+                            <div class="pc-sub-panel">
+                                <div class="pc-sub-title">
+                                    <span>01 // 学科与算法权威大赛</span>
+                                    <span class="dev-badge"><span class="badge-k">TRACK</span><span class="badge-v blue">ACADEMIC</span></span>
+                                </div>
+                                <div class="pc-award-list">
+                                    <div class="pc-award-item">
+                                        <div class="pc-award-info">
+                                            <span class="pc-award-name">中国大学生计算机设计大赛</span>
+                                            <span class="pc-award-target">参赛作品：<strong>《格物启示录》</strong> · 教育部 A 类</span>
+                                        </div>
+                                        <span class="dev-badge"><span class="badge-k">PROV</span><span class="badge-v blue">西北二等奖</span></span>
+                                    </div>
+                                    <div class="pc-award-item">
+                                        <div class="pc-award-info">
+                                            <span class="pc-award-name">蓝桥杯全国软件和信息技术大赛</span>
+                                            <span class="pc-award-target">专业赛道：<strong>Python 大学组算法与软件开发</strong></span>
+                                        </div>
+                                        <span class="dev-badge"><span class="badge-k">PROV</span><span class="badge-v blue">陕西省二等奖</span></span>
+                                    </div>
+                                    <div class="pc-award-item">
+                                        <div class="pc-award-info">
+                                            <span class="pc-award-name">数字媒体科技作品竞赛</span>
+                                            <span class="pc-award-target">参赛项目：<strong>羊肚菌智慧大棚环控决策系统</strong></span>
+                                        </div>
+                                        <span class="dev-badge"><span class="badge-k">REGION</span><span class="badge-v graphite">省三等奖</span></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- 分组 2：创新创业与 GameJam 极限开发 -->
+                            <div class="pc-sub-panel">
+                                <div class="pc-sub-title">
+                                    <span>02 // 创新创业与极限 GAMEJAM</span>
+                                    <span class="dev-badge"><span class="badge-k">TRACK</span><span class="badge-v red">CREATIVE</span></span>
+                                </div>
+                                <div class="pc-award-list">
+                                    <div class="pc-award-item">
+                                        <div class="pc-award-info">
+                                            <span class="pc-award-name">G-Star 公益行 2025 卡赢杯公益游戏大赛</span>
+                                            <span class="pc-award-target">获奖项目：<strong>《免疫联结》微观免疫塔防</strong></span>
+                                        </div>
+                                        <span class="dev-badge"><span class="badge-k">WINNER</span><span class="badge-v red">最佳创意奖</span></span>
+                                    </div>
+                                    <div class="pc-award-item">
+                                        <div class="pc-award-info">
+                                            <span class="pc-award-name">034 GameJam 极限游戏开发大赛</span>
+                                            <span class="pc-award-target">独立作品：<strong>72 小时极限塔防验证</strong></span>
+                                        </div>
+                                        <span class="dev-badge"><span class="badge-k">JAM</span><span class="badge-v red">最战斗爽奖</span></span>
+                                    </div>
+                                    <div class="pc-award-item">
+                                        <div class="pc-award-info">
+                                            <span class="pc-award-name">乡村振兴非遗创新赋能大赛</span>
+                                            <span class="pc-award-target">落地应用：<strong>合阳提线木偶小助手</strong></span>
+                                        </div>
+                                        <span class="dev-badge"><span class="badge-k">TIER-1</span><span class="badge-v green">校一等奖</span></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- 交互脚本：选项卡切换控制 -->
+    <script>
+        (function() {
+            var tabs = document.querySelectorAll(".switcher-tabs .tab-btn");
+            var cards = document.querySelectorAll(".proposal-card");
+
+            tabs.forEach(function(btn) {
+                btn.addEventListener("click", function() {
+                    var target = this.getAttribute("data-target");
+
+                    tabs.forEach(function(t) { t.classList.remove("active"); });
+                    this.classList.add("active");
+
+                    if (target === "all") {
+                        cards.forEach(function(c) { c.style.display = "block"; });
+                    } else {
+                        cards.forEach(function(c) {
+                            if (c.getAttribute("data-scheme") === target) {
+                                c.style.display = "block";
+                            } else {
+                                c.style.display = "none";
+                            }
+                        });
+                    }
+                });
+            });
+        })();
+    </script>
+</body>
+</html>
+
