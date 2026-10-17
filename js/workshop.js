@@ -252,25 +252,33 @@
         return "<li>" + inlineMd(body) + "</li>";
     }
 
-    /* 组装自发现卡片：返回 section 元素，复用现有卡片样式类
+    /* 组装自发现卡片：返回 section 元素，对齐 #resume-card 档案纸卡规范
        styleCfg = manifest 条目的 style 字段（手写单值；不写/非法 → doc） */
     function buildAutoCard(filename, body, styleCfg) {
         if (!body || !String(body).trim()) { return null; }
         var type = AUTO_STYLES.indexOf(styleCfg) >= 0 ? styleCfg : "doc";
+        var badgeMap = {
+            doc: "档案 / DOC",
+            links: "索引 / LINKS",
+            list: "清单 / LIST",
+            quote: "便签 / NOTE"
+        };
+        var badgeText = badgeMap[type] || "档案 / DOC";
+        var badgeHtml = '<span class="tile-badge samp">' + badgeText + '</span>';
         var title = "<h2 class=\"tile-title samp\">" + escHtml(filename) + "</h2>";
-        var cls = "tile t-2w", inner = title;
+        var cls = "tile t-2w", inner = badgeHtml + title;
         if (type === "links") {
             var items = String(body).replace(/\r\n?/g, "\n").split("\n")
                 .map(function (l) { return l.trim(); })
                 .filter(function (l) { return l; })
                 .map(linksItemHtml);
-            inner = title + '<ul class="link-list samp">' + items.join("") + "</ul>";
+            inner = badgeHtml + title + '<ul class="link-list samp">' + items.join("") + "</ul>";
         } else if (type === "list") {
             var lis = String(body).replace(/\r\n?/g, "\n").split("\n")
                 .map(function (l) { return l.replace(/^\s*-\s+/, ""); })
                 .filter(function (l) { return l.trim(); })
                 .map(function (l) { return '<li><span class="now-dot"></span>' + inlineMd(l) + "</li>"; });
-            inner = title + '<ul class="now-list">' + lis.join("") + "</ul>";
+            inner = badgeHtml + title + '<ul class="now-list">' + lis.join("") + "</ul>";
         } else if (type === "quote") {
             cls = "tile tile--quote t-2w";
             var blocks = String(body).replace(/\r\n?/g, "\n").split(/\n\s*\n/);
@@ -282,10 +290,10 @@
                 if (!ls.length) { return; }
                 if (i === 0) { quote = ls; } else { foot = foot.concat(ls); }
             });
-            inner = title + "<blockquote>" + quote.map(escHtml).join("<br>") + "</blockquote>";
+            inner = badgeHtml + title + "<blockquote>" + quote.map(escHtml).join("<br>") + "</blockquote>";
             if (foot.length) { inner += '<p class="tile-foot samp">' + escHtml(foot.join(" ")) + "</p>"; }
         } else {
-            inner = title + '<div class="tile-body">' + blockMd(body) + "</div>";
+            inner = badgeHtml + title + '<div class="tile-body">' + blockMd(body) + "</div>";
         }
         var card = document.createElement("section");
         card.className = cls;

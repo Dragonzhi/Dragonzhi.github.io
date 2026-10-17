@@ -525,7 +525,8 @@ a:hover { color: var(--red); }
   border-radius: 2px 0 0 2px;
   opacity: 0.8;
 }
-.resume-badge {
+.resume-badge,
+.tile-badge {
   position: absolute;
   top: -9px;
   right: 14px;
@@ -539,6 +540,8 @@ a:hover { color: var(--red); }
   letter-spacing: 1px;
   font-weight: 700;
   box-shadow: 0 1px 3px rgba(38,34,28,.08);
+  pointer-events: none;
+  white-space: nowrap;
 }
 .resume-who {
   font-size: 13.5px;
@@ -598,51 +601,169 @@ a:hover { color: var(--red); }
   box-shadow: none;                      /* 容器只是堆叠/拖拽层，不渲染成卡 */
   padding: 0;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;               /* 卡片宽度随内容收放，不撑满整行 */
-  gap: 14px;
+  flex-wrap: wrap;                       /* 多卡片时在档案架内自然流式折行 */
+  align-items: flex-start;
+  gap: 20px 24px;
   cursor: default;
 }
+
+/* 自发现档案架卡片：对齐 #resume-card 硬质工坊档案便签纸设计规范 */
+#auto-shelf > section,
 .paper--shelf .tile {
-  position: static;
+  position: relative;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: var(--radius);
-  box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
-  padding: 20px 22px;
-  max-width: 100%;                       /* 长内容仍在容器内折行 */
-  min-width: min(280px, 100%);           /* 太短的内容也保住卡片比例 */
+  border-radius: 3px;
+  padding: 16px 18px 16px 20px;
+  box-shadow: 2px 4px 12px rgba(38,34,28,.10);
+  width: min(300px, 100%);
+  box-sizing: border-box;
   transition: transform .2s ease, box-shadow .2s ease;
 }
-.paper--shelf .tile:hover { transform: translateY(-3px); box-shadow: 0 14px 30px rgba(38,34,28,.10); }
-.paper--shelf .tile-title {
-  margin: 0 0 12px; font-family: var(--mono); font-size: 13px; font-weight: 600;
-  color: var(--ink-soft); letter-spacing: .5px;
+#auto-shelf > section:hover,
+.paper--shelf .tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 2px 8px 20px rgba(38,34,28,.14);
 }
-.paper--shelf .tile-title::before { content: "▤ "; color: var(--red); }
-.paper--shelf .tile p { margin: 0 0 12px; }
-.paper--shelf .tile-foot { font-size: 12px; color: var(--ink-soft); margin: 12px 0 0 !important; font-family: var(--mono); }
-.tile-body { font-size: 13.5px; line-height: 1.7; }
-.tile-body p { margin: 0 0 6px; }
-.tile-body ul { margin: 0 0 6px; padding-left: 18px; }
-/* quote 型档案卡：镜像 motto 黄便签外观（收放由 .paper--shelf 的 align-items 统一处理） */
+
+/* 标志性特征一：左侧朱砂红装订标尺线 */
+#auto-shelf > section::before,
+.paper--shelf .tile::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  width: 4px;
+  background: var(--red);
+  border-radius: 2px 0 0 2px;
+  opacity: 0.8;
+}
+
+/* 标题样式：等宽微型公文标题 */
+#auto-shelf > section .tile-title,
+.paper--shelf .tile-title {
+  margin: 0 0 10px;
+  font-family: var(--mono);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  letter-spacing: .5px;
+  line-height: 1.4;
+}
+#auto-shelf > section .tile-title::before,
+.paper--shelf .tile-title::before {
+  content: "▤ ";
+  color: var(--red);
+}
+#auto-shelf > section p,
+.paper--shelf .tile p {
+  margin: 0 0 8px;
+}
+#auto-shelf > section .tile-foot,
+.paper--shelf .tile-foot {
+  font-size: 11.5px;
+  color: var(--ink-soft);
+  margin: 10px 0 0 !important;
+  font-family: var(--mono);
+  opacity: 0.85;
+}
+.tile-body {
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.tile-body strong {
+  color: var(--ink);
+}
+.tile-body p {
+  margin: 0 0 8px;
+}
+.tile-body p:last-child {
+  margin-bottom: 0;
+}
+.tile-body ul {
+  margin: 0 0 8px;
+  padding-left: 18px;
+}
+
+/* 列表样式 (list 型与 links 型) */
+.paper--shelf .link-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--mono);
+  font-size: 12px;
+}
+.paper--shelf .link-list li {
+  margin: 6px 0;
+  line-height: 1.5;
+}
+.paper--shelf .now-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 12.5px;
+  line-height: 1.6;
+  color: var(--ink-soft);
+}
+.paper--shelf .now-list li {
+  margin: 6px 0;
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+/* 链接样式：对齐 .resume-btn 风格（朱砂红、虚线下划线） */
+#auto-shelf > section a,
+.paper--shelf .tile a {
+  color: var(--red);
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  border-bottom: 1px dashed rgba(139,44,31,.4);
+  padding-bottom: 1px;
+  transition: all .15s ease;
+}
+#auto-shelf > section a:hover,
+.paper--shelf .tile a:hover {
+  border-bottom-style: solid;
+  color: var(--ink);
+}
+
+/* quote 型档案卡：镜像 motto 黄便签外观 */
+#auto-shelf > section.tile--quote,
 .paper--shelf .tile--quote {
-  max-width: 72%;
   background: #fff3b8;
   background-image: linear-gradient(135deg, rgba(255,255,255,.5), transparent 60%);
-  transform: rotate(-2deg);
+  transform: rotate(-1.5deg);
   text-align: center;
 }
-.paper--shelf .tile--quote:hover { transform: rotate(-2deg) translateY(-3px); }
+#auto-shelf > section.tile--quote:hover,
+.paper--shelf .tile--quote:hover {
+  transform: rotate(-1.5deg) translateY(-4px);
+  box-shadow: 2px 8px 20px rgba(38,34,28,.14);
+}
+#auto-shelf > section.tile--quote blockquote,
 .paper--shelf .tile--quote blockquote {
-  margin: 4px 0 8px;
+  margin: 6px 0 8px;
   font-family: var(--display);
-  font-size: 17px;
+  font-size: 16px;
   line-height: 1.5;
   color: var(--ink);
 }
-.paper--shelf .tile--quote blockquote::before { content: "“"; color: var(--red); }
-.paper--shelf .tile--quote blockquote::after { content: "”"; color: var(--red); }
+#auto-shelf > section.tile--quote blockquote::before,
+.paper--shelf .tile--quote blockquote::before {
+  content: "“";
+  color: var(--red);
+}
+#auto-shelf > section.tile--quote blockquote::after,
+.paper--shelf .tile--quote blockquote::after {
+  content: "”";
+  color: var(--red);
+}
 
 /* ===== 装饰物件 ===== */
 .stamp-important {
@@ -666,29 +787,53 @@ a:hover { color: var(--red); }
   z-index: 8;
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 12px;
 }
 .drag-hint {
   color: var(--ink-soft);
+  font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 1px;
-  opacity: .85;
+  letter-spacing: .5px;
+  opacity: .75;
   transition: opacity .4s ease;
+  user-select: none;
 }
 .drag-hint.is-hidden { opacity: 0; pointer-events: none; }
 .desk-reset {
   font-family: var(--mono);
   font-size: 11px;
-  letter-spacing: 1px;
-  color: var(--red);
-  background: rgba(139,44,31,.05);
-  border: 1px solid rgba(139,44,31,.35);
+  letter-spacing: .5px;
+  color: var(--ink-soft);
+  background: transparent;
+  border: 1px dashed var(--line);
   border-radius: 3px;
-  padding: 4px 12px;
+  padding: 3px 10px;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all .15s ease;
+  user-select: none;
 }
-.desk-reset:hover { background: var(--red); color: var(--card); }
+.desk-reset::before {
+  content: "↺";
+  font-size: 11px;
+  line-height: 1;
+  transition: transform .25s ease;
+}
+.desk-reset:hover {
+  color: var(--red);
+  border-color: var(--red);
+  border-style: solid;
+  background: rgba(139,44,31,.03);
+  transform: translateY(-1px);
+}
+.desk-reset:hover::before {
+  transform: rotate(-45deg);
+}
+.desk-reset:active {
+  transform: translateY(0);
+}
 
 /* ===== 拖动态 ===== */
 .paper.is-dragging,
@@ -831,6 +976,15 @@ a:hover { color: var(--red); }
     background: transparent;             /* 覆盖窄屏 .paper 的白卡底：容器不渲染成卡 */
     border: 0;
     box-shadow: none;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    width: 100%;
+  }
+  #auto-shelf > section,
+  .paper--shelf .tile {
+    width: 100%;
+    box-sizing: border-box;
   }
 
   .proj {
