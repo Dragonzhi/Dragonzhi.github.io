@@ -93,5 +93,30 @@
       }
     ],
     "published": true
+  },
+  {
+    "id": "weaving-rain",
+    "order": 5,
+    "title": "风织雨 Weaving Rain",
+    "badge": "GAME JAM",
+    "date": "2026-10-20",
+    "theme": "blue",
+    "image": "images/projects/weaving-rain.png",
+    "imageAlt": "风织雨群岛场景实机画面",
+    "type": "Godot 天气操控解谜游戏 · 单人开发",
+    "summary": "拨动空气，把雨送到群岛上需要它的地方。13 天做出可试玩的 Demo，含水库教学与九张关卡：湿空气迎着山坡抬升成云，再借风把云雨送到农田与水库，风停后云仍会走，雨也不会立刻停。仓库里另写了一个关卡编辑器插件，可以在编辑器里摆山体、水汽与目标。",
+    "responsibility": ["玩法与关卡设计", "天气模拟系统", "自研关卡编辑器插件", "程序化画风体系"],
+    "tech": ["Godot 4.7.2", "GDScript", "EditorPlugin", "3D 程序化视觉"],
+    "links": [
+      {
+        "label": "TapTap 试玩",
+        "url": "https://www.taptap.cn/app/981551"
+      },
+      {
+        "label": "GitHub",
+        "url": "https://github.com/Dragonzhi/Weaving-Rain"
+      }
+    ],
+    "published": true
   }
 ]

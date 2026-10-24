@@ -21,7 +21,7 @@
     <!-- 门牌 -->
     <div class="dossier-eyebrow">
         <span class="eyebrow-brand"><a class="brand-home" href="../index.html">ZLOONG 工房</a> <span>//</span> 履历档案</span>
-        <span id="today" class="samp" data-date-format="dossier">2026.10.15</span>
+        <span id="today" class="samp" data-date-format="dossier">2026.10.25</span>
         <span class="eyebrow-actions">
             <a href="mailto:3248569738@qq.com?subject=索取徐同学正式投递版PDF简历" class="eyebrow-mail" title="通过邮件索取校招/实习完整文字版 PDF 简历">✉️ 索取投递版 PDF</a>
             <a href="../index.html" class="back-home">返回工作台</a>
@@ -156,7 +156,7 @@
                     </button>
                     <button class="arch-rail-item" role="tab" aria-selected="false" data-arch-target="game">
                         <span class="arch-rail-name">04 // 游戏研发与系统</span>
-                        <span class="arch-rail-badge" id="rail-badge-game">4 项自研</span>
+                        <span class="arch-rail-badge" id="rail-badge-game">5 项自研</span>
                     </button>
                     <button class="arch-rail-item" role="tab" aria-selected="false" data-arch-target="eng">
                         <span class="arch-rail-name">05 // 工程化与交付素养</span>
@@ -356,7 +356,7 @@
                                 <h3 class="arch-stage-title">游戏研发与系统工程</h3>
                                 <span class="dev-badge"><span class="badge-k">MOD</span><span class="badge-v green">SYSTEM</span></span>
                             </div>
-                            <span class="arch-stage-sub samp">4 项底层自研 · 引擎机制</span>
+                            <span class="arch-stage-sub samp">5 项底层自研 · 引擎机制</span>
                         </div>
 
                         <div>
@@ -364,7 +364,7 @@
                             <div class="arch-badges-row">
                                 <span class="dev-badge"><span class="badge-k">engine</span><span class="badge-v green">Godot 4.3</span></span>
                                 <span class="dev-badge"><span class="badge-k">lang</span><span class="badge-v green">GDScript</span></span>
-                                <span class="dev-badge"><span class="badge-k">plugin</span><span class="badge-v green">自研 GraphEdit 插件</span></span>
+                                <span class="dev-badge"><span class="badge-k">plugin</span><span class="badge-v green">自研关卡编辑器插件</span></span>
                                 <span class="dev-badge"><span class="badge-k">mod</span><span class="badge-v green">MC Forge 1.20.1</span></span>
                                 <span class="dev-badge"><span class="badge-k">lang</span><span class="badge-v green">Kotlin / Java</span></span>
                                 <span class="dev-badge"><span class="badge-k">algo</span><span class="badge-v green">TACZ 穿烟包围盒</span></span>
@@ -376,9 +376,9 @@
                             <div class="arch-tickets-stack">
                                 <div class="arch-ticket-strip">
                                     <span class="arch-ticket-no">01</span>
-                                    <span class="arch-ticket-title">自研 Godot 节点式叙事编辑器</span>
-                                    <span class="arch-ticket-rule">基于 <code>EditorPlugin + GraphEdit</code> 研发任务拓扑导出插件，可视化拼装直接导出 JSON，策划改数值不碰代码</span>
-                                    <a href="#proj-optimized" class="link-dash link-dash--quiet" title="查看项目实证">智能优化中 ↗</a>
+                                    <span class="arch-ticket-title">自研 Godot 关卡编辑器插件</span>
+                                    <span class="arch-ticket-rule">基于 <code>EditorPlugin + EditorNode3DGizmoPlugin</code> 自研地图编辑插件（667 行），编辑器内管理山体 / 水汽 / 地块并直接读写地图资源，策划自行编关</span>
+                                    <a href="#proj-weaving-rain" class="link-dash link-dash--quiet" title="查看项目实证">风织雨 ↗</a>
                                 </div>
                                 <div class="arch-ticket-strip">
                                     <span class="arch-ticket-no">02</span>
@@ -669,11 +669,73 @@
                     </div>
                 </article>
 
-                <!-- 项目 5：智能优化中 (游戏与系统主打) -->
+                <!-- 项目 5：风织雨 (AI 游戏线最重) -->
+                <article class="dossier-proj-item" data-cat="game" id="proj-weaving-rain">
+                    <div class="proj-top-banner">
+                        <div class="proj-title-box">
+                            <span class="proj-index-code">第伍件 // WEAVING-RAIN</span>
+                            <h3 class="proj-heading">风织雨 Weaving Rain — 天气操控解谜游戏</h3>
+                            <span class="proj-role-tag">单人开发 (设计 / 程序 / 画风体系)</span>
+                            <span class="dev-badge"><span class="badge-k">release</span><span class="badge-v red">TapTap 试玩上线</span></span>
+                        </div>
+                        <div class="proj-timeline">2026.10 (13 天 / 聚光灯 GameJam)</div>
+                    </div>
+                    <div class="proj-content-body">
+                        <div class="proj-layout-grid">
+                            <div class="media-window">
+                                <div class="window-topbar">
+                                    <div class="window-dots"><div class="window-dot"></div><div class="window-dot"></div><div class="window-dot"></div></div>
+                                    <span>PLAYABLE // TapTap 试玩</span>
+                                </div>
+                                <img src="../images/projects/weaving-rain.png" alt="风织雨群岛场景实机画面：云雨、水库与菜田" loading="lazy">
+                            </div>
+
+                            <div class="proj-info-col">
+                                <div>
+                                    <p class="proj-summary-line">
+                                        TapTap 聚光灯 21 天 GameJam 参赛作品（主题「涌现」）：拨动空气，让湿空气迎山坡抬升成云，再把云雨送往群岛上的农田与水库。风停后云仍会移动，雨也不会立刻停下。
+                                    </p>
+                                    <div class="metrics-capsule-row">
+                                        <div class="m-item"><span class="m-k">开发周期:</span><span class="m-v">13 天可试玩 Demo</span></div>
+                                        <div class="m-item"><span class="m-k">内容规模:</span><span class="m-v">水库教学 + 9 关</span></div>
+                                        <div class="m-item"><span class="m-k">代码规模:</span><span class="m-v">GDScript 约 1.66 万行</span></div>
+                                    </div>
+                                    <div class="tech-chips">
+                                        <span class="tech-chip">Godot 4.7.2</span>
+                                        <span class="tech-chip">GDScript</span>
+                                        <span class="tech-chip">自研关卡编辑器</span>
+                                        <span class="tech-chip">3D 程序化视觉</span>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <div class="action-capsule-group">
+                                        <a href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer" class="link-dash">TapTap 试玩 ↗</a>
+                                        <a href="https://github.com/Dragonzhi/Weaving-Rain" target="_blank" rel="noreferrer" class="link-dash">GitHub 源码 ↗</a>
+                                    </div>
+
+                                    <details class="deep-dive-details">
+                                        <summary>▸ 查看天气模拟与自研关卡编辑器</summary>
+                                        <div class="deep-dive-content">
+                                            <ul>
+                                                <li><strong>天气模拟系统：</strong>湿空气受风推动、遇山坡抬升成云，云随气流漂移，落雨改变地块湿度；农田需浇够并安全收尾，水库蓄满即完成，部分目标受损后仍可挽救其余目标。</li>
+                                                <li><strong>自研 Godot 关卡编辑器插件（667 行）：</strong>EditorPlugin + EditorNode3DGizmoPlugin，编辑器内 dock 面板管理山体 / 水汽 / 地块列表，彩色手柄拖拽编辑岛形预设，直接读写地图资源。</li>
+                                                <li><strong>程序化统一画风：</strong>无外部美术素材，四档云色与陆地 / 岸 / 土 / 湿土色板、云影强度、接触阴影、山体投影、倒角宽度全部参数化为一套风格资源（scripts/scene_style.gd），改风格不碰逻辑。</li>
+                                                <li><strong>AI 辅助开发与验收：</strong>Codex 辅助实现，配 76 个自动化验证脚本（关卡合法性校验、性能剖析、场景回放截图）；交付记录写明构建范围、散列与已知问题清单。</li>
+                                            </ul>
+                                        </div>
+                                    </details>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </article>
+
+                <!-- 项目 6：智能优化中 (游戏与系统主打) -->
                 <article class="dossier-proj-item" data-cat="game" id="proj-optimized">
                     <div class="proj-top-banner">
                         <div class="proj-title-box">
-                            <span class="proj-index-code">第伍件 // OPTIMIZED</span>
+                            <span class="proj-index-code">第陆件 // OPTIMIZED</span>
                             <h3 class="proj-heading">智能优化中 (OPTIMIZED) — 反乌托邦像素叙事游戏</h3>
                             <span class="proj-role-tag">主程兼队长 (8人队伍)</span>
                             <span class="dev-badge"><span class="badge-k">release</span><span class="badge-v red">好游快爆上线</span></span>
@@ -695,18 +757,18 @@
                             <div class="proj-info-col">
                                 <div>
                                     <p class="proj-summary-line">
-                                        金海豚 2026 游戏大赛参赛作品：反乌托邦多结局叙事游戏。21 天 GameJam 极限交付，基于 Godot 4 自研 GraphEdit 节点式叙事编辑器实现数据驱动。
+                                        金海豚 2026 游戏大赛参赛作品：反乌托邦多结局叙事游戏。21 天 GameJam 极限交付，以 Resource 数据驱动的任务调度与侵蚀值阈值系统支撑多结局分支。
                                     </p>
                                     <div class="metrics-capsule-row">
                                         <div class="m-item"><span class="m-k">开发周期:</span><span class="m-v">21 天极限交付</span></div>
                                         <div class="m-item"><span class="m-k">团队协作:</span><span class="m-v">8 人主程兼队长</span></div>
-                                        <div class="m-item"><span class="m-k">自研架构:</span><span class="m-v">EditorPlugin 插件</span></div>
+                                        <div class="m-item"><span class="m-k">任务系统:</span><span class="m-v">侵蚀值 5 阶段阈值</span></div>
                                     </div>
                                     <div class="tech-chips">
                                         <span class="tech-chip">Godot 4</span>
                                         <span class="tech-chip">GDScript</span>
-                                        <span class="tech-chip">自研 EditorPlugin</span>
-                                        <span class="tech-chip">数据驱动</span>
+                                        <span class="tech-chip">数据驱动任务调度</span>
+                                        <span class="tech-chip">多结局分支</span>
                                     </div>
                                 </div>
 
@@ -716,10 +778,10 @@
                                     </div>
 
                                     <details class="deep-dive-details">
-                                        <summary>▸ 查看节点编辑器自研与工程交付</summary>
+                                        <summary>▸ 查看数据驱动任务系统与工程交付</summary>
                                         <div class="deep-dive-content">
                                             <ul>
-                                                <li><strong>自研 Godot 节点式叙事编辑器：</strong>基于 Godot 4 自研 EditorPlugin 编辑器插件，利用 GraphEdit 实现可视化拼装任务图谱并直接导出 JSON 数据，实现“策划改数值不碰代码”。</li>
+                                                <li><strong>数据驱动任务系统：</strong>日期 / 侵蚀值 / 权重过滤 + 加权随机调度 + AP 预算过滤 + 阈值强制触发；侵蚀值 5 阶段阈值系统（0–100）覆盖边界用例单测，支撑多结局分支。</li>
                                                 <li><strong>高压项目管理与交付：</strong>作为队长与主程，在 21 天 GameJam 节奏下制定跨职能数值契约与 PR 规范，完成全套程序交付文档与边界用例自检，已在好游快爆上线试玩。</li>
                                             </ul>
                                         </div>
@@ -734,7 +796,7 @@
                 <article class="dossier-proj-item" data-cat="game" id="proj-immunelink">
                     <div class="proj-top-banner">
                         <div class="proj-title-box">
-                            <span class="proj-index-code">第陆件 // IMMUNELINK</span>
+                            <span class="proj-index-code">第柒件 // IMMUNELINK</span>
                             <h3 class="proj-heading">免疫联结 ImmuneLink — 2D 桥梁网络塔防</h3>
                             <span class="proj-role-tag">独立开发 (设计+程序+美术)</span>
                             <span class="dev-badge"><span class="badge-k">award</span><span class="badge-v red">卡赢杯最佳创意奖</span></span>
@@ -797,7 +859,7 @@
                 <article class="dossier-proj-item" data-cat="ai" id="proj-hanako">
                     <div class="proj-top-banner">
                         <div class="proj-title-box">
-                            <span class="proj-index-code">第柒件 // HANAKO</span>
+                            <span class="proj-index-code">第捌件 // HANAKO</span>
                             <h3 class="proj-heading">hanako 箱庭日报 — 零依赖标准库门户与自动化管线</h3>
                             <span class="proj-role-tag">独立开发与自运维</span>
                             <span class="dev-badge"><span class="badge-k">pipeline</span><span class="badge-v amber">50+ 期连续更新</span></span>
@@ -851,7 +913,7 @@
                 <article class="dossier-proj-item" data-cat="game" id="proj-csg">
                     <div class="proj-top-banner">
                         <div class="proj-title-box">
-                            <span class="proj-index-code">第捌件 // CS-GRENADES</span>
+                            <span class="proj-index-code">第玖件 // CS-GRENADES</span>
                             <h3 class="proj-heading">CounterStrikeGrenades — Minecraft CS2 机制模组</h3>
                             <span class="proj-role-tag">协作开发 (ThePiSquad 团队)</span>
                             <span class="dev-badge"><span class="badge-k">mod</span><span class="badge-v blue">Forge 1.20.1</span></span>
@@ -941,7 +1003,7 @@
                                 <span class="dev-badge"><span class="badge-k">REG</span><span class="badge-v red">2026SR0492487</span></span>
                             </div>
                             <div class="docket-foot">
-                                <span class="docket-brief">机器视觉与大棚环控 · YOLOv8</span>
+                                <span class="docket-brief">机器视觉与大棚环控 · YOLOv11n</span>
                                 <a href="#proj-morel" class="link-dash link-dash--quiet" title="查看对应重点项目">菌智大棚 ↗</a>
                             </div>
                         </div>
@@ -1014,7 +1076,7 @@
                                 <span class="dev-badge"><span class="badge-k">JAM</span><span class="badge-v red">最战斗爽奖</span></span>
                             </div>
                             <div class="merit-sub">
-                                <span class="merit-proj">8 天极限独立交付 · 2026.03</span>
+                                <span class="merit-proj">团队报名 · 本人主程序 · 2026.03</span>
                                 <a href="#proj-immunelink" class="link-dash link-dash--quiet" title="查看对应重点项目">实机验证 ↗</a>
                             </div>
                         </div>
@@ -1048,7 +1110,7 @@
                                 <span class="dev-badge"><span class="badge-k">REGION</span><span class="badge-v graphite">省三等奖</span></span>
                             </div>
                             <div class="merit-sub">
-                                <span class="merit-proj">羊肚菌智慧大棚环控系统 · 2025</span>
+                                <span class="merit-proj">菌兴慧农 · 羊肚菌智慧大棚种植系统 · 2025</span>
                                 <a href="#proj-morel" class="link-dash link-dash--quiet" title="查看对应重点项目">菌智大棚 ↗</a>
                             </div>
                         </div>
@@ -1151,13 +1213,13 @@
         if (track === "game") {
             activateArchTab("game");
             var gameBadge = document.getElementById("rail-badge-game");
-            if (gameBadge) gameBadge.textContent = "4 项自研 · 主修";
+            if (gameBadge) gameBadge.textContent = "5 项自研 · 主修";
             var aiBadge = document.getElementById("rail-badge-ai");
             if (aiBadge) aiBadge.textContent = "6 契约";
         } else {
             activateArchTab("ai");
             var gameBadge = document.getElementById("rail-badge-game");
-            if (gameBadge) gameBadge.textContent = "4 项自研";
+            if (gameBadge) gameBadge.textContent = "5 项自研";
             var aiBadge = document.getElementById("rail-badge-ai");
             if (aiBadge) aiBadge.textContent = (track === "ai") ? "6 契约 · 主修" : "6 契约";
         }
