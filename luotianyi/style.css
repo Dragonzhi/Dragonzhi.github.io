@@ -281,6 +281,22 @@ body {
     font-family: var(--mono);
     color: var(--ink-faint);
 }
+/* 报头品牌与返回键：与全站子页 .brand-home / .back-home 同语言
+   （朱砂箭头前缀、quiet 墨色、hover 朱砂） */
+.stream-hero-top .brand-home {
+    color: var(--ink);
+    font-weight: 700;
+    text-decoration: none;
+    transition: color var(--t-fast) ease;
+}
+.stream-hero-top .brand-home:hover { color: var(--red); }
+.stream-hero-top .back-home {
+    color: var(--ink-faint);
+    text-decoration: none;
+    transition: color var(--t-fast) ease;
+}
+.stream-hero-top .back-home::before { content: "← "; color: var(--red); }
+.stream-hero-top .back-home:hover { color: var(--red); }
 .stream-hero-title-area {
     display: flex;
     align-items: center;

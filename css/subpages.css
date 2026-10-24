@@ -25,13 +25,25 @@
   padding: calc(var(--gap) * .75) 0 calc(var(--gap) * .5);
 }
 .sub-eyebrow .live { color: var(--red); }
-.sub-eyebrow a {
+
+/* ---- 报眉品牌与返回工作台（全站子页统一） ----
+   .brand-home：左上角品牌，可点回主页，加粗墨色、hover 朱砂；
+   .back-home：报眉最右侧返回键，「← 」前缀朱砂、quiet 墨色、hover 朱砂。
+   resume 页（.dossier-eyebrow，mono 壳）同样加载本文件，共用这两条规则。 */
+.brand-home {
+  color: var(--ink);
+  font-weight: 600;
+  text-decoration: none;
+  transition: color var(--t-fast) ease;
+}
+.brand-home:hover { color: var(--red); }
+.back-home {
   color: var(--ink-soft);
   text-decoration: none;
   transition: color var(--t-fast) ease;
 }
-.sub-eyebrow a:hover { color: var(--red); }
-.sub-eyebrow .back-home::before { content: "← "; color: var(--red); }
+.back-home::before { content: "← "; color: var(--red); }
+.back-home:hover { color: var(--red); }
 
 /* ---- 报头墙 ---- */
 .sub-wall {
@@ -197,11 +209,11 @@
 /* ---- 状态徽章 ---- */
 .sub-state {
   font-family: var(--mono);
-  font-size: 10px;
+  font-size: 10.5px;
   color: var(--red);
   border: 1px solid rgba(139, 44, 31, .45);
   border-radius: var(--radius-pill);
-  padding: 0 8px;
+  padding: 1px 9px;
   letter-spacing: 1px;
   white-space: nowrap;
 }

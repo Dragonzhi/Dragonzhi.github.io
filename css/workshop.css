@@ -113,6 +113,31 @@ a.btn, button.btn { cursor: pointer; }
   transform: translateX(2px);
 }
 
+/* ===== 迷你双拼徽章（.badge-mini）：简历页 .dev-badge 的台面版 =====
+   只用于招聘动线上的资历/状态强调（如首页 resume 卡「状态｜求职中」），
+   台面普通状态仍用 .state 系，勿滥用。 */
+.badge-mini {
+  display: inline-flex; align-items: stretch; vertical-align: middle;
+  font-family: var(--mono); font-size: 10px; line-height: 1;
+  border-radius: var(--radius-sm); overflow: hidden;
+  border: 1px solid rgba(38, 34, 28, .22);
+  box-shadow: 0 1px 2px rgba(38, 34, 28, .1);
+  white-space: nowrap; text-decoration: none;
+  letter-spacing: .3px;
+}
+.badge-mini .badge-k {
+  background: var(--screen); color: var(--card);
+  padding: 2px 5px; font-weight: 500;
+  display: inline-flex; align-items: center;
+  border-right: 1px solid rgba(255, 255, 255, .12);
+}
+.badge-mini .badge-v {
+  background: var(--card); color: var(--ink);
+  padding: 2px 6px; font-weight: 700;
+  display: inline-flex; align-items: center;
+}
+.badge-mini .badge-v.red { background: var(--red); color: #fff; }
+
 /* 键盘焦点（全站统一；luotianyi 页按其页面主色自行覆盖） */
 a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
   outline: 2px solid var(--red); outline-offset: 2px;
@@ -125,6 +150,8 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   border-bottom: 1px solid var(--line); padding: calc(var(--gap)*.75) 0 calc(var(--gap)*.5);
 }
 .eyebrow .live { color: var(--red); }
+/* 主页品牌字样：与子页 .brand-home 同视觉（加粗墨色）；主页自身不做成链接 */
+.eyebrow .brand-name { color: var(--ink); font-weight: 600; }
 .eyebrow a { color: var(--ink-soft); }
 .eyebrow a:hover { color: var(--red); }
 
@@ -329,11 +356,16 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   background: var(--red); transform: rotate(45deg); margin-top: 2px;
 }
 .state {
-  font-family: var(--mono); font-size: 10px; color: var(--red);
+  font-family: var(--mono); font-size: 10.5px; color: var(--red);
   border: 1px solid rgba(139,44,31,.45); border-radius: var(--radius-pill);
-  padding: 0 8px; letter-spacing: 1px; white-space: nowrap;
+  padding: 1px 9px; letter-spacing: 1px; white-space: nowrap;
 }
 .state.calm { color: var(--ink-soft); border-color: var(--line); }
+/* hot 状态：朱砂实心底 + 米白字，比描边胶囊重一级（求职中/新开/获奖等热状态） */
+.state.hot {
+  background: var(--red); border-color: var(--red); color: var(--card);
+  font-weight: 600;
+}
 
 /* ===== 中段 · 档案区 ===== */
 

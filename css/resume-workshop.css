@@ -38,15 +38,15 @@
   margin-bottom: 24px;
 }
 
-.dossier-eyebrow a {
+/* 品牌与返回键共用 subpages.css 的 .brand-home / .back-home；
+   邮件索取链接单独走 .eyebrow-mail（无 ← 前缀的 quiet 链接） */
+.dossier-eyebrow .eyebrow-mail {
   color: var(--ink-soft, rgba(38, 34, 28, .68));
   text-decoration: none;
-  transition: color var(--t-fast, var(--t-fast)) ease;
+  transition: color var(--t-fast, .15s) ease;
 }
 
-.dossier-eyebrow a:hover { color: var(--red, #8b2c1f); }
-
-.dossier-eyebrow .back-home::before { content: "← "; color: var(--red, #8b2c1f); }
+.dossier-eyebrow .eyebrow-mail:hover { color: var(--red, #8b2c1f); }
 
 .dossier-eyebrow .eyebrow-brand {
   font-weight: 600;
@@ -149,7 +149,7 @@
     0 8px 30px rgba(38, 34, 28, .06),
     0 1px 3px rgba(38, 34, 28, .04);
   padding: 38px 46px 54px 74px; /* 左侧留出 74px 给工程装订打孔脊 */
-  transition: opacity var(--t-fast, var(--t-fast)) ease;
+  transition: opacity var(--t-fast, .15s) ease;
 }
 
 /* 左侧工房工程档案装订线与打孔标记 */

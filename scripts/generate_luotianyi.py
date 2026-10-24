@@ -306,9 +306,10 @@ TEMPLATE = """<!DOCTYPE html>
         <!-- 报头卡片 -->
         <header class="stream-hero">
             <div class="stream-hero-top">
-                <span>ZLOONG 工房 · 洛天依文献目录</span>
+                <span><a class="brand-home" href="../">ZLOONG 工房</a> · 洛天依文献目录</span>
                 <span>{span} &mdash; {end}</span>
                 <span>整理：ZLOONG · 排印：Hanako</span>
+                <a class="back-home" href="../">返回工作台</a>
             </div>
 
             <div class="stream-hero-title-area">
@@ -351,7 +352,7 @@ TEMPLATE = """<!DOCTYPE html>
         </div>
 
         <footer class="stream-colophon">
-            <a class="back" href="../">&larr; 回 ZLOONG 工房</a><br>
+            <a class="back" href="../">&larr; 返回工作台</a><br>
             数据截止 {last_date} · 排印于 {built}<br>
             <span class="credit">歌迷整理 · 曲目版权归各创作者及版权方所有</span><br>
             <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a>
