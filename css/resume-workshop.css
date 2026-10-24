@@ -177,32 +177,39 @@
   letter-spacing: 1.5px;
 }
 
-/* 求职意向条：紧凑、纯粹、去掉多余形容词 */
+/* 求职意向行：去框纯排印——// 代码注释母题 + 字重承担强调，
+   唯一红色重音交给行内 status 双拼徽章，不再叠半透明红底与左粗线 */
 .target-role-pill {
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: rgba(139, 44, 31, .04);
-  border-left: 3px solid var(--red, #8b2c1f);
-  border-top: 1px solid rgba(139, 44, 31, .2);
-  border-right: 1px solid rgba(139, 44, 31, .2);
-  border-bottom: 1px solid rgba(139, 44, 31, .2);
-  padding: 4px 12px;
-  border-radius: 0 var(--radius-md) var(--radius-md) 0;
-  font-size: 13.5px;
-  margin-bottom: 18px;
   flex-wrap: wrap;
+  padding: 2px 0 9px;
+  border-bottom: 1px dashed rgba(139, 44, 31, .35);
+  font-size: 15px;
+  margin-bottom: 18px;
 }
 
 .target-role-pill .label {
   color: var(--ink-soft, rgba(38, 34, 28, .68));
   font-family: var(--mono, monospace);
   font-size: 11.5px;
+  letter-spacing: .5px;
+}
+
+.target-role-pill .label::before {
+  content: "//";
+  color: var(--red, #8b2c1f);
+  opacity: .65;
+  font-weight: 700;
+  margin-right: 6px;
 }
 
 .target-role-pill .value {
-  color: var(--red, #8b2c1f);
+  color: var(--ink, #26221c);
   font-weight: 700;
+  font-size: 15.5px;
+  letter-spacing: .5px;
 }
 
 .state-badge {
@@ -1572,6 +1579,7 @@
   .target-role-pill .value {
     color: #000 !important;
     font-weight: bold !important;
+    font-size: 11pt !important;
   }
 
   .state-badge {
