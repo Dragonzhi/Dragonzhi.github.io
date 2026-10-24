@@ -28,7 +28,7 @@
 .sub-eyebrow a {
   color: var(--ink-soft);
   text-decoration: none;
-  transition: color .15s ease;
+  transition: color var(--t-fast) ease;
 }
 .sub-eyebrow a:hover { color: var(--red); }
 .sub-eyebrow .back-home::before { content: "← "; color: var(--red); }
@@ -63,7 +63,7 @@
   font-size: 11px;
   color: var(--red);
   border: 2px solid var(--red);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   padding: 3px 9px;
   letter-spacing: 3px;
   transform: rotate(7deg);
@@ -141,7 +141,7 @@
   border-bottom: 1px dotted var(--line);
   color: var(--ink);
   text-decoration: none;
-  transition: color .15s ease;
+  transition: color var(--t-fast) ease;
 }
 .sub-dir-item:last-child { border-bottom: none; }
 .sub-dir-item .no {
@@ -164,7 +164,7 @@
 .sub-dir-item .arrow {
   font-size: 15px;
   color: var(--ink-soft);
-  transition: transform .15s;
+  transition: transform var(--t-fast);
 }
 .sub-dir-item:hover .t { color: var(--red); }
 .sub-dir-item:hover .arrow {
@@ -200,7 +200,7 @@
   font-size: 10px;
   color: var(--red);
   border: 1px solid rgba(139, 44, 31, .45);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 0 8px;
   letter-spacing: 1px;
   white-space: nowrap;

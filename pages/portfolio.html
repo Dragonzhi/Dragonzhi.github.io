@@ -82,8 +82,8 @@
                         <div class="shot-placeholder">SCREENSHOT</div>
                     </div>
                     <div class="archive-links">
-                        <a class="link-btn" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩</a>
-                        <a class="link-btn" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">查看源码</a>
+                        <a class="btn btn--line btn-arrow" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩</a>
+                        <a class="btn btn--line btn-arrow" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">查看源码</a>
                     </div>
                 </div>
             </div>
@@ -129,17 +129,8 @@
     </footer>
 </div>
 
+<script src="../js/date.js"></script>
 <script>
-/* 门牌日期 */
-(function() {
-    var todayEl = document.getElementById("today");
-    if (todayEl) {
-        var nd = new Date();
-        var week = ["日", "一", "二", "三", "四", "五", "六"][nd.getDay()];
-        todayEl.textContent = nd.getFullYear() + "年" + (nd.getMonth() + 1) + "月" + nd.getDate() + "日 · 星期" + week;
-    }
-})();
-
 /* 中文数字 */
 var CN_NUMS = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"];
 function cnNum(n) {
@@ -205,7 +196,7 @@ function renderArchive(filter) {
         var links = "";
         if (item.links && Array.isArray(item.links)) {
             links = item.links.map(function(l) {
-                return '<a class="link-btn" href="' + escHtml(l.url) + '" target="_blank" rel="noreferrer">' + escHtml(l.label) + '</a>';
+                return '<a class="btn btn--line btn-arrow" href="' + escHtml(l.url) + '" target="_blank" rel="noreferrer">' + escHtml(l.label) + '</a>';
             }).join("");
         }
 

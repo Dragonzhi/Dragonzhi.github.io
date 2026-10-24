@@ -13,13 +13,13 @@
     display:none;               /* 由 js 打上 data-ready 才出现 */
     opacity:0;
     cursor:grab; touch-action:none; -webkit-user-select:none; user-select:none;
-    transition:transform .18s ease, opacity .45s ease;
+    transition:transform var(--t-fast) ease, opacity var(--t-slow) ease;
 }
 #seal-rig[data-ready]{ display:block; opacity:1; }
 #seal-rig canvas{ display:block; width:100%; height:100%; pointer-events:none; }
 #seal-rig.dragging{ cursor:grabbing; z-index:45; }
 #seal-rig.pressing{ transform:scale(.94); }
-#seal-rig:focus-visible{ outline:2px dashed #8b2c1f; outline-offset:6px; border-radius:10px; }
+#seal-rig:focus-visible{ outline:2px dashed var(--red); outline-offset:6px; border-radius: var(--radius-lg); }
 
 /* 盖在纸上的印子：落墨时从略大略虚收到清晰 */
 .seal-print{
@@ -28,7 +28,7 @@
     pointer-events:none; mix-blend-mode:multiply;
     opacity:0; z-index:5;
     transform:rotate(var(--r,-6deg)) scale(1.18);
-    transition:opacity .16s ease-out, transform .18s cubic-bezier(.2,.8,.3,1);
+    transition:opacity .16s ease-out, transform var(--t-fast) cubic-bezier(.2,.8,.3,1);
 }
 .seal-print.on{ opacity:var(--o,.85); transform:rotate(var(--r,-6deg)) scale(1); }
 
@@ -39,9 +39,9 @@
     white-space:nowrap;
     box-shadow:0 6px 16px rgba(38,34,28,.12);
 }
-#seal-clear.is-armed{ background:#8b2c1f; color:#fbf8f2; }
+#seal-clear.is-armed{ background:var(--red); color:var(--card); }
 
-.seal-hint{ color:#8b2c1f; }
+.seal-hint{ color:var(--red); }
 
 @media (max-width:1080px){
     #seal-rig{ display:none !important; }   /* 窄屏卡片重排，印章不参与 */

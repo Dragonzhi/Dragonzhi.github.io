@@ -247,7 +247,7 @@
                 + escHtml(m[1]) + dim + " ↗</a></li>";
         }
         if (copy && /^\S+@\S+$/.test(body)) {
-            return '<li class="link-mail"><span>' + escHtml(body) + '</span><button type="button" class="copy-btn samp" data-copy-email data-email="' + escHtml(body) + '">copy</button></li>';
+            return '<li class="link-mail"><span>' + escHtml(body) + '</span><button type="button" class="btn btn--line samp" data-copy-email data-email="' + escHtml(body) + '">copy</button></li>';
         }
         return "<li>" + inlineMd(body) + "</li>";
     }
@@ -464,7 +464,7 @@
                         var mail = (pre + post).replace(/<[^>]+>/g, "").trim();
                         if (!/^\S+@\S+$/.test(mail)) { return m; }
                         return '<li class="link-mail"><span>' + mail +
-                            '</span><button type="button" class="copy-btn samp" data-copy-email data-email="' + mail + '">copy</button></li>';
+                            '</span><button type="button" class="btn btn--line samp" data-copy-email data-email="' + mail + '">copy</button></li>';
                     })
                     .replace(/\{copy\}/g, "");
                 var lis = lisFromHtml(html);

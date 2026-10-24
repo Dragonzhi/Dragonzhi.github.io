@@ -1,32 +1,13 @@
 /* ============================================================
    ZLOONG 工房 · workshop.css
-   设计定稿：融合版 · 整理过的台面（与 workshop.css / tokens 同谱系）
+   设计定稿：融合版 · 整理过的台面
    报头墙 → 今日一言 → 台面拼贴(desk, 贴贴可拖动) → 导览牌 → 报尾
+   设计 token 一律来自 tokens.css（@import 引入），本文件只留台面布局配置。
    ============================================================ */
+@import url("tokens.css");
+
 :root {
-  --desk: #f5f0e6;                     /* 纸底：与箱庭 --paper 统一，切换无色差 */
-  --card: #fbf8f2;
-  --ink: #26221c;
-  --ink-soft: rgba(38,34,28,.68);      /* 透明灰阶：换基底色即得暗色模式 */
-  --line: rgba(38,34,28,.18);
-  --red: #8b2c1f;
-  --blue: #2f5d8a;
-  --amber: #d98e4a;
-  --screen: #2b2620;
-  --tape: rgba(255,252,242,.75);
-  --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-  --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
-  --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
-  --display: "Averia Gruesa Libre", var(--hand);
-  --radius: 6px;
-  --gap: 16px;
-  --wrap: 1040px;
-  /* 排版基座：字号阶梯 + 行宽（antfu 65ch / tonsky 比例系统） */
-  --fs-xs: 11.5px;
-  --fs-sm: 12.5px;
-  --fs-md: 14.5px;
-  --prose: 65ch;
-  /* ===== 台面拖拽配置 =====
+  /* ===== 台面拖拽配置（仅首页台面用，非全局 token） =====
      改下面这些即可，JS 会自动读取，无需动脚本。
      悬浮只保留动效、不抬升层级；仅点按拖拽才压入栈顶。
      层级顺序：基础 3~7 < 拖拽栈 ≥10 < 拖拽中恒顶 1000 */
@@ -37,6 +18,7 @@
   --desk-padding: 24px;    /* 兜底边界留白（desk-config.js 的 padding 覆盖） */
   --desk-z-stack: 10;      /* 拖拽栈起点：拖一张 +1，最后拖过的贴贴保持在最上 */
   --desk-z-drag: 1000;     /* 拖拽中的层级：恒顶（压到栈顶） */
+  --prose: 65ch;
 }
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { scroll-behavior: smooth; }
@@ -60,6 +42,83 @@ a:hover { color: var(--red); }
 .samp { font-family: var(--mono); }
 .dim { color: var(--ink-soft); }
 .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+
+/* ===== 控件家族：按钮与虚线链接（全站统一，各页不再自造） =====
+   .btn--ghost 虚线幽灵：工具类（还原台面 / SIGNAL / 抹印章）
+   .btn--line  朱砂描边：复制、外链、打印等轻行动
+   .btn--ink   墨线描边：次级行动
+   .btn--solid 朱砂实心：主级行动
+   .btn--xs    迷你尺寸：行内附按钮
+   .btn-arrow  外链箭头修饰
+   .link-dash / .link-dash--quiet：虚线下划线链接
+     --link-accent 可覆盖主色（如简历各方向板的 --pane-accent） */
+.btn {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-family: var(--mono); font-size: 11px; letter-spacing: .5px;
+  padding: 3px 12px; border-radius: var(--radius-md);
+  text-decoration: none; white-space: nowrap;
+  transition: color var(--t-fast) ease, background var(--t-fast) ease,
+    border-color var(--t-fast) ease, transform var(--t-fast) ease;
+}
+a.btn, button.btn { cursor: pointer; }
+.btn--ghost {
+  color: var(--ink-soft); background: transparent;
+  border: 1px dashed var(--line);
+}
+.btn--ghost:hover {
+  color: var(--red); border-color: var(--red); border-style: solid;
+  background: rgba(139, 44, 31, .03);
+}
+.btn--line {
+  color: var(--red); background: rgba(139, 44, 31, .06);
+  border: 1px solid rgba(139, 44, 31, .35);
+}
+.btn--line:hover, .btn--line.copied {
+  background: var(--red); border-color: var(--red); color: var(--card);
+}
+.btn--ink {
+  color: var(--ink); background: var(--card-hi);
+  border: 1px solid var(--line);
+  box-shadow: 0 1px 3px rgba(38, 34, 28, .05);
+}
+.btn--ink:hover {
+  color: var(--red); border-color: var(--red); transform: translateY(-1px);
+}
+.btn--solid {
+  color: #fff; background: var(--red); border: 1px solid var(--red);
+}
+.btn--solid:hover {
+  background: var(--red-hover); border-color: var(--red-hover); color: #fff;
+}
+.btn--xs { font-size: 10px; padding: 1px 7px; letter-spacing: .3px; }
+.btn .icon { font-size: 13px; }
+.btn-arrow::after { content: " ↗"; font-size: 10px; }
+
+.link-dash {
+  color: var(--link-accent, var(--red));
+  text-decoration: none; font-weight: 600;
+  display: inline-flex; align-items: center; gap: 3px;
+  border-bottom: 1px dashed rgba(139, 44, 31, .4);
+  padding-bottom: 1px;
+  transition: color var(--t-fast) ease, border-bottom-color var(--t-fast) ease;
+}
+.link-dash:hover {
+  border-bottom-style: solid; color: var(--ink);
+}
+.link-dash--quiet {
+  color: var(--ink-soft); font-weight: 500;
+  border-bottom-color: rgba(38, 34, 28, .28);
+}
+.link-dash--quiet:hover {
+  color: var(--link-accent, var(--red));
+  border-bottom-color: var(--link-accent, var(--red));
+  transform: translateX(2px);
+}
+
+/* 键盘焦点（全站统一；luotianyi 页按其页面主色自行覆盖） */
+a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
+  outline: 2px solid var(--red); outline-offset: 2px;
+}
 
 /* ===== 报眉 ===== */
 .eyebrow {
@@ -85,7 +144,7 @@ a:hover { color: var(--red); }
 .wall .seal {
   position: absolute; right: 4%; top: 30px;
   font-family: var(--mono); font-size: 11px; color: var(--red);
-  border: 2px solid var(--red); border-radius: 3px;
+  border: 2px solid var(--red); border-radius: var(--radius-md);
   padding: 3px 9px; letter-spacing: 3px;
   transform: rotate(7deg); opacity: .85;
 }
@@ -122,7 +181,7 @@ a:hover { color: var(--red); }
 .paper {
   position: absolute;
   background: var(--card);
-  transition: transform .25s cubic-bezier(.2,.7,.3,1), box-shadow .25s ease;
+  transition: transform var(--t-med) cubic-bezier(.2,.7,.3,1), box-shadow var(--t-med) ease;
   cursor: grab;
 }
 .paper:hover {
@@ -153,7 +212,7 @@ a:hover { color: var(--red); }
   left: 0;
   margin-left: var(--desk-shift, 0px);   /* 台面撑宽后卡片群右移居中 */
   width: 600px;
-  background: #fdfaf3;
+  background: var(--card-hi);
   background-image:
     repeating-linear-gradient(transparent, transparent 27px, rgba(139,44,31,.06) 28px),
     linear-gradient(135deg, rgba(255,255,255,.5), transparent 60%);
@@ -206,10 +265,10 @@ a:hover { color: var(--red); }
   top: 0;
   right: 0;
   width: 350px;
-  background: #fdfaf3;
+  background: var(--card-hi);
   background-image: linear-gradient(160deg, rgba(255,255,255,.4), transparent 50%);
   border: 1px solid rgba(38,34,28,.10);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   padding: 20px 22px;
   transform: rotate(0.6deg);
   box-shadow: 2px 3px 10px rgba(38,34,28,.08);
@@ -249,7 +308,7 @@ a:hover { color: var(--red); }
   width: 340px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   padding: 18px 20px;
   transform: rotate(-0.4deg);
   box-shadow: 2px 4px 12px rgba(38,34,28,.10);
@@ -268,12 +327,12 @@ a:hover { color: var(--red); }
 }
 .now-list li:last-child { border-bottom: none; }
 .now-dot {
-  flex: none; width: 8px; height: 8px; border-radius: 2px;
+  flex: none; width: 8px; height: 8px; border-radius: var(--radius-sm);
   background: var(--red); transform: rotate(45deg); margin-top: 2px;
 }
 .state {
   font-family: var(--mono); font-size: 10px; color: var(--red);
-  border: 1px solid rgba(139,44,31,.45); border-radius: 999px;
+  border: 1px solid rgba(139,44,31,.45); border-radius: var(--radius-pill);
   padding: 0 8px; letter-spacing: 1px; white-space: nowrap;
 }
 .state.calm { color: var(--ink-soft); border-color: var(--line); }
@@ -286,12 +345,12 @@ a:hover { color: var(--red); }
   left: 50px;
   margin-left: var(--desk-shift, 0px);   /* 台面撑宽后卡片群右移居中 */
   width: 860px;
-  background: #faf5ea;
+  background: var(--card-warm);
   background-image:
     linear-gradient(180deg, rgba(139,44,31,.03) 0%, transparent 40px),
     linear-gradient(180deg, transparent 0, rgba(139,44,31,.025) 100%);
   border: 1px solid rgba(38,34,28,.12);
-  border-radius: 0 4px 4px 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   padding: 34px 28px 24px 48px;
   box-shadow: 3px 6px 20px rgba(38,34,28,.14), 0 1px 2px rgba(38,34,28,.06);
   z-index: 5;
@@ -302,10 +361,10 @@ a:hover { color: var(--red); }
   position: absolute;
   top: -1px; left: 0; right: 0;
   height: 22px;
-  background: #faf5ea;
+  background: var(--card-warm);
   border: 1px solid rgba(38,34,28,.12);
   border-bottom: none;
-  border-radius: 4px 4px 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .paper--projects::after {
   content: "";
@@ -327,7 +386,7 @@ a:hover { color: var(--red); }
   width: 32px;
   background: linear-gradient(90deg, rgba(139,44,31,.08), transparent);
   border-right: 1px dashed rgba(139,44,31,.15);
-  border-radius: 0 0 0 4px;
+  border-radius: 0 0 0 var(--radius-md);
 }
 .paper-head {
   display: flex;
@@ -347,11 +406,11 @@ a:hover { color: var(--red); }
   position: relative;
   background: var(--card);
   border: 1px solid rgba(38,34,28,.14);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   padding: 14px 18px;
   margin-bottom: -8px;
   box-shadow: 2px 3px 8px rgba(38,34,28,.08);
-  transition: transform .25s ease, box-shadow .25s ease;
+  transition: transform var(--t-med) ease, box-shadow var(--t-med) ease;
 }
 .proj:last-child { margin-bottom: 0; }
 .proj:hover {
@@ -387,7 +446,7 @@ a:hover { color: var(--red); }
 .tag {
   display: inline-block; font-family: var(--mono); font-size: 10.5px; font-style: normal;
   color: var(--ink-soft); background: rgba(139,44,31,.04);
-  border: 1px solid var(--line); border-radius: 3px; padding: 1px 9px; margin: 0 6px 6px 0;
+  border: 1px solid var(--line); border-radius: var(--radius-md); padding: 1px 9px; margin: 0 6px 6px 0;
 }
 .proj-links {
   display: flex;
@@ -460,7 +519,7 @@ a:hover { color: var(--red); }
   width: 240px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 2px 4px 4px 2px;
+  border-radius: var(--radius-sm) var(--radius-md) var(--radius-md) var(--radius-sm);
   padding: 16px 18px 16px 20px;
   transform: rotate(0.5deg);
   box-shadow: 2px 3px 10px rgba(38,34,28,.10);
@@ -473,7 +532,7 @@ a:hover { color: var(--red); }
   top: 0; left: 0; bottom: 0;
   width: 4px;
   background: var(--red);
-  border-radius: 2px 0 0 2px;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
   opacity: 0.65;
 }
 .paper--links::after {
@@ -483,7 +542,7 @@ a:hover { color: var(--red); }
   right: 28px;
   width: 14px; height: 36px;
   border: 2px solid #a89e92;
-  border-radius: 8px 8px 4px 4px;
+  border-radius: var(--radius-lg) var(--radius-lg) var(--radius-md) var(--radius-md);
   border-bottom: none;
   z-index: 5;
   transform: rotate(6deg);
@@ -494,13 +553,7 @@ a:hover { color: var(--red); }
 .link-list li:last-child { border-bottom: none; }
 .link-list a::before { content: "→ "; color: var(--red); }
 .link-mail { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--mono); }
-.copy-btn {
-  font-family: var(--mono); font-size: 11px; color: var(--red);
-  background: rgba(139,44,31,.06); border: 1px solid rgba(139,44,31,.35);
-  border-radius: 3px; padding: 3px 13px; cursor: pointer;
-  transition: background .15s ease, color .15s ease;
-}
-.copy-btn:hover, .copy-btn.copied { background: var(--red); color: var(--card); }
+/* 复制邮箱按钮统一走 .btn .btn--line（含 .copied 复制成功态），本处不再单独定义 */
 
 /* resume 档案便签纸 — 放置在台面上，带朱砂红「档案 / CV」角标 */
 .paper--resume {
@@ -509,7 +562,7 @@ a:hover { color: var(--red); }
   width: 250px;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   padding: 16px 18px 16px 20px;
   transform: rotate(-1deg);
   box-shadow: 2px 4px 12px rgba(38,34,28,.10);
@@ -522,7 +575,7 @@ a:hover { color: var(--red); }
   top: 0; left: 0; bottom: 0;
   width: 4px;
   background: var(--red);
-  border-radius: 2px 0 0 2px;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
   opacity: 0.8;
 }
 .resume-badge,
@@ -533,9 +586,9 @@ a:hover { color: var(--red); }
   font-family: var(--mono);
   font-size: 10px;
   color: var(--red);
-  background: #faf5ea;
+  background: var(--card-warm);
   border: 1px solid var(--red);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   padding: 1px 7px;
   letter-spacing: 1px;
   font-weight: 700;
@@ -566,21 +619,7 @@ a:hover { color: var(--red); }
   font-family: var(--mono);
   font-size: 12px;
 }
-.resume-btn {
-  color: var(--red);
-  text-decoration: none;
-  font-weight: 600;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  border-bottom: 1px dashed rgba(139,44,31,.4);
-  padding-bottom: 1px;
-  transition: all .15s ease;
-}
-.resume-btn:hover {
-  border-bottom-style: solid;
-  color: var(--ink);
-}
+/* 「查看技术履历」链接统一走 .link-dash（.resume-btn 已并入） */
 
 /* 自发现档案架：容器内流式排列，容器本身可拖动 */
 /* ID+!important 终极覆盖：容器只是堆叠/拖拽层，任何断点、任何来源都不得渲染成卡 */
@@ -613,12 +652,12 @@ a:hover { color: var(--red); }
   position: relative;
   background: var(--card);
   border: 1px solid var(--line);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   padding: 16px 18px 16px 20px;
   box-shadow: 2px 4px 12px rgba(38,34,28,.10);
   width: min(300px, 100%);
   box-sizing: border-box;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: transform var(--t-med) ease, box-shadow var(--t-med) ease;
 }
 #auto-shelf > section:hover,
 .paper--shelf .tile:hover {
@@ -636,7 +675,7 @@ a:hover { color: var(--red); }
   bottom: 0;
   width: 4px;
   background: var(--red);
-  border-radius: 2px 0 0 2px;
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
   opacity: 0.8;
 }
 
@@ -714,7 +753,9 @@ a:hover { color: var(--red); }
   gap: 8px;
 }
 
-/* 链接样式：对齐 .resume-btn 风格（朱砂红、虚线下划线） */
+/* 链接样式：与控件层 .link-dash 同谱（朱砂红、虚线下划线）。
+   档案架卡片内容由 JS 从 manifest 渲染，锚点无独立类，故用上下文选择器；
+   改动 .link-dash 时同步这里。 */
 #auto-shelf > section a,
 .paper--shelf .tile a {
   color: var(--red);
@@ -725,7 +766,7 @@ a:hover { color: var(--red); }
   gap: 3px;
   border-bottom: 1px dashed rgba(139,44,31,.4);
   padding-bottom: 1px;
-  transition: all .15s ease;
+  transition: all var(--t-fast) ease;
 }
 #auto-shelf > section a:hover,
 .paper--shelf .tile a:hover {
@@ -795,37 +836,21 @@ a:hover { color: var(--red); }
   font-size: 11px;
   letter-spacing: .5px;
   opacity: .75;
-  transition: opacity .4s ease;
+  transition: opacity var(--t-slow) ease;
   user-select: none;
 }
 .drag-hint.is-hidden { opacity: 0; pointer-events: none; }
+/* 底座样式来自 .btn .btn--ghost（HTML 同时挂两个类），此处只留 ↺ 专属动效 */
 .desk-reset {
-  font-family: var(--mono);
-  font-size: 11px;
-  letter-spacing: .5px;
-  color: var(--ink-soft);
-  background: transparent;
-  border: 1px dashed var(--line);
-  border-radius: 3px;
-  padding: 3px 10px;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-  transition: all .15s ease;
   user-select: none;
 }
 .desk-reset::before {
   content: "↺";
   font-size: 11px;
   line-height: 1;
-  transition: transform .25s ease;
+  transition: transform var(--t-med) ease;
 }
 .desk-reset:hover {
-  color: var(--red);
-  border-color: var(--red);
-  border-style: solid;
-  background: rgba(139,44,31,.03);
   transform: translateY(-1px);
 }
 .desk-reset:hover::before {
@@ -865,7 +890,7 @@ a:hover { color: var(--red); }
 .dir-item .info { flex: 1; min-width: 0; }
 .dir-item .t { font-size: 16px; font-weight: 700; letter-spacing: 1px; }
 .dir-item .d { font-size: var(--fs-sm); color: var(--ink-soft); margin-left: 10px; }
-.dir-item .arrow { font-size: 15px; color: var(--ink-soft); transition: transform .15s; }
+.dir-item .arrow { font-size: 15px; color: var(--ink-soft); transition: transform var(--t-fast); }
 .dir-item:hover .t { color: var(--red); }
 .dir-item:hover .arrow { transform: translateX(4px); color: var(--red); }
 
@@ -884,12 +909,8 @@ a:hover { color: var(--red); }
 }
 .colophon .meta { font-size: var(--fs-xs); color: var(--ink-soft); line-height: 2; }
 .colophon .meta a { color: var(--ink-soft); text-decoration: underline; }
-.signal-trigger {
-  display: inline-block; margin-top: 10px; font-family: var(--mono); font-size: 11px;
-  letter-spacing: 1px; color: var(--ink-soft); background: none;
-  border: 1px dashed var(--line); border-radius: 3px; padding: 3px 14px; cursor: pointer;
-}
-.signal-trigger:hover { color: var(--red); border-color: var(--red); }
+/* SIGNAL 触发钮统一走 .btn .btn--ghost（.signal-trigger 只留布局间距与语义标记） */
+.signal-trigger { margin-top: 10px; }
 
 /* ===== 彩蛋收音机 ===== */
 .signal-layer { position: fixed; inset: 0; z-index: 50; display: none; }
@@ -898,7 +919,7 @@ a:hover { color: var(--red); }
 .signal-console {
   position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%);
   width: min(420px, calc(100vw - 40px));
-  background: #1d2b26; color: #d7efe9; border-radius: 8px;
+  background: #1d2b26; color: #d7efe9; border-radius: var(--radius-lg);
   border: 1px solid rgba(79,224,196,.25);
   box-shadow: 0 0 34px rgba(79,224,196,.18), 0 30px 70px rgba(20,30,26,.5);
   padding: 22px 24px 26px;
@@ -944,7 +965,7 @@ a:hover { color: var(--red); }
     width: 100%;
     transform: none !important;
     box-shadow: 0 1px 2px rgba(38,34,28,.06), 0 6px 18px rgba(38,34,28,.05);
-    border-radius: var(--radius);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--line);
     background: var(--card);
     clip-path: none;
@@ -1016,6 +1037,6 @@ a:hover { color: var(--red); }
   html { scroll-behavior: auto; }
   .caret { animation: none; }
   .paper, .paper:hover, .proj, .proj:hover,
-  .copy-btn, .signal-trigger,
+  .btn, .link-dash,
   .drag-hint, .desk-reset { transition: none; }
 }

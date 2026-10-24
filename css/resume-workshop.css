@@ -2,7 +2,16 @@
    ZLOONG 工房 · 个人技术履历 (resume-workshop.css)
    设计定稿：工程蓝图手札 (Workshop Blueprint Dossier)
    核心基调：装订书脊 · 朱砂双规 · 汉字大写编年 · 绝无多余冗词
+   全局 token 来自 tokens.css（经 workshop.css @import 链引入）；
+   下面只声明本页五个方向板的专色（局部子板），其他页面不得引用。
    ============================================================ */
+:root {
+  --accent-ai: var(--red, #8b2c1f);
+  --accent-backend: #234d70;
+  --accent-frontend: #a05a20;
+  --accent-game: #2e6040;
+  --accent-eng: #3d3935;
+}
 
 /* ---------- 全局布局容器 ---------- */
 .dossier-wrap {
@@ -11,8 +20,10 @@
   padding: 0 20px 80px;
 }
 
-/* ---------- 门牌（报眉）：极简典雅 ---------- */
-.sub-eyebrow {
+/* ---------- 门牌（报眉）：极简典雅 ----------
+   本页门牌与子页模板 .sub-eyebrow（subpages.css）刻意不同族，
+   故独立命名 .dossier-eyebrow，不再同名覆盖。 */
+.dossier-eyebrow {
   font-family: var(--mono, monospace);
   font-size: 11.5px;
   color: var(--ink-soft, rgba(38, 34, 28, .68));
@@ -27,13 +38,23 @@
   margin-bottom: 24px;
 }
 
-.sub-eyebrow .eyebrow-brand {
+.dossier-eyebrow a {
+  color: var(--ink-soft, rgba(38, 34, 28, .68));
+  text-decoration: none;
+  transition: color var(--t-fast, var(--t-fast)) ease;
+}
+
+.dossier-eyebrow a:hover { color: var(--red, #8b2c1f); }
+
+.dossier-eyebrow .back-home::before { content: "← "; color: var(--red, #8b2c1f); }
+
+.dossier-eyebrow .eyebrow-brand {
   font-weight: 600;
   color: var(--ink, #26221c);
   letter-spacing: 2px;
 }
 
-.sub-eyebrow .eyebrow-brand span {
+.dossier-eyebrow .eyebrow-brand span {
   color: var(--red, #8b2c1f);
 }
 
@@ -43,23 +64,7 @@
   gap: 14px;
 }
 
-.resume-print-btn {
-  font-family: var(--mono, monospace);
-  font-size: 11px;
-  letter-spacing: 1px;
-  color: var(--red, #8b2c1f);
-  background: rgba(139, 44, 31, .06);
-  border: 1px solid rgba(139, 44, 31, .28);
-  border-radius: 2px;
-  padding: 3px 10px;
-  cursor: pointer;
-  transition: all .15s ease;
-}
-
-.resume-print-btn:hover {
-  background: var(--red, #8b2c1f);
-  color: #fff;
-}
+/* 打印/复制按钮统一走 .btn .btn--line（.resume-print-btn / .email-copy-pill 已并入） */
 
 /* ---------- 顶部方向卡槽标签轨 (Dossier Tabs) ---------- */
 .track-tabs-bar {
@@ -76,13 +81,13 @@
   background: #e9e2d2;
   border: 1px solid rgba(38, 34, 28, .22);
   border-bottom: 1px solid rgba(38, 34, 28, .2);
-  border-radius: 4px 4px 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
   padding: 8px 20px 7px;
   font-family: var(--mono, monospace);
   font-size: 12.5px;
   color: var(--ink-soft, rgba(38, 34, 28, .68));
   cursor: pointer;
-  transition: all .18s ease;
+  transition: all var(--t-fast) ease;
   position: relative;
   top: 1px;
   display: inline-flex;
@@ -102,9 +107,9 @@
 }
 
 .track-tab.active {
-  background: #fffdf9;
+  background: var(--card-hi);
   border-color: rgba(38, 34, 28, .22);
-  border-bottom: 1px solid #fffdf9;
+  border-bottom: 1px solid var(--card-hi);
   color: var(--red, #8b2c1f);
   font-weight: 700;
   padding-top: 10px;
@@ -117,7 +122,7 @@
   top: 0; left: 0; right: 0;
   height: 3px;
   background: var(--red, #8b2c1f);
-  border-radius: 4px 4px 0 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .track-tab.active .tab-idx {
@@ -129,14 +134,22 @@
 .resume-paper {
   position: relative;
   z-index: 1;
-  background: #fffdf9;
+  background-color: var(--card-hi, var(--card-hi));
+  /* 上下两枚装订孔：径向渐变绘制（desk 色孔心 + 墨圈）。
+     替代旧版 ::after + calc(100vh) box-shadow 的视口高度 hack——
+     那写法孔位随窗口高度漂移，长页面缩放时错位。 */
+  background-image:
+    radial-gradient(circle 5px at 23.5px 52.5px,
+      var(--desk, #f5f0e6) 4px, rgba(38, 34, 28, .3) 4.5px, transparent 5px),
+    radial-gradient(circle 5px at 23.5px calc(100% - 52.5px),
+      var(--desk, #f5f0e6) 4px, rgba(38, 34, 28, .3) 4.5px, transparent 5px);
   border: 1px solid rgba(38, 34, 28, .22);
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   box-shadow:
     0 8px 30px rgba(38, 34, 28, .06),
     0 1px 3px rgba(38, 34, 28, .04);
   padding: 38px 46px 54px 74px; /* 左侧留出 74px 给工程装订打孔脊 */
-  transition: opacity .18s ease;
+  transition: opacity var(--t-fast, var(--t-fast)) ease;
 }
 
 /* 左侧工房工程档案装订线与打孔标记 */
@@ -146,21 +159,6 @@
   top: 0; bottom: 0; left: 42px;
   width: 1px;
   border-right: 1px dashed rgba(38, 34, 28, .22);
-  pointer-events: none;
-}
-
-/* 装订孔（上下两枚精密小圆孔） */
-.resume-paper::after {
-  content: "";
-  position: absolute;
-  top: 48px; left: 19px;
-  width: 9px; height: 9px;
-  border-radius: 50%;
-  background: var(--desk, #f5f0e6);
-  border: 1px solid rgba(38, 34, 28, .3);
-  box-shadow:
-    inset 0 1px 2px rgba(0, 0, 0, .2),
-    0 calc(100vh - 200px) 0 -0.5px var(--desk, #f5f0e6);
   pointer-events: none;
 }
 
@@ -225,7 +223,7 @@
   border-right: 1px solid rgba(139, 44, 31, .2);
   border-bottom: 1px solid rgba(139, 44, 31, .2);
   padding: 4px 12px;
-  border-radius: 0 3px 3px 0;
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
   font-size: 13.5px;
   margin-bottom: 18px;
   flex-wrap: wrap;
@@ -246,67 +244,15 @@
   font-family: var(--mono, monospace);
   font-size: 10.5px;
   padding: 1px 7px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   background: var(--red, #8b2c1f);
   color: #fff;
   font-weight: 600;
   letter-spacing: .5px;
 }
 
-/* ---------- 箱庭开发者双拼徽章 (Dev Shields Badge) ---------- */
-.dev-badge {
-  display: inline-flex;
-  align-items: stretch;
-  vertical-align: middle;
-  font-family: var(--mono, monospace);
-  font-size: 10px;
-  line-height: 1;
-  border-radius: 2px;
-  overflow: hidden;
-  box-shadow: 0 1px 2px rgba(38, 34, 28, .1);
-  border: 1px solid rgba(38, 34, 28, .22);
-  margin-left: 6px;
-  white-space: nowrap;
-  letter-spacing: 0.3px;
-  text-decoration: none;
-}
-
-.dev-badge .badge-k {
-  background: #2b2620; /* 工坊炭墨底色 */
-  color: #ebe4d5;       /* 浅米纸白 */
-  padding: 3px 5px;
-  font-weight: 500;
-  display: inline-flex;
-  align-items: center;
-  border-right: 1px solid rgba(255, 255, 255, .12);
-}
-
-.dev-badge .badge-v {
-  background: #f5eee1; /* 象牙暖纸色 */
-  color: var(--ink, #26221c);
-  padding: 3px 6px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-}
-
-/* 朱砂红变体 (用于 985/双一流、重点状态等) */
-.dev-badge .badge-v.red {
-  background: var(--red, #8b2c1f);
-  color: #fff;
-}
-
-/* 工坊青蓝变体 (用于 commits、开源、版本等) */
-.dev-badge .badge-v.blue {
-  background: #2f5d8a;
-  color: #fff;
-}
-
-/* 工坊琥珀色变体 (用于 在读学年、连续更新等) */
-.dev-badge .badge-v.amber {
-  background: #9e692b;
-  color: #fff;
-}
+/* ---------- 箱庭开发者双拼徽章 (Dev Shields Badge) ----------
+   统一定义见下方「技术微标群区块」处（历史上曾在此重复定义，已合并）。 */
 
 /* 个人基础信息紧凑矩阵 */
 .profile-meta-row {
@@ -338,30 +284,11 @@
 .meta-cell a {
   color: var(--ink, #26221c);
   text-decoration: none;
-  transition: color .15s ease;
+  transition: color var(--t-fast) ease;
 }
 
 .meta-cell a:hover {
   color: var(--red, #8b2c1f);
-}
-
-.email-copy-pill {
-  font-family: var(--mono, monospace);
-  font-size: 10px;
-  color: var(--red, #8b2c1f);
-  background: rgba(139, 44, 31, .06);
-  border: 1px solid rgba(139, 44, 31, .28);
-  border-radius: 2px;
-  padding: 1px 6px;
-  cursor: pointer;
-  margin-left: 6px;
-  transition: all .15s ease;
-}
-
-.email-copy-pill:hover,
-.email-copy-pill.copied {
-  background: var(--red, #8b2c1f);
-  color: #fff;
 }
 
 /* ---------- 右侧朱砂双圈矢量印章 (SVG Seal) ---------- */
@@ -377,7 +304,7 @@
   height: 82px;
   user-select: none;
   opacity: .88;
-  transition: transform .2s ease;
+  transition: transform var(--t-med) ease;
 }
 
 .stamp-workshop:hover {
@@ -443,10 +370,10 @@
 
 /* ---------- 01 · 教育背景卡片 ---------- */
 .edu-card {
-  background: #fdfcf9;
+  background: var(--card);
   border: 1px solid var(--line, rgba(38, 34, 28, .18));
-  border-left: 3.5px solid var(--red, #8b2c1f);
-  border-radius: 3px;
+  border-left: 4px solid var(--red, #8b2c1f);
+  border-radius: var(--radius-md);
   padding: 16px 20px;
   box-shadow: 0 1px 4px rgba(38, 34, 28, .04);
   background-image: radial-gradient(rgba(38, 34, 28, 0.035) 1px, transparent 1px);
@@ -500,8 +427,8 @@
   display: grid;
   grid-template-columns: 240px 1fr;
   border: 1px solid var(--line, rgba(38, 34, 28, .18));
-  border-radius: 3px;
-  background: #fdfcf9;
+  border-radius: var(--radius-md);
+  background: var(--card);
   box-shadow: 0 1px 4px rgba(38, 34, 28, .04);
   /* 极细微工程点阵底纹 */
   background-image: radial-gradient(rgba(38, 34, 28, 0.035) 1px, transparent 1px);
@@ -560,7 +487,7 @@
   padding: 12px 16px;
   border-bottom: 1px solid rgba(38, 34, 28, 0.08);
   cursor: pointer;
-  transition: all .16s ease;
+  transition: all var(--t-fast) ease;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -575,7 +502,7 @@
     white-space: nowrap;
     border-bottom: none;
     padding: 8px 12px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
   }
 }
 
@@ -584,8 +511,8 @@
 }
 
 .arch-rail-item.active {
-  background: #fdfcf9;
-  border-left: 3.5px solid var(--rail-accent, var(--red, #8b2c1f));
+  background: var(--card);
+  border-left: 4px solid var(--rail-accent, var(--red, #8b2c1f));
   font-weight: 700;
   color: var(--rail-accent, var(--red, #8b2c1f));
   padding-left: 12.5px;
@@ -599,11 +526,11 @@
   }
 }
 
-.arch-rail-item[data-arch-target="ai"] { --rail-accent: #8b2c1f; }
-.arch-rail-item[data-arch-target="backend"] { --rail-accent: #234d70; }
-.arch-rail-item[data-arch-target="frontend"] { --rail-accent: #a05a20; }
-.arch-rail-item[data-arch-target="game"] { --rail-accent: #2e6040; }
-.arch-rail-item[data-arch-target="eng"] { --rail-accent: #3d3935; }
+.arch-rail-item[data-arch-target="ai"] { --rail-accent: var(--accent-ai, #8b2c1f); }
+.arch-rail-item[data-arch-target="backend"] { --rail-accent: var(--accent-backend, #234d70); }
+.arch-rail-item[data-arch-target="frontend"] { --rail-accent: var(--accent-frontend, #a05a20); }
+.arch-rail-item[data-arch-target="game"] { --rail-accent: var(--accent-game, #2e6040); }
+.arch-rail-item[data-arch-target="eng"] { --rail-accent: var(--accent-eng, #3d3935); }
 
 .arch-rail-name {
   font-size: 13px;
@@ -616,7 +543,7 @@
   background: rgba(38, 34, 28, 0.06);
   color: var(--ink-soft, rgba(38, 34, 28, .68));
   padding: 1px 6px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   font-weight: 600;
   letter-spacing: .3px;
 }
@@ -650,7 +577,7 @@
 
 .arch-stage-pane.active {
   display: flex;
-  animation: archFadeIn .2s ease-out;
+  animation: archFadeIn var(--t-med) ease-out;
 }
 
 @keyframes archFadeIn {
@@ -658,11 +585,14 @@
   to { opacity: 1; transform: translateY(0); }
 }
 
-.arch-stage-pane[data-pane="ai"] { --pane-accent: #8b2c1f; }
-.arch-stage-pane[data-pane="backend"] { --pane-accent: #234d70; }
-.arch-stage-pane[data-pane="frontend"] { --pane-accent: #a05a20; }
-.arch-stage-pane[data-pane="game"] { --pane-accent: #2e6040; }
-.arch-stage-pane[data-pane="eng"] { --pane-accent: #3d3935; }
+.arch-stage-pane[data-pane="ai"] { --pane-accent: var(--accent-ai, #8b2c1f); }
+.arch-stage-pane[data-pane="backend"] { --pane-accent: var(--accent-backend, #234d70); }
+.arch-stage-pane[data-pane="frontend"] { --pane-accent: var(--accent-frontend, #a05a20); }
+.arch-stage-pane[data-pane="game"] { --pane-accent: var(--accent-game, #2e6040); }
+.arch-stage-pane[data-pane="eng"] { --pane-accent: var(--accent-eng, #3d3935); }
+
+/* 面板内虚线链接（.link-dash 系）跟随方向板主色 */
+.arch-stage-pane { --link-accent: var(--pane-accent, var(--red, #8b2c1f)); }
 
 .arch-stage-head {
   display: flex;
@@ -712,19 +642,23 @@
   gap: 6px;
 }
 
-/* 双拼极客徽章 (Dev Badges) */
+/* 双拼极客徽章 (Dev Badges) —— 全页唯一 .dev-badge 定义 */
 .dev-badge {
   display: inline-flex;
   align-items: center;
   font-family: var(--mono, monospace);
   font-size: 11px;
   line-height: 1;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   border: 1px solid rgba(38, 34, 28, 0.16);
   box-shadow: 0 1px 2px rgba(38, 34, 28, 0.03);
   vertical-align: middle;
-  transition: transform .15s ease;
+  margin-left: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.3px;
+  text-decoration: none;
+  transition: transform var(--t-fast) ease;
 }
 
 .dev-badge:hover {
@@ -747,11 +681,11 @@
   border-left: 1px solid rgba(38, 34, 28, 0.12);
 }
 
-.dev-badge .badge-v.red { background: #8b2c1f; color: #fff; }
-.dev-badge .badge-v.blue { background: #234d70; color: #fff; }
-.dev-badge .badge-v.amber { background: #a05a20; color: #fff; }
-.dev-badge .badge-v.green { background: #2e6040; color: #fff; }
-.dev-badge .badge-v.graphite { background: #3d3935; color: #fff; }
+.dev-badge .badge-v.red { background: var(--accent-ai, #8b2c1f); color: #fff; }
+.dev-badge .badge-v.blue { background: var(--accent-backend, #234d70); color: #fff; }
+.dev-badge .badge-v.amber { background: var(--accent-frontend, #a05a20); color: #fff; }
+.dev-badge .badge-v.green { background: var(--accent-game, #2e6040); color: #fff; }
+.dev-badge .badge-v.graphite { background: var(--accent-eng, #3d3935); color: #fff; }
 
 /* 单行工程攻坚票据栈 (Milestone Ticket Strips - 彻底解决显示不全) */
 .arch-tickets-stack {
@@ -764,12 +698,12 @@
   display: flex;
   align-items: baseline;
   gap: 12px;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line, rgba(38, 34, 28, .16));
-  border-left: 3.5px solid var(--pane-accent, #8b2c1f);
+  border-left: 4px solid var(--pane-accent, #8b2c1f);
   padding: 10px 14px;
-  border-radius: 2px;
-  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+  border-radius: var(--radius-sm);
+  transition: transform var(--t-fast) ease, box-shadow var(--t-fast) ease, border-color var(--t-fast) ease;
   box-shadow: 0 1px 3px rgba(38, 34, 28, 0.03);
 }
 
@@ -812,7 +746,7 @@
   font-size: 11px;
   background: rgba(38, 34, 28, 0.05);
   border: 1px solid rgba(38, 34, 28, 0.12);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   padding: 1px 4px;
   color: var(--ink, #26221c);
   font-weight: 600;
@@ -826,41 +760,15 @@
   }
 }
 
-/* 实证边注标 (Subtle Margin Proof Tag) */
-/* 实证边注标 (Subtle Margin Proof Tag - 全局清爽规范) */
-.skill-proof-tag {
-  font-family: var(--mono, monospace);
-  font-size: 11px;
-  color: var(--ink-soft, rgba(38, 34, 28, .55));
-  background: transparent;
-  border: none;
-  border-bottom: 1px dashed rgba(38, 34, 28, .28);
-  border-radius: 0;
-  padding: 1px 2px;
-  text-decoration: none;
-  white-space: nowrap;
-  font-weight: 500;
-  transition: all .16s ease;
-  flex-shrink: 0;
-  letter-spacing: .2px;
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-}
-
-.skill-proof-tag:hover {
-  color: var(--pane-accent, var(--red, #8b2c1f));
-  border-bottom-color: var(--pane-accent, var(--red, #8b2c1f));
-  background: transparent;
-  transform: translateX(2px);
-}
-
-.arch-ticket-strip .skill-proof-tag {
+/* 实证边注标：统一走控件层 .link-dash .link-dash--quiet，
+   主色由面板的 --link-accent（= --pane-accent）驱动，此处不再单独定义。
+   仅保留票据条内的布局位。 */
+.arch-ticket-strip .link-dash {
   margin-left: auto;
 }
 
 @media (max-width: 680px) {
-  .arch-ticket-strip .skill-proof-tag {
+  .arch-ticket-strip .link-dash {
     align-self: flex-end;
     margin-top: 4px;
   }
@@ -871,7 +779,7 @@
   background: #faf6ed;
   border: 1px dashed var(--line, rgba(38, 34, 28, .18));
   padding: 10px 14px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -885,21 +793,7 @@
   color: var(--ink, #26221c);
 }
 
-.arch-linked-link {
-  font-family: var(--mono, monospace);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--pane-accent, #8b2c1f);
-  text-decoration: none;
-  border-bottom: 1px dashed currentColor;
-  padding: 1px 2px;
-  transition: all .16s ease;
-  white-space: nowrap;
-}
-
-.arch-linked-link:hover {
-  transform: translateX(2px);
-}
+/* 「前往项目实证卡」直达链接：统一走 .link-dash（主色取面板 --link-accent） */
 
 /* 锚点定位高亮动画 */
 @keyframes projFlash {
@@ -920,12 +814,12 @@
 }
 
 .dossier-proj-item {
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line, rgba(38, 34, 28, .18));
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   box-shadow: 0 2px 8px rgba(38, 34, 28, .04);
   overflow: hidden;
-  transition: all .2s ease;
+  transition: all var(--t-med) ease;
 }
 
 .dossier-proj-item:hover {
@@ -935,7 +829,7 @@
 
 .dossier-proj-item.is-flagship {
   border-left: 4px solid var(--red, #8b2c1f);
-  background: #fffefb;
+  background: var(--card-hi);
 }
 
 .proj-top-banner {
@@ -1015,7 +909,7 @@
 .proj-telemetry-bar {
   background: #211e19;
   color: #ebe4d5;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   padding: 4px 12px;
   font-size: 11.5px;
   font-family: var(--mono, monospace);
@@ -1064,14 +958,14 @@
 /* 项目实机照轻量卡 */
 .proj-photo-slip {
   display: inline-block;
-  background: #fff;
+  background: var(--card);
   border: 1px solid var(--line, rgba(38, 34, 28, .18));
   padding: 5px 5px 10px 5px;
   box-shadow: 0 2px 8px rgba(38, 34, 28, .06);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   margin: 6px 0 14px;
   max-width: 300px;
-  transition: transform .2s ease, box-shadow .2s ease;
+  transition: transform var(--t-med) ease, box-shadow var(--t-med) ease;
 }
 
 .proj-photo-slip:hover {
@@ -1125,14 +1019,14 @@
   position: relative;
   background: #ede8dc;
   border: 1px solid var(--line, rgba(38, 34, 28, .18));
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-  transition: all .2s ease;
+  transition: all var(--t-med) ease;
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.04);
   min-height: 200px;
 }
@@ -1147,7 +1041,7 @@
   max-height: 230px;
   object-fit: cover;
   display: block;
-  transition: transform .25s ease;
+  transition: transform var(--t-med) ease;
 }
 
 .media-window:hover img {
@@ -1178,7 +1072,7 @@
   height: 7px;
   border-radius: 50%;
   background: #cfc7b6;
-  transition: background .2s ease;
+  transition: background var(--t-med) ease;
 }
 
 .media-window:hover .window-dot:nth-child(1) { background: #e06c75; }
@@ -1215,7 +1109,7 @@
   color: var(--red, #8b2c1f);
   background: rgba(139, 44, 31, 0.06);
   padding: 2px 7px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   border: 1px dashed rgba(139, 44, 31, 0.28);
 }
 
@@ -1266,51 +1160,14 @@
   font-weight: 600;
 }
 
-/* 动作胶囊按钮 */
+/* 动作按钮组：按钮本体统一走控件层 .btn
+   （默认 .btn--ink 墨线描边，主行动 .btn--solid 朱砂实心） */
 .action-capsule-group {
   display: flex;
   gap: 8px;
   flex-wrap: wrap;
   align-items: center;
   margin-top: 14px;
-}
-
-.action-capsule {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 12.5px;
-  font-weight: 600;
-  text-decoration: none;
-  padding: 6px 14px;
-  border-radius: 2px;
-  border: 1px solid var(--line, rgba(38, 34, 28, .22));
-  background: #fdfcf9;
-  color: var(--ink, #26221c);
-  transition: all .18s ease;
-  box-shadow: 0 1px 3px rgba(38, 34, 28, 0.05);
-}
-
-.action-capsule:hover {
-  border-color: var(--red, #8b2c1f);
-  color: var(--red, #8b2c1f);
-  transform: translateY(-1px);
-  box-shadow: 0 3px 8px rgba(139, 44, 31, 0.14);
-}
-
-.action-capsule.primary {
-  background: var(--red, #8b2c1f);
-  color: #fff;
-  border-color: var(--red, #8b2c1f);
-}
-
-.action-capsule.primary:hover {
-  background: #ab3a2c;
-  color: #fff;
-}
-
-.action-capsule .icon {
-  font-size: 13px;
 }
 
 /* 可折叠技术细节抽屉 */
@@ -1331,7 +1188,7 @@
   gap: 6px;
   padding: 2px 0;
   font-weight: 600;
-  transition: color .15s ease;
+  transition: color var(--t-fast) ease;
 }
 
 .deep-dive-details summary:hover {
@@ -1343,7 +1200,7 @@
   padding: 10px 14px;
   background: rgba(38, 34, 28, 0.025);
   border-left: 2px solid var(--red, #8b2c1f);
-  border-radius: 0 2px 2px 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-size: 12.5px;
   line-height: 1.7;
   color: var(--ink, #26221c);
@@ -1387,9 +1244,9 @@
   color: var(--ink-soft, rgba(38, 34, 28, .75));
   background: rgba(38, 34, 28, 0.035);
   border: 1px solid rgba(38, 34, 28, 0.11);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   padding: 1.5px 7px;
-  transition: all .15s ease;
+  transition: all var(--t-fast) ease;
 }
 
 .tech-chip:hover {
@@ -1410,7 +1267,7 @@
   color: var(--red, #8b2c1f);
   text-decoration: none;
   font-weight: 600;
-  transition: opacity .15s ease;
+  transition: opacity var(--t-fast) ease;
 }
 
 .links-row a:hover {
@@ -1487,15 +1344,15 @@
 }
 
 .docket-card {
-  background: #fff;
+  background: var(--card);
   border: 1px solid rgba(38, 34, 28, .12);
-  border-left: 3.5px solid var(--red, #8b2c1f);
-  border-radius: 2px;
+  border-left: 4px solid var(--red, #8b2c1f);
+  border-radius: var(--radius-sm);
   padding: 12px 14px;
   box-shadow: 0 1px 3px rgba(38, 34, 28, .03);
   position: relative;
   overflow: hidden;
-  transition: all .18s ease;
+  transition: all var(--t-fast) ease;
 }
 
 .docket-card:hover {
@@ -1519,7 +1376,7 @@
   letter-spacing: 3px;
   border: 2px dashed rgba(139, 44, 31, 0.08);
   padding: 3px 7px;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   transform: rotate(-6deg);
 }
 
@@ -1562,14 +1419,14 @@
 }
 
 .merit-strip {
-  background: #fff;
+  background: var(--card);
   border: 1px solid rgba(38, 34, 28, .11);
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   padding: 9px 12px;
   display: flex;
   flex-direction: column;
   gap: 5px;
-  transition: all .18s ease;
+  transition: all var(--t-fast) ease;
   position: relative;
   box-shadow: 0 1px 2px rgba(38, 34, 28, .02);
 }
@@ -1645,8 +1502,9 @@
     left: 20px;
   }
 
-  .resume-paper::after {
-    display: none;
+  /* 窄屏收脊线，装订孔（背景渐变）一并隐藏 */
+  .resume-paper {
+    background-image: none;
   }
 
   .track-tabs-bar {
@@ -1674,13 +1532,8 @@
     gap: 8px;
   }
 
-  .skills-deck,
   .honors-grid {
     grid-template-columns: 1fr;
-  }
-
-  .skill-panel[data-cat="eng"] .skill-items-list {
-    grid-template-columns: 1fr !important;
   }
 }
 
@@ -1698,15 +1551,21 @@
     line-height: 1.45;
   }
 
-  .sub-eyebrow,
+  .dossier-eyebrow,
   .track-tabs-bar,
   .sheet-status-strip,
-  .resume-print-btn,
-  .email-copy-pill,
   .proj-photo-slip,
   .resume-footer,
   .links-row {
     display: none !important;
+  }
+
+  /* 控件层按钮打印时退化为描边黑字（主行动实心红在纸面上不可靠） */
+  .btn {
+    border: 1pt solid #999 !important;
+    background: none !important;
+    color: #000 !important;
+    box-shadow: none !important;
   }
 
   .dossier-wrap {
@@ -1722,8 +1581,7 @@
     padding: 0 !important;
   }
 
-  .resume-paper::before,
-  .resume-paper::after {
+  .resume-paper::before {
     display: none !important;
   }
 
@@ -1791,7 +1649,6 @@
   }
 
   .dossier-proj-item,
-  .skill-panel,
   .honor-col,
   .honor-box,
   .docket-card,

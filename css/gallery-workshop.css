@@ -3,6 +3,9 @@
    陈列墙风格：木质画框 + 衬纸 + 挂钩
    ============================================================ */
 
+/* 青色频道门牌徽标（覆盖 subpages.css 的朱砂 .live 默认色） */
+.sub-eyebrow .live--blue { color: var(--blue); }
+
 /* 陈列墙网格 */
 .gallery-wall {
   display: grid;
@@ -15,7 +18,7 @@
 .gallery-frame {
   position: relative;
   cursor: zoom-in;
-  transition: transform .25s ease;
+  transition: transform var(--t-med) ease;
 }
 .gallery-frame:hover {
   transform: translateY(-4px);
@@ -48,7 +51,7 @@
 .gallery-frame .frame {
   background: #5c4a3a;
   padding: 10px;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
   box-shadow:
     0 2px 4px rgba(38, 34, 28, .2),
     0 10px 24px rgba(38, 34, 28, .18),
@@ -61,13 +64,13 @@
   position: absolute;
   inset: 6px;
   border: 1px solid rgba(0, 0, 0, .3);
-  border-radius: 1px;
+  border-radius: var(--radius-sm);
   pointer-events: none;
 }
 
 /* 衬纸 */
 .gallery-frame .mat {
-  background: #faf6ee;
+  background: var(--card);
   padding: 12px;
   border: 1px solid rgba(38, 34, 28, .08);
   position: relative;
@@ -89,7 +92,7 @@
   height: 100%;
   object-fit: cover;
   display: block;
-  transition: transform .4s ease;
+  transition: transform var(--t-slow) ease;
 }
 .gallery-frame:hover .artwork img {
   transform: scale(1.02);
@@ -122,7 +125,7 @@
   color: var(--red);
   border: 1px solid rgba(139, 44, 31, .4);
   padding: 1px 7px;
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   letter-spacing: 1px;
 }
 .gallery-frame .label .name {
@@ -165,7 +168,7 @@
   max-height: 85vh;
   background: #5c4a3a;
   padding: 12px;
-  border-radius: 3px;
+  border-radius: var(--radius-md);
   box-shadow: 0 20px 60px rgba(0, 0, 0, .5);
 }
 .gallery-lightbox .lb-content::before {
@@ -173,11 +176,11 @@
   position: absolute;
   inset: 8px;
   border: 1px solid rgba(0, 0, 0, .25);
-  border-radius: 1px;
+  border-radius: var(--radius-sm);
   pointer-events: none;
 }
 .gallery-lightbox .lb-mat {
-  background: #faf6ee;
+  background: var(--card);
   padding: 10px;
 }
 .gallery-lightbox img {
@@ -196,7 +199,7 @@
 .gallery-lightbox .lb-caption .t {
   font-family: var(--display);
   font-size: 18px;
-  color: #faf6ee;
+  color: var(--card);
   margin-bottom: 4px;
   letter-spacing: 3px;
 }
@@ -217,7 +220,7 @@
   align-items: center;
   justify-content: center;
   box-shadow: 0 4px 12px rgba(0, 0, 0, .3);
-  transition: transform .15s;
+  transition: transform var(--t-fast);
 }
 .gallery-lightbox .lb-close:hover { transform: scale(1.1); }
 
@@ -229,14 +232,14 @@
   height: 44px;
   border-radius: 50%;
   background: rgba(92, 74, 58, .9);
-  color: #faf6ee;
+  color: var(--card);
   border: none;
   font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background .15s;
+  transition: background var(--t-fast);
 }
 .gallery-lightbox .lb-nav:hover { background: var(--red); }
 .gallery-lightbox .lb-prev { left: -60px; }

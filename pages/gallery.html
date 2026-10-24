@@ -20,7 +20,7 @@
 
     <!-- 门牌 -->
     <div class="sub-eyebrow">
-        <span>ZLOONG 工房 · 画廊版 <span class="live" style="color:#2f5d8a;">● 青色频道</span></span>
+        <span>ZLOONG 工房 · 画廊版 <span class="live live--blue">● 青色频道</span></span>
         <span id="today">2026年9月4日 · 星期五</span>
         <span><a href="../index.html" class="back-home">返回工作台</a></span>
     </div>
@@ -146,17 +146,8 @@
     </div>
 </div>
 
+<script src="../js/date.js"></script>
 <script>
-/* 门牌日期 */
-(function() {
-    var todayEl = document.getElementById("today");
-    if (todayEl) {
-        var nd = new Date();
-        var week = ["日", "一", "二", "三", "四", "五", "六"][nd.getDay()];
-        todayEl.textContent = nd.getFullYear() + "年" + (nd.getMonth() + 1) + "月" + nd.getDate() + "日 · 星期" + week;
-    }
-})();
-
 /* 中文数字 */
 var CN_NUMS = ["零", "壹", "贰", "叁", "肆", "伍", "陆", "柒", "捌", "玖", "拾"];
 function cnNum(n) {

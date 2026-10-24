@@ -5,38 +5,24 @@
    2. 彻底解决长歌名截断：歌名自适应多行自然展开，虚线导引自适应弹性断点，右侧日期时刻固定等宽。
    3. 完备状态反馈：即时搜索、快捷标签过滤、空状态引导、无障碍播报。
    4. 工房纸面美学：米黄纸底、红墨朱砂、天依碧印、金石印章。
+   全局设计 token（纸/墨/朱砂/字体/字号/形状/动效）统一来自 ../css/tokens.css；
+   此处只保留本页专有的天依碧色板与细墨阶，不得重复定义全局 token。
    ========================================================================== */
+@import url("../css/tokens.css");
 
 :root {
-    --desk: #f5f0e6;
-    --card: #fbf8f2;
-    --card-hover: #ffffff;
-    --ink: #26221c;
-    --ink-soft: rgba(38, 34, 28, .72);
-    --ink-faint: rgba(38, 34, 28, .46);
-    --ink-ghost: rgba(38, 34, 28, .16);
-    --line: rgba(38, 34, 28, .18);
-    --line-light: rgba(38, 34, 28, .08);
-    --red: #8b2c1f;
-    --red-soft: rgba(139, 44, 31, .12);
-    --blue: #2f5d8a;
-    --amber: #d98e4a;
-
-    --tianyi: #66ccff;
+    /* ---- 天依碧：本页品牌色（与工房朱砂并用，勿移入全局 token） ---- */
     --tianyi-ink: #2e7fa6;
+    --tianyi-ink-deep: #25688a;   /* 实心钮 hover 加深 */
     --tianyi-soft: rgba(46, 127, 166, .65);
     --tianyi-24: rgba(46, 127, 166, .24);
     --tianyi-12: rgba(46, 127, 166, .12);
     --tianyi-06: rgba(46, 127, 166, .06);
 
-    --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
-    --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
-    --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
-    --display: "Averia Gruesa Libre", var(--hand);
-
-    --fs-xs: 12px;
-    --fs-sm: 13px;
-    --fs-base: 15px;
+    /* ---- 细墨阶（本页排版专用灰阶） ---- */
+    --ink-faint: rgba(38, 34, 28, .46);
+    --ink-ghost: rgba(38, 34, 28, .16);
+    --line-light: rgba(38, 34, 28, .08);
 }
 
 * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -45,7 +31,7 @@ html { scroll-behavior: smooth; }
 
 body {
     font-family: var(--hand);
-    font-size: var(--fs-base);
+    font-size: 16px;
     line-height: 1.7;
     color: var(--ink);
     background-color: var(--desk);
@@ -76,7 +62,7 @@ body {
     top: 20px;
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 6px;
+    border-radius: var(--radius-lg);
     box-shadow: 0 4px 16px rgba(38, 34, 28, .04);
     padding: 20px 18px;
     display: flex;
@@ -125,9 +111,9 @@ body {
     color: var(--ink);
     background: var(--desk);
     border: 1px solid var(--line);
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     outline: none;
-    transition: border-color .2s, box-shadow .2s;
+    transition: border-color var(--t-med), box-shadow var(--t-med);
 }
 .search-input:focus {
     border-color: var(--tianyi-ink);
@@ -158,9 +144,9 @@ body {
     border: 1px solid var(--line);
     color: var(--ink-soft);
     padding: 2px 7px;
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     cursor: pointer;
-    transition: all .15s;
+    transition: all var(--t-fast);
 }
 .chip-btn:hover {
     color: var(--ink);
@@ -179,7 +165,7 @@ body {
     color: var(--ink-faint);
     padding: 4px 6px;
     background: var(--desk);
-    border-radius: 3px;
+    border-radius: var(--radius-md);
     border-left: 2px solid var(--tianyi-ink);
 }
 
@@ -207,10 +193,10 @@ body {
     padding: 5px 8px;
     text-decoration: none;
     color: var(--ink-soft);
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     font-family: var(--mono);
     font-size: var(--fs-xs);
-    transition: background .15s, color .15s;
+    transition: background var(--t-fast), color var(--t-fast);
     position: relative;
 }
 .rail-item:hover {
@@ -226,8 +212,8 @@ body {
     width: 4px;
     height: 12px;
     background: transparent;
-    border-radius: 2px;
-    transition: background .2s;
+    border-radius: var(--radius-sm);
+    transition: background var(--t-med);
 }
 .rail-item.is-active .rail-indicator {
     background: var(--red);
@@ -240,14 +226,14 @@ body {
     flex: 1;
     height: 4px;
     background: rgba(38, 34, 28, .06);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     overflow: hidden;
 }
 .rail-bar-fill {
     display: block;
     height: 100%;
     background: var(--tianyi-soft);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
 }
 .rail-item.is-active .rail-bar-fill {
     background: var(--red);
@@ -279,7 +265,7 @@ body {
 .stream-hero {
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 6px;
+    border-radius: var(--radius-lg);
     padding: 32px 36px 28px;
     box-shadow: 0 4px 16px rgba(38, 34, 28, .04);
     position: relative;
@@ -323,7 +309,7 @@ body {
     padding: 12px 18px;
     background: var(--desk);
     border-left: 3px solid var(--red);
-    border-radius: 0 4px 4px 0;
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
     font-size: 14px;
     color: var(--ink-soft);
     display: flex;
@@ -345,7 +331,7 @@ body {
     background: var(--desk);
     border: 1px solid var(--line-light);
     padding: 10px 6px;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
 }
 .stat-pill b {
     display: block;
@@ -363,11 +349,11 @@ body {
 .year-section {
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 6px;
+    border-radius: var(--radius-lg);
     padding: 24px 28px 28px;
     box-shadow: 0 2px 12px rgba(38, 34, 28, .03);
     scroll-margin-top: 30px;
-    transition: border-color .2s;
+    transition: border-color var(--t-med);
 }
 .year-section.is-focused-section {
     border-color: var(--tianyi-ink);
@@ -388,7 +374,7 @@ body {
     color: var(--red);
     border: 1px solid var(--red);
     padding: 1px 4px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     line-height: 1;
     transform: rotate(-3deg);
 }
@@ -425,9 +411,9 @@ body {
     align-items: baseline;
     gap: 8px;
     padding: 6px 8px;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     background: transparent;
-    transition: background .15s;
+    transition: background var(--t-fast);
     min-width: 0;
 }
 .song-row:hover {
@@ -450,7 +436,7 @@ body {
     color: var(--ink);
     word-break: break-word;
     line-height: 1.45;
-    transition: color .15s;
+    transition: color var(--t-fast);
 }
 .song-row:hover .song-title {
     color: var(--tianyi-ink);
@@ -462,7 +448,7 @@ body {
     font-size: 11px;
     line-height: 1.2;
     padding: 1px 4px;
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     flex-shrink: 0;
     transform: translateY(-1px);
 }
@@ -517,7 +503,7 @@ body {
 mark {
     background: var(--tianyi-24);
     color: var(--ink);
-    border-radius: 2px;
+    border-radius: var(--radius-sm);
     padding: 0 2px;
 }
 
@@ -525,7 +511,7 @@ mark {
 .empty-box {
     background: var(--card);
     border: 1px dashed var(--line);
-    border-radius: 6px;
+    border-radius: var(--radius-lg);
     padding: 48px 24px;
     text-align: center;
     color: var(--ink-faint);
@@ -540,12 +526,12 @@ mark {
     background: var(--tianyi-ink);
     color: #fff;
     border: none;
-    border-radius: 4px;
+    border-radius: var(--radius-md);
     padding: 6px 14px;
     cursor: pointer;
 }
 .reset-btn:hover {
-    background: var(--blue);
+    background: var(--tianyi-ink-deep);
 }
 
 /* 页脚 */

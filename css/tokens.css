@@ -1,0 +1,54 @@
+/* ============================================================
+   ZLOONG 工房 · tokens.css —— 全站设计 token 唯一来源
+   workshop.css 与 luotianyi/style.css 通过 @import 引入本文件。
+   改取值只改这里；页面 CSS 里一律 var() 引用，禁止另写裸值。
+   形状三档：sm=票据/徽章  md=卡片/按钮/输入框  lg=大容器/面板
+   动效三档：fast=悬停微动  med=位移/抬升  slow=氛围渐变
+   ============================================================ */
+:root {
+  /* ---- 纸与墨 ---- */
+  --desk: #f5f0e6;                     /* 台面纸底 */
+  --card: #fbf8f2;                     /* 卡底（默认纸面） */
+  --card-warm: #faf5ea;                /* 暖纸：装订册、胶带徽章底 */
+  --card-hi: #fffdf9;                  /* 亮纸：阅读纸面、hero 便签 */
+  --ink: #26221c;
+  --ink-soft: rgba(38, 34, 28, .68);
+  --line: rgba(38, 34, 28, .18);
+  --screen: #2b2620;
+  --tape: rgba(255, 252, 242, .75);
+
+  /* ---- 工房色 ---- */
+  --red: #8b2c1f;                      /* 朱砂 */
+  --red-hover: #74271b;                /* 朱砂实心 hover 加深 */
+  --blue: #2f5d8a;                     /* 工房蓝（链接默认色等） */
+
+  /* ---- 字体 ---- */
+  --mono: "Cascadia Code", "JetBrains Mono", Consolas, monospace;
+  --serif: Georgia, "Noto Serif SC", "Source Han Serif SC", "Songti SC", STSong, serif;
+  --hand: "LXGW WenKai Screen", "PingFang SC", "Microsoft YaHei", sans-serif;
+  --display: "Averia Gruesa Libre", var(--hand);
+
+  /* ---- 字号阶梯 ---- */
+  --fs-xs: 11.5px;
+  --fs-sm: 12.5px;
+  --fs-md: 14.5px;
+
+  /* ---- 形状三档 ---- */
+  --radius-sm: 2px;
+  --radius-md: 3px;
+  --radius-lg: 6px;
+  --radius-pill: 999px;
+
+  /* ---- 节奏 ---- */
+  --gap: 16px;
+  --wrap: 1040px;
+
+  /* ---- 动效 ---- */
+  --t-fast: .15s;
+  --t-med: .2s;
+  --t-slow: .4s;
+
+  /* ---- legacy 兼容别名：blog-workshop.css（旧站存档）仍引用 --radius，
+     不要在新代码里使用，请用三档 token ---- */
+  --radius: var(--radius-lg);
+}
