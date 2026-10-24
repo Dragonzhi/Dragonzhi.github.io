@@ -82,8 +82,8 @@
                         <div class="shot-placeholder">SCREENSHOT</div>
                     </div>
                     <div class="archive-links">
-                        <a class="btn btn--line btn-arrow" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩</a>
-                        <a class="btn btn--line btn-arrow" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">查看源码</a>
+                        <a class="link-dash" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩 ↗</a>
+                        <a class="link-dash" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">查看源码 ↗</a>
                     </div>
                 </div>
             </div>
@@ -196,7 +196,7 @@ function renderArchive(filter) {
         var links = "";
         if (item.links && Array.isArray(item.links)) {
             links = item.links.map(function(l) {
-                return '<a class="btn btn--line btn-arrow" href="' + escHtml(l.url) + '" target="_blank" rel="noreferrer">' + escHtml(l.label) + '</a>';
+                return '<a class="link-dash" href="' + escHtml(l.url) + '" target="_blank" rel="noreferrer">' + escHtml(l.label) + ' ↗</a>';
             }).join("");
         }
 

@@ -5,7 +5,7 @@
 
 ## 项目速览
 
-- `css/tokens.css`：全站设计 token 唯一来源（纸/墨/朱砂色板、字体、字号阶梯、圆角三档 sm/md/lg、动效三档 fast/med/slow），由 `workshop.css` 与 `luotianyi/style.css` 各自 `@import` 引入；**改取值只改这个文件**，页面 CSS 一律 `var()` 引用，不要再写裸色值/裸圆角/裸时长。按钮与虚线链接的公共控件层（`.btn` 四型 + `.link-dash`）定义在 `workshop.css`，各页面按语义挂类，不要再造私有按钮样式。
+- `css/tokens.css`：全站设计 token 唯一来源（纸/墨/朱砂色板、字体、字号阶梯、圆角三档 sm/md/lg、动效三档 fast/med/slow），由 `workshop.css` 与 `luotianyi/style.css` 各自 `@import` 引入；**改取值只改这个文件**，页面 CSS 一律 `var()` 引用，不要再写裸色值/裸圆角/裸时长。按钮与虚线链接的公共控件层（`.btn` 四型 + `.link-dash`）定义在 `workshop.css`，各页面按语义挂类，不要再造私有按钮样式。**语义分工：跳转/查看类外链（在线体验、源码、演示视频等）一律 `.link-dash`（朱砂虚线下划线 + ↗）**；`.btn` 只用于工具钮（复制/还原台面/SIGNAL）、主次行动与信息章（软著/获奖等非跳转章）。
 - `js/date.js`：门牌日期注入脚本（`#today`，`data-date-format="dossier"` 走 2026.10.24 等宽格式，缺省走中文长格式），gallery / portfolio / resume 三页共用，不要再复制内联日期代码。
 - `index.html` + `css/workshop.css` + `js/workshop.js` + `data/content.js` + `files/` + `data/files-manifest.json`：工房首页及其数据流（about / now / links / motto / 今日一言的文案在 `files/` 下的 .md/.txt，打字机句子在 `data/content.js`，`files/` 新增 `.md` 通过 `scripts/generate_manifest.py` 生成的索引自动成为档案架卡片，外观由 manifest 条目的 `style` 字段手动指定（links / list / quote / doc 四型，不写或非法值默认 doc，不做内容判型与随机）。
 - `css/seal.css` + `js/seal.js`：工房印章（3D 单物件方向）——视口右下角一枚 three.js 印章，拖到纸卡上按下即盖章；印子存 localStorage（`zloong-seal-v1`，只记坐标与随机种子，最多 48 枚），清除键 `#seal-clear` 贴在印章上方；窄屏不出现、不加载 three.js，已存印子也不渲染；无 WebGL 退化为 2D 印章。**全站唯一的第三方依赖就在这里**（见工作约定 5）。

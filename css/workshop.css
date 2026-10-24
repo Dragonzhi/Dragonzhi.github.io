@@ -48,8 +48,7 @@ a:hover { color: var(--red); }
    .btn--line  朱砂描边：复制、外链、打印等轻行动
    .btn--ink   墨线描边：次级行动
    .btn--solid 朱砂实心：主级行动
-   .btn--xs    迷你尺寸：行内附按钮
-   .btn-arrow  外链箭头修饰
+   .btn--xs    迷你尺寸：行内附按钮（复制等工具钮）
    .link-dash / .link-dash--quiet：虚线下划线链接
      --link-accent 可覆盖主色（如简历各方向板的 --pane-accent） */
 .btn {
@@ -92,7 +91,6 @@ a.btn, button.btn { cursor: pointer; }
 }
 .btn--xs { font-size: 10px; padding: 1px 7px; letter-spacing: .3px; }
 .btn .icon { font-size: 13px; }
-.btn-arrow::after { content: " ↗"; font-size: 10px; }
 
 .link-dash {
   color: var(--link-accent, var(--red));
