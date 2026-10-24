@@ -3,40 +3,10 @@
    展开的档案夹风格
    ============================================================ */
 
-/* 索引标签栏（文件夹标签） */
+/* 索引标签栏：视觉走共享 .tab-fold（workshop.css 控件层），此处只留折行与间距 */
 .archive-tabs {
-  display: flex;
   flex-wrap: wrap;
-  gap: 4px;
   margin-bottom: 20px;
-  border-bottom: 2px solid var(--ink);
-  padding-bottom: 0;
-}
-.archive-tabs .tab {
-  font-family: var(--mono);
-  font-size: 11.5px;
-  letter-spacing: 1px;
-  padding: 8px 16px 10px;
-  background: transparent;
-  color: var(--ink-soft);
-  border: none;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  cursor: pointer;
-  margin-bottom: -2px;
-  transition: all var(--t-fast) ease;
-  position: relative;
-}
-.archive-tabs .tab:hover {
-  color: var(--ink);
-  background: rgba(139, 44, 31, .06);
-}
-.archive-tabs .tab.active {
-  background: var(--card);
-  color: var(--red);
-  border: 2px solid var(--ink);
-  border-bottom-color: var(--card);
-  font-weight: 700;
-  z-index: 1;
 }
 
 /* 档案列表 */
@@ -265,6 +235,5 @@
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .archive-tabs .tab,
-  .archive-links .link-btn { transition: none; }
+  .tab-fold { transition: none; }
 }

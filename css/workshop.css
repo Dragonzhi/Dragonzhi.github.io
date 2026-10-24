@@ -138,6 +138,42 @@ a.btn, button.btn { cursor: pointer; }
 }
 .badge-mini .badge-v.red { background: var(--red); color: #fff; }
 
+/* ===== 档案夹标签（.tab-fold-bar / .tab-fold）：档案架与履历页共用 =====
+   未选中 = 基线上的静默文字；hover = 浅红纸底；
+   选中 = 墨描边盒 + 红字 + 卡纸底，盒底与基线同色，形成「翻开」的档案夹页签。 */
+.tab-fold-bar {
+  display: flex;
+  align-items: flex-end;
+  gap: 4px;
+  border-bottom: 2px solid var(--ink);
+}
+.tab-fold {
+  font-family: var(--mono);
+  font-size: 11.5px;
+  letter-spacing: 1px;
+  padding: 8px 16px 10px;
+  background: transparent;
+  color: var(--ink-soft);
+  border: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  cursor: pointer;
+  margin-bottom: -2px;
+  transition: color var(--t-fast) ease, background var(--t-fast) ease;
+  position: relative;
+}
+.tab-fold:hover {
+  color: var(--ink);
+  background: rgba(139, 44, 31, .06);
+}
+.tab-fold.active {
+  background: var(--card);
+  color: var(--red);
+  border: 2px solid var(--ink);
+  border-bottom-color: var(--card);
+  font-weight: 700;
+  z-index: 1;
+}
+
 /* 键盘焦点（全站统一；luotianyi 页按其页面主色自行覆盖） */
 a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visible {
   outline: 2px solid var(--red); outline-offset: 2px;
@@ -1067,6 +1103,6 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
   html { scroll-behavior: auto; }
   .caret { animation: none; }
   .paper, .paper:hover, .proj, .proj:hover,
-  .btn, .link-dash,
+  .btn, .link-dash, .tab-fold,
   .drag-hint, .desk-reset { transition: none; }
 }

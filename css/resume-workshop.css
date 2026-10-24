@@ -66,30 +66,20 @@
 
 /* 打印/复制按钮统一走 .btn .btn--line（.resume-print-btn / .email-copy-pill 已并入） */
 
-/* ---------- 顶部方向卡槽标签轨 (Dossier Tabs) ---------- */
+/* ---------- 顶部方向标签轨：视觉走共享 .tab-fold（档案夹标签，与档案架页同语言），
+   此处只留布局定位与编号前缀；活动标签盒底与阅读纸同色，形成翻开进纸面的效果 ---------- */
 .track-tabs-bar {
   display: flex;
   align-items: flex-end;
-  gap: 8px;
+  gap: 4px;
   margin-bottom: -1px;
   padding-left: 36px; /* 避开左侧装订脊线 */
+  border-bottom: 2px solid var(--ink, #26221c);
   position: relative;
   z-index: 2;
 }
 
 .track-tab {
-  background: #e9e2d2;
-  border: 1px solid rgba(38, 34, 28, .22);
-  border-bottom: 1px solid rgba(38, 34, 28, .2);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-  padding: 8px 20px 7px;
-  font-family: var(--mono, monospace);
-  font-size: 12.5px;
-  color: var(--ink-soft, rgba(38, 34, 28, .68));
-  cursor: pointer;
-  transition: all var(--t-fast) ease;
-  position: relative;
-  top: 1px;
   display: inline-flex;
   align-items: center;
   gap: 8px;
@@ -97,32 +87,7 @@
 
 .track-tab .tab-idx {
   font-size: 10px;
-  color: var(--ink-soft, rgba(38, 34, 28, .68));
   opacity: .7;
-}
-
-.track-tab:hover {
-  background: #efe8dc;
-  color: var(--ink, #26221c);
-}
-
-.track-tab.active {
-  background: var(--card-hi);
-  border-color: rgba(38, 34, 28, .22);
-  border-bottom: 1px solid var(--card-hi);
-  color: var(--red, #8b2c1f);
-  font-weight: 700;
-  padding-top: 10px;
-  z-index: 3;
-}
-
-.track-tab.active::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 3px;
-  background: var(--red, #8b2c1f);
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 
 .track-tab.active .tab-idx {
@@ -134,7 +99,7 @@
 .resume-paper {
   position: relative;
   z-index: 1;
-  background-color: var(--card-hi, var(--card-hi));
+  background-color: var(--card-hi, #fffdf9);
   /* 上下两枚装订孔：径向渐变绘制（desk 色孔心 + 墨圈）。
      替代旧版 ::after + calc(100vh) box-shadow 的视口高度 hack——
      那写法孔位随窗口高度漂移，长页面缩放时错位。 */
