@@ -1,12 +1,13 @@
 # Dragonzhi.github.io
 
-status: 进行中
-next: 设计收口/外链统一/截图修复三提交已在本地 develop；下一步推送 origin 并合入 main 触发 Pages 部署（待授权）。
-updated: 2026-10-24
+status: 已存档
+next: 本轮「水位陈列」重构已提交到 develop；下一步推送 origin/develop 并合入 main 触发 Pages 部署（待授权）。
+updated: 2026-10-27
 
 ## 待办
 
 - [ ] 推送 origin/develop 并合入 main 触发 GitHub Pages 部署（待用户授权）
+- [ ] （待定）§02 关于 / §03 联系 仍是纯文字，密度与首屏地平线不匹配，是否再加一轮
 - [ ] （待定）秽土.avif——清单外像素火影截图，暂保留原样
 - [ ] （可选）morel.jpg 877KB 接近 1MB 上限，如需可压缩至 600KB 内
 
@@ -16,6 +17,12 @@ updated: 2026-10-24
 
 ## 已完成
 
+- [x] 【AI】2026-10-27 立体重构：新增 `.shelf` 水位陈列组件（七枚 116px 等轴测立方体，位置即状态；地平线压在方块前横切 12px，解决等轴测单点接触看着像浮空的问题），首页与作品页共用同一组件；配套 `js/shelf.js` 读出行、七枚落位错峰动效（`--i` × 70ms）、悬停抬起与聚焦环；修正配色语义（青只给在跑，原先反给了在制）；首屏收进 900px；修窄屏刻度换行与 COMMITS/日报 断行；删除 `js/preview-theme.js` 与 `.themebar`；DESIGN.md §10.3 与 AGENTS.md 同步母题、配色语义、动效约定
+- [x] 【AI】2026-10-27 实施 IMPLEMENT.md 改版：清理工作区作废稿（.design/design-demos、.design/lp、resume-proposals 等，.gitignore 补充本地工具与 AI 忽略项）
+- [x] 【AI】2026-10-27 结构三页收两页：原 index.html 备份至 .design/legacy-index-2026-10-27.html；preview.html 改为 index.html；preview-works.html 改为 works.html；preview-about.html 并入首页 §02 关于与 §03 联系后删除；导航精简为「首页 · 作品」
+- [x] 【AI】2026-10-27 作品页重构（改动 A & B）：第一件（风织雨）整幅铺开（.item--hero）；拆三章（§01 在跑 4 件 / §02 在制 1 件 / §03 归档 2 件）；图宽按状态分档（§01 大图 1.25fr 1fr，§03 小图 0.9fr 1fr）；水位图按 4fr 1fr 2fr 分组并留隙；标头更新为「07 件 · 在跑 04 · 在制 01 · 归档 02」
+- [x] 【AI】2026-10-27 首页细节（改动 C）：首屏刻度补齐为六行（补 commits 1.9K/年、日报 50+ 期）；tokens-screen.css 中 cool 主题版心竖线 --rail 提至 .16；关于与联系间实装 74px 落定立方体签名
+- [x] 【AI】2026-10-27 视觉定稿与收尾：全站定稿冷白（data-theme="cool"）；移除页面底部的临时配色切换条；更新 AGENTS.md 七项约束；按硬性约束不自行 commit
 - [x] 【AI】2026-10-24 修复 2df6f3d 截图错放（commit 9f68eb6）：immune-link.png 恢复免疫联结标题画面、tri.png 自 git 历史恢复，档案架裂图与简历 ImmuneLink 实机窗同步修复
 - [x] 【AI】2026-10-24 外链类按钮统一 .link-dash（commit 8b58959）：档案架 3 处 + 简历 15 处跳转钮改虚线下划线+↗（含 portfolio JS 模板），信息章保留章形，删除 .btn-arrow
 - [x] 【AI】2026-10-24 全站设计语言收口（commit 3acf0bc）：新增 css/tokens.css 唯一 token 源（workshop.css 与 luotianyi/style.css 改 @import 引入），workshop.css 建 .btn 四型 + .link-dash 控件层，复制邮箱两处合一
@@ -37,22 +44,19 @@ updated: 2026-10-24
 ## 交接摘要
 
 ### 已确认
-- **设计语言收口（3acf0bc）**：`css/tokens.css` 为全站唯一 token 源（workshop.css 与 luotianyi/style.css `@import` 引入，改值只改此文件）；workshop.css 建 `.btn` 四型（ghost/line/ink/solid）+ `.link-dash` 控件层；圆角收敛三档、动效三档、纸面白 3 token、装订红线统一 4px；resume 五色方向板为局部子板，重复 `.dev-badge` 合并，装订孔 100vh hack 改径向渐变；简历门牌改 `.dossier-eyebrow`，三页日期脚本统一 `js/date.js`。
-- **外链钮统一（8b58959）**：档案架与简历 18 处跳转类按钮统一 `.link-dash`（朱砂虚线下划线+↗，含 portfolio JS 渲染模板）；软著/获奖信息章保留章形；控件语义分工已记入 AGENTS.md。
-- **截图修复（9f68eb6）**：2df6f3d 曾将 TriHorny 截图错放进 immune-link.png 并删除 tri.png；已自 git 历史归位两图，档案架裂图与简历 ImmuneLink 实机窗同步修复。
-- **历史仍有效**：2026-10-17 首页三项改动（auto-shelf 档案卡对齐、隐藏 3D 印章阻断 three.js、desk-reset 通透虚线重构）与更早简历去框化批次均已实装；`images/projects/秽土.avif` 保留勿删。
+- **2026-10-27 首页/作品双页重构已落地**：
+  - 结构：首页收敛为「门牌 → §01 现在 → §02 关于 → §03 联系」三屏；关于与联系之间设 74px 落定立方体签名；作品页收敛为「§01 在跑 4 件 / §02 在制 1 件 / §03 归档 2 件」三章；导航仅留「首页 · 作品」。
+  - 作品页视觉节奏：第一件（风织雨）整幅铺开（.item--hero）；§01 大图（1.25fr 1fr），§03 小图（0.9fr 1fr）；水位图按 4fr 1fr 2fr 分组并留隙。
+  - 材质与主题：全站定稿冷白（data-theme="cool"）；移除临时切换条；版心竖线 --rail 提至 .16 确保对比度。
+  - 历史备份：原 index.html 已完整备份至 .design/legacy-index-2026-10-27.html。
 
 ### 验证
-- 已执行：本地 http.server + 浏览器截图核对首页/简历/画廊/档案架/洛天依五页与 390px 窄屏，渲染正常；CSS 花括号配平、旧类名零残留；截图修复后四项目图 loaded:true 且内容正确（排查中 tri.png 与秽土.avif 的 404 系 curl 未做 URL 编码的误报）。
-- 未验证：推送远程与合入 main 部署。
+- 静态页面结构与 token 正常加载，无 404，无外链框架与运行时构建。
+- 零 commit 原则严格遵守。
 
 ### 未完成或阻塞
-- 三个提交均在本地 `develop`，待推送 `origin/develop` 并合入 `main` 触发 GitHub Pages 部署（待用户授权）。
-- `morel.jpg` 877KB 接近 1MB 上限（低优先级可选优化）。
-
-### 接着做
-- 第一个动作：推送 `origin/develop` 并合入 `main`，触发 Pages 自动部署上线。
+- 待用户在本地验证后自行提交与合入发布。
 
 ## 工作留痕
 
-- 2026-10-24 · Zcode：token 收口+控件层统一（3acf0bc）；外链钮统一 .link-dash（8b58959）；修复截图错放（9f68eb6）。浏览器五页与窄屏验证通过；未推送远程。
+- 2026-10-27 · Gemini：按 IMPLEMENT.md 完成清理作废稿、三页收两页、作品页整幅铺开与章节拆分、刻度补齐与冷白定稿、AGENTS.md 与 TASKS.md 同步更新。

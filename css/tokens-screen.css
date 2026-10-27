@@ -1,0 +1,155 @@
+/* ============================================================
+   tokens-screen.css —— 屏的 token 唯一来源
+   三套配色：dark（玄黑）/ cool（冷白）/ warm（暖白）
+   切换方式：<html data-theme="cool"> ，缺省走 dark。
+   页面 CSS 只准引用语义层，不直接写原色值。
+   纸（子页 / Hanako 箱庭）用 css/tokens.css，两套不混用。
+   ============================================================ */
+
+:root {
+  /* ---- 原色 · 青绿 ---- */
+  --qing-1: #8FF0EA;
+  --qing-2: #2FD3CB;
+  --qing-3: #14A9A2;
+  --qing-4: #00827F;
+  --qing-5: #00605E;
+  --qing-6: #004A49;
+
+  /* ---- 原色 · 朱砂 ---- */
+  --zhu-1: #E96A52;
+  --zhu-2: #E2533C;
+  --zhu-3: #B93A26;
+  --zhu-4: #8B2C1F;
+  --zhu-5: #7A2519;
+
+  /* ---- 字体 ---- */
+  --sans: "PingFang SC", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans SC", system-ui, sans-serif;
+  --black: "Arial Black", "Helvetica Neue", Arial, var(--sans);
+  --mono: "Cascadia Code", "JetBrains Mono", Consolas, ui-monospace, monospace;
+
+  /* ---- 字号：全站只有六档 ---- */
+  --t0: clamp(52px, 8.2vw, 116px);
+  --t1: clamp(30px, 3.3vw, 46px);
+  --t2: clamp(21px, 2vw, 29px);
+  --t3: 16.5px;
+  --t4: 14.5px;
+  --t5: 11.5px;
+
+  /* ---- 间距：基准 8 ---- */
+  --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px; --s5: 24px;
+  --s6: 32px; --s7: 48px; --s8: 64px; --s9: 96px; --s10: 128px;
+
+  --wrap: 1240px;
+  --pad: 44px;
+
+  --press: .12s;
+  --ease: cubic-bezier(.2, .7, .3, 1);
+}
+
+/* ============ 黑底白字（缺省） ============ */
+:root,
+[data-theme="dark"] {
+  --bg: #08080A;
+  --surface: #0E0E11;
+  --frame: #16161A;
+  --line: #2A2A33;
+  --line-strong: #3A3A45;
+  --rail: rgba(233, 238, 241, .055);
+
+  --fg: #E9EEF1;
+  --fg-dim: #A9B3B9;
+  --fg-faint: #7F8990;
+
+  --live: var(--qing-2);        /* 状态字 10.8 : 1 */
+  --live-fill: var(--qing-4);
+  --mark: var(--zhu-2);         /* 编号字 5.3 : 1 */
+  --mark-fill: var(--zhu-4);
+
+  --toplight: linear-gradient(180deg, rgba(233,238,241,.055) 0%, rgba(233,238,241,.018) 44%, transparent 100%);
+  --noise-op: .05;
+
+  /* 立方体三面：顶 / 左 / 右，光恒从左上来。
+     live = 现在就能玩（青）；缺省 = 在制（墨）；sunk = 归档（沉）。 */
+  --cube-top: #DFE6EA;
+  --cube-left: #98A2A9;
+  --cube-right: #5F686E;
+  --cube-live-top: var(--qing-1);
+  --cube-live-left: var(--qing-2);
+  --cube-live-right: var(--qing-4);
+  --cube-sunk-top: #5B6469;
+  --cube-sunk-left: #3C4448;
+  --cube-sunk-right: #272C2F;
+
+  --btn-bg: #191920;
+  --btn-bg-hi: #1F1F28;
+}
+
+/* ============ 白底黑字 · 冷白 ============ */
+[data-theme="cool"] {
+  --bg: #F2F5F7;
+  --surface: #E9EEF1;
+  --frame: #DDE5EA;
+  --line: #D3DCE1;
+  --line-strong: #B9C5CC;
+  --rail: rgba(18, 23, 26, .16);
+
+  --fg: #12171A;                /* 16.5 : 1 */
+  --fg-dim: #4C565C;            /*  6.9 : 1 */
+  --fg-faint: #5C666C;          /*  4.9 : 1 */
+
+  --live: var(--qing-5);        /* #00605E  6.8 : 1 */
+  --live-fill: var(--qing-4);
+  --mark: var(--zhu-4);         /* #8B2C1F  7.7 : 1 */
+  --mark-fill: var(--zhu-4);
+
+  --toplight: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.18) 44%, transparent 100%);
+  --noise-op: .06;
+
+  --cube-top: #E6EDF0;
+  --cube-left: #BDC9D0;
+  --cube-right: #74818A;
+  --cube-live-top: var(--qing-2);
+  --cube-live-left: var(--qing-3);
+  --cube-live-right: var(--qing-5);
+  --cube-sunk-top: #D5DEE3;
+  --cube-sunk-left: #B9C5CC;
+  --cube-sunk-right: #97A3AB;
+
+  --btn-bg: #FFFFFF;
+  --btn-bg-hi: #FFFFFF;
+}
+
+/* ============ 白底黑字 · 暖白 ============ */
+[data-theme="warm"] {
+  --bg: #F7F4EC;
+  --surface: #F0EADC;
+  --frame: #E6DECB;
+  --line: #DED5C2;
+  --line-strong: #C5BAA4;
+  --rail: rgba(26, 23, 18, .08);
+
+  --fg: #1A1712;                /* 16.3 : 1 */
+  --fg-dim: #554D40;            /*  7.3 : 1 */
+  --fg-faint: #6A6252;          /*  5.0 : 1 */
+
+  --live: var(--qing-5);
+  --live-fill: var(--qing-4);
+  --mark: var(--zhu-5);         /* #7A2519  9.1 : 1 */
+  --mark-fill: var(--zhu-4);
+
+  --toplight: linear-gradient(180deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,.2) 44%, transparent 100%);
+  --noise-op: .06;
+
+  --cube-top: #FFFDF8;
+  --cube-left: #D8CFBC;
+  --cube-right: #A89C86;
+  --cube-live-top: var(--qing-2);
+  --cube-live-left: var(--qing-3);
+  --cube-live-right: var(--qing-5);
+  --cube-sunk-top: #E5DFD2;
+  --cube-sunk-left: #CFC7B6;
+  --cube-sunk-right: #B9B0A0;
+
+  --btn-bg: #FFFDF8;
+  --btn-bg-hi: #FFFFFF;
+}

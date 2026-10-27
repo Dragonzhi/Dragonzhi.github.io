@@ -1,285 +1,205 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" data-theme="cool">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="ZLOONG 的工房：游戏开发、Mod、vibe coding 的工作台。">
-    <meta name="theme-color" content="#f5f0e6">
-    <title>ZLOONG 工房 · Hanako箱庭</title>
-    <link rel="icon" href="images/favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.cn">
-    <link href="https://fonts.googleapis.cn/css2?family=Averia+Gruesa+Libre&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="css/workshop.css">
-    <!-- <link rel="stylesheet" href="css/seal.css"> -->
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="ZLOONG（Dragonzhi）：做游戏，也做 AI 应用。">
+<meta name="theme-color" content="#F2F5F7">
+<title>ZLOONG · Dragonzhi</title>
+<link rel="icon" href="images/favicon.png">
+<link rel="stylesheet" href="css/tokens-screen.css">
+<link rel="stylesheet" href="css/site.css">
 </head>
 <body>
 
-<div class="wrap">
+<div class="rails" aria-hidden="true"><i></i></div>
 
-    <!-- 报眉 -->
-    <div class="eyebrow">
-        <span><span class="brand-name">ZLOONG 工房</span> · 与箱庭同院 <span class="live">● 常开</span></span>
-        <span id="today">2026年9月4日 · 星期五</span>
-        <span>编辑：ZLOONG · 排印：Hanako</span>
+<header class="bar">
+  <div class="wrap">
+    <a class="brand" href="index.html">ZLOONG<span class="brand-x"> / DRAGONZHI</span></a>
+    <span class="right">
+      <span class="state state--live">在跑 <span data-stat="running">04</span> 件</span>
+      <span class="hide-sm today" id="today">2026.10.27</span>
+      <a class="link navlink" href="works.html">作品</a>
+    </span>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-grid">
+        <div>
+          <h1 class="name">ZLOONG<em>Dragonzhi · 个人主页</em></h1>
+          <p class="tag">做游戏，也做 AI 应用。<b>能玩、能跑、能按，而且一直在长。</b>
+            <span class="lead">7 件作品，4 件还在跑。</span>
+          </p>
+          <nav class="links">
+            <a class="link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub</a>
+            <a class="link" href="https://space.bilibili.com/304097408" target="_blank" rel="noreferrer">B 站 智LONZ</a>
+            <a class="link" href="mailto:dzloong@foxmail.com">dzloong@foxmail.com</a>
+          </nav>
+        </div>
+
+        <div class="hero-side">
+          <div class="scale scale--flat">
+            <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v" data-stat="works">07</span></div>
+            <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v" data-stat="running">04</span></div>
+            <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v" data-stat="copyright">03</span></div>
+            <div class="scale__row"><span class="scale__k">B 站</span><span class="scale__v" data-stat="bilibili">30k</span></div>
+            <div class="scale__row"><span class="scale__k">commits</span><span class="scale__v"><span data-stat="commits">1.9K</span> / 年</span></div>
+            <div class="scale__row"><span class="scale__k">日报</span><span class="scale__v"><span data-stat="daily">50+</span> 期</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 水位陈列：七块立方体，位置就是状态。指一块，下面报一块。 -->
+      <div class="shelf" data-shelf>
+        <div class="shelf__deck">
+          <span class="shelf__rule" aria-hidden="true"></span>
+
+          <a class="shelf__cell" data-s="on" href="works.html#w1" style="--i:0"
+             data-no="01" data-name="风织雨 Weaving Rain" data-meta="在跑 · 2026.10.20 · 现在能玩"
+             aria-label="01 风织雨 Weaving Rain，在跑，2026.10.20，现在能玩">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+
+          <a class="shelf__cell" data-s="on" href="works.html#w2" style="--i:1"
+             data-no="02" data-name="IterTrip" data-meta="在跑 · M24 · 1.3 万行"
+             aria-label="02 IterTrip，在跑，1.3 万行">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+
+          <a class="shelf__cell" data-s="on" href="works.html#w3" style="--i:2"
+             data-no="03" data-name="免疫联结 ImmuneLink" data-meta="在跑 · 2025.12 · 在线能玩"
+             aria-label="03 免疫联结 ImmuneLink，在跑，在线能玩">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+
+          <a class="shelf__cell" data-s="on" href="works.html#w4" style="--i:3"
+             data-no="04" data-name="掷弹 Mod · CounterStrike Grenades" data-meta="在跑 · 2026.02 · 已上线"
+             aria-label="04 掷弹 Mod CounterStrike Grenades，在跑，已上线">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+
+          <a class="shelf__cell" data-s="air" href="works.html#w5" style="--i:4"
+             data-no="05" data-name="棱镜 · 碧芙洛斯" data-meta="在制 · Godot 4 · 还没开"
+             aria-label="05 棱镜 碧芙洛斯，在制，暂时还不能玩">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+
+          <a class="shelf__cell" data-s="sunk" href="works.html#w6" style="--i:5"
+             data-no="06" data-name="TriHorny4Link" data-meta="已归档 · 2026.03 · Game Jam"
+             aria-label="06 TriHorny4Link，已归档">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--sunk" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+
+          <a class="shelf__cell" data-s="sunk" href="works.html#w7" style="--i:6"
+             data-no="07" data-name="像素火影 · 秽土柱间" data-meta="已归档 · Unity 2D · 成品视频"
+             aria-label="07 像素火影 秽土柱间，已归档">
+            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--sunk" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
+          </a>
+        </div>
+
+        <p class="shelf__read" aria-hidden="true">
+          <span class="shelf__read-no" data-r-no>01</span>
+          <span class="shelf__read-name" data-r-name>风织雨 Weaving Rain</span>
+          <span class="shelf__read-meta" data-r-meta>在跑 · 2026.10.20 · 现在能玩</span>
+        </p>
+      </div>
     </div>
+  </section>
 
-    <!-- 报头墙 -->
-    <header class="wall">
-        <span class="seal samp">常开<br>OPEN</span>
-        <h1>ZLOONG 工房</h1>
-        <div class="sub">THE WORKSHOP · 手作与代码的台面</div>
-    </header>
-    <div class="rule-double"></div>
+  <section class="now">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="no">01</span>
+        <h2>现在</h2>
+        <span class="meta">最新一件 · 2026.10.20 · 单人 13 天</span>
+      </div>
 
-    <!-- 今日一言 -->
-    <div class="daily">
-        <div class="quote">「 make games, have fun, and ship it someday. 」</div>
-        <div class="who">— 钉在墙上的话 · 手机电量与动力同步下降中 (˶ᵔ ᵕ ᵔ˶)</div>
+      <div class="figure">
+        <span class="state state--live badge">可试玩</span>
+        <img src="images/projects/weaving-rain-gameplay.jpg"
+             alt="风织雨实机画面：风把湿空气推上岛屿山坡成云，云雨落在农田与水库上"
+             width="1600" height="900" fetchpriority="high">
+      </div>
+
+      <div class="now__meta">
+        <h3>风织雨 Weaving Rain</h3>
+        <span class="type">Godot 4.7 · 天气操控解谜 · 单人开发</span>
+        <a class="btn" href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer">TapTap 试玩 ↗</a>
+      </div>
     </div>
+  </section>
 
-    <!-- 台面标注 -->
-    <div class="bench-label">
-        <span class="t">进门</span>
-        <span class="en">HELLO &amp; MACHINE</span>
+  <section class="about">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="no">02</span>
+        <h2>关于</h2>
+        <span class="meta">计算机在读 · 游戏是老手艺 · AI 是现在的活</span>
+      </div>
+
+      <div class="about-grid">
+        <div>
+          <p><strong>计算机在读。</strong>游戏开发是做了几年的老手艺。</p>
+          <p><strong>现在主要做 AI 应用。</strong>把大模型能力落成能跑起来的产品，整条链路自己走一遍。</p>
+          <p><strong>每天出一份日报。</strong>Hanako 箱庭，50+ 期，没断过。</p>
+          <p class="fav">♪ 洛天依 <b>#66CCFF</b></p>
+        </div>
+
+        <div class="rows">
+          <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+          <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+          <div class="rows__r"><span>软著</span><span>3 项</span></div>
+          <div class="rows__r"><span>commits</span><span>1.9K / 年</span></div>
+          <div class="rows__r"><span>B 站</span><span>30k 关注 · 4.8M 播放</span></div>
+          <div class="rows__r"><span>日报</span><span><a href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">Hanako 箱庭 ↗</a></span></div>
+          <div class="rows__r"><span>歌单</span><span><a href="luotianyi/">洛天依歌单 ↗</a></span></div>
+        </div>
+      </div>
+
+      <div class="sign">
+        <div class="stateobj" data-s="on" aria-hidden="true">
+          <svg class="cube" viewBox="-1 -1 2 2"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg>
+        </div>
+        <span class="sign__t">已上线 · 此刻落在线上</span>
+      </div>
     </div>
+  </section>
 
-    <!-- 融合版台面：每张贴贴可拖动 -->
-    <main class="desk">
+  <section class="door">
+    <div class="wrap">
+      <div class="sec-head">
+        <span class="no">03</span>
+        <h2>联系</h2>
+        <span class="meta">有事按这里</span>
+      </div>
 
-        <!-- "重要"印章 -->
-        <div class="stamp-important" aria-hidden="true">
-            <svg viewBox="0 0 70 70" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="35" cy="35" r="32" fill="none" stroke="#8b2c1f" stroke-width="3"/>
-                <circle cx="35" cy="35" r="27" fill="none" stroke="#8b2c1f" stroke-width="1"/>
-                <text x="35" y="28" text-anchor="middle" fill="#8b2c1f" font-family="serif" font-size="14" font-weight="bold" letter-spacing="2">重要</text>
-                <text x="35" y="46" text-anchor="middle" fill="#8b2c1f" font-family="monospace" font-size="9" letter-spacing="1">IMPORTANT</text>
-                <path d="M10 35 L60 35" stroke="#8b2c1f" stroke-width="1" stroke-dasharray="2,3" opacity="0.5"/>
-            </svg>
-        </div>
+      <p class="door__line">要找我，或者想看源码和工程过程。</p>
+      <div class="door__acts">
+        <button class="btn" type="button" data-copy-email data-email="dzloong@foxmail.com">复制邮箱</button>
+        <span class="door__mail">dzloong@foxmail.com</span>
+        <a class="link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub @Dragonzhi</a>
+        <a class="link" href="https://space.bilibili.com/304097408" target="_blank" rel="noreferrer">B 站 智LONZ</a>
+      </div>
+    </div>
+  </section>
 
-        <!-- ===== 上段 · 进门区 ===== -->
+</main>
 
-        <!-- Hero 便签纸 -->
-        <section class="paper paper--hero" data-desk-card="hero">
-            <p class="hero-hello samp">~/workshop <span class="mark">▌</span> 门没锁，随便看</p>
-            <h2 class="hero-title"><span id="typed">Hi, I'm Dragonzhi.</span><span class="caret" aria-hidden="true"></span></h2>
-            <p class="hero-sub">一个喜欢做游戏的学生。这间工房里摆着我的作品、<br>Mod 练习和一点 vibe coding 的痕迹。</p>
-            <p class="hero-links samp">
-                <a href="mailto:dzloong@foxmail.com">Email ↗</a> ·
-                <a href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">隔壁箱庭 ↗</a> ·
-                <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub ↗</a>
-            </p>
-        </section>
+<footer class="foot">
+  <div class="wrap">
+    <div class="row">
+      <span>© <span data-stat="year">2026</span> ZLOONG · Dragonzhi</span>
+      <span><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a></span>
+    </div>
+  </div>
+</footer>
 
-        <!-- about.md：文案在 files/about.md 里改 -->
-        <section class="paper paper--about" data-desk-card="about">
-            <h2 class="paper-title samp">about.md</h2>
-            <div id="about-body"><!-- 由 js/workshop.js 填充 --></div>
-        </section>
-
-        <!-- now.md：文案在 files/now.md 里改 -->
-        <section class="paper paper--now" data-desk-card="now">
-            <h2 class="paper-title samp">now.md</h2>
-            <ul class="now-list" id="now-list">
-                <li><span class="now-dot"></span>打磨「棱镜：碧芙洛斯」卡牌核心玩法</li>
-                <li><span class="now-dot"></span>学 Godot 4 的渲染管线和 shader</li>
-                <li><span class="now-dot"></span>每天早上出一份 Hanako 箱庭日报</li>
-            </ul>
-            <p class="paper-foot samp">updated: <span data-current-year>2026</span> · Make Continually</p>
-        </section>
-
-        <!-- ===== 中段 · 档案区 ===== -->
-
-        <!-- projects 档案册 -->
-        <section class="paper paper--projects" id="projects" data-desk-card="projects">
-            <div class="binding-edge" aria-hidden="true"></div>
-            <div class="paper-head">
-                <h2 class="paper-title samp">projects/ 档案架</h2>
-                <span class="paper-count samp">共肆件 · 壹件在制</span>
-            </div>
-            <ol class="proj-list">
-                <li class="proj">
-                    <div class="proj-inner">
-                        <span class="proj-index">第壹件</span>
-                        <div class="proj-main">
-                            <h3>免疫联结 ImmuneLink <span class="state">获奖</span></h3>
-                            <p class="proj-type samp">Godot 4 · 2D Tower Defense · 2025 卡赢杯公益赛</p>
-                            <p class="proj-desc">主题是「桥」的塔防：画桥连资源点、升级防线抵御病原。设计、编程、像素美术独立完成，支持关卡导入导出。</p>
-                            <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">Pixel Art</code><code class="tag">JSON</code></p>
-                        </div>
-                        <div class="proj-links samp">
-                            <a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noreferrer">在线游玩 ↗</a>
-                            <a href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noreferrer">源码 ↗</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="proj">
-                    <div class="proj-inner">
-                        <span class="proj-index">第贰件</span>
-                        <div class="proj-main">
-                            <h3>棱镜：碧芙洛斯 <span class="state">在制</span></h3>
-                            <p class="proj-type samp">Godot 4 · 卡牌游戏 · 抖音小游戏</p>
-                            <p class="proj-desc">Uno 机制 × 七色光谱相邻出牌，光谱反转、+2/+4 连锁、喊「棱镜」。正在打磨成完整的小游戏。</p>
-                            <p class="proj-tags"><code class="tag">Godot 4</code><code class="tag">卡牌</code><code class="tag">WebGL</code></p>
-                        </div>
-                        <div class="proj-links samp">
-                            <a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">源码 ↗</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="proj">
-                    <div class="proj-inner">
-                        <span class="proj-index">第叁件</span>
-                        <div class="proj-main">
-                            <h3>TriHorny4Link</h3>
-                            <p class="proj-type samp">Godot 塔防 · gameplay practice</p>
-                            <p class="proj-desc">动态路径重规划、敌人对象池和事件驱动系统，顺便做了些单位很多时的优化。</p>
-                            <p class="proj-tags"><code class="tag">GDScript</code><code class="tag">A*</code><code class="tag">Object Pool</code></p>
-                        </div>
-                        <div class="proj-links samp">
-                            <a href="https://b23.tv/EZKZQSl" target="_blank" rel="noreferrer">演示 ↗</a>
-                        </div>
-                    </div>
-                </li>
-                <li class="proj">
-                    <div class="proj-inner">
-                        <span class="proj-index">第肆件</span>
-                        <div class="proj-main">
-                            <h3>CounterStrikeGrenades</h3>
-                            <p class="proj-type samp">Minecraft Forge Mod · systems</p>
-                            <p class="proj-desc">尝试把 CS2 的投掷物机制搬进 MC，含行为逻辑、简单 3D 资产和 TACZ 兼容。</p>
-                            <p class="proj-tags"><code class="tag">Forge</code><code class="tag">Kotlin</code><code class="tag">Blockbench</code></p>
-                        </div>
-                        <div class="proj-links samp">
-                            <a href="https://github.com/ThePiSquad/CounterStrikeGrenades" target="_blank" rel="noreferrer">源码 ↗</a>
-                        </div>
-                    </div>
-                </li>
-            </ol>
-            <p class="paper-foot samp">完整旧版作品集: <a href="legacy/portfolio.html">legacy/portfolio.html ↗</a></p>
-        </section>
-
-        <!-- links.md 书签：文案在 files/links.md 里改 -->
-        <section class="paper paper--links" id="links" data-desk-card="links">
-            <h2 class="paper-title samp">links.md</h2>
-            <ul class="link-list samp">
-                <li><a href="pages/gallery.html">gallery <span class="dim">/ 洛天依画廊</span> ↗</a></li>
-                <li><a href="pages/portfolio.html">portfolio <span class="dim">/ 作品集</span> ↗</a></li>
-                <li><a href="pages/resume.html">resume <span class="dim">/ 技术履历</span> ↗</a></li>
-                <li><a href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub <span class="dim">/ @Dragonzhi</span> ↗</a></li>
-                <li class="link-mail">
-                    <span>dzloong@foxmail.com</span>
-                    <button type="button" class="btn btn--line samp" data-copy-email data-email="dzloong@foxmail.com">copy</button>
-                </li>
-            </ul>
-        </section>
-
-        <!-- motto 黄色便签：文案在 files/motto.txt 里改 -->
-        <section class="paper paper--motto" data-desk-card="motto">
-            <div class="motto-title samp">motto.txt</div>
-            <blockquote id="motto-quote">台面常乱，<br>ship 不断。</blockquote>
-            <p class="motto-foot samp" id="motto-foot">— 便签 · 原句钉在进门墙上</p>
-        </section>
-
-        <!-- resume 档案便签纸：履历与求职意向 -->
-        <section class="paper paper--resume" id="resume-card" data-desk-card="resume">
-            <span class="resume-badge samp">档案 / CV</span>
-            <h2 class="paper-title samp">resume.md</h2>
-            <div class="resume-intro">
-                <p class="resume-who"><strong>徐同学</strong> · ZLOONG · 计科本科在读</p>
-                <p class="resume-intent"><span class="badge-mini"><span class="badge-k">状态</span><span class="badge-v red">求职中</span></span> 寻找 AI 应用开发实习</p>
-                <p class="resume-desc">约 1.3 万行 IterTrip 落地工程 · 3 项国家软著 · 50+ 期连续技术日报 · 比赛获奖。</p>
-            </div>
-            <div class="resume-actions samp">
-                <a href="pages/resume.html" class="link-dash">查看技术履历 ↗</a>
-            </div>
-        </section>
-
-        <!-- 自发现档案架：由 data/files-manifest.json + files/ 驱动 -->
-        <div class="paper paper--shelf" id="auto-shelf" data-desk-card="shelf" aria-label="档案架"><!-- 新增 .md 自动成卡 --></div>
-
-        <!-- 工房印章（已隐藏）：如需找回取消下方注释即可 -->
-        <!--
-        <div id="seal-rig" role="button" tabindex="0"
-             aria-label="工房印章：拖动到纸卡上按下即可盖章，双击归位">
-            <canvas id="seal-canvas" aria-hidden="true"></canvas>
-        </div>
-        <button type="button" class="btn btn--ghost desk-reset samp" id="seal-clear" hidden>抹掉印章</button>
-        -->
-
-        <!-- 台面工具：拖动提示 + 还原 -->
-        <div class="desk-tools" aria-label="台面工具">
-            <span class="drag-hint samp" id="drag-hint">贴贴可以拖动哦</span>
-            <button type="button" class="btn btn--ghost desk-reset samp" id="desk-reset">还原台面</button>
-        </div>
-    </main>
-
-    <!-- 导览牌 -->
-    <nav class="directory" aria-label="本区导览">
-        <div class="head">本区导览 <span class="en">CONTENTS</span></div>
-        <a class="dir-item" href="pages/gallery.html">
-            <span class="no">壹</span>
-            <span class="info"><span class="t">画廊版</span><span class="d">洛天依同人画廊 · 青色频道</span></span>
-            <span class="state calm">已上线</span>
-            <span class="arrow">→</span>
-        </a>
-        <a class="dir-item" href="pages/portfolio.html">
-            <span class="no">贰</span>
-            <span class="info"><span class="t">档案架</span><span class="d">作品集存档</span></span>
-            <span class="state calm">存档</span>
-            <span class="arrow">→</span>
-        </a>
-        <a class="dir-item" href="/itertrip/" target="_blank" rel="noreferrer">
-            <span class="no">叁</span>
-            <span class="info"><span class="t">IterTrip 启程</span><span class="d">AI 旅行规划 · 攻略变地图 · /itertrip</span></span>
-            <span class="state hot">新开</span>
-            <span class="arrow">→</span>
-        </a>
-        <a class="dir-item" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
-            <span class="no">肆</span>
-            <span class="info"><span class="t">隔壁箱庭</span><span class="d">每日日报 · 每日一阅 · dragonzhi.xyz/hanako</span></span>
-            <span class="state">今日已发</span>
-            <span class="arrow">→</span>
-        </a>
-        <a class="dir-item" href="pages/resume.html">
-            <span class="no">伍</span>
-            <span class="info"><span class="t">技术履历</span><span class="d">个人技术履历 · 技能矩阵与工程实绩</span></span>
-            <span class="state hot">求职中</span>
-            <span class="arrow">→</span>
-        </a>
-    </nav>
-
-    <!-- 报尾 -->
-    <footer class="colophon">
-        <img class="colophon-avatar" src="images/head-avatar.jpg" alt="工房主人 ZLOONG" width="72" height="72">
-        <div class="end">— ZLOONG · 工房主 —</div>
-        <div class="meta">
-            ZLOONG 工房 · 与 Hanako 箱庭同院：日报在隔壁，作品在这屋<br>
-            <a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">闽ICP备20260330551号-1</a> · https://dragonzhi.xyz/<br>
-            隔壁箱庭每日出报 · 明晨八时再会<br>
-            <button type="button" class="btn btn--ghost signal-trigger" data-signal-trigger aria-controls="signal" aria-expanded="false">SIGNAL / 66.00 MHz</button>
-        </div>
-    </footer>
-</div>
-
-<!-- 彩蛋：工房角落的收音机 -->
-<div class="signal-layer" id="signal" data-signal aria-hidden="true">
-    <button type="button" class="signal-backdrop" data-signal-close aria-label="关闭"></button>
-    <aside class="signal-console" role="dialog" aria-modal="true" aria-labelledby="signal-title">
-        <div class="signal-bar">
-            <span>RECEIVER://SIDE_CHANNEL_01</span>
-            <button type="button" data-signal-close>[ ESC ]</button>
-        </div>
-        <p class="signal-code">VOICEPRINT / #66CCFF / VSINGER</p>
-        <h2 id="signal-title">工房角落的收音机响了。<br>66.00 MHz，一段歌声。</h2>
-        <p>洛天依，编辑的小爱好频道。去 <a href="pages/gallery.html">画廊版</a> 看看她。</p>
-    </aside>
-</div>
-
-<script src="data/content.js"></script>
-<script src="data/desk-config.js"></script>
-<script src="js/workshop.js"></script>
-<!-- <script src="js/seal.js"></script> -->
+<script src="js/shelf.js"></script>
+<script src="js/home.js"></script>
 </body>
 </html>

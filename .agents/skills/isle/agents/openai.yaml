@@ -1,0 +1,4 @@
+interface:
+  display_name: "案屿 · 项目交接"
+  short_description: "按实际进展维护项目任务、交接摘要与署名留痕，帮助不同 Agent 顺序交接"
+  default_prompt: "使用 $isle 整理本次会话结果并执行收工回写，署名尚未指定时先向我确认。"
