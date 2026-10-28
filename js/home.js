@@ -90,4 +90,50 @@
       } catch (e2) { fail(); }
     });
   }());
+
+  /* ---- 主名浮雕：随整页指针的时差微动。停下衰减归位，归位即停帧 ---- */
+  (function nameLift() {
+    var plate = document.querySelector('.name-plate');
+    var face = document.querySelector('[data-name-solid]');
+    if (!plate || !face || !window.matchMedia) { return; }
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+
+    var MAX = 6;        /* 最大转动角（度） */
+    var EASE = 0.085;   /* 跟随系数：越小，时差越长 */
+    var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+
+    var write = function () {
+      plate.style.transform = 'rotateX(' + cx.toFixed(2) + 'deg) rotateY(' + cy.toFixed(2) + 'deg)';
+      face.style.backgroundPosition =
+        (50 - cy * 2.4).toFixed(1) + '% ' + (50 - cx * 1.8).toFixed(1) + '%';
+    };
+
+    var tick = function () {
+      cx += (tx - cx) * EASE;
+      cy += (ty - cy) * EASE;
+      if (Math.abs(tx - cx) < 0.02 && Math.abs(ty - cy) < 0.02) {
+        cx = tx; cy = ty; write(); raf = 0; return;   /* 归位即停帧 */
+      }
+      write();
+      raf = requestAnimationFrame(tick);
+    };
+
+    var aim = function (e) {
+      var nx = (e.clientX / window.innerWidth - 0.5) * 2;
+      var ny = (e.clientY / window.innerHeight - 0.5) * 2;
+      tx = ny * MAX * 0.7;      /* 指针在下方 → 下沿朝观者 */
+      ty = -nx * MAX;           /* 指针在右侧 → 右沿朝观者 */
+      if (!raf) { raf = requestAnimationFrame(tick); }
+    };
+
+    var idle = function () {
+      tx = 0; ty = 0;
+      if (!raf) { raf = requestAnimationFrame(tick); }
+    };
+
+    window.addEventListener('pointermove', aim, { passive: true });
+    document.documentElement.addEventListener('mouseleave', idle);
+    window.addEventListener('blur', idle);
+  }());
+
 }());
