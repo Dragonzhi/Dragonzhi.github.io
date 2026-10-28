@@ -327,6 +327,9 @@ main, .bar, .foot { position: relative; z-index: 2; }
   height: var(--h);
 }
 
+/* 七枚的轨道：桌面透明，仍由 deck 等分七列；窄屏才变成可横向滑动的一排 */
+.shelf__track { display: contents; }
+
 /* 线下的暗面：沉下去的东西在一片更深的水里 */
 .shelf__deck::after {
   content: "";
@@ -665,7 +668,21 @@ main, .bar, .foot { position: relative; z-index: 2; }
 }
 
 
-/* ---------- 关于页 ---------- */
+/* ---------- 现在 / 关于 ---------- */
+
+/* 章节间距 112：本章收口 16 + 下一章 96 */
+.now { padding: var(--s9) 0 var(--s4); }
+.now__line {
+  margin: var(--s6) 0 0;
+  max-width: 28em;
+  font-size: var(--t2);
+  font-weight: 600;
+  line-height: 1.55;
+  letter-spacing: -.01em;
+  color: var(--fg);
+  text-wrap: pretty;
+}
+.now__line b { font-weight: 800; }
 
 .about { padding: var(--s9) 0 0; }
 .about-grid {
@@ -794,7 +811,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   .hero { padding: var(--s7) 0 var(--s5); }
   .sec-works--wip .item,
   .sec-works--arch .item { padding: var(--s5) 0; }
-  .works, .about, .door { padding-top: var(--s7); }
+  .works, .now, .about, .door { padding-top: var(--s7); }
   .door { padding-bottom: var(--s8); }
   .bar .wrap { min-height: 42px; }
   .bar .state { display: none; }
@@ -803,8 +820,20 @@ main, .bar, .foot { position: relative; z-index: 2; }
   .sec-head .meta { margin-left: 0; width: 100%; text-align: left; padding-bottom: 0; }
   .item { padding: var(--s6) 0; }
   .figure .badge { top: 12px; left: 12px; }
-  .shelf { --h: 150px; --line: 90px; --cw: 40px; --lift: 12px; --dip: 4px; }
-  .shelf__deck { gap: var(--s2); }
+  /* 七枚保住 72px 立体门槛，改成一排横向滑动；线上/悬空/线下的位置语义不变 */
+  .shelf { --h: 176px; --line: 96px; --cw: 72px; --lift: 14px; --dip: 6px; }
+  .shelf__deck { grid-template-columns: 1fr; gap: 0; }
+  .shelf__track {
+    display: flex;
+    gap: var(--s2);
+    height: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scrollbar-width: none;
+    overscroll-behavior-x: contain;
+  }
+  .shelf__track::-webkit-scrollbar { display: none; }
+  .shelf__cell { flex: 0 0 var(--cw); }
   .scale__k { letter-spacing: .08em; }
   .scale__v { font-size: var(--t4); white-space: nowrap; }
   .sign { flex-direction: column; align-items: flex-start; gap: var(--s4); }
