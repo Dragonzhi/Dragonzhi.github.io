@@ -171,7 +171,12 @@ main, .bar, .foot { position: relative; z-index: 2; }
     inset 0 2px 5px rgba(0, 0, 0, .35);
 }
 
-[data-theme="cool"] .btn,
+[data-theme="cool"] .btn {
+  box-shadow:
+    inset 0 -1px 0 rgba(0, 0, 0, .12),
+    0 1px 0 rgba(0, 0, 0, .12),
+    0 3px 10px rgba(18, 23, 26, .18);
+}
 [data-theme="warm"] .btn {
   box-shadow:
     inset 0 -1px 0 rgba(0, 0, 0, .10),
@@ -251,7 +256,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
 
 /* ---------- 首页 · 门牌 ---------- */
 
-.hero { padding: var(--s8) 0 var(--s7); }
+.hero { padding: var(--s9) 0 0; }
 .hero-grid {
   display: grid;
   grid-template-columns: 1fr 330px;
@@ -278,7 +283,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   color: var(--fg-faint);
 }
 .tag {
-  margin: var(--s6) 0 0;
+  margin: var(--s5) 0 0;
   max-width: 30em;
   color: var(--fg-dim);
   font-size: var(--t3);
@@ -292,7 +297,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   display: flex;
   flex-wrap: wrap;
   gap: var(--s5);
-  margin-top: var(--s7);
+  margin-top: var(--s6);
   font-family: var(--mono);
   font-size: var(--t5);
   letter-spacing: .1em;
@@ -422,7 +427,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   display: flex;
   align-items: baseline;
   justify-content: space-between;
-  padding: var(--s3) 0;
+  padding: var(--s2) 0;
   border-bottom: 1px solid var(--line);
 }
 .scale__row:first-child { padding-top: 0; }
@@ -445,9 +450,30 @@ main, .bar, .foot { position: relative; z-index: 2; }
 
 .hero-side { display: flex; flex-direction: column; gap: var(--s6); }
 .scale--flat { border-left: 0; padding-left: 0; }
-.bar .navlink { border-bottom: 0; color: var(--fg-dim); letter-spacing: .13em; }
-.bar .navlink:hover { color: var(--fg); }
-.bar .navlink[aria-current="page"] { color: var(--fg); }
+/* 顶栏的页间切换：当前页是一枚实心抬起的键，另一页是次级链接 */
+.tabs { display: flex; align-items: center; gap: var(--s2); }
+.tab {
+  display: inline-flex;
+  align-items: center;
+  height: 32px;
+  padding: 0 calc(var(--s4) - .2em) 0 var(--s4);   /* 右侧补回字距，字在键里居中 */
+  font-family: var(--mono);
+  font-size: var(--t4);
+  letter-spacing: .2em;
+  text-decoration: none;
+  color: var(--fg-dim);
+  border-bottom: 1px solid transparent;
+  transition: color var(--press) var(--ease), border-color var(--press) var(--ease);
+}
+.tab:hover { color: var(--fg); border-color: var(--line-strong); }
+.tab--on {
+  background: var(--btn-bg);
+  color: var(--fg);
+  border-bottom-color: transparent;
+}
+[data-theme="dark"] .tab--on { box-shadow: 0 1px 0 rgba(0, 0, 0, .35), 0 3px 10px rgba(0, 0, 0, .28); }
+[data-theme="cool"] .tab--on { box-shadow: inset 0 -1px 0 rgba(0, 0, 0, .08), 0 1px 0 rgba(0, 0, 0, .12), 0 3px 10px rgba(18, 23, 26, .18); }
+[data-theme="warm"] .tab--on { box-shadow: 0 1px 0 rgba(0, 0, 0, .10), 0 3px 10px rgba(18, 23, 26, .10); }
 
 /* ---------- 图：凹进去的一块 ---------- */
 
@@ -473,7 +499,11 @@ main, .bar, .foot { position: relative; z-index: 2; }
     inset 0 0 0 1px rgba(0, 0, 0, .35),
     inset 0 2px 8px rgba(0, 0, 0, .28);
 }
-[data-theme="cool"] .figure::after,
+[data-theme="cool"] .figure::after {
+  box-shadow:
+    inset 0 0 0 1px rgba(18, 23, 26, .26),
+    inset 0 2px 8px rgba(18, 23, 26, .22);
+}
 [data-theme="warm"] .figure::after {
   box-shadow:
     inset 0 0 0 1px rgba(18, 23, 26, .18),
@@ -486,16 +516,13 @@ main, .bar, .foot { position: relative; z-index: 2; }
   padding: var(--s2) var(--s3);
   background: rgba(8, 8, 10, .88);
 }
-
-/* ---------- 现在 ---------- */
-
-.now {
-  background: var(--surface);
-  padding: var(--s9) 0 96px;
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
+/* 浅色主题里状态字是深青，压在深色块上会读不清，角标跟着变浅底 */
+[data-theme="cool"] .figure .badge,
+[data-theme="warm"] .figure .badge {
+  background: rgba(242, 245, 247, .88);
 }
-.now .figure { margin-top: var(--s6); }
+
+/* ---------- 作品名/机器行（作品页首件复用） ---------- */
 
 .now__meta {
   display: flex;
@@ -525,7 +552,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .works .sec-head { margin-bottom: var(--s2); }
 
 .sec-works {
-  padding-top: var(--s8);
+  padding-top: var(--s9);
 }
 .sec-works:first-of-type {
   padding-top: var(--s7);
@@ -546,6 +573,10 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .item:nth-of-type(even) .item__fig { order: 2; }
 .item--bare { grid-template-columns: 1fr; }
 .item--bare .item__body { max-width: 44em; }
+
+/* §02 §03 故意轻：在制 / 归档收成一行字的密度，与上面四件的重量成对比 */
+.sec-works--wip .item,
+.sec-works--arch .item { padding: var(--s4) 0; }
 
 /* §01 在跑：大图 1.25fr 1fr */
 .sec-works--live .item:not(.item--hero):not(.item--bare) {
@@ -760,15 +791,16 @@ main, .bar, .foot { position: relative; z-index: 2; }
 @media (max-width: 767px) {
   :root { --pad: 24px; }
   .rails i { border-color: transparent; }
-  .hero { padding: var(--s8) 0 var(--s7); }
-  .now, .works, .about, .door { padding-top: var(--s7); }
-  .now { padding-bottom: var(--s7); }
+  .hero { padding: var(--s7) 0 var(--s5); }
+  .sec-works--wip .item,
+  .sec-works--arch .item { padding: var(--s5) 0; }
+  .works, .about, .door { padding-top: var(--s7); }
   .door { padding-bottom: var(--s8); }
   .bar .wrap { min-height: 42px; }
+  .bar .state { display: none; }
   .bar .hide-sm { display: none; }
   .sec-head { flex-wrap: wrap; gap: var(--s2) var(--s4); }
   .sec-head .meta { margin-left: 0; width: 100%; text-align: left; padding-bottom: 0; }
-  .now__meta .btn { margin-left: 0; }
   .item { padding: var(--s6) 0; }
   .figure .badge { top: 12px; left: 12px; }
   .shelf { --h: 150px; --line: 90px; --cw: 40px; --lift: 12px; --dip: 4px; }
@@ -794,4 +826,51 @@ main, .bar, .foot { position: relative; z-index: 2; }
     animation-duration: .01ms !important;
     animation-delay: 0ms !important;
   }
+}
+
+/* ---------- WebGL 升级后顶替 SVG 的画布 ---------- */
+
+.shelf__obj > canvas.cube,
+.stateobj > canvas.cube {
+  display: block;
+  width: var(--cw, 30px);
+  height: var(--cw, 30px);
+}
+
+/* 冷白底上的接触影：浅底下影子是物理事实，不是装饰 */
+.shelf__obj { position: relative; }
+.shelf__obj::after,
+.stateobj::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -0.04em;
+  width: 66%;
+  height: 9%;
+  transform: translateX(-50%);
+  background: radial-gradient(ellipse at center, rgba(18,23,26,.18), transparent 70%);
+  filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* ---------- 水位下沿的一池水 ---------- */
+
+.shelf__water {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: calc(var(--line) - 14px);
+  width: 100%;
+  height: calc(100% - var(--line) + 14px);
+  display: block;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 池壁：顶缘与底缘的内阴影，让这块不只是渐变板 */
+.shelf__deck::after {
+  box-shadow:
+    inset 0 12px 16px -14px rgba(18,23,26,.38),
+    inset 0 -20px 26px -22px rgba(18,23,26,.20);
 }

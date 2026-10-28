@@ -15,3 +15,6 @@ _preview_*.pdf
 !.agents/skills/
 .agents/skills/*
 !.agents/skills/isle/
+
+# 本地设计过程稿
+.design/

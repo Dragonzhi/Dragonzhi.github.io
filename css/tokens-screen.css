@@ -80,6 +80,11 @@
   --cube-sunk-left: #3C4448;
   --cube-sunk-right: #272C2F;
 
+  /* WebGL 基色：初值取各组的 --cube-left */
+  --cube-base: #98A2A9;
+  --cube-live-base: var(--qing-2);
+  --cube-sunk-base: #3C4448;
+
   --btn-bg: #191920;
   --btn-bg-hi: #1F1F28;
 }
@@ -87,9 +92,9 @@
 /* ============ 白底黑字 · 冷白 ============ */
 [data-theme="cool"] {
   --bg: #F2F5F7;
-  --surface: #E9EEF1;
-  --frame: #DDE5EA;
-  --line: #D3DCE1;
+  --surface: #E1E8EC;           /* 面板比底深 5%——差值肉眼可感知 */
+  --frame: #D6DEE3;             /* 图框比面板再深一档，水面的暗面也靠它 */
+  --line: #CBD6DB;
   --line-strong: #B9C5CC;
   --rail: rgba(18, 23, 26, .16);
 
@@ -114,6 +119,11 @@
   --cube-sunk-top: #D5DEE3;
   --cube-sunk-left: #B9C5CC;
   --cube-sunk-right: #97A3AB;
+
+  /* WebGL 基色：初值取各组的 --cube-left */
+  --cube-base: #BDC9D0;
+  --cube-live-base: var(--qing-3);
+  --cube-sunk-base: #B9C5CC;
 
   --btn-bg: #FFFFFF;
   --btn-bg-hi: #FFFFFF;
@@ -149,6 +159,11 @@
   --cube-sunk-top: #E5DFD2;
   --cube-sunk-left: #CFC7B6;
   --cube-sunk-right: #B9B0A0;
+
+  /* WebGL 基色：初值取各组的 --cube-left */
+  --cube-base: #D8CFBC;
+  --cube-live-base: var(--qing-3);
+  --cube-sunk-base: #CFC7B6;
 
   --btn-bg: #FFFDF8;
   --btn-bg-hi: #FFFFFF;

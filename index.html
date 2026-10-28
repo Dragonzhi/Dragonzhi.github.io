@@ -20,7 +20,10 @@
     <span class="right">
       <span class="state state--live">在跑 <span data-stat="running">04</span> 件</span>
       <span class="hide-sm today" id="today">2026.10.27</span>
-      <a class="link navlink" href="works.html">作品</a>
+      <nav class="tabs" aria-label="页面切换">
+        <a class="tab tab--on" href="index.html" aria-current="page">首页</a>
+        <a class="tab" href="works.html">作品</a>
+      </nav>
     </span>
   </div>
 </header>
@@ -33,7 +36,7 @@
         <div>
           <h1 class="name">ZLOONG<em>Dragonzhi · 个人主页</em></h1>
           <p class="tag">做游戏，也做 AI 应用。<b>能玩、能跑、能按，而且一直在长。</b>
-            <span class="lead">7 件作品，4 件还在跑。</span>
+            <span class="lead"><a class="link" href="works.html">07 件作品 · 04 件还在跑 ↗</a></span>
           </p>
           <nav class="links">
             <a class="link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer">GitHub</a>
@@ -54,90 +57,13 @@
         </div>
       </div>
 
-      <!-- 水位陈列：七块立方体，位置就是状态。指一块，下面报一块。 -->
-      <div class="shelf" data-shelf>
-        <div class="shelf__deck">
-          <span class="shelf__rule" aria-hidden="true"></span>
-
-          <a class="shelf__cell" data-s="on" href="works.html#w1" style="--i:0"
-             data-no="01" data-name="风织雨 Weaving Rain" data-meta="在跑 · 2026.10.20 · 现在能玩"
-             aria-label="01 风织雨 Weaving Rain，在跑，2026.10.20，现在能玩">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-
-          <a class="shelf__cell" data-s="on" href="works.html#w2" style="--i:1"
-             data-no="02" data-name="IterTrip" data-meta="在跑 · M24 · 1.3 万行"
-             aria-label="02 IterTrip，在跑，1.3 万行">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-
-          <a class="shelf__cell" data-s="on" href="works.html#w3" style="--i:2"
-             data-no="03" data-name="免疫联结 ImmuneLink" data-meta="在跑 · 2025.12 · 在线能玩"
-             aria-label="03 免疫联结 ImmuneLink，在跑，在线能玩">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-
-          <a class="shelf__cell" data-s="on" href="works.html#w4" style="--i:3"
-             data-no="04" data-name="掷弹 Mod · CounterStrike Grenades" data-meta="在跑 · 2026.02 · 已上线"
-             aria-label="04 掷弹 Mod CounterStrike Grenades，在跑，已上线">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--live" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-
-          <a class="shelf__cell" data-s="air" href="works.html#w5" style="--i:4"
-             data-no="05" data-name="棱镜 · 碧芙洛斯" data-meta="在制 · Godot 4 · 还没开"
-             aria-label="05 棱镜 碧芙洛斯，在制，暂时还不能玩">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-
-          <a class="shelf__cell" data-s="sunk" href="works.html#w6" style="--i:5"
-             data-no="06" data-name="TriHorny4Link" data-meta="已归档 · 2026.03 · Game Jam"
-             aria-label="06 TriHorny4Link，已归档">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--sunk" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-
-          <a class="shelf__cell" data-s="sunk" href="works.html#w7" style="--i:6"
-             data-no="07" data-name="像素火影 · 秽土柱间" data-meta="已归档 · Unity 2D · 成品视频"
-             aria-label="07 像素火影 秽土柱间，已归档">
-            <span class="shelf__cube"><span class="shelf__obj"><svg class="cube cube--sunk" viewBox="-1 -1 2 2" aria-hidden="true"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg></span></span>
-          </a>
-        </div>
-
-        <p class="shelf__read" aria-hidden="true">
-          <span class="shelf__read-no" data-r-no>01</span>
-          <span class="shelf__read-name" data-r-name>风织雨 Weaving Rain</span>
-          <span class="shelf__read-meta" data-r-meta>在跑 · 2026.10.20 · 现在能玩</span>
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <section class="now">
-    <div class="wrap">
-      <div class="sec-head">
-        <span class="no">01</span>
-        <h2>现在</h2>
-        <span class="meta">最新一件 · 2026.10.20 · 单人 13 天</span>
-      </div>
-
-      <div class="figure">
-        <span class="state state--live badge">可试玩</span>
-        <img src="images/projects/weaving-rain-gameplay.jpg"
-             alt="风织雨实机画面：风把湿空气推上岛屿山坡成云，云雨落在农田与水库上"
-             width="1600" height="900" fetchpriority="high">
-      </div>
-
-      <div class="now__meta">
-        <h3>风织雨 Weaving Rain</h3>
-        <span class="type">Godot 4.7 · 天气操控解谜 · 单人开发</span>
-        <a class="btn" href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer">TapTap 试玩 ↗</a>
-      </div>
     </div>
   </section>
 
   <section class="about">
     <div class="wrap">
       <div class="sec-head">
-        <span class="no">02</span>
+        <span class="no">01</span>
         <h2>关于</h2>
         <span class="meta">计算机在读 · 游戏是老手艺 · AI 是现在的活</span>
       </div>
@@ -162,7 +88,7 @@
       </div>
 
       <div class="sign">
-        <div class="stateobj" data-s="on" aria-hidden="true">
+        <div class="stateobj" data-s="on" data-cube-host data-cube-drag aria-hidden="true">
           <svg class="cube" viewBox="-1 -1 2 2"><polygon class="t" points="0,-1 .866,-.5 0,0 -.866,-.5"/><polygon class="l" points="-.866,-.5 0,0 0,1 -.866,.5"/><polygon class="r" points=".866,-.5 .866,.5 0,1 0,0"/></svg>
         </div>
         <span class="sign__t">已上线 · 此刻落在线上</span>
@@ -173,7 +99,7 @@
   <section class="door">
     <div class="wrap">
       <div class="sec-head">
-        <span class="no">03</span>
+        <span class="no">02</span>
         <h2>联系</h2>
         <span class="meta">有事按这里</span>
       </div>
@@ -199,7 +125,7 @@
   </div>
 </footer>
 
-<script src="js/shelf.js"></script>
 <script src="js/home.js"></script>
+<script src="js/cube.js" defer></script>
 </body>
 </html>
