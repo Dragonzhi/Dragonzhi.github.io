@@ -179,4 +179,86 @@ outColor=vec4(pow(c,vec3(1.0/2.2)),1.0);
   document.querySelectorAll('[data-cube-host]').forEach(function (h) {
     try { init(h); } catch (e) { console.error('[cube]', e); }
   });
+
+  /* ---- 入场：手写 2D 物理坠落（重力 + 触线反弹 + 角度回正）。
+     物理只管「怎么落」，不管「落在哪」：终点是 CSS 设计位（transform 归零）。
+     落定即停帧；落线瞬间派发 shelf-impact，water.js 借此起波。 ---- */
+  function drop() {
+    var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var hosts = document.querySelectorAll('[data-cube-host]');
+    var i;
+
+    function reveal(el) { el.style.opacity = '1'; }
+
+    if (calm || !hosts.length) {
+      for (i = 0; i < hosts.length; i++) { reveal(hosts[i]); }
+      return;
+    }
+
+    function fall(host, idx) {
+      var shelf = host.closest('[data-shelf]');
+      var deck = shelf ? shelf.querySelector('.shelf__deck') : null;
+      var r = host.getBoundingClientRect();
+      if (!r.width) { return; }
+
+      var deckTop = deck ? deck.getBoundingClientRect().top : r.top - 160;
+      var crossAt = null;                      // 底缘触到水线时的 y；无水（签名）为 null 不触发
+      if (shelf) {
+        var lineY = deckTop + (parseFloat(getComputedStyle(shelf).getPropertyValue('--line')) || 0);
+        crossAt = lineY - r.bottom;
+      }
+      var y = -((r.top - deckTop) + 150 + (idx % 7) * 26 + Math.random() * 40);
+      var vy = 0;
+      var ang = (Math.random() - .5) * .22;
+      var va = (Math.random() - .5) * 1.1;
+      var G = 2600, REST = .34;
+      var bounced = 0, crossed = false, ground = false;
+      var last = 0;
+
+      setTimeout(function () {
+        reveal(host);
+        last = performance.now();
+        requestAnimationFrame(tick);
+      }, 120 + idx * 90);
+
+      function tick(now) {
+        var dt = Math.min((now - last) / 1000, .032);
+        last = now;
+
+        if (!ground) {
+          vy += G * dt;
+          y += vy * dt;
+          if (crossAt !== null && !crossed && y >= crossAt) {
+            crossed = true;
+            shelf.dispatchEvent(new CustomEvent('shelf-impact', {
+              detail: { clientX: r.left + r.width / 2, force: -(1.4 + Math.min(2.8, vy / 340)) }
+            }));
+          }
+          ang += va * dt;
+          if (y >= 0) {
+            y = 0;
+            if (bounced < 2 && vy > 150) { vy = -vy * REST; va = -va * .5; bounced++; }
+            else { vy = 0; ground = true; }
+          }
+        } else {
+          va += (-ang * 140 - va * 9) * dt;
+          ang += va * dt;
+          if (Math.abs(ang) < .004 && Math.abs(va) < .05) {
+            host.style.transform = '';
+            return;                            // 落定，停帧
+          }
+        }
+        host.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + ang.toFixed(4) + 'rad)';
+        requestAnimationFrame(tick);
+      }
+    }
+
+    for (i = 0; i < hosts.length; i++) {
+      (function (host, idx) {
+        try { fall(host, idx); } catch (err) { reveal(host); }
+      }(hosts[i], i));
+    }
+  }
+
+  drop();
 }());

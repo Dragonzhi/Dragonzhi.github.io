@@ -318,6 +318,8 @@ main, .bar, .foot { position: relative; z-index: 2; }
   grid-template-columns: repeat(7, 1fr);
   gap: var(--s5);
   height: var(--h);
+  /* 坠落阶段压在台面外：方块从顶缘之外落进来，不越过章名 */
+  overflow: hidden;
 }
 
 /* 七枚的轨道：桌面透明，仍由 deck 等分七列；窄屏才变成可横向滑动的一排 */
@@ -366,12 +368,9 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .shelf__cell[data-s="air"]  .shelf__cube { bottom: calc(var(--h) - var(--line) + var(--lift)); }
 .shelf__cell[data-s="sunk"] .shelf__cube { top: calc(var(--line) + 8px); opacity: .8; }
 
-/* 入场：七块依次落位。动的是位置，不是装饰。 */
-.shelf__obj {
-  display: block;
-  animation: settle .6s var(--ease) both;
-  animation-delay: calc(var(--i, 0) * 70ms + 200ms);
-}
+/* 入场：手写物理坠落，由 js/cube.js 驱动。JS 就绪前先藏住；无 JS 时 .drop-ready 不存在，直接在位。 */
+.drop-ready [data-cube-host] { opacity: 0; }
+.shelf__obj { display: block; }
 
 /* 抬起 = 你指到了它 */
 .shelf__cell:hover .shelf__cube,
@@ -408,11 +407,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 }
 .shelf__read-meta { color: var(--fg-faint); text-transform: none; letter-spacing: .06em; }
 
-@keyframes settle {
-  0%   { transform: translateY(-38px); opacity: 0; }
-  62%  { transform: translateY(4px); opacity: 1; }
-  100% { transform: translateY(0); opacity: 1; }
-}
 @keyframes rule-in {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }

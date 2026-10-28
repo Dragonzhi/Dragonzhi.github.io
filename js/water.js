@@ -168,6 +168,12 @@
     }(cells[i]));
   }
 
+  // 立方体入场坠落砸进水里：cube.js 在底缘触线的瞬间派发
+  shelf.addEventListener('shelf-impact', function (e) {
+    var d = e.detail || {};
+    if (typeof d.clientX === 'number' && typeof d.force === 'number') { poke(d.clientX, d.force); }
+  });
+
   var timer = 0;
   function resize() {
     clearTimeout(timer);
