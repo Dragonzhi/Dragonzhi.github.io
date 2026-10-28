@@ -45,6 +45,6 @@
 
 ## 硬性约束
 
-- **不要自行执行 `git commit`**（`git push`、`git tag` 同理）。可以主动提议提交并给出建议的 commit message，但必须等用户明确确认后，由用户自行执行或在当轮对话中获得明确授权后才可执行。`git add` / `git stash` 等改变仓库状态的操作同样先征询。
+- **不要自行合并到 `main`**（直接 `git merge`、`git push origin main`、`gh pr merge` 都算）。除此之外的 git 操作由你自行判断执行：`develop` 等非 main 分支上的 `git add` / `git commit` / `git push` / `git tag` / `git stash` 无需再逐条征询。提交保持单一意图，并把 commit hash 与 message 报给用户。
 - 不要删除或覆盖 `legacy/` 存档目录。
 - 不要修改 `LICENSE`、备案号相关内容。
