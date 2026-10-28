@@ -28,12 +28,12 @@
   --mono: "Cascadia Code", "JetBrains Mono", Consolas, ui-monospace, monospace;
 
   /* ---- 字号：全站只有六档 ---- */
-  --t0: clamp(52px, 8.2vw, 116px);
-  --t1: clamp(30px, 3.3vw, 46px);
-  --t2: clamp(21px, 2vw, 29px);
-  --t3: 16.5px;
-  --t4: 14.5px;
-  --t5: 11.5px;
+  --t0: clamp(60px, 9.6vw, 140px);
+  --t1: clamp(34px, 4vw, 56px);
+  --t2: clamp(24px, 2.4vw, 34px);
+  --t3: 17px;
+  --t4: 15px;
+  --t5: 13px;
 
   /* ---- 间距：基准 8 ---- */
   --s1: 4px;  --s2: 8px;  --s3: 12px; --s4: 16px; --s5: 24px;
