@@ -46,6 +46,6 @@
 
 ## 硬性约束
 
-- **不要自行合并到 `main`**（直接 `git merge`、`git push origin main`、`gh pr merge` 都算）。除此之外的 git 操作由你自行判断执行：`develop` 等非 main 分支上的 `git add` / `git commit` / `git push` / `git tag` / `git stash` 无需再逐条征询。提交保持单一意图，并把 commit hash 与 message 报给用户。
+- **不要自行合并到 `main`**（直接 `git merge`、`git push origin main`、`gh pr merge` 都算）。除此之外的 git 操作由你自行判断执行：`develop` 等非 main 分支上的 `git add` / `git commit` / `git push` / `git tag` / `git stash` 无需再逐条征询。**提交按功能收口，不按次数收口**：同一个元素、同一项展示效果的多轮调整，攒到这一项做完再提交一次，中途不逐次提交；不同功能之间才拆开。提交后把 commit hash 与 message 报给用户。
 - 不要删除或覆盖 `legacy/` 存档目录。
 - 不要修改 `LICENSE`、备案号相关内容。
