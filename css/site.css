@@ -303,13 +303,11 @@ main, .bar, .foot { position: relative; z-index: 2; }
   color: transparent;
   -webkit-text-fill-color: transparent;
   background-image: linear-gradient(102deg,
-    #101518 0%, #12171A 38%,
-    #2FD3CB 42.4%, #0F1518 44%,          /* 青绿：一道薄光，不是色带 */
-    #12171A 47%,
-    #EDF2F4 48.4%, #12171A 49.8%,        /* 镜面刃 */
-    #12171A 52.4%,
-    #E2533C 54.6%, #101518 56.2%,        /* 赤砂：另一道薄光 */
-    #12171A 61%, #12171A 100%);
+    #101518 0%, #12171A 37%, #12171A 40.8%,
+    #2FD3CB 42.4%, #2FD3CB 43%,          /* 青绿：白左侧的色差边 */
+    #EDF2F4 43.6%, #EDF2F4 45.4%,        /* 白色反光：唯一主体 */
+    #E2533C 46%, #E2533C 46.6%,          /* 赤砂：白右侧的色差边 */
+    #12171A 48.2%, #12171A 100%);
   background-size: 320% 100%;
   background-position: 50% 50%;
   -webkit-background-clip: text;
