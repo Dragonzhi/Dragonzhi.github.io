@@ -48,7 +48,13 @@
   .row input[type="range"] {
     grid-column: 1 / -1; width: 100%; accent-color: var(--fg); height: 22px;
   }
-  .actions { display: flex; gap: 12px; margin-top: 16px; }
+  .row--select { grid-template-columns: 1fr 40px; }
+  .row--select select {
+    grid-column: 1 / -1; width: 100%; padding: 8px 10px; margin-top: 2px;
+    font: inherit; font-size: 13px; color: var(--fg); background: var(--btn-bg);
+    border: 1px solid var(--line-strong); border-radius: 0;
+  }
+
   .actions button {
     font-family: var(--mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
     padding: 10px 16px; border: 0; cursor: pointer;
@@ -113,7 +119,7 @@
     </div>
 
     <pre id="out"></pre>
-    <p class="note">导出的 CSS 粘回 <code>css/site.css</code> 的 <code>.name-solid</code>；JS 参数对应 <code>js/home.js</code> 的 <code>nameLift</code>。颜色不动：白 <code>#EDF2F4</code>、青 <code>#2FD3CB</code>、赤 <code>#E2533C</code>、墨 <code>#12171A</code>。</p>
+    <p class="note">导出的 CSS 粘回 <code>css/site.css</code> 的 <code>.name-solid</code>；JS 参数对应 <code>js/home.js</code> 的 <code>nameLift</code>。白 <code>#EDF2F4</code>、墨 <code>#12171A</code> 固定；青/赤按「色差色阶」取色——深档 <code>#00827F</code> / <code>#8B2C1F</code> 是线上定值，亮档 <code>#2FD3CB</code> / <code>#E2533C</code> 只作对比（对称夹白会读成抖音霓虹）。</p>
   </aside>
 </div>
 
@@ -122,22 +128,26 @@
   'use strict';
 
   var KEY = 'zloong-name-tuner-v1';
-  var TEAL = '#2FD3CB', RED = '#E2533C', WHITE = '#EDF2F4', INK = '#12171A', INK2 = '#101518';
+  var WHITE = '#EDF2F4', INK = '#12171A', INK2 = '#101518';
+  var TONES = {
+    deep:   { teal: '#00827F', red: '#8B2C1F', label: '深档 · 玻璃边（线上用这档）' },
+    bright: { teal: '#2FD3CB', red: '#E2533C', label: '亮档 · 霓虹（会像抖音）' }
+  };
 
   /* 参数定义：范围、步长、默认值与站内现值一致 */
   var DEFS = [
-    { k: 'size',    label: '背景尺寸',        min: 200, max: 420, step: 5,    def: 320,  unit: '%',  group: 'gradient' },
-    { k: 'angle',   label: '光带角度',        min: 80,  max: 120, step: 1,    def: 102,  unit: 'deg', group: 'gradient' },
-    { k: 'center',  label: '光带位置',        min: 30,  max: 60,  step: .1,   def: 44.4, unit: '%',  group: 'gradient' },
-    { k: 'coreW',   label: '白光宽度',        min: .4,  max: 3,   step: .05,  def: 1.15, unit: '%',  group: 'gradient' },
-    { k: 'fringeW', label: '色差边宽度',      min: .1,  max: 1.2, step: .05,  def: .35,  unit: '%',  group: 'gradient' },
-    { k: 'feather', label: '羽化',            min: .1,  max: 1.5, step: .05,  def: .55,  unit: '%',  group: 'gradient' },
-    { k: 'max',     label: '最大转动角',      min: 2,   max: 12,  step: .5,   def: 6,    unit: '°',  group: 'motion' },
-    { k: 'ease',    label: '跟随时差',        min: .03, max: .3,  step: .005, def: .085, unit: '',   group: 'motion' },
-    { k: 'sweep',   label: '扫光幅度',        min: 0,   max: 5,   step: .1,   def: 2.4,  unit: '×',  group: 'motion' }
+    { k: 'size',    label: '背景尺寸',        min: 200, max: 420, step: 5,    def: 420,   unit: '%',  group: 'gradient' },
+    { k: 'angle',   label: '光带角度',        min: 80,  max: 120, step: 1,    def: 120,   unit: 'deg', group: 'gradient' },
+    { k: 'center',  label: '光带位置',        min: 30,  max: 60,  step: .1,   def: 50,    unit: '%',  group: 'gradient' },
+    { k: 'coreW',   label: '白光宽度',        min: .4,  max: 3,   step: .05,  def: 1.75,  unit: '%',  group: 'gradient' },
+    { k: 'fringeW', label: '色差边宽度',      min: .05, max: 1.2, step: .05,  def: .1,    unit: '%',  group: 'gradient' },
+    { k: 'feather', label: '羽化',            min: .05, max: 1.5, step: .05,  def: .1,    unit: '%',  group: 'gradient' },
+    { k: 'max',     label: '最大转动角',      min: 2,   max: 12,  step: .5,   def: 9,     unit: '°',  group: 'motion' },
+    { k: 'ease',    label: '跟随时差',        min: .03, max: .3,  step: .005, def: .125,  unit: '',   group: 'motion' },
+    { k: 'sweep',   label: '扫光幅度',        min: 0,   max: 5,   step: .1,   def: 3,     unit: '×',  group: 'motion' }
   ];
 
-  var p = {};
+  var p = { tone: 'deep' };
   DEFS.forEach(function (d) { p[d.k] = d.def; });
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
@@ -145,6 +155,7 @@
       var v = parseFloat(saved[d.k]);
       if (isFinite(v)) { p[d.k] = Math.min(d.max, Math.max(d.min, v)); }
     });
+    if (saved.tone === 'bright') { p.tone = 'bright'; }
   } catch (e) { /* 坏数据就当没有 */ }
 
   var face = document.getElementById('face');
@@ -156,6 +167,7 @@
   var resetBtn = document.getElementById('reset');
 
   function gradient(p) {
+    var tone = TONES[p.tone] || TONES.deep;
     var half = p.coreW / 2;
     var ws = p.center - half, we = p.center + half;
     var ts = ws - p.feather - p.fringeW, te = ws - p.feather;
@@ -164,9 +176,9 @@
     function f(n) { return n.toFixed(2) + '%'; }
     return 'linear-gradient(' + p.angle + 'deg, ' +
       INK2 + ' 0%, ' + INK + ' 37%, ' + INK + ' ' + f(Math.max(0, ts - p.feather)) + ', ' +
-      TEAL + ' ' + f(ts) + ', ' + TEAL + ' ' + f(te) + ', ' +
+      tone.teal + ' ' + f(ts) + ', ' + tone.teal + ' ' + f(te) + ', ' +
       WHITE + ' ' + f(ws) + ', ' + WHITE + ' ' + f(we) + ', ' +
-      RED + ' ' + f(rs) + ', ' + RED + ' ' + f(re) + ', ' +
+      tone.red + ' ' + f(rs) + ', ' + tone.red + ' ' + f(re) + ', ' +
       INK + ' ' + f(io) + ', ' + INK + ' 100%)';
   }
 
@@ -219,12 +231,47 @@
     box.appendChild(row);
   });
 
+  /* 色差色阶：深档（线上） / 亮档（对比，会像抖音） */
+  var toneSel = null, toneShow = null;
+  (function toneControl() {
+    var box = document.getElementById('sliders-gradient');
+    var row = document.createElement('div');
+    row.className = 'row row--select';
+    var label = document.createElement('label');
+    label.textContent = '色差色阶';
+    label.setAttribute('for', 'ctl-tone');
+    var outEl = document.createElement('output');
+    toneSel = document.createElement('select');
+    toneSel.id = 'ctl-tone';
+    Object.keys(TONES).forEach(function (k) {
+      var opt = document.createElement('option');
+      opt.value = k;
+      opt.textContent = TONES[k].label;
+      toneSel.appendChild(opt);
+    });
+    toneSel.value = p.tone;
+    toneShow = function () {
+      outEl.textContent = p.tone === 'deep' ? '深' : '亮';
+      toneSel.value = p.tone;
+    };
+    toneSel.addEventListener('change', function () {
+      p.tone = toneSel.value;
+      toneShow();
+      apply();
+    });
+    toneShow();
+    row.appendChild(label); row.appendChild(outEl); row.appendChild(toneSel);
+    box.insertBefore(row, box.firstChild);
+  }());
+
   resetBtn.addEventListener('click', function () {
     DEFS.forEach(function (d) {
       p[d.k] = d.def;
       outputs[d.k].input.value = d.def;
       outputs[d.k].show();
     });
+    p.tone = 'deep';
+    if (toneShow) { toneShow(); }
     apply();
   });
 

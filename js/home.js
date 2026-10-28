@@ -98,14 +98,14 @@
     if (!plate || !face || !window.matchMedia) { return; }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
-    var MAX = 6;        /* 最大转动角（度） */
-    var EASE = 0.085;   /* 跟随系数：越小，时差越长 */
+    var MAX = 9;        /* 最大转动角（度） */
+    var EASE = 0.125;   /* 跟随系数：越小，时差越长 */
     var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
 
     var write = function () {
       plate.style.transform = 'rotateX(' + cx.toFixed(2) + 'deg) rotateY(' + cy.toFixed(2) + 'deg)';
       face.style.backgroundPosition =
-        (50 - cy * 2.4).toFixed(1) + '% ' + (50 - cx * 1.8).toFixed(1) + '%';
+        (50 - cy * 3).toFixed(1) + '% ' + (50 - cx * 2.25).toFixed(1) + '%';
     };
 
     var tick = function () {

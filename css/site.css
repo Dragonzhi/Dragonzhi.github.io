@@ -302,14 +302,15 @@ main, .bar, .foot { position: relative; z-index: 2; }
   display: inline-block;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  /* 定值与 tools/name-tuner.html 的滑块默认值一致：size 320 / angle 102 / center 44.4 / coreW 1.15 / fringeW 0.35 / feather 0.55 */
-  background-image: linear-gradient(102deg,
-    #101518 0%, #12171A 37%, #12171A 42.38%,
-    #2FD3CB 42.92%, #2FD3CB 43.27%,
-    #EDF2F4 43.82%, #EDF2F4 44.98%,
-    #E2533C 45.52%, #E2533C 45.88%,
-    #12171A 46.42%, #12171A 100%);
-  background-size: 320% 100%;
+  /* 定值与 tools/name-tuner.html 默认一致：size 420 / angle 120 / center 50 / coreW 1.75 / fringeW 0.1 / feather 0.1。
+     色差边用深档（#00827F / #8B2C1F）：亮档对称夹白会读成抖音式霓虹故障，深档是玻璃厚边的折射。 */
+  background-image: linear-gradient(120deg,
+    #101518 0%, #12171A 37%, #12171A 48.83%,
+    #00827F 48.93%, #00827F 49.03%,
+    #EDF2F4 49.13%, #EDF2F4 50.88%,
+    #8B2C1F 50.98%, #8B2C1F 51.08%,
+    #12171A 51.18%, #12171A 100%);
+  background-size: 420% 100%;
   background-position: 50% 50%;
   -webkit-background-clip: text;
   background-clip: text;
