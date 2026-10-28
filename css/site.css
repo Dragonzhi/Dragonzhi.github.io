@@ -302,14 +302,14 @@ main, .bar, .foot { position: relative; z-index: 2; }
   display: inline-block;
   color: transparent;
   -webkit-text-fill-color: transparent;
-  background-image: linear-gradient(105deg,
-    #12171A 0%, #1B2429 30%, #12171A 36%,
-    #004A49 40%, #00605E 42.4%, #052A29 44%, #12171A 45.6%,
+  background-image: linear-gradient(102deg,
+    #101518 0%, #12171A 38%,
+    #2FD3CB 42.4%, #0F1518 44%,          /* 青绿：一道薄光，不是色带 */
     #12171A 47%,
-    #EDF2F4 48%, #EDF2F4 48.6%, #12171A 49.4%,
-    #12171A 50.6%,
-    #8B2C1F 52.4%, #7A2519 54.4%, #12171A 56%,
-    #12171A 100%);
+    #EDF2F4 48.4%, #12171A 49.8%,        /* 镜面刃 */
+    #12171A 52.4%,
+    #E2533C 54.6%, #101518 56.2%,        /* 赤砂：另一道薄光 */
+    #12171A 61%, #12171A 100%);
   background-size: 320% 100%;
   background-position: 50% 50%;
   -webkit-background-clip: text;
