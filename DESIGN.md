@@ -303,6 +303,7 @@
 | `js/shelf.js` | 水位陈列读数 |
 | `js/cube.js` | WebGL2 立方体，无依赖，带 SVG 降级；拖动与惯性、入场坠落（手写 2D 物理）都在这里 |
 | `js/water.js` | 水线以下的一池水：Canvas2D 高度场，被扰动才跑，仅作品页加载 |
+| `tools/name-tuner.html` | 主名浮雕调参台（本地工具，站内无入口）：反光带与微动参数实时预览并导出 |
 | `data/home.json` | 作品数 / 在跑数 / 最近 ship |
 | `css/tokens.css`、`css/workshop.css` | 纸：子页与 Hanako 箱庭，本次不动 |
 | `pages/resume.html` | 封存，首页零入口 |
