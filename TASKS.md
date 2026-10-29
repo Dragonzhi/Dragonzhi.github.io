@@ -19,6 +19,8 @@ updated: 2026-10-28
 
 ## 已完成
 
+- [x] 首页三节章节头的右对齐 meta 小字移除（最近一次 ship / 关于一句话 / 有事按这里）；§6 ④ 补「无事实不放」通用规则（2026-10-29）
+
 - [x] 首页签名立方体整块移除（方块 + 「已上线 · 此刻落在线上」 + 地线），母题只剩作品页七枚；`.sign` / `.stateobj` 死规则全部清掉（2026-10-29）
 
 - [x] 首页签名去掉入场坠落，从加载起直接在位；`drop-ready` 藏块收窄到作品页七枚，index 内联钩子删除（2026-10-29）
@@ -48,6 +50,7 @@ updated: 2026-10-28
 
 ## 工作留痕
 
+- 2026-10-29 · 章节头右刻度移除：三条 meta 过不了小字纪律（重复正文 / 装饰话），index 三处直接删，`home.js` 的 `data-stat` 注入对缺失元素本来容忍（querySelectorAll 空转）；works 页右刻度保留。
 - 2026-10-29 · 签名整块移除：用户澄清「去掉」本意就是拆元素（此前误判为去动效）；index 删 `.sign` 块，CSS 清 `.sign` ×4 处、`.stateobj` 基座与地线、共享选择器收窄到 `.shelf__obj`；AGENTS 母题 bullet 改「只有一处」，DESIGN §7.3 删签名行。
 - 2026-10-29 · 签名坠落移除：接「地线钉死」仍不满意的裁决——先去掉；`cube.js` 坠落只认 `[data-shelf]` 内宿主，藏块 CSS 收窄 `.drop-ready [data-shelf] [data-cube-host] .cube`，index 内联钩子删除；实测签名加载即在位（无飞行段）、作品页七枚坠落与落水冲击不受影响。
 - 2026-10-29 · 坠落脱钩地线：`cube.js` 的 transform / reveal 目标从 `[data-cube-host]` 改成宿主内的 `canvas.cube` / `svg.cube`，地线（`.stateobj::after`）与接触影不再随坠落位移；连拍确认方块悬在「关于」上方时签名地线仍在原位，落定后 canvas transform 归零、宿主 transform 恒为 none。
