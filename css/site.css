@@ -212,23 +212,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .cube--sunk .l { fill: var(--cube-sunk-left); }
 .cube--sunk .r { fill: var(--cube-sunk-right); }
 
-/* 立方体 + 它的那条地平线 */
-.stateobj {
-  position: relative;
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-}
-.stateobj::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0; bottom: 0;
-  height: 1px;
-  background: var(--line-strong);
-}
-.stateobj[data-s="air"] .cube { transform: translateY(-42%); }
-.stateobj[data-s="sunk"] .cube { transform: translateY(38%); }
-
 /* ---------- 仪表条 ---------- */
 
 .bar { border-bottom: 1px solid var(--line); }
@@ -798,26 +781,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .rows__r a { color: var(--fg); text-decoration: none; border-bottom: 1px solid var(--line-strong); }
 .rows__r a:hover { border-color: var(--live); }
 
-/* 关于页那颗落定的立方体 */
-.sign {
-  display: flex;
-  align-items: flex-end;
-  gap: var(--s5);
-  margin-top: var(--s8);
-  padding-top: var(--s6);
-  border-top: 1px solid var(--line);
-}
-.sign .stateobj { width: 96px; height: 92px; }
-.sign .stateobj .cube { --cw: 74px; }
-.sign .sign__t {
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-  padding-bottom: var(--s1);
-}
-
 /* ---------- 联系 ---------- */
 
 .door { padding: var(--s9) 0 var(--s10); }
@@ -903,9 +866,8 @@ main, .bar, .foot { position: relative; z-index: 2; }
   }
   .shelf__track::-webkit-scrollbar { display: none; }
   .shelf__cell { flex: 0 0 var(--cw); }
-  .scale__k { letter-spacing: .08em; }
-  .scale__v { font-size: var(--t4); white-space: nowrap; }
-  .sign { flex-direction: column; align-items: flex-start; gap: var(--s4); }
+.scale__k { letter-spacing: .08em; }
+.scale__v { font-size: var(--t4); white-space: nowrap; }
 }
 
 @media (max-width: 400px) {
@@ -928,8 +890,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
 
 /* ---------- WebGL 升级后顶替 SVG 的画布 ---------- */
 
-.shelf__obj > canvas.cube,
-.stateobj > canvas.cube {
+.shelf__obj > canvas.cube {
   display: block;
   width: var(--cw, 30px);
   height: var(--cw, 30px);
@@ -937,8 +898,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
 
 /* 冷白底上的接触影：浅底下影子是物理事实，不是装饰 */
 .shelf__obj { position: relative; }
-.shelf__obj::after,
-.stateobj::before {
+.shelf__obj::after {
   content: "";
   position: absolute;
   left: 50%;
