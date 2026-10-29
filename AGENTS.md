@@ -33,7 +33,7 @@
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
 - `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（纸面 · 精修编年目录：左侧常驻年份索引轨 + 右侧编年曲目长流，天依碧印点缀）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成（`style.css` 与 `app.js` 是静态伴生文件，不随脚本生成）。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
-- `tools/`：本地调参台（`name-tuner.html`，主名浮雕的反光带与微动参数），纯静态单页、复用站点 CSS 的真组件；站内不设入口、不参与部署必需路径，参数存 localStorage，导出结果手工粘回 `css/site.css` / `js/home.js`。
+- `tools/`：本地调参对比台（`name-tuner.html`：主名浮雕反光与微动参数；`key-preview.html`：按键拟物方案对比页），纯静态单页、复用站点 CSS 的真组件；站内不设入口、不参与部署必需路径，参数存 localStorage（name-tuner），key-preview 为纯预览不存参数。
 - `pages/`：纸风格子页面（画廊版 / 档案架 / 技术履历），在用；`data/portfolio.json` 是档案架子页的数据。`legacy/` 存档见上条，勿删。
 - 合规红线：首页 `<title>` 为「ZLOONG · Dragonzhi」，页脚备案号「闽ICP备20260330551号-1」不得删改。
 

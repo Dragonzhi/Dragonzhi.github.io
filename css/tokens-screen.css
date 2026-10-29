@@ -87,6 +87,14 @@
 
   --btn-bg: #191920;
   --btn-bg-hi: #1F1F28;
+
+  /* 按键拟物：键程键（动作）的三段面与弹片台阶；铭牌键（入口）的受光面 */
+  --key-face-hi: #212129;
+  --key-face: #1A1A21;
+  --key-face-lo: #14141A;
+  --key-step: #08080C;
+  --plate-hi: #1E1E25;
+  --plate-lo: #131319;
 }
 
 /* ============ 白底黑字 · 冷白 ============ */
@@ -127,6 +135,14 @@
 
   --btn-bg: #FFFFFF;
   --btn-bg-hi: #FFFFFF;
+
+  /* 按键拟物：键程键（动作）的三段面与弹片台阶；铭牌键（入口）的受光面 */
+  --key-face-hi: #FDFEFF;
+  --key-face: #F1F6F8;
+  --key-face-lo: #E3EAEE;
+  --key-step: #C3CED5;
+  --plate-hi: #F7FAFB;
+  --plate-lo: #DFE6EB;
 }
 
 /* ============ 白底黑字 · 暖白 ============ */
@@ -167,4 +183,12 @@
 
   --btn-bg: #FFFDF8;
   --btn-bg-hi: #FFFFFF;
+
+  /* 按键拟物：键程键（动作）的三段面与弹片台阶；铭牌键（入口）的受光面 */
+  --key-face-hi: #FFFDF8;
+  --key-face: #F7F3EA;
+  --key-face-lo: #EDE7DB;
+  --key-step: #CFC5B4;
+  --plate-hi: #FBF9F3;
+  --plate-lo: #E9E3D6;
 }

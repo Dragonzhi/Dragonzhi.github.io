@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>按键拟物方案对比 · 调参台</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  body { background: var(--bg); }
+  .page { max-width: 1100px; margin: 0 auto; padding: var(--s8) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s2); }
+  .note { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s7); max-width: 46em; line-height: 1.9; }
+  .v { margin: 0 0 var(--s9); }
+  .v > h2 { font-size: var(--t3); font-weight: 800; margin: 0 0 var(--s1); }
+  .v > p { color: var(--fg-faint); font-size: var(--t4); margin: 0 0 var(--s5); max-width: 60em; line-height: 1.8; }
+  .row { display: flex; align-items: center; gap: var(--s6); margin: 0 0 var(--s4); flex-wrap: wrap; }
+  .row .k {
+    width: 64px; flex: none;
+    font-family: var(--mono); font-size: var(--t5); letter-spacing: .12em;
+    color: var(--fg-faint); text-transform: uppercase;
+  }
+  .arm { display: inline-flex; align-items: center; gap: var(--s4); }
+
+  /* ============ 键的共性 ============ */
+  .key {
+    display: inline-flex; align-items: center; gap: 9px;
+    font-family: var(--mono); font-size: var(--t5); letter-spacing: .12em;
+    text-transform: uppercase; text-decoration: none; color: var(--fg);
+    padding: 11px 20px; cursor: pointer; user-select: none;
+    transition: transform var(--press) var(--ease),
+                box-shadow var(--press) var(--ease),
+                background var(--press) var(--ease),
+                color var(--press) var(--ease);
+  }
+  .key .arr { font-size: 11px; opacity: .75; }
+  .key:focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
+  .key.is-press { pointer-events: none; }
+
+  /* ============ A · 键帽 ============ */
+  /* 圆角软塑料：顶线高光、底缘硬线、落一步接触影 */
+  .key--a {
+    border-radius: 6px;
+    background: linear-gradient(180deg, #FFFFFF 0%, #F3F7F9 10%, #E7EDF0 78%, #DCE3E8 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .9),
+      inset 0 -1px 0 rgba(18, 23, 26, .10),
+      0 1px 0 rgba(18, 23, 26, .16),
+      0 6px 14px -4px rgba(18, 23, 26, .28);
+  }
+  .key--a:hover, .key--a.is-hover { color: var(--live); }
+  .key--a:active, .key--a.is-press {
+    transform: translateY(2px);
+    background: linear-gradient(180deg, #E9EFF2 0%, #E1E8EC 100%);
+    box-shadow:
+      inset 0 2px 5px rgba(18, 23, 26, .16),
+      inset 0 1px 0 rgba(255, 255, 255, .55),
+      0 1px 0 rgba(18, 23, 26, .12);
+  }
+
+  /* ============ B · 机械键程 ============ */
+  /* 两段位移：先压弹片（价差塌陷），再落底。硬台阶逐级吃掉。 */
+  .key--b {
+    border-radius: 5px;
+    background: linear-gradient(180deg, #FDFEFF 0%, #F1F6F8 30%, #E3EAEE 100%);
+    box-shadow:
+      inset 0 1.5px 0 rgba(255, 255, 255, 1),
+      inset 0 -1.5px 0 rgba(18, 23, 26, .12),
+      0 3px 0 #C3CED5,                 /* 弹片第一台阶 */
+      0 4px 0 rgba(18, 23, 26, .22),   /* 台阶落影 */
+      0 8px 16px -4px rgba(18, 23, 26, .25);
+  }
+  .key--b:hover, .key--b.is-hover { color: var(--live); }
+  .key--b:active, .key--b.is-press {
+    transform: translateY(3px);
+    background: linear-gradient(180deg, #EDF2F5 0%, #E0E7EB 100%);
+    box-shadow:
+      inset 0 2px 4px rgba(18, 23, 26, .2),
+      inset 0 1px 0 rgba(255, 255, 255, .5),
+      0 0 0 #C3CED5,
+      0 1px 0 rgba(18, 23, 26, .18);
+  }
+
+  /* ============ C · 内嵌刻井 ============ */
+  /* 键嵌进面板里：井底受下缘反光，字是刻的（上暗下亮双影） */
+  .key--c {
+    border-radius: 4px;
+    background: linear-gradient(180deg, #D9E0E5 0%, #E8EEF1 55%, #EDF2F4 100%);
+    box-shadow:
+      inset 0 2px 4px rgba(18, 23, 26, .30),
+      inset 0 -1px 0 rgba(255, 255, 255, .8),
+      0 1px 0 rgba(255, 255, 255, .6);
+  }
+  .key--c b { font-weight: 500; text-shadow: 0 1px 0 rgba(255, 255, 255, .9); }
+  .key--c:hover, .key--c.is-hover { color: var(--live); }
+  .key--c:hover b, .key--c.is-hover b { text-shadow: 0 1px 0 rgba(255, 255, 255, .9); }
+  .key--c:active, .key--c.is-press {
+    color: var(--live-fill);
+    box-shadow:
+      inset 0 3px 6px rgba(18, 23, 26, .38),
+      inset 0 -1px 0 rgba(255, 255, 255, .5);
+  }
+  .key--c:active b, .key--c.is-press b {
+    transform: translate(0, .5px);
+    text-shadow: 0 1px 0 rgba(255, 255, 255, .6);
+  }
+
+  /* ============ D · 机器铭牌 ============ */
+  /* 平板键：左上受光 Critics，右下暗棱；硬接触影，像铣出来的					      铝牌 */
+  .key--d {
+    border-radius: 3px;
+    background: linear-gradient(135deg, #F7FAFB 0%, #E7EDF0 55%, #DFE6EB 100%);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, .95),
+      inset -1px -1px 0 rgba(18, 23, 26, .14),
+      0 2px 0 rgba(18, 23, 26, .10),
+      0 4px 10px -3px rgba(18, 23, 26, .2);
+  }
+  .key--d:hover, .key--d.is-hover { color: var(--live); }
+  .key--d:active, .key--d.is-press {
+    transform: translateY(2px);
+    background: linear-gradient(315deg, #EDF2F4 0%, #E3EAEE 100%);
+    box-shadow:
+      inset -1px -1px 0 rgba(255, 255, 255, .7),
+      inset 1px 1px 0 rgba(18, 23, 26, .18);
+  }
+
+  /* ============ 行内入口（rows 表格里的那行） ============ */
+  .inline-lead { font-family: var(--mono); font-size: var(--t5); letter-spacing: .1em; color: var(--fg-faint); }
+
+  .hint { font-size: var(--t4); color: var(--fg-faint); margin: var(--s8) 0 0; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>按键拟物方案 · 四选一</h1>
+  <p class="note">四条路线都只走 CSS（无图、无第三方），色都在系统 token 里，光一律来自左上——和主名浮雕的受光棱一致。「悬停 / 按下」两行是静态演示（指针悬上时整组都同样成立），按下那格预先写成触发后的样子。</p>
+
+  <section class="v">
+    <h2>A · 键帽</h2>
+    <p>现在 .btn 的亲儿子强化版：圆角软塑料面，一条顶高光 + 一条底缘硬线 + 柔接触影。最省、最贴现有仪表感，但拟物程度最浅。</p>
+    <div class="row"><span class="k">静止</span><span class="arm"><a class="key key--a" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--a" href="#" onclick="return false">复制邮箱</a></span></div>
+    <div class="row"><span class="k">悬停</span><span class="arm"><a class="key key--a is-hover" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--a is-hover" href="#" onclick="return false">复制邮箱</a></span></div>
+    <div class="row"><span class="k">按下</span><span class="arm"><a class="key key--a is-press" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--a is-press" href="#" onclick="return false">复制邮箱</a></span></div>
+  </section>
+
+  <section class="v">
+    <h2>B · 机械键程</h2>
+    <p>两段台阶：按下先塌 3px 的硬弹片（硬阶消失在脚下），手感最「物理」。和「物理」基调最合拍，代价是阴影层最多、在哪都最醒目。</p>
+    <div class="row"><span class="k">静止</span><span class="arm"><a class="key key--b" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--b" href="#" onclick="return false">复制邮箱</a></span></div>
+    <div class="row"><span class="k">悬停</span><span class="arm"><a class="key key--b is-hover" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--b is-hover" href="#" onclick="return false">复制邮箱</a></span></div>
+    <div class="row"><span class="k">按下</span><span class="arm"><a class="key key--b is-press" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--b is-press" href="#" onclick="return false">复制邮箱</a></span></div>
+  </section>
+
+  <section class="v">
+    <h2>C · 内嵌刻井</h2>
+    <p>键不是凸出来，是凹进去的：井底受下缘反光，字带刻字的「上暗下亮」双影，按下往井底再陷半像素。最静的一路——但和 §6.1「凸起 = 点它会做事」的职能义反着来，等于把键读成永不按下的坑。</p>
+    <div class="row"><span class="k">静止</span><span class="arm"><a class="key key--c" href="#" onclick="return false"><b>HANAKO 箱庭 &nbsp;↗</b></a><a class="key key--c" href="#" onclick="return false"><b>复制邮箱</b></a></span></div>
+    <div class="row"><span class="k">悬停</span><span class="arm"><a class="key key--c is-hover" href="#" onclick="return false"><b>HANAKO 箱庭 &nbsp;↗</b></a><a class="key key--c is-hover" href="#" onclick="return false"><b>复制邮箱</b></a></span></div>
+    <div class="row"><span class="k">按下</span><span class="arm"><a class="key key--c is-press" href="#" onclick="return false"><b>HANAKO 箱庭 &nbsp;↗</b></a><a class="key key--c is-press" href="#" onclick="return false"><b>复制邮箱</b></a></span></div>
+  </section>
+
+  <section class="v">
+    <h2>D · 机器铭牌</h2>
+    <p>平得多的板键：定向光做 1px 斜棱（左上亮右下暗），配硬接触影，像铣出来的铝牌上钉着字。拟物感靠「材质对光线的诚实」而不是位移，最克的一路。</p>
+    <div class="row"><span class="k">静止</span><span class="arm"><a class="key key--d" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--d" href="#" onclick="return false">复制邮箱</a></span></div>
+    <div class="row"><span class="k">悬停</span><span class="arm"><a class="key key--d is-hover" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--d is-hover" href="#" onclick="return false">复制邮箱</a></span></div>
+    <div class="row"><span class="k">按下</span><span class="arm"><a class="key key--d is-press" href="#" onclick="return false">HANAKO 箱庭 &nbsp;↗</a><a class="key key--d is-press" href="#" onclick="return false">复制邮箱</a></span></div>
+  </section>
+
+  <p class="hint">拿定了告诉我字母；接下来把这一路铺到 .rows__r a、.btn、.tab 当前页、.icon-link 和作品页的入口键上（一步到位或分步走都行），再把选中样式的参数化写进调参台。</p>
+</div>
+</body>
+</html>

@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 签名立方体已整块移除，母题只剩作品页水线七枚；等你下一条逐条指导。
+next: 按键拟物两型已铺全站；等你下一条逐条指导（窄屏密度或参数微调如需细调可给调参台开滑块）。
 updated: 2026-10-28
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -18,6 +18,8 @@ updated: 2026-10-28
 暂无已开始但未完成的任务。
 
 ## 已完成
+
+- [x] 按键拟物两型落地：键程键（.btn / .tab--on / 图标键抬起）+ 铭牌键（.link / .rows__r a / 作品入口），token 层新增 --key-* / --plate-*，对比页 `tools/key-preview.html` 存档选型（2026-10-29）
 
 - [x] 仪表条撤下「在跑 N 件」状态灯（首页）；状态灯该留给作品页报状态的行与陈列，§6 ① 同步改写（2026-10-29）
 
@@ -52,6 +54,7 @@ updated: 2026-10-28
 
 ## 工作留痕
 
+- 2026-10-29 · 按键拟物四选一：B 机械键程定为主 + D 机器铭牌并用（分工动作用/入口用）；`site.css` 重写 `.btn`/`.link` 并把 `.rows__r a` 并进铭牌选择器，token 层新增六色；浏览器三态验证（rows 铭牌、door 键程、tab 键、图标 hover）。坑再现：python http.server 使 site.css 被浏览器缓存，实测用 `no-store` 取回注入法。注意事项已写入 DECISIONS（按压 3px/1px 与棱交换）。
 - 2026-10-29 · 顶栏状态灯移除：「在跑 04 件」与 hero 刻度第一行整句重复，index 顶栏删之；works 顶栏同名芯片保留，`.bar .state` CSS 与 §6 ② 组件规格不动。
 - 2026-10-29 · 章节头右刻度移除：三条 meta 过不了小字纪律（重复正文 / 装饰话），index 三处直接删，`home.js` 的 `data-stat` 注入对缺失元素本来容忍（querySelectorAll 空转）；works 页右刻度保留。
 - 2026-10-29 · 签名整块移除：用户澄清「去掉」本意就是拆元素（此前误判为去动效）；index 删 `.sign` 块，CSS 清 `.sign` ×4 处、`.stateobj` 基座与地线、共享选择器收窄到 `.shelf__obj`；AGENTS 母题 bullet 改「只有一处」，DESIGN §7.3 删签名行。
