@@ -450,9 +450,9 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .shelf__cell[data-s="air"]  .shelf__cube { bottom: calc(var(--h) - var(--line) + var(--lift)); }
 .shelf__cell[data-s="sunk"] .shelf__cube { top: calc(var(--line) + 8px); opacity: .8; }
 
-/* 入场：手写物理坠落，由 js/cube.js 驱动。JS 就绪前先藏住方块本身；
-   地线与接触影不属于方块，看得见、也不随坠落走。无 JS 时 .drop-ready 不存在，直接在位。 */
-.drop-ready [data-cube-host] .cube { opacity: 0; }
+/* 入场：手写物理坠落，由 js/cube.js 驱动。只藏作品页水线上那七枚（有坠落可看）；
+   首页签名不播坠落，直接在位。无 JS 时 .drop-ready 藏不出效果，全部在位。 */
+.drop-ready [data-shelf] [data-cube-host] .cube { opacity: 0; }
 .shelf__obj { display: block; }
 
 /* 抬起 = 你指到了它 */

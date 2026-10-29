@@ -181,8 +181,9 @@ outColor=vec4(pow(c,vec3(1.0/2.2)),1.0);
   });
 
   /* ---- 入场：手写 2D 物理坠落（重力 + 触线反弹 + 角度回正）。
+     只给作品页水线上的七枚；首页签名不播坠落，直接在位。
      物理只管「怎么落」，不管「落在哪」：终点是 CSS 设计位（transform 归零）。
-     只搬方块本体（canvas / svg），地线与接触影留在地上不跟；
+     只搬方块本体（canvas / svg），水线与接触影留在地上不跟；
      落定即停帧；落线瞬间派发 shelf-impact，water.js 借此起波。 ---- */
   function drop() {
     var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -208,14 +209,11 @@ outColor=vec4(pow(c,vec3(1.0/2.2)),1.0);
       var el = cubeEl(host);
       var r = host.getBoundingClientRect();
       if (!r.width) { return; }
-      if (!el) { return; }
+      if (!el || !deck || !shelf) { reveal(host); return; }   // 签名（无水）直接在位，不演坠落
 
-      var deckTop = deck ? deck.getBoundingClientRect().top : r.top - 160;
-      var crossAt = null;                      // 底缘触到水线时的 y；无水（签名）为 null 不触发
-      if (shelf) {
-        var lineY = deckTop + (parseFloat(getComputedStyle(shelf).getPropertyValue('--line')) || 0);
-        crossAt = lineY - r.bottom;
-      }
+      var deckTop = deck.getBoundingClientRect().top;
+      var lineY = deckTop + (parseFloat(getComputedStyle(shelf).getPropertyValue('--line')) || 0);
+      var crossAt = lineY - r.bottom;          // 底缘触到水线时的 y
       var y = -((r.top - deckTop) + 150 + (idx % 7) * 26 + Math.random() * 40);
       var vy = 0;
       var ang = (Math.random() - .5) * .22;

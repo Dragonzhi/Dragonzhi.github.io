@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 基调与主名浮雕已落地，反光参数改走 tools/name-tuner.html；等你下一条逐条指导。
+next: 签名坠落已去掉（直接在位），作品页七枚坠落保留；等你下一条逐条指导。
 updated: 2026-10-28
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -18,6 +18,8 @@ updated: 2026-10-28
 暂无已开始但未完成的任务。
 
 ## 已完成
+
+- [x] 首页签名去掉入场坠落，从加载起直接在位；`drop-ready` 藏块收窄到作品页七枚，index 内联钩子删除（2026-10-29）
 
 - [x] 立方体坠落与地线脱钩：transform / reveal 改到方块本体（canvas / SVG），地线与接触影钉在原位；`.stateobj` 去掉 `overflow: hidden`，签名从上方落进不再被裁（2026-10-29）
 
@@ -44,6 +46,7 @@ updated: 2026-10-28
 
 ## 工作留痕
 
+- 2026-10-29 · 签名坠落移除：接「地线钉死」仍不满意的裁决——先去掉；`cube.js` 坠落只认 `[data-shelf]` 内宿主，藏块 CSS 收窄 `.drop-ready [data-shelf] [data-cube-host] .cube`，index 内联钩子删除；实测签名加载即在位（无飞行段）、作品页七枚坠落与落水冲击不受影响。
 - 2026-10-29 · 坠落脱钩地线：`cube.js` 的 transform / reveal 目标从 `[data-cube-host]` 改成宿主内的 `canvas.cube` / `svg.cube`，地线（`.stateobj::after`）与接触影不再随坠落位移；连拍确认方块悬在「关于」上方时签名地线仍在原位，落定后 canvas transform 归零、宿主 transform 恒为 none。
 - 2026-10-28 · 首屏外部入口图标化：GitHub / Bilibili 品牌标与信封手写成内联 SVG（不引 Font Awesome，站内依赖纪律不变），44×44 热区、hover 凸起 + 青、按下 2px；浏览器实测三枚轮廓、hover 态与 913px 无溢出。
 - 2026-10-28 · 主名定参收口：用户经调参台定向几何（120° / 420% / 1.75 / 0.1 / 0.1）与微动（9° / 0.125 / 3×）；亮档色差边被判定「像抖音」，改深档 #00827F / #8B2C1F，调参台加色阶开关；导出值与 `site.css` / `home.js` 已对齐。
