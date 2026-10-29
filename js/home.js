@@ -38,59 +38,6 @@
       .catch(function () { /* 断网 / file:// 下静默退回 HTML 静态值 */ });
   }());
 
-  /* ---- 复制邮箱 ---- */
-  (function copyEmail() {
-    var btn = document.querySelector('[data-copy-email]');
-    if (!btn) { return; }
-    var label = btn.textContent;
-    var timer = null;
-
-    var flash = function (text) {
-      btn.textContent = text;
-      if (timer) { clearTimeout(timer); }
-      timer = setTimeout(function () { btn.textContent = label; }, 1600);
-    };
-
-    btn.addEventListener('click', function () {
-      var email = btn.getAttribute('data-email') || '';
-      if (!email) { return; }
-
-      var done = function () { flash('已复制'); };
-      var fail = function () { flash('复制失败，请手动选中'); };
-
-      if (navigator.clipboard && navigator.clipboard.writeText) {
-        navigator.clipboard.writeText(email).then(done).catch(function () {
-          try {
-            var ta = document.createElement('textarea');
-            ta.value = email;
-            ta.setAttribute('readonly', '');
-            ta.style.position = 'fixed';
-            ta.style.opacity = '0';
-            document.body.appendChild(ta);
-            ta.select();
-            var ok = document.execCommand('copy');
-            document.body.removeChild(ta);
-            ok ? done() : fail();
-          } catch (e) { fail(); }
-        });
-        return;
-      }
-
-      try {
-        var ta2 = document.createElement('textarea');
-        ta2.value = email;
-        ta2.setAttribute('readonly', '');
-        ta2.style.position = 'fixed';
-        ta2.style.opacity = '0';
-        document.body.appendChild(ta2);
-        ta2.select();
-        var ok2 = document.execCommand('copy');
-        document.body.removeChild(ta2);
-        ok2 ? done() : fail();
-      } catch (e2) { fail(); }
-    });
-  }());
-
   /* ---- 主名浮雕：随整页指针的时差微动。停下衰减归位，归位即停帧 ---- */
   (function nameLift() {
     var plate = document.querySelector('.name-plate');

@@ -139,78 +139,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
   text-align: right;
 }
 
-/* ---------- 按键 ----------
-   两型拟物（tools/key-preview.html 选型）：
-   键程键 = 做动作的键（.btn、.tab--on、.icon-link 抬起）：冷白键面 + 顶高光 + 底棱，
-   悬在 3px 硬弹片上，点击塌 3px 落底、弹片消失。
-   铭牌键 = 出门的入口键（.link / .rows__r a）：平板靠左上/右下 1px 定向光棱
-   + 硬接触影，按压只下 1px、棱交换。 */
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-  text-decoration: none;
-  padding: var(--s3) var(--s5);
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
-  background: linear-gradient(180deg, var(--key-face-hi) 0%, var(--key-face) 30%, var(--key-face-lo) 100%);
-  color: var(--fg);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, .20),
-    inset 0 -1.5px 0 rgba(0, 0, 0, .30),
-    0 3px 0 var(--key-step),
-    0 4px 0 rgba(0, 0, 0, .55),
-    0 8px 16px -4px rgba(0, 0, 0, .45);
-  transition: transform var(--press) var(--ease),
-              box-shadow var(--press) var(--ease),
-              background var(--press) var(--ease),
-              color var(--press) var(--ease);
-}
-.btn:hover { color: var(--live); }
-.btn:active {
-  transform: translateY(3px);
-  background: linear-gradient(180deg, var(--key-face) 0%, var(--key-face-lo) 100%);
-  box-shadow:
-    inset 0 2px 4px rgba(0, 0, 0, .32),
-    inset 0 1px 0 rgba(255, 255, 255, .12),
-    0 1px 0 rgba(0, 0, 0, .35);
-}
-
-[data-theme="cool"] .btn {
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1.5px 0 rgba(18, 23, 26, .12),
-    0 3px 0 var(--key-step),
-    0 4px 0 rgba(18, 23, 26, .22),
-    0 8px 16px -4px rgba(18, 23, 26, .25);
-}
-[data-theme="warm"] .btn {
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, .9),
-    inset 0 -1.5px 0 rgba(26, 23, 18, .10),
-    0 3px 0 var(--key-step),
-    0 4px 0 rgba(26, 23, 18, .18),
-    0 8px 16px -4px rgba(26, 23, 18, .20);
-}
-[data-theme="cool"] .btn:active {
-  box-shadow:
-    inset 0 2px 4px rgba(18, 23, 26, .2),
-    inset 0 1px 0 rgba(255, 255, 255, .5),
-    0 1px 0 rgba(18, 23, 26, .18);
-}
-[data-theme="warm"] .btn:active {
-  box-shadow:
-    inset 0 2px 4px rgba(26, 23, 18, .16),
-    inset 0 1px 0 rgba(255, 255, 255, .4),
-    0 1px 0 rgba(26, 23, 18, .14);
-}
-
 /* 铭牌键：行内 / 行末的入口，靠定向光棱而不是位移成立体 */
 .link,
 .rows__r a {
@@ -669,7 +597,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   text-transform: uppercase;
   color: var(--fg-faint);
 }
-.now__meta .btn { margin-left: auto; }
+.now__meta { margin-top: var(--s5); }
 
 /* ---------- 作品页 ---------- */
 
@@ -849,26 +777,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .rows__r span:last-child { color: var(--fg); text-align: right; }
 .rows__r a, .rows__r a:hover, .rows__r a:active { padding: 1px 6px; margin: -1px -5px; }
 
-/* ---------- 联系 ---------- */
-
-.door { padding: var(--s9) 0 var(--s10); }
-.door__line {
-  max-width: 26em;
-  margin: 0 0 var(--s6);
-  font-size: var(--t2);
-  font-weight: 700;
-  letter-spacing: -.015em;
-  line-height: 1.4;
-  text-wrap: pretty;
-}
-.door__acts { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s4) var(--s5); }
-.door__mail {
-  font-family: var(--mono);
-  font-size: var(--t4);
-  letter-spacing: .06em;
-  color: var(--fg);
-}
-
 /* ---------- 页脚 ---------- */
 
 .foot {
@@ -911,8 +819,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   .hero { padding: var(--s7) 0 var(--s5); }
   .sec-works--wip .item,
   .sec-works--arch .item { padding: var(--s5) 0; }
-  .works, .now, .about, .door { padding-top: var(--s7); }
-  .door { padding-bottom: var(--s8); }
+  .works, .now, .about { padding-top: var(--s7) }
   .bar .wrap { min-height: 42px; }
   .bar .state { display: none; }
   .bar .hide-sm { display: none; }
@@ -942,7 +849,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
   :root { --pad: 20px; }
   .bar .brand-x { display: none; }
   .links { gap: 0; }
-  .door__acts { gap: var(--s3); }
   .bar .wrap { gap: var(--s3); letter-spacing: .1em; }
   .bar .today { display: none; }
 }
