@@ -182,13 +182,20 @@ outColor=vec4(pow(c,vec3(1.0/2.2)),1.0);
 
   /* ---- 入场：手写 2D 物理坠落（重力 + 触线反弹 + 角度回正）。
      物理只管「怎么落」，不管「落在哪」：终点是 CSS 设计位（transform 归零）。
+     只搬方块本体（canvas / svg），地线与接触影留在地上不跟；
      落定即停帧；落线瞬间派发 shelf-impact，water.js 借此起波。 ---- */
   function drop() {
     var calm = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     var hosts = document.querySelectorAll('[data-cube-host]');
     var i;
 
-    function reveal(el) { el.style.opacity = '1'; }
+    function cubeEl(host) {
+      return host.querySelector('canvas.cube') || host.querySelector('svg.cube');
+    }
+    function reveal(host) {
+      var el = cubeEl(host);
+      if (el) { el.style.opacity = '1'; }
+    }
 
     if (calm || !hosts.length) {
       for (i = 0; i < hosts.length; i++) { reveal(hosts[i]); }
@@ -198,8 +205,10 @@ outColor=vec4(pow(c,vec3(1.0/2.2)),1.0);
     function fall(host, idx) {
       var shelf = host.closest('[data-shelf]');
       var deck = shelf ? shelf.querySelector('.shelf__deck') : null;
+      var el = cubeEl(host);
       var r = host.getBoundingClientRect();
       if (!r.width) { return; }
+      if (!el) { return; }
 
       var deckTop = deck ? deck.getBoundingClientRect().top : r.top - 160;
       var crossAt = null;                      // 底缘触到水线时的 y；无水（签名）为 null 不触发
@@ -244,11 +253,11 @@ outColor=vec4(pow(c,vec3(1.0/2.2)),1.0);
           va += (-ang * 140 - va * 9) * dt;
           ang += va * dt;
           if (Math.abs(ang) < .004 && Math.abs(va) < .05) {
-            host.style.transform = '';
+            el.style.transform = '';
             return;                            // 落定，停帧
           }
         }
-        host.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + ang.toFixed(4) + 'rad)';
+        el.style.transform = 'translateY(' + y.toFixed(2) + 'px) rotate(' + ang.toFixed(4) + 'rad)';
         requestAnimationFrame(tick);
       }
     }

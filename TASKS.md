@@ -19,6 +19,8 @@ updated: 2026-10-28
 
 ## 已完成
 
+- [x] 立方体坠落与地线脱钩：transform / reveal 改到方块本体（canvas / SVG），地线与接触影钉在原位；`.stateobj` 去掉 `overflow: hidden`，签名从上方落进不再被裁（2026-10-29）
+
 - [x] 首页 hero 的外部入口改为内联 SVG 图标（GitHub / B 站 / 邮箱）：44×44 热区、`aria-label` 兜底，hover / 聚焦抬成凸起键并转青，按下下沉 2px（2026-10-28）
 
 - [x] 用户拍板「取 A 物理 + 字号变大 + 砍无意义小字」：规则先行改 DESIGN / DECISIONS / AGENTS（af6bcfb），字号六档上探并删占位小字与死键（1f06b28），立方体入场改手写物理坠落、落水按冲击起波（cb4523f）（2026-10-28）
@@ -42,6 +44,7 @@ updated: 2026-10-28
 
 ## 工作留痕
 
+- 2026-10-29 · 坠落脱钩地线：`cube.js` 的 transform / reveal 目标从 `[data-cube-host]` 改成宿主内的 `canvas.cube` / `svg.cube`，地线（`.stateobj::after`）与接触影不再随坠落位移；连拍确认方块悬在「关于」上方时签名地线仍在原位，落定后 canvas transform 归零、宿主 transform 恒为 none。
 - 2026-10-28 · 首屏外部入口图标化：GitHub / Bilibili 品牌标与信封手写成内联 SVG（不引 Font Awesome，站内依赖纪律不变），44×44 热区、hover 凸起 + 青、按下 2px；浏览器实测三枚轮廓、hover 态与 913px 无溢出。
 - 2026-10-28 · 主名定参收口：用户经调参台定向几何（120° / 420% / 1.75 / 0.1 / 0.1）与微动（9° / 0.125 / 3×）；亮档色差边被判定「像抖音」，改深档 #00827F / #8B2C1F，调参台加色阶开关；导出值与 `site.css` / `home.js` 已对齐。
 - 2026-10-28 · 主名反光调参闭环：三轮目视调音后建 `tools/name-tuner.html`（滑块 + 双预览 + 导出），浏览器实测联动与持久化正常；后续参数调整走调参台，不再手改 CSS。
