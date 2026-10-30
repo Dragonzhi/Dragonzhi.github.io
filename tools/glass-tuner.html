@@ -17,7 +17,7 @@
   .bar b { font-weight: 700; }
   .bar span { color: var(--fg-faint); }
 
-  .layout { display: grid; grid-template-columns: 1fr 400px; min-height: calc(100vh - 49px); }
+  .layout { position: relative; z-index: 2; display: grid; grid-template-columns: 1fr 400px; min-height: calc(100vh - 49px); }
 
   .stage {
     padding: 56px 24px 48px; overflow: hidden;

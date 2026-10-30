@@ -1,14 +1,15 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 玻璃片悬浮已改扫光带（105°/48%/0.6s），歌单并入玻璃；等实页验收。
+next: 底板经控制台定稿冷白，软 UI 卡与去线已落；等实页验收与窄屏复查。
 updated: 2026-10-30
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
 
 ## 待办
 
-- [ ] 玻璃片收尾观察：药丸 32px 与相邻内容的高差、扫光在窄屏上的观感；作品页 `.link` 站外入口是否也换玻璃，尚未定。
+- [ ] 软 UI 落地后复查：390 / 320 窄屏下刻度卡的双列与关于卡的内边距；作品页去线后行距是否够；玻璃片在新底上的观感。
+- [ ] 玻璃片收尾观察：药丸 32px 与相邻内容的高差；作品页 `.link` 站外入口是否也换玻璃，尚未定。
 - [ ] 核实像素火影与 TriHorny4Link 的素材和链接；旧资料记录了封面文字及共用短链的问题。
 - [ ] 评估 `images/projects/morel.jpg` 的压缩空间；`秽土.avif` 暂时保留。
 - [ ] 本地验收后，按用户后续授权处理合并与部署。
@@ -19,6 +20,8 @@ updated: 2026-10-30
 暂无已开始但未完成的任务。
 
 ## 已完成
+
+- [x] 底板定稿冷白 #F2F5F7 + 软 UI：屏上分隔线与 `.rails` 全撤；刻度块与关于表改成 32px 圆角软卡（`#C3CED5 → #FFFFFF` 凸边 + `#284456` 内发光）；新增 `--soft-*` token；配色经 `tools/palette-console.html` 定稿（2026-10-30）
 
 - [x] 邮件图标改复制键：`<a mailto:>` 换成 `<button data-copy>`，点按复制地址并在图标上方浮出面版小签「已复制」（1.6s 淡出、失败显示「复制失败」，`aria-live`、reduced-motion 直接显隐）；`js/home.js` 新增 `copyMail`（2026-10-30）
 
@@ -65,6 +68,9 @@ updated: 2026-10-30
 
 ## 工作留痕
 
+- 2026-10-30 · 光带退场：用户报「离开时倒放」。实测玻璃片是瞬间归位（无过渡），顶栏亚克力片才是真抽回（`transition: background-position .4s`）。按「原地淡出」改：两处底态位置与动画终点对齐（玻璃 100% / 顶栏 0%），hover 跑一遍 `forwards`，离开只让 opacity 0.18s 淡到 0。复验：离开后 position 恒定、opacity 1→0，无中间位移。
+- 2026-10-30 · 配色控制台：用户嫌 #E1E9F1 不称心，改做 `tools/palette-console.html`——iframe 载真实首页/作品页，面板把 `--bg / --surface / --frame / --line / --line-strong / --soft-* / --grid-line` 写进 iframe 的 `:root`，四个预设 + 导出 CSS + localStorage。用户选「旧冷白」并导出，tokens 回写 `#F2F5F7 / #FFFFFF / #C3CED5 / #284456`。落站后实测：软卡在冷白上仍靠凸边立住，玻璃折射弱一档。
+- 2026-10-30 · 抄 Gemini UI：先复刻 `tools/neumorph-preview.html`（A 原底 / B 冷白底 / C 磨砂下拉），链路里发现两件事——预览页内容层压在网格下面（补 `.page { z-index:2 }`），以及旧底只比白暗 4% 导致软 UI 与磨砂全部失效。用户定 #E1E9F1 + 首页铺卡。落站时改 token 五组、删线七处、删 `.rails` 元素两页、新增 `.scale/.rows` 软卡；作品页水线与接触影保留。窄屏 1023 断点里 `.scale` 原有的 bordertop 与 padding 覆盖一并清掉，改成卡内双列。
 - 2026-10-30 · 复制回执：三选一定「纯复制」后落地——图标换 button、`copyMail` 双通道（clipboard → execCommand）、小签走面板配方（不做玻璃不借青色）。验证踩坑：8011 端口仍缓存旧 `home.js`（有 button 无处理器，点击无反应），换 8012 新源复验通过（`已复制` 出现、2s 后 `is-on` 移除、opacity 归 0）。
 - 2026-10-30 · 玻璃扫光定参：先出 `tools/glass-hover-preview.html`（甲乙丙丁，跟随指针 / 扫过 / 常驻 / 棱亮），用户选乙；再按 name-tuner 的样板做 `tools/glass-tuner.html`（六项参数 + 扫完停住/熄灭 + 导出 CSS），用户导出 105°/48%/纯白芯/墨边 0/0.6s。落站时补了两处：`.glass > svg` 也抬到 `z-index:1`（否则图标被光带盖住）、`.rows__r a.glass` 强制 `color: var(--fg)`（压掉铭牌键的 hover 转青）。
 - 2026-10-30 · 出站玻璃 + 工程网格：用户拿参考图判掉预览版的「无网格 / 无外影 / 方角」三点，拍板 A 硬边 + G1 55px；`body::before` 扩为整页图层（网格在上、顶部渐变垫底），`.glass` 只挂 Hanako 与三枚图标，玻璃层走 `::before` + `isolation:isolate`。踩坑：浏览器缓存导致首轮验证读到旧 CSS（换端口 8011 复验），`.rows__r a` 的 3px 圆角压过 `.glass`（补 `.rows__r a.glass` 覆盖）。

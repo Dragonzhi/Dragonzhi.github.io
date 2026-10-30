@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>分隔方式对比 · 调参台</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  body { background: var(--bg); }
+  .page { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: var(--s8) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s2); }
+  .note { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s8); max-width: 52em; line-height: 1.9; }
+  .note b { color: var(--fg); }
+  h2 { font-size: var(--t3); font-weight: 800; margin: 0 0 var(--s1); }
+  .v > p { color: var(--fg-faint); font-size: var(--t4); margin: 0 0 var(--s4); max-width: 62em; line-height: 1.8; }
+  .v { margin: 0 0 var(--s10); }
+
+  /* 展示台：不加边框，避免自己又变成一条线 */
+  .demo { position: relative; padding: 32px 0 8px; }
+  .demo::before {
+    content: attr(data-name);
+    position: absolute; top: 0; left: 0;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    color: var(--fg-faint); text-transform: uppercase;
+  }
+  .demo .sec-head { margin-bottom: var(--s5); }
+  .demo .scale { max-width: 420px; margin-bottom: var(--s6); }
+  .demo .rows { margin-bottom: var(--s6); }
+  .demo .foot { margin: 0; padding-left: 0; padding-right: 0; }
+
+  /* ============ 甲 · 留白分隔 ============ */
+  /* 所有线归零，只有间距与对齐。行距靠 14px 的下 padding 撑出分组感 */
+  .demo-a .sec-head { border-bottom: 0; padding-bottom: 0; }
+  .demo-a .scale { border-left: 0; padding-left: 0; }
+  .demo-a .scale__row { border-bottom: 0; padding: 9px 0; }
+  .demo-a .rows { border-top: 0; }
+  .demo-a .rows__r { border-bottom: 0; padding: 13px 0; }
+  .demo-a .foot { border-top: 0; padding-top: var(--s5); }
+
+  /* ============ 乙 · 只留一条重音 ============ */
+  /* 章节头那条加粗到 2px、走墨色，和网格彻底分开；其余同甲 */
+  .demo-b .sec-head { border-bottom: 2px solid var(--fg); padding-bottom: var(--s3); }
+  .demo-b .scale { border-left: 0; padding-left: 0; }
+  .demo-b .scale__row { border-bottom: 0; padding: 9px 0; }
+  .demo-b .rows { border-top: 0; }
+  .demo-b .rows__r { border-bottom: 0; padding: 13px 0; }
+  .demo-b .foot { border-top: 0; padding-top: var(--s5); }
+
+  /* ============ 丙 · 面代替线 ============ */
+  /* 无描边；表格隔行铺 3% 墨底，刻度与页脚整块抬到 --surface */
+  .demo-c .sec-head { border-bottom: 0; padding-bottom: 0; }
+  .demo-c .scale { border-left: 0; padding: 14px 18px; background: var(--surface); }
+  .demo-c .scale__row { border-bottom: 0; padding: 9px 0; }
+  .demo-c .rows { border-top: 0; padding: 4px 18px; background: var(--surface); }
+  .demo-c .rows__r { border-bottom: 0; padding: 13px 6px; }
+  .demo-c .rows__r:nth-child(even) { background: rgba(18, 23, 26, .035); }
+  .demo-c .foot { border-top: 0; padding: 18px; background: var(--surface); }
+
+  /* ============ 戊 · 磨砂卡片面（照参考图） ============ */
+  /* 无描边、无行线：刻度与关于表各成一张 18px 圆角磨砂卡。
+     半透明白 + backdrop-filter；白度与模糊半径决定网格能透出多少。
+     底只比白暗 4%，所以白度必须压到 .5 上下、模糊压到 3px 以内才看得出来。 */
+  .demo-e .sec-head, .demo-f .sec-head { border-bottom: 0; padding-bottom: 0; }
+  .demo-e .scale, .demo-e .rows,
+  .demo-f .scale, .demo-f .rows {
+    border-radius: 18px;
+    box-shadow: 0 12px 28px -20px rgba(18, 23, 26, .45);
+    -webkit-backdrop-filter: blur(3px);
+    backdrop-filter: blur(3px);
+  }
+  .demo-e .scale, .demo-e .rows { background: rgba(255, 255, 255, .52); }
+  .demo-f .scale, .demo-f .rows { background: rgba(255, 255, 255, .34); }
+
+  .demo-e .scale, .demo-f .scale { border-left: 0; padding: 22px 24px; }
+  .demo-e .scale__row, .demo-f .scale__row { border-bottom: 0; padding: 9px 0; }
+  .demo-e .rows, .demo-f .rows { border-top: 0; padding: 8px 24px; }
+  .demo-e .rows__r, .demo-f .rows__r { border-bottom: 0; padding: 14px 0; }
+  .demo-e .foot, .demo-f .foot { border-top: 0; padding-top: var(--s5); }
+
+  /* ============ 丁 · 线改刻槽 ============ */
+  /* 暗线 + 紧贴其下的亮线 = 一道凹下去的接缝；章节头用更深的 2px */
+  .demo-d .sec-head { border-bottom: 2px solid rgba(18, 23, 26, .30); padding-bottom: var(--s3); }
+  .demo-d .scale { border-left: 0; padding-left: 0; }
+  .demo-d .scale__row,
+  .demo-d .rows__r {
+    border-bottom: 1px solid rgba(18, 23, 26, .18);
+    box-shadow: 0 1px 0 rgba(255, 255, 255, .95);
+  }
+  .demo-d .scale__row { padding: 9px 0; }
+  .demo-d .rows__r { padding: 13px 0; }
+  .demo-d .rows { border-top: 1px solid rgba(18, 23, 26, .18); box-shadow: 0 1px 0 rgba(255, 255, 255, .95); }
+  .demo-d .foot { border-top: 1px solid rgba(18, 23, 26, .18); box-shadow: 0 1px 0 rgba(255, 255, 255, .95); }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>分隔方式 · 四版对比</h1>
+  <p class="note">
+    底板已经是 55px 网格。四版拿同一组组件（章节头、刻度块、关于表、页脚）比：<b>看哪一版不再和网格抢「一条浅线」这个身份</b>。
+    甲乙两版同时撤掉 `.rails` 两侧竖线与全部行线；丙丁保留各自的办法。
+  </p>
+
+  <section class="v">
+    <h2>甲 · 留白分隔</h2>
+    <p>一条线都不留。章节靠 55px 节奏的空当，表格靠 mono 左右对齐，行距 13px 把每条记录分开。网格是页面唯一的纹理，不会再被横切。</p>
+    <div class="demo demo-a" data-name="甲 · 无任何线">
+      <div class="sec-head"><span class="no">01</span><h2>现在</h2></div>
+      <div class="scale">
+        <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v">07</span></div>
+        <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v">04</span></div>
+        <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v">03</span></div>
+      </div>
+      <div class="rows">
+        <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+        <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+        <div class="rows__r"><span>日报</span><span><a class="glass" href="#" onclick="return false">Hanako 箱庭 ↗</a></span></div>
+        <div class="rows__r"><span>歌单</span><span><a class="glass" href="#" onclick="return false">洛天依歌单 ↗</a></span></div>
+      </div>
+      <div class="foot"><div class="row"><span>© 2026 ZLOONG · Dragonzhi</span><span>闽ICP备20260330551号-1</span></div></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>乙 · 只留一条重音</h2>
+    <p>章节头那条留，但加粗到 2px 并走墨色——它不再是「一条浅线」，和网格没有可比性；其余全部归零。线只做重音，不做分隔。</p>
+    <div class="demo demo-b" data-name="乙 · 仅章节头 2px">
+      <div class="sec-head"><span class="no">01</span><h2>现在</h2></div>
+      <div class="scale">
+        <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v">07</span></div>
+        <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v">04</span></div>
+        <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v">03</span></div>
+      </div>
+      <div class="rows">
+        <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+        <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+        <div class="rows__r"><span>日报</span><span><a class="glass" href="#" onclick="return false">Hanako 箱庭 ↗</a></span></div>
+        <div class="rows__r"><span>歌单</span><span><a class="glass" href="#" onclick="return false">洛天依歌单 ↗</a></span></div>
+      </div>
+      <div class="foot"><div class="row"><span>© 2026 ZLOONG · Dragonzhi</span><span>闽ICP备20260330551号-1</span></div></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>丙 · 面代替线</h2>
+    <p>无描边，靠面分：刻度与关于表整块抬到 <code>--surface</code>，表格隔行铺 3% 墨。层级清楚，但大块面会把网格盖住——玻璃就没有东西可透。</p>
+    <div class="demo demo-c" data-name="丙 · 面色分层">
+      <div class="sec-head"><span class="no">01</span><h2>现在</h2></div>
+      <div class="scale">
+        <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v">07</span></div>
+        <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v">04</span></div>
+        <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v">03</span></div>
+      </div>
+      <div class="rows">
+        <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+        <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+        <div class="rows__r"><span>日报</span><span><a class="glass" href="#" onclick="return false">Hanako 箱庭 ↗</a></span></div>
+        <div class="rows__r"><span>歌单</span><span><a class="glass" href="#" onclick="return false">洛天依歌单 ↗</a></span></div>
+      </div>
+      <div class="foot"><div class="row"><span>© 2026 ZLOONG · Dragonzhi</span><span>闽ICP备20260330551号-1</span></div></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>丁 · 线改刻槽</h2>
+    <p>分隔留着，但做成凹槽：1px 墨线 + 紧贴其下的 1px 亮线。读作「面板上铣出来的一道缝」，不是画上去的线。风险：在网格上可能被读成双层格子。</p>
+    <div class="demo demo-d" data-name="丁 · 暗线 + 亮线">
+      <div class="sec-head"><span class="no">01</span><h2>现在</h2></div>
+      <div class="scale">
+        <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v">07</span></div>
+        <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v">04</span></div>
+        <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v">03</span></div>
+      </div>
+      <div class="rows">
+        <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+        <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+        <div class="rows__r"><span>日报</span><span><a class="glass" href="#" onclick="return false">Hanako 箱庭 ↗</a></span></div>
+        <div class="rows__r"><span>歌单</span><span><a class="glass" href="#" onclick="return false">洛天依歌单 ↗</a></span></div>
+      </div>
+      <div class="foot"><div class="row"><span>© 2026 ZLOONG · Dragonzhi</span><span>闽ICP备20260330551号-1</span></div></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>戊 · 卡片面（照参考图）</h2>
+    <p>无描边、无行线：刻度块与关于表各成一张 18px 圆角的<strong>磨砂白卡</strong>（半透明白 + <code>backdrop-filter</code>），网格在卡底下透出约三成并被打糊，条目靠 14px 留白分组。最贴近你给的那张图，卡里的玻璃也还有东西可折射。代价：面板与按键都成了玻璃，只是尺度不同。</p>
+    <div class="demo demo-e" data-name="戊 · 磨砂白卡">
+      <div class="sec-head"><span class="no">01</span><h2>现在</h2></div>
+      <div class="scale">
+        <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v">07</span></div>
+        <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v">04</span></div>
+        <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v">03</span></div>
+      </div>
+      <div class="rows">
+        <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+        <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+        <div class="rows__r"><span>日报</span><span><a class="glass" href="#" onclick="return false">Hanako 箱庭 ↗</a></span></div>
+        <div class="rows__r"><span>歌单</span><span><a class="glass" href="#" onclick="return false">洛天依歌单 ↗</a></span></div>
+      </div>
+      <div class="foot"><div class="row"><span>© 2026 ZLOONG · Dragonzhi</span><span>闽ICP备20260330551号-1</span></div></div>
+    </div>
+
+    <p style="margin-top:var(--s6)">下面这组再透一档（白度 <code>.34</code>），网格更明显，但卡片会偏灰、白感变弱。</p>
+    <div class="demo demo-f" data-name="戊-B · 更透（白度 .34）">
+      <div class="sec-head"><span class="no">01</span><h2>现在</h2></div>
+      <div class="scale">
+        <div class="scale__row"><span class="scale__k">作品</span><span class="scale__v">07</span></div>
+        <div class="scale__row is-live"><span class="scale__k">在跑</span><span class="scale__v">04</span></div>
+        <div class="scale__row"><span class="scale__k">软著</span><span class="scale__v">03</span></div>
+      </div>
+      <div class="rows">
+        <div class="rows__r"><span>引擎</span><span>Godot 4 / Unity</span></div>
+        <div class="rows__r"><span>语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+        <div class="rows__r"><span>日报</span><span><a class="glass" href="#" onclick="return false">Hanako 箱庭 ↗</a></span></div>
+        <div class="rows__r"><span>歌单</span><span><a class="glass" href="#" onclick="return false">洛天依歌单 ↗</a></span></div>
+      </div>
+      <div class="foot"><div class="row"><span>© 2026 ZLOONG · Dragonzhi</span><span>闽ICP备20260330551号-1</span></div></div>
+    </div>
+  </section>
+
+  <p class="note" style="margin:0">拿定了告诉我甲乙丙丁戊；我再把它铺到首页与作品页的全部线位，并同步 DESIGN / DECISIONS。</p>
+</div>
+</body>
+</html>

@@ -54,7 +54,6 @@
   --frame: #16161A;
   --line: #2A2A33;
   --line-strong: #3A3A45;
-  --rail: rgba(233, 238, 241, .055);
 
   --fg: #E9EEF1;
   --fg-dim: #A9B3B9;
@@ -104,27 +103,31 @@
 
   /* 工程网格：全站底板，55px 一格 */
   --grid-line: rgba(233, 238, 241, .07);
+
+  /* 软 UI 卡：外圈凸边（上暗下亮）与内面的深色内发光 */
+  --soft-dark: #3A3A45;
+  --soft-light: #6A6A76;
+  --soft-inset: rgba(0, 0, 0, .85);
 }
 
 /* ============ 白底黑字 · 冷白 ============ */
 [data-theme="cool"] {
   --bg: #F2F5F7;
-  --surface: #E1E8EC;           /* 面板比底深 5%——差值肉眼可感知 */
-  --frame: #D6DEE3;             /* 图框比面板再深一档，水面的暗面也靠它 */
+  --surface: #FFFFFF;           /* 软卡内面：比底亮一档，卡才浮得起来 */
+  --frame: #D6DEE3;             /* 图框比底再深一档，水面的暗面也靠它 */
   --line: #CBD6DB;
   --line-strong: #B9C5CC;
-  --rail: rgba(18, 23, 26, .16);
 
-  --fg: #12171A;                /* 16.5 : 1 */
-  --fg-dim: #4C565C;            /*  6.9 : 1 */
-  --fg-faint: #5C666C;          /*  4.9 : 1 */
+  --fg: #12171A;                /* 16.0 : 1 */
+  --fg-dim: #4C565C;            /*  7.6 : 1 */
+  --fg-faint: #5C666C;          /*  5.9 : 1 */
 
   --live: var(--qing-5);        /* #00605E  6.8 : 1 */
   --live-fill: var(--qing-4);
   --mark: var(--zhu-4);         /* #8B2C1F  7.7 : 1 */
   --mark-fill: var(--zhu-4);
 
-  --toplight: linear-gradient(180deg, rgba(255,255,255,.55) 0%, rgba(255,255,255,.18) 44%, transparent 100%);
+  --toplight: linear-gradient(180deg, rgba(255,255,255,.35) 0%, rgba(255,255,255,.12) 44%, transparent 100%);
   --noise-op: .06;
 
   --cube-top: #E6EDF0;
@@ -159,8 +162,13 @@
   --acrylic-lo: #12171A;
   --acrylic-fg: #E8EFF2;
 
+  /* 软 UI 卡：外圈凸边（上暗下亮）与内面的深色内发光 */
+  --soft-dark: #C3CED5;
+  --soft-light: #FFFFFF;
+  --soft-inset: #284456;
+
   /* 工程网格：全站底板，55px 一格 */
-  --grid-line: rgba(18, 23, 26, .055);
+  --grid-line: rgba(18, 23, 26, .045);
 }
 
 /* ============ 白底黑字 · 暖白 ============ */
@@ -170,7 +178,6 @@
   --frame: #E6DECB;
   --line: #DED5C2;
   --line-strong: #C5BAA4;
-  --rail: rgba(26, 23, 18, .08);
 
   --fg: #1A1712;                /* 16.3 : 1 */
   --fg-dim: #554D40;            /*  7.3 : 1 */
@@ -218,4 +225,9 @@
 
   /* 工程网格：全站底板，55px 一格 */
   --grid-line: rgba(26, 23, 18, .05);
+
+  /* 软 UI 卡：外圈凸边（上暗下亮）与内面的深色内发光 */
+  --soft-dark: #C9BEA8;
+  --soft-light: #FFFDF8;
+  --soft-inset: #2B2418;
 }

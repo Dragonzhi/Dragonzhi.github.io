@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>软 UI 复刻 · 调参台</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  body { background: var(--bg); }
+  .page { position: relative; z-index: 2; max-width: 1100px; margin: 0 auto; padding: var(--s8) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s2); }
+  .note { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s7); max-width: 54em; line-height: 1.9; }
+  .note b { color: var(--fg); }
+  h2 { font-size: var(--t3); font-weight: 800; margin: 0 0 var(--s1); }
+  .v { margin: 0 0 var(--s9); }
+  .v > p { color: var(--fg-faint); font-size: var(--t4); margin: 0 0 var(--s5); max-width: 62em; line-height: 1.8; }
+
+  /* ============ 软 UI 的原料（照 yzrt/Gemini UI 一比一） ============ */
+  .nm {
+    --nb-bg: #E1E9F1;
+    --nb-text: #111b2d;
+    --nb-dark: #92a8c1;
+    --nb-light: #fefeff;
+    --nb-inset: #022143;
+    --nb-face: #f9fcfd;
+    --nb-face-lo: #adc1d3;
+    --nb-dim: #737b81;
+    font-family: "PingFang SC", "Microsoft YaHei", system-ui, sans-serif;
+    color: var(--nb-text);
+    padding: 56px 40px;
+    background: var(--nb-bg);
+    border-radius: 28px;
+  }
+  /* 换成站上的冷白底，其余材料不动——看同一套阴影在浅底上还成不成立 */
+  .nm--cool {
+    --nb-bg: #F2F5F7;
+    --nb-text: #12171A;
+    --nb-dark: #B4C1CC;
+    --nb-light: #FFFFFF;
+    --nb-dim: #5C666C;
+  }
+
+  .nm-head { margin-bottom: 32px; }
+  .nm-des { display: flex; align-items: center; gap: 12px; margin-bottom: 6px; }
+  .nm-des .dot {
+    width: 26px; height: 26px; border-radius: 8px;
+    background: linear-gradient(to bottom, var(--nb-light), var(--nb-dark));
+    box-shadow: 0 1px 2px rgba(18, 23, 26, .25);
+  }
+  .nm-des .text { font-size: 24px; }
+  .nm-title { font-size: 36px; font-weight: 600; letter-spacing: -.02em; }
+
+  /* 大容器：4px 渐变凸边 + 内层深色内发光（参考里的 .chat） */
+  .nm-shell {
+    padding: 4px;
+    border-radius: 40px;
+    background: linear-gradient(to bottom, var(--nb-dark), var(--nb-light));
+  }
+  .nm-shell__in {
+    padding: 22px 26px 26px;
+    border-radius: 35px;
+    background: var(--nb-bg);
+    box-shadow:
+      inset 0 0 12px var(--nb-inset),
+      inset 0 -7px 4px rgba(255, 255, 255, .60),
+      inset 0 4px 3px rgba(154, 169, 184, .60);
+  }
+
+  .nm-scale { display: flex; flex-direction: column; margin-bottom: 22px; }
+  .nm-scale__r {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 6px 2px;
+    font-size: 14px; letter-spacing: .08em;
+  }
+  .nm-scale__r b { font-size: 26px; font-weight: 700; letter-spacing: -.01em; }
+  .nm-scale__r .k { color: var(--nb-dim); }
+
+  .nm-rows { display: flex; flex-direction: column; }
+  .nm-rows__r {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 2px; font-size: 14px; letter-spacing: .06em;
+  }
+  .nm-rows__r .k { color: var(--nb-dim); }
+
+  /* 药丸：4px 渐变凸边 + 渐变面 + 三层内阴影 */
+  .nm-pills { display: flex; gap: 8px; margin-top: 28px; flex-wrap: wrap; }
+  .nm-pill {
+    min-width: 148px; height: 56px; padding: 4px;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, var(--nb-dark), var(--nb-light));
+    font-weight: 600; font-size: 15px;
+    text-shadow: 0 1px 1px #fff;
+    cursor: pointer;
+  }
+  .nm-pill__in {
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    border-radius: 999px;
+    background: linear-gradient(to bottom, var(--nb-face), var(--nb-face-lo));
+    box-shadow:
+      inset 0 0 8px var(--nb-inset),
+      inset 0 -7px 3px rgba(255, 255, 255, .60),
+      inset 0 4px 3px rgba(35, 82, 133, .30);
+  }
+  .nm-pill:hover .nm-pill__in {
+    box-shadow:
+      inset 0 0 9px #011730,
+      inset 0 -7px 3px rgba(255, 255, 255, .50),
+      inset 0 5px 4px rgba(35, 82, 133, .30);
+    font-size: 14px;
+  }
+  .nm-pill:active .nm-pill__in {
+    box-shadow:
+      inset 0 0 8px #01162e,
+      inset 0 -7px 3px rgba(255, 255, 255, .30),
+      inset 0 6px 5px rgba(35, 82, 133, .50);
+    font-size: 13px;
+  }
+
+  /* 磨砂下拉：半透明白 .1 + blur(2px) + 三层内外阴影 */
+  .nm-menu {
+    width: 300px; padding: 8px 0; border-radius: 15px;
+    background: rgba(255, 255, 255, .10);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+    box-shadow:
+      0 4px 8px rgba(152, 169, 186, .80),
+      inset 0 2px 2px rgba(123, 142, 161, .80),
+      inset 0 -2px 2px rgba(249, 253, 255, .90);
+  }
+  .nm-menu__r { padding: 4px 16px 8px; display: flex; flex-direction: column; gap: 2px; }
+  .nm-menu__r .t { font-size: 15px; font-weight: 600; }
+  .nm-menu__r .d { font-size: 12px; color: var(--nb-dim); }
+  .nm-menu__r:hover { background: rgba(136, 136, 136, .06); }
+
+  .nm-anno {
+    margin-top: 18px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .12em;
+    text-transform: uppercase; color: var(--fg-faint);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>软 UI 复刻 · 照 Gemini UI</h1>
+  <p class="note">
+    配方直接搬自 <b>yzrt/Gemini UI</b>：<code>#E1E9F1</code> 底、40px 圆角、外层「上暗下亮」渐变做凸边、内层叠
+    <code>inset 0 0 12px #022143</code> 等三层内影；药丸是渐变边框里再套一层渐变面；下拉是 .10 白 + <code>blur(2px)</code> 的磨砂。
+    下面两版只有底色不同——A 原样，B 换成站上的冷白，看同一套阴影在浅底上还成不成立。
+  </p>
+
+  <section class="v">
+    <h2>A · 原配方（#E1E9F1）</h2>
+    <p>内容换成站上的刻度与关于表，其它一个像素都没改。</p>
+    <div class="nm">
+      <div class="nm-head">
+        <div class="nm-des"><span class="dot"></span><span class="text">Hi ZLOONG</span></div>
+        <div class="nm-title">现在跑到哪了？</div>
+      </div>
+
+      <div class="nm-shell">
+        <div class="nm-shell__in">
+          <div class="nm-scale">
+            <div class="nm-scale__r"><span class="k">作品</span><b>07</b></div>
+            <div class="nm-scale__r"><span class="k">在跑</span><b>04</b></div>
+            <div class="nm-scale__r"><span class="k">软著</span><b>03</b></div>
+          </div>
+
+          <div class="nm-rows">
+            <div class="nm-rows__r"><span class="k">引擎</span><span>Godot 4 / Unity</span></div>
+            <div class="nm-rows__r"><span class="k">语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+            <div class="nm-rows__r"><span class="k">日报</span><span>Hanako 箱庭 ↗</span></div>
+            <div class="nm-rows__r"><span class="k">歌单</span><span>洛天依歌单 ↗</span></div>
+          </div>
+
+          <div class="nm-pills">
+            <div class="nm-pill"><span class="nm-pill__in">洛天依歌单</span></div>
+            <div class="nm-pill"><span class="nm-pill__in">Hanako 箱庭</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nm-anno" style="color:#737b81">A · 原底 #E1E9F1</div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>B · 换成冷白底（#F2F5F7）</h2>
+    <p>只改底色与文字色，阴影与渐变照旧。重点看：浅底上的「凸边 + 内发光」还剩多少。</p>
+    <div class="nm nm--cool">
+      <div class="nm-head">
+        <div class="nm-des"><span class="dot"></span><span class="text">Hi ZLOONG</span></div>
+        <div class="nm-title">现在跑到哪了？</div>
+      </div>
+
+      <div class="nm-shell">
+        <div class="nm-shell__in">
+          <div class="nm-scale">
+            <div class="nm-scale__r"><span class="k">作品</span><b>07</b></div>
+            <div class="nm-scale__r"><span class="k">在跑</span><b>04</b></div>
+            <div class="nm-scale__r"><span class="k">软著</span><b>03</b></div>
+          </div>
+
+          <div class="nm-rows">
+            <div class="nm-rows__r"><span class="k">引擎</span><span>Godot 4 / Unity</span></div>
+            <div class="nm-rows__r"><span class="k">语言</span><span>GDScript / C# / Kotlin / Python / TS</span></div>
+            <div class="nm-rows__r"><span class="k">日报</span><span>Hanako 箱庭 ↗</span></div>
+            <div class="nm-rows__r"><span class="k">歌单</span><span>洛天依歌单 ↗</span></div>
+          </div>
+
+          <div class="nm-pills">
+            <div class="nm-pill"><span class="nm-pill__in">洛天依歌单</span></div>
+            <div class="nm-pill"><span class="nm-pill__in">Hanako 箱庭</span></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="nm-anno" style="color:#5C666C">B · 冷白底 #F2F5F7</div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>C · 磨砂下拉（参考里那张弹层的原样）</h2>
+    <p>这就是你先前发的那张 <code>Fast / Answers quickly</code>：半透明白 .10 + <code>blur(2px)</code>，内容换成了站上的四件事。</p>
+    <div class="nm" style="padding:40px">
+      <div class="nm-menu">
+        <div class="nm-menu__r"><span class="t">在跑</span><span class="d">四件按月修，没有大版本计划</span></div>
+        <div class="nm-menu__r"><span class="t">在制</span><span class="d">第五件还在纸上</span></div>
+        <div class="nm-menu__r"><span class="t">归档</span><span class="d">沉到水位线以下的那几件</span></div>
+        <div class="nm-menu__r"><span class="t">关于</span><span class="d">计算机在读，游戏开发做了几年</span></div>
+      </div>
+      <div class="nm-anno" style="color:#737b81">C · .10 白 + blur(2px)</div>
+    </div>
+  </section>
+
+  <p class="note" style="margin:0">
+    这套材料与现在的站是硬顶的：它靠 <b>外凸渐变边 + 深色内发光</b> 成立，而 DESIGN 现在写的是「哑光、面只做操作、不做装饰性阴影」；
+    40px 圆角、<code>#022143</code> 的深蓝内影也与冷白的四色四岗不同族。要抄就得连规则一起改。
+    拿定了告诉我 A / B / C 各自要不要、以及铺到哪些区块，我再落站。
+  </p>
+</div>
+</body>
+</html>
