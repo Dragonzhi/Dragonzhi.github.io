@@ -21,7 +21,7 @@
 - 按材质分 token 源：`css/tokens-screen.css` 为屏（首页 / 作品）的 token 唯一来源（三套配色：玄黑/冷白/暖白，定稿冷白）；`css/tokens.css` 为纸（子页 / Hanako 箱庭）的设计 token 来源，两套不混用。
 - `js/date.js`：门牌日期注入脚本（`#today`，`data-date-format="dossier"` 走 2026.10.24 等宽格式，缺省走中文长格式），gallery / portfolio / resume 等子页共用，不要再复制内联日期代码。
 - 结构两页：`index.html`（屏，冷白）承担门牌、现在、关于，联系只由 hero 的三枚图标入口承担，不设独立章节；作品一律在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。两页由静态 HTML + `css/site.css` + `js/home.js` 驱动（`js/shelf.js` 仅作品页加载）；刻度从 `data/home.json` 读取，正文与静态兜底写在 HTML 中；`files/` 下的旧文件保留，子页档案架引用 `data/portfolio.json`。
-- 首页 hero 的外部入口（GitHub / B 站 / 邮箱）是三枚内联 SVG 图标，**不用图标字体、不引图标库、不走 CDN**；图标直接写在 `index.html`，热区与 hover 状态在 `css/site.css` 的 `.icon-link`。
+- 首页 hero 的三个入口（GitHub / B 站 / 复制邮箱）是三枚内联 SVG 图标，**不用图标字体、不引图标库、不走 CDN**；图标直接写在 `index.html`，热区与玻璃样式在 `css/site.css` 的 `.icon-link` / `.glass`。第三枚是复制键（`<button data-copy>`），点按复制地址并在图标上方浮出「已复制」小签（`js/home.js` 的 `copyMail`）。
 - **母题立方体**：屏上唯一的立体物，规格写在 `DESIGN.md §7`，只有一处——`works.html` 开头的水位陈列（`.shelf`），七枚 116px（≤767px 为 72px、一排横向滑动）排成一条地平线，**位置即状态**——坐在线上 = 在跑，悬空 = 在制，沉到线下 = 归档；地平线压在方块前面横过去，所以是「站在水里」而不是「浮在空中」；指一块，下面那行就读出那一块（`js/shelf.js`，无脚本时读出行显示首块、方块照常可点）。七枚都能按下拖动（松手带短惯性，再按下即刹车），拖动不触发跳转。**屏上不许再出现第二处立体物**，要加内容就加进那条水线。
 - **水线以下是一池水**：`js/water.js` 用 Canvas2D 高度场（96 列，弹簧回正 + 邻居耦合 + 阻尼）在 `.shelf__deck` 里画水面；只在指针划过、按下、方块抬起时起波，衰减到阈值就清空状态并停掉 rAF——**静止时不跑循环**。它只加载于作品页，无 JS 时不存在；面在方块下缘之前（沉到线下的方块在水面之下），颜色走中性灰蓝，不借用青。`prefers-reduced-motion` 下水面静止。
 - `js/vendor/`：运行时第三方代码的唯一落点，自托管、文件名带版本号、页面按需 `<script defer>`，**不得改用 CDN**。Motion 尚未 vendor，等第一个滚动动效落地时再放固定版本。

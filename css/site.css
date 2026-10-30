@@ -655,6 +655,38 @@ main, .bar, .foot { position: relative; z-index: 2; }
   box-shadow: none;
   transform: none;
 }
+/* 第三枚是复制键，用 button 承载：清掉浏览器默认的面与边 */
+button.icon-link {
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+/* 复制回执：图标上方一枚面板小签，1.6s 后淡出；不做阴影、不借青色 */
+.glass > .copy-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 3px 8px 4px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .1em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s var(--ease);
+}
+.glass > .copy-hint.is-on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .glass > .copy-hint { transition: none; }
+}
 .icon-link.glass:hover,
 .icon-link.glass:focus-visible {
   background: none;

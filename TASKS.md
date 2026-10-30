@@ -20,6 +20,8 @@ updated: 2026-10-30
 
 ## 已完成
 
+- [x] 邮件图标改复制键：`<a mailto:>` 换成 `<button data-copy>`，点按复制地址并在图标上方浮出面版小签「已复制」（1.6s 淡出、失败显示「复制失败」，`aria-live`、reduced-motion 直接显隐）；`js/home.js` 新增 `copyMail`（2026-10-30）
+
 - [x] 玻璃片悬浮改扫光带：去掉文字变色，`::after` 反光带 0%→100% 跑 0.6s（105°、48%、纯白芯），聚焦同样触发、reduced-motion 下不画；洛天依歌单并入玻璃，glass 岗位改「关于区两枚 rows 入口 + hero 三枚图标」（2026-10-30）
 
 - [x] 出站入口改液态玻璃片（Hanako 箱庭药丸 + hero 三枚圆形图标）+ 全页 55px 工程网格；token 层新增 `--grid-line`，DESIGN §1 氛围层 / §6 ⑥ / §6 ② / §6.1 同步（2026-10-30）
@@ -63,6 +65,7 @@ updated: 2026-10-30
 
 ## 工作留痕
 
+- 2026-10-30 · 复制回执：三选一定「纯复制」后落地——图标换 button、`copyMail` 双通道（clipboard → execCommand）、小签走面板配方（不做玻璃不借青色）。验证踩坑：8011 端口仍缓存旧 `home.js`（有 button 无处理器，点击无反应），换 8012 新源复验通过（`已复制` 出现、2s 后 `is-on` 移除、opacity 归 0）。
 - 2026-10-30 · 玻璃扫光定参：先出 `tools/glass-hover-preview.html`（甲乙丙丁，跟随指针 / 扫过 / 常驻 / 棱亮），用户选乙；再按 name-tuner 的样板做 `tools/glass-tuner.html`（六项参数 + 扫完停住/熄灭 + 导出 CSS），用户导出 105°/48%/纯白芯/墨边 0/0.6s。落站时补了两处：`.glass > svg` 也抬到 `z-index:1`（否则图标被光带盖住）、`.rows__r a.glass` 强制 `color: var(--fg)`（压掉铭牌键的 hover 转青）。
 - 2026-10-30 · 出站玻璃 + 工程网格：用户拿参考图判掉预览版的「无网格 / 无外影 / 方角」三点，拍板 A 硬边 + G1 55px；`body::before` 扩为整页图层（网格在上、顶部渐变垫底），`.glass` 只挂 Hanako 与三枚图标，玻璃层走 `::before` + `isolation:isolate`。踩坑：浏览器缓存导致首轮验证读到旧 CSS（换端口 8011 复验），`.rows__r a` 的 3px 圆角压过 `.glass`（补 `.rows__r a.glass` 覆盖）。
 - 2026-10-30 · 顶栏改墨色亚克力：用户判定旧拟物键「CSS 效果很糟」并指向主名那块黑亚克力板；两轮定夺（材质 → 范围），只动 `.tab--on`，`.rows__r a` 与 `.link` 留旧。反光层用 `::before` / `::after` + `z-index:-1` + 父级 `isolation:isolate` 垫在字下，避免洗白笔画；深色片在冷白底首次出现，DESIGN §1 反光与光源两条随之松绑。

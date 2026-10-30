@@ -1,6 +1,6 @@
 /* ============================================================
    home.js —— 屏首页脚本
-   只做三件事：填日期、读 data/home.json 填刻度、复制邮箱。
+   只做三件事：填日期、读 data/home.json 填刻度、复制邮箱并给回执。
    全部失败都要容忍：静态 HTML 里的值就是兜底。
    ============================================================ */
 (function () {
@@ -81,6 +81,51 @@
     window.addEventListener('pointermove', aim, { passive: true });
     document.documentElement.addEventListener('mouseleave', idle);
     window.addEventListener('blur', idle);
+  }());
+
+  /* ---- 复制邮箱：成功 / 失败都在图标上方的小签里给回执 ---- */
+  (function copyMail() {
+    var btn = document.querySelector('[data-copy]');
+    if (!btn) { return; }
+    var hint = btn.querySelector('.copy-hint');
+    var timer = 0;
+
+    var flash = function (text) {
+      if (!hint) { return; }
+      hint.textContent = text;
+      hint.classList.add('is-on');
+      clearTimeout(timer);
+      timer = setTimeout(function () { hint.classList.remove('is-on'); }, 1600);
+    };
+
+    var fallbackCopy = function (text) {
+      var ok = false;
+      try {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        ta.setAttribute('readonly', '');
+        ta.style.position = 'fixed';
+        ta.style.top = '-1000px';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        ok = document.execCommand('copy');
+        document.body.removeChild(ta);
+      } catch (e) { ok = false; }
+      flash(ok ? '已复制' : '复制失败');
+    };
+
+    btn.addEventListener('click', function () {
+      var text = btn.getAttribute('data-copy') || '';
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(
+          function () { flash('已复制'); },
+          function () { fallbackCopy(text); }
+        );
+      } else {
+        fallbackCopy(text);
+      }
+    });
   }());
 
 }());
