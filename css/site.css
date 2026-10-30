@@ -589,7 +589,40 @@ main, .bar, .foot { position: relative; z-index: 2; }
     0 10px 22px -8px rgba(18, 23, 26, .30),              /* 外投影：拖出来的重力 */
     0 3px 8px -3px rgba(18, 23, 26, .14);
 }
-.glass:hover { color: var(--live); }
+/* 悬浮：一道反光带从左扫到右（0.6s），扫完停在右侧常亮；文字不改色。
+   参数由 tools/glass-tuner.html 定：105°、带宽 48%、纯白芯、无墨边。 */
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: linear-gradient(105deg,
+    transparent 0%,
+    rgba(18, 23, 26, 0) 20%,
+    rgba(255, 255, 255, 1) 50%,
+    rgba(18, 23, 26, 0) 80%,
+    transparent 100%);
+  background-size: 48% 100%;
+  background-repeat: no-repeat;
+  background-position: 0% 0;
+  opacity: 0;
+}
+.glass > span,
+.glass > svg { position: relative; z-index: 1; }   /* 字与图标压在光带上面 */
+.glass:hover::after,
+.glass:focus-visible::after {
+  animation: glass-sweep .6s var(--ease) forwards;
+}
+@keyframes glass-sweep {
+  0%   { opacity: 0; background-position: 0% 0; }
+  12%  { opacity: 1; }
+  100% { opacity: 1; background-position: 100% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass::after { display: none; }   /* 少动效时不扫光，玻璃面照常成立 */
+}
 .glass:active { transform: translateY(1px); }
 .glass:active::before {
   box-shadow:
@@ -612,6 +645,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
   border-radius: 9999px;
   background: none;
   box-shadow: none;
+  color: var(--fg);
 }
 
 /* hero 的三枚图标：纽扣形玻璃，热区仍是 44×44 */
@@ -623,7 +657,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 }
 .icon-link.glass:hover,
 .icon-link.glass:focus-visible {
-  color: var(--live);
   background: none;
   box-shadow: none;
   transform: none;

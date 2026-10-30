@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>玻璃按钮悬浮效果 · 调参台</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  body { background: var(--bg); }
+  .page { max-width: 1100px; margin: 0 auto; padding: var(--s8) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s2); }
+  .note { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s7); max-width: 52em; line-height: 1.9; }
+  .note b { color: var(--fg); }
+  h2 { font-size: var(--t3); font-weight: 800; margin: 0 0 var(--s1); }
+  .v { margin: 0 0 var(--s8); }
+  .v > p { color: var(--fg-faint); font-size: var(--t4); margin: 0 0 var(--s4); max-width: 62em; line-height: 1.8; }
+  .row { display: flex; align-items: center; gap: var(--s5); margin: 0 0 var(--s3); flex-wrap: wrap; }
+  .row .k {
+    width: 96px; flex: none;
+    font-family: var(--mono); font-size: var(--t5); letter-spacing: .12em;
+    color: var(--fg-faint); text-transform: uppercase;
+  }
+  .arm { display: inline-flex; align-items: center; gap: var(--s4); }
+  .stage {
+    position: relative;
+    padding: var(--s7) var(--s6) var(--s5);
+    border: 1px solid var(--line);
+    background-image:
+      repeating-linear-gradient(0deg, rgba(18, 23, 26, .055) 0 1px, transparent 1px 55px),
+      repeating-linear-gradient(90deg, rgba(18, 23, 26, .055) 0 1px, transparent 1px 55px);
+  }
+  .stage::before {
+    content: attr(data-name);
+    position: absolute; top: 8px; left: 12px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    color: var(--fg-faint); text-transform: uppercase;
+  }
+
+  /* ============ 玻璃底：与站上 .glass 一致 ============ */
+  .gl {
+    position: relative; isolation: isolate;
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; cursor: pointer; user-select: none;
+    color: var(--fg);
+    font-family: var(--mono); font-size: var(--t5); letter-spacing: .11em; text-transform: uppercase;
+    border-radius: 9999px;
+  }
+  .gl--chip { height: 32px; padding: 0 14px; }
+  .gl--icon { width: 44px; height: 44px; font-size: 18px; }
+  .gl > span { position: relative; z-index: 1; }
+  .gl::before {
+    content: ""; position: absolute; inset: 0; z-index: -1;
+    border-radius: inherit; pointer-events: none;
+    background:
+      linear-gradient(45deg,
+        rgba(255, 255, 255, .90) 0%, rgba(255, 255, 255, 0) 22%,
+        rgba(255, 255, 255, 0) 78%, rgba(255, 255, 255, .90) 100%),
+      rgba(255, 255, 255, .30);
+    box-shadow:
+      inset 2px -2px 1px -1px rgba(255, 255, 255, .95),
+      inset -2px 2px 1px -1px rgba(255, 255, 255, .95),
+      inset 6px -6px 1px -6px rgba(255, 255, 255, .60),
+      inset -6px 6px 1px -6px rgba(255, 255, 255, .60),
+      inset 0 0 3px rgba(18, 23, 26, .45),
+      inset 0 -10px 14px -10px rgba(18, 23, 26, .35),
+      0 10px 22px -8px rgba(18, 23, 26, .30),
+      0 3px 8px -3px rgba(18, 23, 26, .14);
+  }
+  /* 反光带：一道窄光，白芯 + 两侧淡墨边（白底上纯白读不出来，得靠这两条边立住） */
+  .gl::after {
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    border-radius: inherit; pointer-events: none;
+    background-image: linear-gradient(100deg,
+      transparent 0%,
+      rgba(18, 23, 26, .09) 30%,
+      rgba(255, 255, 255, 1) 50%,
+      rgba(18, 23, 26, .09) 70%,
+      transparent 100%);
+    background-size: 34% 100%;
+    background-repeat: no-repeat;
+    background-position: var(--band, 50%) 0;
+    opacity: 0;
+    transition: opacity var(--press) var(--ease);
+  }
+
+  /* ============ 甲 · 跟随指针 ============ */
+  /* 主名浮雕同一种语言：光带跟着指针在面上走，指到哪亮到哪 */
+  .gl--follow:hover::after,
+  .gl--follow.is-hover::after { opacity: 1; }
+
+  /* ============ 乙 · 悬停扫过 ============ */
+  /* 指针进来，光带从左扫到右一次，扫完停在右边 */
+  .gl--sweep::after {
+    background-position: 0% 0;
+    transition: opacity .12s linear, background-position .55s var(--ease);
+  }
+  .gl--sweep:hover::after { opacity: 1; background-position: 100% 0; }
+
+  /* ============ 丙 · 常驻高光 ============ */
+  /* 不动：静止就是一道压在左上的斜光，hover 只是把它点亮 */
+  .gl--still::after {
+    background-image: linear-gradient(115deg,
+      rgba(255, 255, 255, .70) 0%, rgba(255, 255, 255, .14) 24%, transparent 46%);
+    background-size: 100% 100%;
+    background-position: 0 0;
+    opacity: .5;
+    transition: opacity .18s var(--ease);
+  }
+  .gl--still:hover::after,
+  .gl--still.is-hover::after { opacity: 1; }
+
+  /* ============ 丁 · 棱亮 ============ */
+  /* 没有光带：hover 只把上下棱与内壁抬亮，像被光扫到边缘 */
+  .gl--rim::after { display: none; }
+  .gl--rim:hover::before,
+  .gl--rim.is-hover::before {
+    box-shadow:
+      inset 2px -2px 1.5px -1px rgba(255, 255, 255, 1),
+      inset -2px 2px 1.5px -1px rgba(255, 255, 255, 1),
+      inset 0 0 7px rgba(255, 255, 255, .70),
+      inset 0 -10px 14px -10px rgba(18, 23, 26, .30),
+      0 10px 22px -8px rgba(18, 23, 26, .30),
+      0 3px 8px -3px rgba(18, 23, 26, .14);
+  }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>玻璃按钮 · 悬浮效果</h1>
+  <p class="note">
+    四路都<b>不再让文字变色</b>，光只落在玻璃上。甲乙丁三路都做成一道窄白光（<b>主名浮雕同一种语言</b>），区别在于它动不动、怎么动；
+    丙路是静止的斜光，只改亮度。四个片子的静止态完全一样，只管比悬浮那一瞬。
+  </p>
+
+  <section class="v">
+    <h2>甲 · 跟随指针</h2>
+    <p>光带跟着指针在面上走：指针进到哪，白光就压到哪，离开回到中间并熄灭。和首屏 ZLOONG 主名的反光是同一套动作语言（扰动才动，停下就停）。下面三行分别是带子在左 / 中 / 右的位置。</p>
+    <div class="stage" data-name="甲 · 静止与三个位置">
+      <div class="row"><span class="k">静止</span><span class="arm">
+        <a class="gl gl--follow gl--chip js-track" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--follow gl--icon js-track" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+      <div class="row"><span class="k">带在左</span><span class="arm">
+        <a class="gl gl--follow gl--chip is-hover" style="--band: 0%" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--follow gl--icon is-hover" style="--band: 0%" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+      <div class="row"><span class="k">带在中</span><span class="arm">
+        <a class="gl gl--follow gl--chip is-hover" style="--band: 50%" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--follow gl--icon is-hover" style="--band: 50%" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+      <div class="row" style="margin:0"><span class="k">带在右</span><span class="arm">
+        <a class="gl gl--follow gl--chip is-hover" style="--band: 100%" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--follow gl--icon is-hover" style="--band: 100%" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>乙 · 悬停扫过</h2>
+    <p>指针一进来，光带从左扫到右一次（0.55s），走完停在右边；移开即熄灭。定向、短促，像有人拿灯擦了一下。</p>
+    <div class="stage" data-name="乙 · 把指针移到片子上看">
+      <div class="row" style="margin:0"><span class="k">悬停试试</span><span class="arm">
+        <a class="gl gl--sweep gl--chip" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--sweep gl--icon" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>丙 · 常驻高光</h2>
+    <p>光带不动：静止时左上就压着一道斜光（亮度 50%），hover 只把它点满。最安静的一路，没有动作，只有受光强弱。</p>
+    <div class="stage" data-name="丙 · 静止与悬停">
+      <div class="row"><span class="k">静止</span><span class="arm">
+        <a class="gl gl--still gl--chip" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--still gl--icon" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+      <div class="row" style="margin:0"><span class="k">悬停</span><span class="arm">
+        <a class="gl gl--still gl--chip is-hover" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--still gl--icon is-hover" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>丁 · 棱亮</h2>
+    <p>不放光带：hover 只把上下棱与内壁的受光抬亮，像光斜扫过边缘。最克制，但「玻璃」这一下最不明显。</p>
+    <div class="stage" data-name="丁 · 静止与悬停">
+      <div class="row"><span class="k">静止</span><span class="arm">
+        <a class="gl gl--rim gl--chip" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--rim gl--icon" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+      <div class="row" style="margin:0"><span class="k">悬停</span><span class="arm">
+        <a class="gl gl--rim gl--chip is-hover" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+        <a class="gl gl--rim gl--icon is-hover" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+      </span></div>
+    </div>
+  </section>
+
+  <p class="note" style="margin:0">拿定了告诉我甲乙丙丁；我把那一路写进 `.glass`，替掉现在的文字变色，并把光带铺到 Hanako 与 hero 三枚图标上。</p>
+</div>
+
+<script>
+  (function () {
+    document.querySelectorAll('.js-track').forEach(function (el) {
+      el.addEventListener('pointermove', function (e) {
+        var box = el.getBoundingClientRect();
+        var p = (e.clientX - box.left) / box.width;
+        el.style.setProperty('--band', (p * 100).toFixed(1) + '%');
+      });
+      el.addEventListener('pointerleave', function () {
+        el.style.setProperty('--band', '50%');
+      });
+    });
+  }());
+</script>
+</body>
+</html>

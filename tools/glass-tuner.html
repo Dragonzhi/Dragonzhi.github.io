@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>玻璃扫光调参台 · ZLOONG（本地工具）</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; }
+  .bar {
+    display: flex; align-items: baseline; gap: 16px;
+    padding: 14px 24px; border-bottom: 1px solid var(--line-strong);
+    font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  }
+  .bar b { font-weight: 700; }
+  .bar span { color: var(--fg-faint); }
+
+  .layout { display: grid; grid-template-columns: 1fr 400px; min-height: calc(100vh - 49px); }
+
+  .stage {
+    padding: 56px 24px 48px; overflow: hidden;
+    background-image:
+      repeating-linear-gradient(0deg, rgba(18, 23, 26, .055) 0 1px, transparent 1px 55px),
+      repeating-linear-gradient(90deg, rgba(18, 23, 26, .055) 0 1px, transparent 1px 55px);
+  }
+  .stage__hint {
+    font-family: var(--mono); font-size: 13px; letter-spacing: .1em;
+    color: var(--fg-faint); text-transform: uppercase; margin: 0 0 18px;
+  }
+  .arm { display: flex; align-items: center; gap: var(--s5); margin: 0 0 56px; }
+  .arm--last { margin-bottom: 0; }
+
+  /* 站上 .glass 的基本形；这里只补尺寸与文字层 */
+  .chip { height: 32px; padding: 0 14px; }
+  .icon { width: 44px; height: 44px; font-size: 18px; }
+  .glass > span { position: relative; z-index: 1; }
+
+  /* ============ 乙 · 扫光（本轮要调的东西） ============ */
+  /* 反光带：白芯 + 两侧淡墨边；尺寸、角度、浓淡全部走变量 */
+  .gd::after {
+    content: ""; position: absolute; inset: 0; z-index: 0;
+    border-radius: inherit; pointer-events: none;
+    background-image: linear-gradient(var(--ang, 100deg),
+      transparent 0%,
+      rgba(18, 23, 26, var(--ink, .09)) var(--e1, 30%),
+      rgba(255, 255, 255, var(--core, 1)) 50%,
+      rgba(18, 23, 26, var(--ink, .09)) var(--e2, 70%),
+      transparent 100%);
+    background-size: var(--bw, 34%) 100%;
+    background-repeat: no-repeat;
+    background-position: 0% 0;
+    opacity: 0;
+  }
+  .gd:hover { color: var(--fg); }
+  .gd:hover::after,
+  .gd.is-run::after {
+    animation: gd-sweep var(--dur, .55s) var(--ease) forwards;
+  }
+  @keyframes gd-sweep {
+    0%   { opacity: 0; background-position: 0% 0; }
+    12%  { opacity: 1; }
+    100% { opacity: var(--end-op, 1); background-position: 100% 0; }
+  }
+
+  .panel {
+    border-left: 1px solid var(--line-strong);
+    padding: 20px 22px 32px;
+    display: flex; flex-direction: column; gap: 4px;
+    background: var(--surface);
+  }
+  .panel h2 {
+    margin: 12px 0 4px; font-family: var(--mono); font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--fg-dim);
+  }
+  .row { display: grid; grid-template-columns: 1fr 72px; gap: 4px 12px; align-items: center; margin: 6px 0; }
+  .row label { font-size: 14px; color: var(--fg); }
+  .row output {
+    font-family: var(--mono); font-size: 13px; text-align: right; color: var(--fg);
+    font-variant-numeric: tabular-nums;
+  }
+  .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--fg); height: 22px; }
+  .row--select { grid-template-columns: 1fr 96px; }
+  .row--select select {
+    grid-column: 1 / -1; width: 100%; padding: 8px 10px; margin-top: 2px;
+    font: inherit; font-size: 13px; color: var(--fg); background: var(--btn-bg);
+    border: 1px solid var(--line-strong); border-radius: 0;
+  }
+
+  .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
+  .actions button {
+    font-family: var(--mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+    padding: 10px 14px; border: 0; cursor: pointer;
+    background: var(--btn-bg); color: var(--fg);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.12), 0 1px 0 rgba(0,0,0,.12), 0 3px 10px rgba(18,23,26,.18);
+  }
+  .actions button:active { transform: translateY(2px); box-shadow: inset 0 2px 5px rgba(18,23,26,.14); }
+  pre#out {
+    margin: 16px 0 0; padding: 14px; overflow: auto; max-height: 320px;
+    font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    background: var(--frame); color: var(--fg);
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .note { color: var(--fg-faint); font-size: 13px; line-height: 1.7; margin-top: 14px; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .panel { border-left: 0; border-top: 1px solid var(--line-strong); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <b>玻璃扫光调参台</b>
+  <span>本地工具 · 站内无入口 · 参数存 localStorage</span>
+</div>
+
+<div class="layout">
+  <section class="stage">
+    <p class="stage__hint">把指针移到片子上 → 扫一次光；「重放」可再看一次</p>
+    <div class="arm">
+      <a class="glass gd chip js-gd" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+      <a class="glass gd icon js-gd" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+    </div>
+
+    <p class="stage__hint">静止（未触发扫光）</p>
+    <div class="arm arm--last">
+      <a class="glass chip" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
+      <a class="glass icon" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
+    </div>
+  </section>
+
+  <aside class="panel">
+    <h2>反光带</h2>
+    <div id="sliders-band"></div>
+
+    <h2>扫光</h2>
+    <div id="sliders-sweep"></div>
+
+    <div class="actions">
+      <button type="button" id="replay">重放</button>
+      <button type="button" id="copy">复制导出</button>
+      <button type="button" id="reset">重置</button>
+    </div>
+
+    <pre id="out"></pre>
+    <p class="note">导出的 CSS 落到 <code>css/site.css</code> 的 <code>.glass::after</code> 与 <code>.glass:hover::after</code>。白芯必须配两条淡墨边：纯白光在白色玻璃上读不出来。</p>
+  </aside>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'zloong-glass-tuner-v1';
+
+  var DEFS = [
+    { k: 'bw',   label: '光带宽度',   min: 12,  max: 60,  step: 1,   def: 34,   unit: '%',   group: 'band' },
+    { k: 'ang',  label: '光带角度',   min: 80,  max: 120, step: 1,   def: 100,  unit: 'deg', group: 'band' },
+    { k: 'core', label: '白芯亮度',   min: .3,  max: 1,   step: .05, def: 1,    unit: '',    group: 'band' },
+    { k: 'ink',  label: '墨边强度',   min: 0,   max: .22, step: .01, def: .09,  unit: '',    group: 'band' },
+    { k: 'edge', label: '墨边位置',   min: 8,   max: 45,  step: 1,   def: 30,   unit: '%',   group: 'band' },
+    { k: 'dur',  label: '扫过时长',   min: .3,  max: 1,   step: .05, def: .55,  unit: 's',   group: 'sweep' }
+  ];
+
+  var p = { end: 'stay' };
+  DEFS.forEach(function (d) { p[d.k] = d.def; });
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+    DEFS.forEach(function (d) {
+      var v = parseFloat(saved[d.k]);
+      if (isFinite(v)) { p[d.k] = Math.min(d.max, Math.max(d.min, v)); }
+    });
+    if (saved.end === 'fade') { p.end = 'fade'; }
+  } catch (e) { /* 坏数据就当没有 */ }
+
+  var chips = Array.prototype.slice.call(document.querySelectorAll('.js-gd'));
+  var out = document.getElementById('out');
+  var copyBtn = document.getElementById('copy');
+  var resetBtn = document.getElementById('reset');
+  var replayBtn = document.getElementById('replay');
+
+  function css(p) {
+    return '/* css/site.css · .glass::after（由 tools/glass-tuner.html 导出） */\n' +
+      '.glass::after {\n' +
+      '  content: "";\n' +
+      '  position: absolute;\n' +
+      '  inset: 0;\n' +
+      '  z-index: 0;\n' +
+      '  border-radius: inherit;\n' +
+      '  pointer-events: none;\n' +
+      '  background-image: linear-gradient(' + p.ang + 'deg,\n' +
+      '    transparent 0%,\n' +
+      '    rgba(18, 23, 26, ' + p.ink + ') ' + p.edge + '%,\n' +
+      '    rgba(255, 255, 255, ' + p.core + ') 50%,\n' +
+      '    rgba(18, 23, 26, ' + p.ink + ') ' + (100 - p.edge) + '%,\n' +
+      '    transparent 100%);\n' +
+      '  background-size: ' + p.bw + '% 100%;\n' +
+      '  background-repeat: no-repeat;\n' +
+      '  background-position: 0% 0;\n' +
+      '  opacity: 0;\n' +
+      '}\n' +
+      '.glass > span { position: relative; z-index: 1; }\n' +
+      '.glass:hover::after {\n' +
+      '  animation: glass-sweep ' + p.dur + 's var(--ease) forwards;\n' +
+      '}\n' +
+      '@keyframes glass-sweep {\n' +
+      '  0%   { opacity: 0; background-position: 0% 0; }\n' +
+      '  12%  { opacity: 1; }\n' +
+      '  100% { opacity: ' + (p.end === 'fade' ? 0 : 1) + '; background-position: 100% 0; }\n' +
+      '}';
+  }
+
+  function apply() {
+    chips.forEach(function (el) {
+      el.style.setProperty('--bw', p.bw + '%');
+      el.style.setProperty('--ang', p.ang + 'deg');
+      el.style.setProperty('--core', p.core);
+      el.style.setProperty('--ink', p.ink);
+      el.style.setProperty('--e1', p.edge + '%');
+      el.style.setProperty('--e2', (100 - p.edge) + '%');
+      el.style.setProperty('--dur', p.dur + 's');
+      el.style.setProperty('--end-op', p.end === 'fade' ? '0' : '1');
+    });
+    out.textContent = css(p);
+    try { localStorage.setItem(KEY, JSON.stringify(p)); } catch (e) { /* 隐私模式 */ }
+  }
+
+  /* ---- 滑块 ---- */
+  var outputs = {};
+  DEFS.forEach(function (d) {
+    var box = document.getElementById(d.group === 'band' ? 'sliders-band' : 'sliders-sweep');
+    var row = document.createElement('div');
+    row.className = 'row';
+    var label = document.createElement('label');
+    label.textContent = d.label;
+    label.setAttribute('for', 'ctl-' + d.k);
+    var outEl = document.createElement('output');
+    var input = document.createElement('input');
+    input.type = 'range';
+    input.id = 'ctl-' + d.k;
+    input.min = d.min; input.max = d.max; input.step = d.step; input.value = p[d.k];
+    var show = function () { outEl.textContent = String(p[d.k]) + d.unit; };
+    input.addEventListener('input', function () {
+      p[d.k] = parseFloat(input.value);
+      show();
+      apply();
+    });
+    show();
+    outputs[d.k] = { input: input, show: show };
+    row.appendChild(label); row.appendChild(outEl); row.appendChild(input);
+    box.appendChild(row);
+  });
+
+  /* ---- 扫完的处理：停住 / 熄灭 ---- */
+  var endSel = null, endShow = null;
+  (function endControl() {
+    var box = document.getElementById('sliders-sweep');
+    var row = document.createElement('div');
+    row.className = 'row row--select';
+    var label = document.createElement('label');
+    label.textContent = '扫完的处理';
+    label.setAttribute('for', 'ctl-end');
+    var outEl = document.createElement('output');
+    endSel = document.createElement('select');
+    endSel.id = 'ctl-end';
+    [['stay', '停在右侧（常亮）'], ['fade', '扫完熄灭']].forEach(function (o) {
+      var opt = document.createElement('option');
+      opt.value = o[0];
+      opt.textContent = o[1];
+      endSel.appendChild(opt);
+    });
+    endShow = function () {
+      endSel.value = p.end;
+      outEl.textContent = p.end === 'fade' ? '熄灭' : '停住';
+    };
+    endSel.addEventListener('change', function () {
+      p.end = endSel.value;
+      endShow();
+      apply();
+    });
+    endShow();
+    row.appendChild(label); row.appendChild(outEl); row.appendChild(endSel);
+    box.insertBefore(row, box.firstChild);
+  }());
+
+  function replay() {
+    chips.forEach(function (el) {
+      el.classList.remove('is-run');
+      void el.offsetWidth;          /* 强制重排，动画才会重头播 */
+      el.classList.add('is-run');
+    });
+  }
+
+  replayBtn.addEventListener('click', replay);
+
+  resetBtn.addEventListener('click', function () {
+    DEFS.forEach(function (d) {
+      p[d.k] = d.def;
+      outputs[d.k].input.value = d.def;
+      outputs[d.k].show();
+    });
+    p.end = 'stay';
+    if (endShow) { endShow(); }
+    apply();
+  });
+
+  copyBtn.addEventListener('click', function () {
+    var text = out.textContent;
+    var flash = function (label) {
+      copyBtn.textContent = label;
+      setTimeout(function () { copyBtn.textContent = '复制导出'; }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { flash('已复制'); }, function () { flash('复制失败'); });
+      return;
+    }
+    try {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      flash('已复制');
+    } catch (e) { flash('复制失败'); }
+  });
+
+  apply();
+}());
+</script>
+</body>
+</html>
