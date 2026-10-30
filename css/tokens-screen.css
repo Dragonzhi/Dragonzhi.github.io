@@ -95,6 +95,15 @@
   --key-step: #08080C;
   --plate-hi: #1E1E25;
   --plate-lo: #131319;
+
+  /* 亚克力按键：顶栏当前页的墨色片（面三段 + 字） */
+  --acrylic-hi: #2E353B;
+  --acrylic-face: #20262B;
+  --acrylic-lo: #171C20;
+  --acrylic-fg: #E9EEF1;
+
+  /* 工程网格：全站底板，55px 一格 */
+  --grid-line: rgba(233, 238, 241, .07);
 }
 
 /* ============ 白底黑字 · 冷白 ============ */
@@ -143,6 +152,15 @@
   --key-step: #C3CED5;
   --plate-hi: #F7FAFB;
   --plate-lo: #DFE6EB;
+
+  /* 亚克力按键：顶栏当前页的墨色片（面三段 + 字） */
+  --acrylic-hi: #2A3035;
+  --acrylic-face: #1B2024;
+  --acrylic-lo: #12171A;
+  --acrylic-fg: #E8EFF2;
+
+  /* 工程网格：全站底板，55px 一格 */
+  --grid-line: rgba(18, 23, 26, .055);
 }
 
 /* ============ 白底黑字 · 暖白 ============ */
@@ -191,4 +209,13 @@
   --key-step: #CFC5B4;
   --plate-hi: #FBF9F3;
   --plate-lo: #E9E3D6;
+
+  /* 亚克力按键：顶栏当前页的墨色片（面三段 + 字） */
+  --acrylic-hi: #34302A;
+  --acrylic-face: #232019;
+  --acrylic-lo: #18150F;
+  --acrylic-fg: #F3EDE3;
+
+  /* 工程网格：全站底板，55px 一格 */
+  --grid-line: rgba(26, 23, 18, .05);
 }

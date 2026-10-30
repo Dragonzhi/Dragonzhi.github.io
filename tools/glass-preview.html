@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>液态玻璃方案对比 · 调参台</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  body { background: var(--bg); }
+  .page { max-width: 1100px; margin: 0 auto; padding: var(--s8) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s2); }
+  .note { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s7); max-width: 52em; line-height: 1.9; }
+  .note b { color: var(--fg); }
+  h2 { font-size: var(--t3); font-weight: 800; margin: 0 0 var(--s1); }
+  .v { margin: 0 0 var(--s8); }
+  .v > p { color: var(--fg-faint); font-size: var(--t4); margin: 0 0 var(--s4); max-width: 62em; line-height: 1.8; }
+  .row { display: flex; align-items: center; gap: var(--s5); margin: 0 0 var(--s3); flex-wrap: wrap; }
+  .row .k {
+    width: 56px; flex: none;
+    font-family: var(--mono); font-size: var(--t5); letter-spacing: .12em;
+    color: var(--fg-faint); text-transform: uppercase;
+  }
+  .arm { display: inline-flex; align-items: center; gap: var(--s4); }
+
+  /* ============ 背景候选 ============ */
+  .stage {
+    position: relative;
+    padding: var(--s7) var(--s6) var(--s5);
+    margin: 0 0 var(--s3);
+    border: 1px solid var(--line);
+  }
+  .stage::before {
+    content: attr(data-name);
+    position: absolute; top: 8px; left: 12px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: .14em;
+    color: var(--fg-faint); text-transform: uppercase;
+  }
+  .stage--g1 {
+    background-image:
+      repeating-linear-gradient(0deg, rgba(18, 23, 26, .055) 0 1px, transparent 1px 55px),
+      repeating-linear-gradient(90deg, rgba(18, 23, 26, .055) 0 1px, transparent 1px 55px);
+  }
+  .stage--g2 {
+    background-image:
+      repeating-linear-gradient(0deg, rgba(18, 23, 26, .04) 0 1px, transparent 1px 18px),
+      repeating-linear-gradient(90deg, rgba(18, 23, 26, .04) 0 1px, transparent 1px 18px);
+  }
+  .stage--g3 { background: var(--bg); }
+
+  /* ============ 玻璃共性 ============ */
+  .gl {
+    position: relative;
+    display: inline-flex; align-items: center; justify-content: center;
+    text-decoration: none; cursor: pointer; user-select: none;
+    color: var(--fg);
+    font-family: var(--mono); font-size: var(--t5); letter-spacing: .11em; text-transform: uppercase;
+    border-radius: 9999px;
+    transition: color var(--press) var(--ease), transform var(--press) var(--ease);
+  }
+  .gl--chip { height: 36px; padding: 0 16px; }
+  .gl--icon { width: 48px; height: 48px; font-size: 20px; }
+  .gl > span { position: relative; z-index: 1; }
+  .gl > span.ref { filter: drop-shadow(0 6px 2px rgba(18, 23, 26, .16)); }
+  .lens {
+    position: absolute; inset: 0; z-index: 0;
+    border-radius: inherit; pointer-events: none;
+    background:
+      linear-gradient(45deg,
+        rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 22%,
+        rgba(255, 255, 255, 0) 78%, rgba(255, 255, 255, .9) 100%),
+      rgba(255, 255, 255, .30);
+    box-shadow:
+      inset 2px -2px 1px -1px rgba(255, 255, 255, .95),
+      inset -2px 2px 1px -1px rgba(255, 255, 255, .95),
+      inset 6px -6px 1px -6px rgba(255, 255, 255, .6),
+      inset -6px 6px 1px -6px rgba(255, 255, 255, .6),
+      inset 0 0 3px rgba(18, 23, 26, .45),
+      inset 0 -10px 14px -10px rgba(18, 23, 26, .35),
+      0 10px 22px -8px rgba(18, 23, 26, .30),
+      0 3px 8px -3px rgba(18, 23, 26, .14);
+  }
+  .gl:hover, .gl.is-hover { color: var(--live); }
+  .gl:active, .gl.is-press { transform: translateY(1px); }
+  .gl.is-press .lens {
+    box-shadow:
+      inset 2px -2px 1px -1px rgba(255, 255, 255, .95),
+      inset -2px 2px 1px -1px rgba(255, 255, 255, .95),
+      inset 0 0 3px rgba(18, 23, 26, .45),
+      inset 0 -10px 14px -10px rgba(18, 23, 26, .35),
+      0 4px 10px -6px rgba(18, 23, 26, .26),
+      0 1px 3px -1px rgba(18, 23, 26, .12);
+  }
+  .gl:focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
+
+  /* A · 硬边玻璃：不上 contrast，硬边靠渐变停点 */
+  /* B · 原配方：contrast(3) + backdrop-filter，复刻参考图 */
+  .gl--b .lens {
+    backdrop-filter: blur(2px);
+    background:
+      linear-gradient(45deg,
+        rgba(255, 255, 255, .9) 0%, rgba(255, 255, 255, 0) 16%,
+        rgba(255, 255, 255, 0) 84%, rgba(255, 255, 255, .9) 100%),
+      rgba(255, 255, 255, .26);
+    filter: contrast(3) brightness(.96);
+  }
+
+  /* D · 墨色亚克力基线 */
+  .gl--d { border-radius: 4px; color: var(--acrylic-fg); }
+  .gl--d .lens {
+    background: linear-gradient(165deg, var(--acrylic-hi) 0%, var(--acrylic-face) 48%, var(--acrylic-lo) 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, .22),
+      inset 0 -1px 0 rgba(0, 0, 0, .55),
+      0 1px 0 rgba(18, 23, 26, .12);
+  }
+  .gl--d:hover, .gl--d.is-hover { color: #9FD8D5; }
+</style>
+</head>
+<body>
+<div class="page">
+  <h1>液态玻璃 · 第二版</h1>
+  <p class="note">
+    对照参考图补了三样：<b>网格底</b>（玻璃把网格放大模糊地透出来，那是「液态」的来源）、
+    <b>外投影</b>（药丸底下拖出来的一团软影）、<b>文字倒影</b>（label 自己的 drop-shadow 向下偏）。
+    形状改成药丸与正圆。先看三种背景，再看两种玻璃写法落在网格上的差别，最后是现行墨色亚克力做基线。
+  </p>
+
+  <section class="v">
+    <h2>一、背景候选（玻璃统一用 B 原配方，只换底）</h2>
+    <p>同一颗玻璃放三种底上。网格越密，玻璃里的折射越碎；没有网格就没有东西可透，只剩磨砂白。</p>
+
+    <div class="stage stage--g1" data-name="G1 · 55px 网格（参考图原尺寸，墨 5.5%）">
+      <a class="gl gl--b gl--chip" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+      <a class="gl gl--b gl--icon" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+    </div>
+
+    <div class="stage stage--g2" data-name="G2 · 18px 细网格（墨 4%）">
+      <a class="gl gl--b gl--chip" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+      <a class="gl gl--b gl--icon" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+    </div>
+
+    <div class="stage stage--g3" data-name="G3 · 不铺底纹（现状）">
+      <a class="gl gl--b gl--chip" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+      <a class="gl gl--b gl--icon" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>二、A · 硬边玻璃（不上 contrast）</h2>
+    <p>落在 55px 网格上，只去掉 contrast(3)，硬边靠渐变停点。与下面的 B 对比：边缘更干脆，但网格不会被压得那么「液体」。</p>
+    <div class="stage stage--g1" data-name="落在 G1 上 · 三态">
+      <div class="row"><span class="k">静止</span><span class="arm">
+        <a class="gl gl--a gl--chip" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--a gl--icon" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+      </span></div>
+      <div class="row"><span class="k">悬停</span><span class="arm">
+        <a class="gl gl--a gl--chip is-hover" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--a gl--icon is-hover" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+      </span></div>
+      <div class="row" style="margin:0"><span class="k">按下</span><span class="arm">
+        <a class="gl gl--a gl--chip is-press" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--a gl--icon is-press" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+      </span></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>三、B · 原配方（contrast + backdrop-filter）</h2>
+    <p>与参考图同一条生成链：玻璃层先 backdrop-filter 吃到网格，再由 contrast(3) 把软边压硬。网格会被玻璃「放大 + 模糊」，就是参考图里那种糖果感。代价是多一层 GPU 滤镜。</p>
+    <div class="stage stage--g1" data-name="落在 G1 上 · 三态">
+      <div class="row"><span class="k">静止</span><span class="arm">
+        <a class="gl gl--b gl--chip" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--b gl--icon" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+      </span></div>
+      <div class="row"><span class="k">悬停</span><span class="arm">
+        <a class="gl gl--b gl--chip is-hover" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--b gl--icon is-hover" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+      </span></div>
+      <div class="row" style="margin:0"><span class="k">按下</span><span class="arm">
+        <a class="gl gl--b gl--chip is-press" href="#" onclick="return false"><span class="ref">Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--b gl--icon is-press" href="#" onclick="return false" aria-label="图标"><span class="ref">＋</span><i class="lens"></i></a>
+      </span></div>
+    </div>
+  </section>
+
+  <section class="v">
+    <h2>四、D · 墨色亚克力片（现行顶栏，基线）</h2>
+    <p>顶栏已定的材质，放这里对照。它靠深色面自己成立，不依赖背景；液态玻璃则完全吃背景。两种材质分工做「站内 / 站外」。</p>
+    <div class="stage stage--g1" data-name="落在 G1 上 · 静止">
+      <div class="row" style="margin:0"><span class="k">静止</span><span class="arm">
+        <a class="gl gl--d gl--chip" href="#" onclick="return false"><span>Hanako 箱庭 ↗</span><i class="lens"></i></a>
+        <a class="gl gl--d gl--icon" href="#" onclick="return false" aria-label="图标"><span>＋</span><i class="lens"></i></a>
+      </span></div>
+    </div>
+  </section>
+
+  <p class="note" style="margin:0">
+    注意：正圆目前只允许出现在状态灯（DESIGN §6 ②），玻璃图标做成正圆要再开一个口子；若不接受，可改成药丸或 4px 方片。
+    拿定了给背景代号（G1 / G2 / G3）与玻璃路线（A / B），我再落站。
+  </p>
+</div>
+</body>
+</html>
