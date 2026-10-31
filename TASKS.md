@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 按钮反馈 A/B/C 对比页已出（`tools/btn-feedback.html`），等你选型后落站。
+next: 铭牌反馈定为 C 纯行程（hover 不加光不转色），已落站；等你下一条逐条指导。
 updated: 2026-10-31
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -16,9 +16,11 @@ updated: 2026-10-31
 
 ## 进行中
 
-- [ ] 按钮 hover 反馈选型：A 状态层 / B 指针微光 / C 纯行程三案已做成 `tools/btn-feedback.html`；选定后落站，并去掉铭牌 hover 转青（`--live` 只留给「在跑」）。
+暂无已开始但未完成的任务。
 
 ## 已完成
+
+- [x] 铭牌反馈改 C 纯行程：删 `plate-sweep` 与铭牌 hover 转青，hover 不改变面、不加光，反馈只在按下的 1px 与斜棱交换；`plate-tuner` 去掉扫光控件与默认值，DESIGN/DECISIONS 同步（2026-10-31）
 
 - [x] `DECISIONS.md` 按主题重排：身份 / 材质 / 母题 / 版面 / 入口 / 工程六组，同一元素的反复调整合并成一条，走不通的写进「否掉」；501 → 约 270 行（2026-10-31）
 

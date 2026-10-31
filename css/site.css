@@ -147,11 +147,10 @@ main, .bar, .foot { position: relative; z-index: 2; }
     inset -1.5px -1.5px 0 rgba(18, 23, 26, .20),
     0 2px 0 rgba(18, 23, 26, .10),
     0 5px 8px -3px rgba(18, 23, 26, .18);
-  transition: color var(--press) var(--ease),
-              transform var(--press) var(--ease),
+  transition: transform var(--press) var(--ease),
               box-shadow var(--press) var(--ease);
 }
-/* 静止时左上角一道进光，与顶栏亚克力片同一种光；垫在字与图标下面 */
+/* 静止时左上角一道进光，与顶栏亚克力片同一种光；hover 不再加任何光 */
 .icon-link::before,
 .link::before,
 .rows__r a::before {
@@ -164,45 +163,8 @@ main, .bar, .foot { position: relative; z-index: 2; }
   background: linear-gradient(118deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, .12) 26%, transparent 48%);
   opacity: .7;
 }
-/* 悬停扫光：一道窄光从左到右只扫一次，扫出即走，不在边上停下 */
-.icon-link::after,
-.link::after,
-.rows__r a::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background-image: linear-gradient(105deg,
-    transparent 40%,
-    rgba(18, 23, 26, .06) 45%,
-    rgba(255, 255, 255, .95) 50%,
-    rgba(18, 23, 26, .06) 55%,
-    transparent 60%);
-  background-size: 220% 100%;
-  background-repeat: no-repeat;
-  background-position: 100% 0;   /* 与扫光起点一致，扫完离场 */
-  opacity: 0;
-}
-.icon-link:hover::after,
-.icon-link:focus-visible::after,
-.link:hover::after,
-.link:focus-visible::after,
-.rows__r a:hover::after,
-.rows__r a:focus-visible::after {
-  animation: plate-sweep .42s var(--ease) forwards;
-}
-@keyframes plate-sweep {
-  0%   { opacity: 0; background-position: 100% 0; }
-  14%  { opacity: 1; }
-  80%  { opacity: 1; }
-  100% { opacity: 0; background-position: 0% 0; }
-}
 /* 图标与字：浮雕（凸起：受光在左上、阴影在右下） */
 .icon-link > svg {
-  position: relative;
-  z-index: 1;
   display: block;
   width: 26px;
   height: 26px;
@@ -214,12 +176,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .rows__r a {
   text-shadow: -1px -1px 0 rgba(255, 255, 255, .75), 1px 1px 0 rgba(18, 23, 26, .35);
 }
-.icon-link:hover,
-.icon-link:focus-visible,
-.link:hover,
-.link:focus-visible,
-.rows__r a:hover,
-.rows__r a:focus-visible { color: var(--live); }
 .icon-link:active,
 .link:active,
 .rows__r a:active {
@@ -229,11 +185,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
     inset 1.5px 1.5px 0 rgba(18, 23, 26, .20),
     0 1px 0 rgba(18, 23, 26, .10),
     0 2px 6px -2px rgba(18, 23, 26, .18);
-}
-@media (prefers-reduced-motion: reduce) {
-  .icon-link::after,
-  .link::after,
-  .rows__r a::after { display: none; }
 }
 .link { padding: 5px 10px 4px; margin: -3px -8px -3px 0; }
 

@@ -59,7 +59,8 @@
                 color .12s cubic-bezier(.2, .7, .3, 1);
   }
 
-  /* 静止进光：左上角一束斜光，与顶栏亚克力片同一角度 */
+  /* 静止进光：左上角一束斜光，与顶栏亚克力片同一角度。
+     hover 不改变面与光，反馈只在按下。 */
   .plate::before {
     content: "";
     position: absolute;
@@ -69,37 +70,6 @@
     pointer-events: none;
     background: linear-gradient(118deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, .12) 26%, transparent 48%);
     opacity: var(--sh-static);
-  }
-  /* 悬停扫光：一道光带从左到右只扫一次、扫出即走。
-     白芯两侧各带一条可调的墨晕——纯白叠冷白读不出，暗晕给白芯一个参照。 */
-  .plate::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    background-image: linear-gradient(calc(var(--sh-ang) * 1deg),
-      transparent calc(50% - var(--sh-w) * .5%),
-      rgba(18, 23, 26, var(--sh-edge)) calc(50% - var(--sh-w) * .25%),
-      rgba(255, 255, 255, var(--sh-a)) 50%,
-      rgba(18, 23, 26, var(--sh-edge)) calc(50% + var(--sh-w) * .25%),
-      transparent calc(50% + var(--sh-w) * .5%));
-    background-size: 220% 100%;
-    background-repeat: no-repeat;
-    background-position: 100% 0;
-    opacity: 0;
-  }
-  .plate.is-hover::after,
-  .plate:hover::after,
-  .plate:focus-visible::after {
-    animation: plate-sweep calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1) forwards;
-  }
-  @keyframes plate-sweep {
-    0%   { opacity: 0; background-position: 100% 0; }
-    14%  { opacity: 1; }
-    80%  { opacity: 1; }
-    100% { opacity: 0; background-position: 0% 0; }
   }
 
   /* 图标与字：浮雕（凹刻 / 凸起） */
@@ -113,7 +83,6 @@
   }
   .plate svg { display: block; width: 26px; height: 26px; fill: currentColor; }
 
-  .plate.is-hover { color: var(--live); }
   .plate.is-press {
     transform: translateY(1px);
     box-shadow:
@@ -186,7 +155,7 @@
 <body>
 <main class="shell" id="shell">
   <h1>铭牌材质 · 调参台</h1>
-  <p class="sub">C 路线的全部参数：斜面棱、面角、静止进光、悬停扫光（单次掠过）、浮雕（凹刻 / 凸起）、接触影。左边直接摸悬停与按下；定值后点「复制导出 CSS」发我，我按导出值收口、铺到图标与 rows 入口。</p>
+  <p class="sub">C 路线的全部参数：斜面棱、面角、静止进光、浮雕（凹刻 / 凸起）、接触影。悬停不改变面与光，按下只下 1px；定值后点「复制导出 CSS」发我，我按导出值收口、铺到图标与 rows 入口。</p>
 
   <div class="grid2">
     <div>
@@ -218,7 +187,7 @@
       </section>
 
       <section class="stage">
-        <p class="cap">文字入口 · 悬停自己摸</p>
+        <p class="cap">文字入口 · 只有按下会动</p>
         <div class="row">
           <span class="tag">静止</span>
           <a class="plate pill" href="#" onclick="return false"><span class="label">HANAKO 箱庭&nbsp;↗</span></a>
@@ -231,7 +200,7 @@
       <div class="grp">面与棱</div>
       <div id="grp-face"></div>
 
-      <div class="grp">掠射高光</div>
+      <div class="grp">静止进光</div>
       <div id="grp-sheen"></div>
 
       <div class="grp">浮雕</div>
@@ -245,7 +214,7 @@
         <button id="copy" type="button">复制导出 CSS</button>
       </div>
       <pre id="css"></pre>
-      <p class="tip">参数自动存 localStorage（zloong-plate-tuner-v1）。导出的 CSS 直接给我即可收口。</p>
+      <p class="tip">参数自动存 localStorage（zloong-plate-tuner-v3）。导出的 CSS 直接给我即可收口。</p>
     </aside>
   </div>
 </main>
@@ -254,12 +223,12 @@
 (function () {
   'use strict';
 
-  var KEY = 'zloong-plate-tuner-v2';
+  var KEY = 'zloong-plate-tuner-v3';
   var shell = document.getElementById('shell');
 
   var DEFS = {
     r: 1, bv: 1.5, hiA: .9, loA: .2, ang: 135,
-    shStatic: .7, shA: .95, shEdge: .06, shW: 20, shAng: 105, shDur: .42,
+    shStatic: .7,
     emMode: 'raised', emX: 1, emHi: .75, emLo: .35,
     edge: 2, edgeA: .10, softY: 5, softB: 8, softS: 3, softA: .18
   };
@@ -271,11 +240,6 @@
     { g: 'grp-face', k: 'loA', label: '背光棱墨', min: 0, max: .6, step: .01 },
     { g: 'grp-face', k: 'ang', label: '面渐变角度', min: 0, max: 180, step: 1, unit: '°' },
     { g: 'grp-sheen', k: 'shStatic', label: '静止进光', min: 0, max: 1, step: .01 },
-    { g: 'grp-sheen', k: 'shA', label: '扫光白度', min: 0, max: 1, step: .01 },
-    { g: 'grp-sheen', k: 'shEdge', label: '光带墨晕', min: 0, max: .2, step: .01 },
-    { g: 'grp-sheen', k: 'shW', label: '光带宽度', min: 6, max: 60, step: 1, unit: '%' },
-    { g: 'grp-sheen', k: 'shAng', label: '光带角度', min: 45, max: 165, step: 1, unit: '°' },
-    { g: 'grp-sheen', k: 'shDur', label: '扫动时长', min: .2, max: 1.2, step: .05, unit: 's' },
     { g: 'grp-emboss', k: 'emX', label: '浮雕位移', min: 0, max: 2, step: .25, unit: 'px' },
     { g: 'grp-emboss', k: 'emHi', label: '浮雕受光', min: 0, max: 1, step: .01 },
     { g: 'grp-emboss', k: 'emLo', label: '浮雕阴影', min: 0, max: .8, step: .01 },
@@ -296,7 +260,7 @@
   /* ---- 参数 → CSS 变量 ---- */
   var VARS = {
     r: '--r', bv: '--bv', hiA: '--hi-a', loA: '--lo-a', ang: '--ang',
-    shStatic: '--sh-static', shA: '--sh-a', shEdge: '--sh-edge', shW: '--sh-w', shAng: '--sh-ang', shDur: '--sh-dur',
+    shStatic: '--sh-static',
     emX: '--em-x', emHi: '--em-hi', emLo: '--em-lo',
     edge: '--edge', edgeA: '--edge-a', softY: '--soft-y', softB: '--soft-b', softS: '--soft-s', softA: '--soft-a'
   };
@@ -374,11 +338,7 @@
       '',
       '/* 静止进光（左上角，118°） */',
       '  opacity(::before): ' + n(P.shStatic) + ';',
-      '',
-      '/* 悬停扫光：220% 背景、从左到右只扫一次 */',
-      '  ::after { background-size: 220% 100%; animation: plate-sweep ' + n(P.shDur) + 's forwards; }',
-      '  ::after 渐变：透明 → rgba(18,23,26,' + n(P.shEdge) + ') ' + n(50 - P.shW / 4) + '% → rgba(255,255,255,' + n(P.shA) + ') 50% → rgba(18,23,26,' + n(P.shEdge) + ') ' + n(50 + P.shW / 4) + '% → 透明',
-      '  两端透明点：' + n(50 - P.shW / 2) + '% / ' + n(50 + P.shW / 2) + '%；扫完停在 0%，离开不抽回',
+      '  hover 不改变面与光；按下 translateY(1px)、斜棱交换',
       '',
       '/* 浮雕 */',
       '  filter: drop-shadow(' + ox + 'px ' + oy + 'px 0 rgba(255,255,255,' + n(P.emHi) + '))',
