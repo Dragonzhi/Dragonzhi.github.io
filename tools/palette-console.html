@@ -101,11 +101,9 @@
     </div>
 
     <div class="grp">
-      <h3>线与网格</h3>
+      <h3>线</h3>
       <div class="row"><label for="c-line">细线 --line</label><output class="val" id="v-line"></output><input type="color" id="c-line" data-token="--line"></div>
       <div class="row"><label for="c-lineS">强线 --line-strong</label><output class="val" id="v-lineS"></output><input type="color" id="c-lineS" data-token="--line-strong"></div>
-      <div class="row"><label for="c-grid">网格墨色</label><output class="val" id="v-grid"></output><input type="color" id="c-grid"></div>
-      <div class="row"><label for="r-grid">网格浓度</label><output class="val" id="v-gridA"></output><input type="range" id="r-grid" min="0" max="12" step=".5"></div>
     </div>
 
     <div class="grp">
@@ -150,8 +148,6 @@
     '--soft-light': '#FFFFFF',
     '--soft-inset': '#022143'
   };
-  var gridColor = '#12171A';
-  var gridAlpha = 4.5;
 
   var PRESETS = [
     { name: '原样（Gemini）', bg: '#E1E9F1', surface: '#EDF3F9', frame: '#D2DDE7', line: '#C7D3DF', lineS: '#AEBECD', sd: '#A9BCCD', ss: '#022143' },
@@ -168,10 +164,6 @@
   function hexOf(v) {
     return /^#[0-9a-f]{6}$/i.test(v || '') ? v : '#000000';
   }
-  function rgbaOf(c, a, pct) {
-    var n = parseInt(c.slice(1), 16);
-    return 'rgba(' + ((n >> 16) & 255) + ', ' + ((n >> 8) & 255) + ', ' + (n & 255) + ', ' + (a / pct).toFixed(3) + ')';
-  }
 
   function target() {
     var doc = frame.contentDocument;
@@ -182,10 +174,9 @@
     var root = target();
     if (!root) { return; }
     Object.keys(DEFAULTS).forEach(function (t) { root.style.setProperty(t, current[t]); });
-    root.style.setProperty('--grid-line', rgbaOf(gridColor, gridAlpha, 100));
     syncUi();
     writeOut();
-    try { localStorage.setItem(KEY, JSON.stringify({ c: current, g: gridColor, a: gridAlpha })); } catch (e) {}
+    try { localStorage.setItem(KEY, JSON.stringify({ c: current })); } catch (e) {}
   }
 
   function syncUi() {
@@ -200,16 +191,11 @@
       var v = document.getElementById('v-' + ID[t]);
       if (v) { v.textContent = current[t]; }
     });
-    document.getElementById('c-grid').value = gridColor;
-    document.getElementById('r-grid').value = gridAlpha;
-    document.getElementById('v-grid').textContent = gridColor;
-    document.getElementById('v-gridA').textContent = gridAlpha + '%';
   }
 
   function writeOut() {
     var lines = ['/* [data-theme="cool"]（由 tools/palette-console.html 导出） */'];
     Object.keys(DEFAULTS).forEach(function (t) { lines.push(t + ': ' + current[t] + ';'); });
-    lines.push('--grid-line: ' + rgbaOf(gridColor, gridAlpha, 100) + ';');
     out.textContent = lines.join('\n');
   }
 
@@ -219,12 +205,6 @@
         current[input.getAttribute('data-token')] = input.value;
         apply();
       });
-    });
-    document.getElementById('c-grid').addEventListener('input', function () {
-      gridColor = this.value; apply();
-    });
-    document.getElementById('r-grid').addEventListener('input', function () {
-      gridAlpha = parseFloat(this.value); apply();
     });
 
     document.querySelectorAll('[data-p]').forEach(function (btn) {
@@ -255,7 +235,6 @@
 
     document.getElementById('reset').addEventListener('click', function () {
       current = Object.assign({}, DEFAULTS);
-      gridColor = '#12171A'; gridAlpha = 4.5;
       apply();
     });
 
@@ -285,8 +264,6 @@
       Object.keys(DEFAULTS).forEach(function (t) {
         if (typeof saved.c[t] === 'string') { current[t] = saved.c[t]; }
       });
-      if (typeof saved.g === 'string') { gridColor = saved.g; }
-      if (typeof saved.a === 'number') { gridAlpha = saved.a; }
     }
   } catch (e) {}
 

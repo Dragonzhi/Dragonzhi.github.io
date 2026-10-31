@@ -64,7 +64,7 @@
   --mark: var(--zhu-2);         /* 编号字 5.3 : 1 */
   --mark-fill: var(--zhu-4);
 
-  --toplight: linear-gradient(180deg, rgba(233,238,241,.055) 0%, rgba(233,238,241,.018) 44%, transparent 100%);
+  --surface-light: linear-gradient(118deg, rgba(233,238,241,.075) 0%, rgba(233,238,241,.022) 44%, rgba(0,0,0,.22) 100%);
   --noise-op: .05;
 
   /* 立方体三面：顶 / 左 / 右，光恒从左上来。
@@ -101,9 +101,6 @@
   --acrylic-lo: #171C20;
   --acrylic-fg: #E9EEF1;
 
-  /* 工程网格：全站底板，55px 一格 */
-  --grid-line: rgba(233, 238, 241, .07);
-
   /* 软 UI 卡：外圈凸边（上暗下亮）与内面的深色内发光 */
   --soft-dark: #3A3A45;
   --soft-light: #6A6A76;
@@ -127,7 +124,7 @@
   --mark: var(--zhu-4);         /* #8B2C1F  7.7 : 1 */
   --mark-fill: var(--zhu-4);
 
-  --toplight: linear-gradient(180deg, rgba(255,255,255,.35) 0%, rgba(255,255,255,.12) 44%, transparent 100%);
+  --surface-light: linear-gradient(118deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.30) 26%, rgba(255,255,255,.06) 48%, rgba(18,23,26,.030) 82%, rgba(18,23,26,.050) 100%);
   --noise-op: .06;
 
   --cube-top: #E6EDF0;
@@ -166,9 +163,6 @@
   --soft-dark: #C3CED5;
   --soft-light: #FFFFFF;
   --soft-inset: #284456;
-
-  /* 工程网格：全站底板，55px 一格 */
-  --grid-line: rgba(18, 23, 26, .045);
 }
 
 /* ============ 白底黑字 · 暖白 ============ */
@@ -188,7 +182,7 @@
   --mark: var(--zhu-5);         /* #7A2519  9.1 : 1 */
   --mark-fill: var(--zhu-4);
 
-  --toplight: linear-gradient(180deg, rgba(255,255,255,.6) 0%, rgba(255,255,255,.2) 44%, transparent 100%);
+  --surface-light: linear-gradient(118deg, rgba(255,255,255,.70) 0%, rgba(255,255,255,.26) 28%, rgba(255,255,255,.05) 48%, rgba(26,23,18,.028) 82%, rgba(26,23,18,.046) 100%);
   --noise-op: .06;
 
   --cube-top: #FFFDF8;
@@ -222,9 +216,6 @@
   --acrylic-face: #232019;
   --acrylic-lo: #18150F;
   --acrylic-fg: #F3EDE3;
-
-  /* 工程网格：全站底板，55px 一格 */
-  --grid-line: rgba(26, 23, 18, .05);
 
   /* 软 UI 卡：外圈凸边（上暗下亮）与内面的深色内发光 */
   --soft-dark: #C9BEA8;

@@ -44,7 +44,7 @@
 3. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
 4. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。动效默认用原生 CSS（`@keyframes` + `animation-delay` 错峰）；**允许 Motion（motion.dev）**做原生 CSS 难编排的滚动进出场与视差，自托管固定版本于 `js/vendor/`、不走 CDN；`prefers-reduced-motion` 下所有 Motion 动效直接落终态。动效只表达节奏与信息（落位、抬起、被扰动、进入视口），不劫持滚动、不做常驻循环。母题相关 canvas（`js/cube.js` 拖动、`js/water.js` 水面）只在被碰过后绘制，衰减即停。
 5. 无构建工具，**首页与作品页保持原生实现**（不引框架、不引打包器、不用 npm 安装链）。这里的「无构建」指**源码即产物**：编辑后刷新即生效，部署不需要 npm install 或编译步骤；`scripts/` 的离线生成脚本与 `js/vendor/` 的预构建库不算构建。运行时第三方只有两个，且都自托管：`js/vendor/` 下固定版本的 Motion，纸材质印章按需加载的 three.js r159 UMD。新增其他依赖前必须先征得同意并同步更新本条。
-6. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。
+6. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。该服务器不发缓存头，改过 CSS / JS 后浏览器可能仍读旧文件：验证前硬刷新（Ctrl+F5），或用 `fetch(url, { cache: 'no-store' })` 取回源码注入再测。
 
 ## 硬性约束
 

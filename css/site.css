@@ -24,23 +24,18 @@ body {
   transition: background-color .2s linear, color .2s linear;
 }
 
-/* ---------- 氛围层：只允许光、格、颗粒、层级 ---------- */
+/* ---------- 氛围层：只允许光、颗粒、层级 ---------- */
 
-/* 底板是一张 55px 的工程网格：墨 5.5%，整页铺，也给出站玻璃当折射源。
-   网格排在最上、顶部渐变垫在它下面，所以网格线不会被那层白光洗淡。 */
+/* 底板是一整块受光的面：左上白、右下极淡墨，118° 与铭牌键同一束光；
+   下面再压一层固定颗粒（body::after），面才有哑光的齿。没有网格。 */
 body::before {
   content: "";
   position: absolute;
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image:
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
-    linear-gradient(0deg, var(--grid-line) 1px, transparent 1px),
-    var(--toplight);
-  background-size: 55px 55px, 55px 55px, 100% 620px;
-  background-repeat: repeat, repeat, no-repeat;
-  background-position: 0 0, 0 0, 50% 0;
+  background-image: var(--surface-light);
+  background-repeat: no-repeat;
 }
 
 body::after {
