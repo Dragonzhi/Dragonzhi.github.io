@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>按钮反馈对比</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  :root { --dim: .05; --spot: .7; }
+  body { background: var(--bg); }
+  .shell { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: var(--s7) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s1); }
+  .sub { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s5); line-height: 1.85; max-width: 64em; }
+
+  .vars { display: flex; flex-wrap: wrap; gap: var(--s5); margin: 0 0 var(--s6); font-family: var(--mono); font-size: var(--t5); color: var(--fg-dim); }
+  .vars label { display: flex; align-items: center; gap: 10px; }
+  .vars input[type="range"] { width: 150px; accent-color: #12171A; }
+  .vars output { min-width: 3.2em; color: var(--fg); }
+
+  .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: var(--s5); align-items: start; }
+  @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+
+  .stage {
+    border-radius: 20px;
+    padding: var(--s5);
+    background: var(--bg);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, .9),
+      inset -1px -1px 0 rgba(18, 23, 26, .08),
+      0 2px 0 rgba(18, 23, 26, .08),
+      0 10px 24px -12px rgba(18, 23, 26, .22);
+  }
+  .cap { font-family: var(--mono); font-size: var(--t5); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-faint); margin: 0 0 var(--s4); }
+  .row { display: flex; align-items: center; flex-wrap: nowrap; gap: var(--s3); }
+  @media (max-width: 900px) { .row { flex-wrap: wrap; } }
+  .row + .row { margin-top: var(--s4); }
+  .row .tag { width: 36px; flex: none; font-family: var(--mono); font-size: 11px; color: var(--fg-faint); letter-spacing: .08em; }
+
+  .zoom { width: 96px; height: 96px; overflow: hidden; flex: none; }
+  .zoom .plate { transform: scale(2); transform-origin: top left; }
+
+  .note { margin: var(--s4) 0 0; font-size: var(--t5); line-height: 1.8; color: var(--fg-dim); }
+  .note b { color: var(--fg); font-weight: 600; }
+
+  /* ============ 铭牌本体：与站上同一套面、棱、浮雕 ============ */
+  .plate {
+    --pw: 44px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    width: var(--pw);
+    height: var(--pw);
+    padding: 0;
+    border: 0;
+    border-radius: 1px;
+    color: var(--fg);
+    background: linear-gradient(135deg, var(--plate-hi) 0%, var(--plate-lo) 100%);
+    box-shadow:
+      inset 1.5px 1.5px 0 rgba(255, 255, 255, .90),
+      inset -1.5px -1.5px 0 rgba(18, 23, 26, .20),
+      0 2px 0 rgba(18, 23, 26, .10),
+      0 5px 8px -3px rgba(18, 23, 26, .18);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform .12s cubic-bezier(.2, .7, .3, 1),
+                box-shadow .12s cubic-bezier(.2, .7, .3, 1);
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .plate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: linear-gradient(118deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, .12) 26%, transparent 48%);
+    opacity: .7;
+  }
+  .plate svg { position: relative; z-index: 1; display: block; width: 26px; height: 26px; fill: currentColor;
+    filter: drop-shadow(-1px -1px 0 rgba(255, 255, 255, .75)) drop-shadow(1px 1px 0 rgba(18, 23, 26, .35)); }
+  .plate > svg { pointer-events: none; }
+  .plate .label { position: relative; z-index: 1; font-size: var(--t4); white-space: nowrap;
+    text-shadow: -1px -1px 0 rgba(255, 255, 255, .75), 1px 1px 0 rgba(18, 23, 26, .35); }
+  .plate.pill { --pw: auto; height: 32px; padding: 0 10px 0 10px; }
+
+  /* 按下：三种方案共用同一段行程 */
+  .plate.is-press,
+  .plate:active {
+    transform: translateY(1px);
+    box-shadow:
+      inset -1.5px -1.5px 0 rgba(255, 255, 255, .90),
+      inset 1.5px 1.5px 0 rgba(18, 23, 26, .20),
+      0 1px 0 rgba(18, 23, 26, .10),
+      0 2px 6px -2px rgba(18, 23, 26, .18);
+  }
+
+  /* A · 状态层：hover 面整体压暗一档 */
+  [data-v="a"] .plate::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background: rgba(18, 23, 26, var(--dim));
+    opacity: 0;
+    transition: opacity .14s cubic-bezier(.2, .7, .3, 1);
+  }
+  [data-v="a"] .plate:hover::after,
+  [data-v="a"] .plate.is-hover::after { opacity: 1; }
+
+  /* B · 指针微光：面压暗一档，一团白光跟着指针 */
+  [data-v="b"] .plate::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image:
+      radial-gradient(22px 22px at var(--mx, 50%) var(--my, 50%),
+        rgba(255, 255, 255, var(--spot)) 0%,
+        rgba(255, 255, 255, calc(var(--spot) * .3)) 45%,
+        transparent 72%),
+      linear-gradient(rgba(18, 23, 26, var(--dim)), rgba(18, 23, 26, var(--dim)));
+    opacity: 0;
+    transition: opacity .14s cubic-bezier(.2, .7, .3, 1);
+  }
+  [data-v="b"] .plate:hover::after,
+  [data-v="b"] .plate.is-hover::after { opacity: 1; }
+
+  /* C · 纯行程：hover 不改面、不加光，只有按下的 1px */
+
+  @media (prefers-reduced-motion: reduce) {
+    .plate, .plate::after { transition: none; }
+  }
+</style>
+</head>
+<body>
+<main class="shell">
+  <h1>按钮反馈对比</h1>
+  <p class="sub">同一枚 44px 铭牌，三种 hover 反馈：<b>A</b> 把面压暗一档；<b>B</b> 面压暗 + 一团白光跟着指针；<b>C</b> hover 什么都不变，只有按下的 1px。鼠标划过、按住，看哪种更像一块能被按的金属。三案的静止、按下（1px 行程 + 斜棱交换）完全相同。</p>
+
+  <div class="vars">
+    <label>A / B 压暗 <input id="dim" type="range" min="0" max="8" step=".5" value="5"><output id="dimv">5%</output></label>
+    <label>B 光斑强度 <input id="spot" type="range" min="0" max=".8" step=".05" value=".7"><output id="spotv">.7</output></label>
+  </div>
+
+  <div class="grid">
+    <section class="stage" data-v="a">
+      <p class="cap">A · 状态层</p>
+      <div class="row">
+        <span class="tag">静止</span>
+        <span class="plate" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        <span class="tag">hover</span>
+        <span class="plate is-hover" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        <span class="tag">按下</span>
+        <span class="plate is-hover is-press" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+      </div>
+      <div class="row">
+        <span class="tag">试</span>
+        <button class="plate" type="button" aria-label="A 状态层示例"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></button>
+        <span class="tag">2×</span>
+        <div class="zoom"><span class="plate is-hover" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span></div>
+      </div>
+      <p class="note"><b>Material 3 / Apple HIG / Radix</b> 这一路：hover 用 on-surface 覆盖（M3 是 8%），按下再深一档。状态清楚、和焦点同一套；不携带颜色语义。</p>
+    </section>
+
+    <section class="stage" data-v="b">
+      <p class="cap">B · 指针微光</p>
+      <div class="row">
+        <span class="tag">静止</span>
+        <span class="plate" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        <span class="tag">hover</span>
+        <span class="plate is-hover" style="--mx:68%; --my:66%" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        <span class="tag">按下</span>
+        <span class="plate is-hover is-press" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+      </div>
+      <div class="row">
+        <span class="tag">试</span>
+        <button class="plate" type="button" aria-label="B 指针微光示例"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></button>
+        <span class="tag">2×</span>
+        <div class="zoom"><span class="plate is-hover" style="--mx:68%; --my:66%" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span></div>
+      </div>
+      <p class="note"><b>Linear / Vercel 的 spotlight 卡、visionOS 的镜面</b> 这一路：光跟着指针走，像手在表面上挪。要一点脚本更新坐标；白光要压在压暗过的面上才读得出，压暗为 0 时光斑等于不存在。</p>
+    </section>
+
+    <section class="stage" data-v="c">
+      <p class="cap">C · 纯行程</p>
+      <div class="row">
+        <span class="tag">静止</span>
+        <span class="plate" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        <span class="tag">hover</span>
+        <span class="plate is-hover" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        <span class="tag">按下</span>
+        <span class="plate is-hover is-press" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+      </div>
+      <div class="row">
+        <span class="tag">试</span>
+        <button class="plate" type="button" aria-label="C 纯行程示例"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></button>
+        <span class="tag">2×</span>
+        <div class="zoom"><span class="plate is-hover" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span></div>
+      </div>
+      <p class="note"><b>硬件面板 / Teenage Engineering</b> 这一路：hover 不表态，世界里只有按下。最像实物，代价是鼠标用户移上去时不知道能不能点。</p>
+    </section>
+  </div>
+
+  <section class="stage" style="margin-top: var(--s5);">
+    <p class="cap">文字入口 · 同一反馈</p>
+    <div class="grid" style="gap: var(--s4);">
+      <div data-v="a" class="row"><span class="tag">A</span>
+        <span class="plate pill" aria-hidden="true"><span class="label">HANAKO 箱庭 ↗</span></span>
+        <span class="plate pill is-hover" aria-hidden="true"><span class="label">HANAKO 箱庭 ↗</span></span>
+      </div>
+      <div data-v="b" class="row"><span class="tag">B</span>
+        <span class="plate pill" aria-hidden="true"><span class="label">HANAKO 箱庭 ↗</span></span>
+        <span class="plate pill is-hover" style="--mx:68%; --my:50%" aria-hidden="true"><span class="label">HANAKO 箱庭 ↗</span></span>
+      </div>
+      <div data-v="c" class="row"><span class="tag">C</span>
+        <span class="plate pill" aria-hidden="true"><span class="label">HANAKO 箱庭 ↗</span></span>
+        <span class="plate pill is-hover" aria-hidden="true"><span class="label">HANAKO 箱庭 ↗</span></span>
+      </div>
+    </div>
+    <p class="note">左为静止，右为 hover。三案都不再把字转青：青绿只回答「现在能不能玩」，不做悬停反馈。</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  'use strict';
+  var root = document.documentElement;
+  var dim = document.getElementById('dim');
+  var dimv = document.getElementById('dimv');
+  var spot = document.getElementById('spot');
+  var spotv = document.getElementById('spotv');
+
+  function syncDim() {
+    var v = parseFloat(dim.value) / 100;
+    root.style.setProperty('--dim', String(v));
+    dimv.textContent = dim.value + '%';
+  }
+  function syncSpot() {
+    var v = parseFloat(spot.value);
+    root.style.setProperty('--spot', String(v));
+    spotv.textContent = String(v);
+  }
+  dim.addEventListener('input', syncDim);
+  spot.addEventListener('input', syncSpot);
+  syncDim(); syncSpot();
+
+  /* B：让光斑跟着指针走（只挂在可交互的示例键上，静态样张保持固定） */
+  document.querySelectorAll('[data-v="b"] button.plate').forEach(function (btn) {
+    btn.addEventListener('pointermove', function (e) {
+      var r = btn.getBoundingClientRect();
+      btn.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+      btn.style.setProperty('--my', (e.clientY - r.top) + 'px');
+    });
+  });
+}());
+</script>
+</body>
+</html>

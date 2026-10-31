@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 底板已改受光的面（网格退场）；DECISIONS 已按主题重排，等你下一条逐条指导。
+next: 按钮反馈 A/B/C 对比页已出（`tools/btn-feedback.html`），等你选型后落站。
 updated: 2026-10-31
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -16,7 +16,7 @@ updated: 2026-10-31
 
 ## 进行中
 
-暂无已开始但未完成的任务。
+- [ ] 按钮 hover 反馈选型：A 状态层 / B 指针微光 / C 纯行程三案已做成 `tools/btn-feedback.html`；选定后落站，并去掉铭牌 hover 转青（`--live` 只留给「在跑」）。
 
 ## 已完成
 
