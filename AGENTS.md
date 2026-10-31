@@ -20,7 +20,7 @@
 
 - 按材质分 token 源：`css/tokens-screen.css` 为屏（首页 / 作品）的 token 唯一来源（三套配色：玄黑/冷白/暖白，定稿冷白）；`css/tokens.css` 为纸（子页 / Hanako 箱庭）的设计 token 来源，两套不混用。
 - `js/date.js`：门牌日期注入脚本（`#today`，`data-date-format="dossier"` 走 2026.10.24 等宽格式，缺省走中文长格式），gallery / portfolio / resume 等子页共用，不要再复制内联日期代码。
-- 结构两页：`index.html`（屏，冷白）承担门牌、现在、关于，联系只由 hero 的三枚图标入口承担，不设独立章节；作品一律在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。两页由静态 HTML + `css/site.css` + `js/home.js` 驱动（`js/shelf.js` 仅作品页加载）；刻度从 `data/home.json` 读取，正文与静态兜底写在 HTML 中；`files/` 下的旧文件保留，子页档案架引用 `data/portfolio.json`。
+- 结构两页：`index.html`（屏，冷白）承担门牌与关于，联系只由 hero 的三枚图标入口承担，不设独立章节；作品一律在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。两页由静态 HTML + `css/site.css` + `js/home.js` 驱动（`js/shelf.js` 仅作品页加载）；作品页门牌的在跑数从 `data/home.json` 读取，正文与静态兜底写在 HTML 中；`files/` 下的旧文件保留，子页档案架引用 `data/portfolio.json`。
 - 首页 hero 的三个入口（GitHub / B 站 / 复制邮箱）是三枚内联 SVG 图标，**不用图标字体、不引图标库、不走 CDN**；图标直接写在 `index.html`，热区与玻璃样式在 `css/site.css` 的 `.icon-link` / `.glass`。第三枚是复制键（`<button data-copy>`），点按复制地址并在图标上方浮出「已复制」小签（`js/home.js` 的 `copyMail`）。
 - **母题立方体**：屏上唯一的立体物，规格写在 `DESIGN.md §7`，只有一处——`works.html` 开头的水位陈列（`.shelf`），七枚 116px（≤767px 为 72px、一排横向滑动）排成一条地平线，**位置即状态**——坐在线上 = 在跑，悬空 = 在制，沉到线下 = 归档；地平线压在方块前面横过去，所以是「站在水里」而不是「浮在空中」；指一块，下面那行就读出那一块（`js/shelf.js`，无脚本时读出行显示首块、方块照常可点）。七枚都能按下拖动（松手带短惯性，再按下即刹车），拖动不触发跳转。**屏上不许再出现第二处立体物**，要加内容就加进那条水线。
 - **水线以下是一池水**：`js/water.js` 用 Canvas2D 高度场（96 列，弹簧回正 + 邻居耦合 + 阻尼）在 `.shelf__deck` 里画水面；只在指针划过、按下、方块抬起时起波，衰减到阈值就清空状态并停掉 rAF——**静止时不跑循环**。它只加载于作品页，无 JS 时不存在；面在方块下缘之前（沉到线下的方块在水面之下），颜色走中性灰蓝，不借用青。`prefers-reduced-motion` 下水面静止。
@@ -40,7 +40,7 @@
 ## 工作约定
 
 1. 两套材质：屏（首页 / 作品，冷白）与纸（子页 / Hanako 箱庭）。首页与作品页遵循 `DESIGN.md` 的屏幕设计规范，子页仍保留纸感。
-2. 改内容：首页刻度改 `data/home.json`（`recentShip` 字段目前没有对应的页面元素）；首页正文和作品内容改对应 HTML，涉及同一事实时同步核对 HTML 静态兜底；子页作品数据改 `data/portfolio.json`。
+2. 改内容：作品页门牌的在跑数改 `data/home.json`（`stats.running`）；首页正文和作品内容改对应 HTML，涉及同一事实时同步核对 HTML 静态兜底；子页作品数据改 `data/portfolio.json`。
 3. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
 4. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。动效默认用原生 CSS（`@keyframes` + `animation-delay` 错峰）；**允许 Motion（motion.dev）**做原生 CSS 难编排的滚动进出场与视差，自托管固定版本于 `js/vendor/`、不走 CDN；`prefers-reduced-motion` 下所有 Motion 动效直接落终态。动效只表达节奏与信息（落位、抬起、被扰动、进入视口），不劫持滚动、不做常驻循环。母题相关 canvas（`js/cube.js` 拖动、`js/water.js` 水面）只在被碰过后绘制，衰减即停。
 5. 无构建工具，**首页与作品页保持原生实现**（不引框架、不引打包器、不用 npm 安装链）。这里的「无构建」指**源码即产物**：编辑后刷新即生效，部署不需要 npm install 或编译步骤；`scripts/` 的离线生成脚本与 `js/vendor/` 的预构建库不算构建。运行时第三方只有两个，且都自托管：`js/vendor/` 下固定版本的 Motion，纸材质印章按需加载的 three.js r159 UMD。新增其他依赖前必须先征得同意并同步更新本条。

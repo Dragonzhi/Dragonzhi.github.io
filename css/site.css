@@ -200,12 +200,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
 /* ---------- 首页 · 门牌 ---------- */
 
 .hero { padding: var(--s9) 0 0; }
-.hero-grid {
-  display: grid;
-  grid-template-columns: 1fr 330px;
-  gap: var(--s8);
-  align-items: start;
-}
 .name {
   margin: 0;
   font-family: var(--black);
@@ -455,16 +449,13 @@ main, .bar, .foot { position: relative; z-index: 2; }
 
 /* ---------- 软 UI 卡：一圈凸边 + 一层内凹的面 ----------
    配方取自 yzrt/Gemini UI：外圈「上暗下亮」渐变当凸边，内面沿用底板色，
-   靠 inset 深色内发光 + 底缘白反光 + 顶缘暗影，读成一块压进底板的面板。
-   分隔不再用线：卡本身就是边界。 */
-.scale,
+   靠 inset 深色内发光 + 底缘白反光 + 顶缘暗影，读成一块压进底板的面板。 */
 .rows {
   position: relative;
   padding: 30px 32px;
   border-radius: 32px;
   background: linear-gradient(to bottom, var(--soft-dark), var(--soft-light));
 }
-.scale::before,
 .rows::before {
   content: "";
   position: absolute;
@@ -477,36 +468,8 @@ main, .bar, .foot { position: relative; z-index: 2; }
     inset 0 -7px 4px rgba(255, 255, 255, .60),     /* 底缘反光 */
     inset 0 4px 3px rgba(154, 169, 184, .60);      /* 顶缘暗影 */
 }
-.scale > *,
 .rows > * { position: relative; z-index: 1; }
 
-.scale__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  padding: var(--s3) 0;
-  border-bottom: 0;
-}
-.scale__row:first-child { padding-top: 0; }
-.scale__row:last-child { padding-bottom: 0; }
-.scale__k {
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-}
-.scale__v {
-  font-family: var(--mono);
-  font-size: var(--t2);
-  line-height: 1.05;
-  letter-spacing: -.02em;
-  color: var(--fg);
-}
-.scale__row.is-live .scale__v { color: var(--live); }
-
-
-.hero-side { display: flex; flex-direction: column; gap: var(--s6); }
 /* 顶栏的页间切换：当前页是一块墨色亚克力片，另一页是次级文字 */
 .tabs { display: flex; align-items: center; gap: var(--s2); }
 .tab {
@@ -904,21 +867,7 @@ button.icon-link {
 }
 
 
-/* ---------- 现在 / 关于 ---------- */
-
-/* 章节间距 112：本章收口 16 + 下一章 96 */
-.now { padding: var(--s9) 0 var(--s4); }
-.now__line {
-  margin: var(--s6) 0 0;
-  max-width: 28em;
-  font-size: var(--t2);
-  font-weight: 600;
-  line-height: 1.55;
-  letter-spacing: -.01em;
-  color: var(--fg);
-  text-wrap: pretty;
-}
-.now__line b { font-weight: 800; }
+/* ---------- 关于 ---------- */
 
 .about { padding: var(--s9) 0 0; }
 .about-grid {
@@ -983,16 +932,8 @@ button.icon-link {
 /* ---------- 响应式 ---------- */
 
 @media (max-width: 1023px) {
-  .hero-grid { grid-template-columns: 1fr; gap: var(--s7); }
   .shelf { --h: 250px; --line: 140px; --cw: 84px; --lift: 18px; --dip: 9px; }
   .shelf__deck { gap: var(--s4); }
-  .scale {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: var(--s6);
-    padding: 22px 20px;
-  }
-  .scale__row:first-child { padding-top: 0; }
   .item { grid-template-columns: 1fr; gap: var(--s5); }
   .item:nth-of-type(even) .item__fig { order: 0; }
   .about-grid { grid-template-columns: 1fr; gap: var(--s7); }
@@ -1003,7 +944,7 @@ button.icon-link {
   .hero { padding: var(--s7) 0 var(--s5); }
   .sec-works--wip .item,
   .sec-works--arch .item { padding: var(--s5) 0; }
-  .works, .now, .about { padding-top: var(--s7) }
+  .works, .about { padding-top: var(--s7) }
   .bar .wrap { min-height: 42px; }
   .bar .state { display: none; }
   .bar .hide-sm { display: none; }
@@ -1025,8 +966,6 @@ button.icon-link {
   }
   .shelf__track::-webkit-scrollbar { display: none; }
   .shelf__cell { flex: 0 0 var(--cw); }
-.scale__k { letter-spacing: .08em; }
-.scale__v { font-size: var(--t4); white-space: nowrap; }
 }
 
 @media (max-width: 400px) {

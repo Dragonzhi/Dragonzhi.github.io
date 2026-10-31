@@ -1,13 +1,7 @@
 {
-  "_note": "首页刻度与最近更新。改数字只改这里，页面会自己读。fetch 失败时页面用 HTML 里的静态兜底值。",
+  "_note": "作品页门牌的在跑数。改数字只改这里，页面会自己读；fetch 失败时页面用 HTML 里的静态兜底值。",
   "updated": "2026-10-27",
-  "recentShip": "2026.10.20",
   "stats": {
-    "works": "07",
-    "running": "04",
-    "copyright": "03",
-    "bilibili": "30k",
-    "commits": "1.9K",
-    "daily": "50+"
+    "running": "04"
   }
 }

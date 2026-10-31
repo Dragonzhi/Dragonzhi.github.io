@@ -1,6 +1,6 @@
 /* ============================================================
-   home.js —— 屏首页脚本
-   只做三件事：填日期、读 data/home.json 填刻度、复制邮箱并给回执。
+   home.js —— 屏脚本（首页 / 作品页共用）
+   只做三件事：填日期、读 data/home.json 填统计、复制邮箱并给回执。
    全部失败都要容忍：静态 HTML 里的值就是兜底。
    ============================================================ */
 (function () {
@@ -19,7 +19,7 @@
     if (yearEl) { yearEl.textContent = String(now.getFullYear()); }
   } catch (e) { /* 保持 HTML 里的静态值 */ }
 
-  /* ---- 刻度：读 data/home.json ---- */
+  /* ---- 统计：读 data/home.json ---- */
   (function loadStats() {
     if (typeof fetch !== 'function') { return; }
     fetch('data/home.json', { cache: 'no-cache' })
@@ -31,7 +31,6 @@
           var nodes = document.querySelectorAll('[data-stat="' + key + '"]');
           for (var i = 0; i < nodes.length; i++) { nodes[i].textContent = value; }
         };
-        set('recentShip', data.recentShip);
         var stats = data.stats || {};
         Object.keys(stats).forEach(function (k) { set(k, stats[k]); });
       })
