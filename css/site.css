@@ -174,7 +174,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
 }
 .link,
 .rows__r a {
-  text-shadow: -1px -1px 0 rgba(255, 255, 255, .75), 1px 1px 0 rgba(18, 23, 26, .35);
+  text-shadow: none;   /* 字平印：标牌上的字是印上去的，不是从板上长出来的 */
 }
 .icon-link:active,
 .link:active,

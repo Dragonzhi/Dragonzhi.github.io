@@ -72,9 +72,8 @@
     opacity: var(--sh-static);
   }
 
-  /* 图标与字：浮雕（凹刻 / 凸起） */
-  .plate svg,
-  .plate .label {
+  /* 图标做浮雕（凹刻 / 凸起）；字平印，不投影 */
+  .plate svg {
     position: relative;
     z-index: 1;
     filter:
@@ -82,6 +81,7 @@
       drop-shadow(calc(var(--em-fx) * -1) calc(var(--em-fy) * -1) 0 rgba(18, 23, 26, var(--em-lo)));
   }
   .plate svg { display: block; width: 26px; height: 26px; fill: currentColor; }
+  .plate .label { position: relative; z-index: 1; }
 
   .plate.is-press {
     transform: translateY(1px);
@@ -340,7 +340,7 @@
       '  opacity(::before): ' + n(P.shStatic) + ';',
       '  hover 不改变面与光；按下 translateY(1px)、斜棱交换',
       '',
-      '/* 浮雕 */',
+      '/* 浮雕（仅图标；字平印不投影） */',
       '  filter: drop-shadow(' + ox + 'px ' + oy + 'px 0 rgba(255,255,255,' + n(P.emHi) + '))',
       '          drop-shadow(' + nx + 'px ' + ny + 'px 0 rgba(18,23,26,' + n(P.emLo) + '));'
     ].join('\n');
