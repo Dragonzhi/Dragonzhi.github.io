@@ -21,7 +21,7 @@
 - 按材质分 token 源：`css/tokens-screen.css` 为屏（首页 / 作品）的 token 唯一来源（三套配色：玄黑/冷白/暖白，定稿冷白）；`css/tokens.css` 为纸（子页 / Hanako 箱庭）的设计 token 来源，两套不混用。
 - `js/date.js`：门牌日期注入脚本（`#today`，`data-date-format="dossier"` 走 2026.10.24 等宽格式，缺省走中文长格式），gallery / portfolio / resume 等子页共用，不要再复制内联日期代码。
 - 结构两页：`index.html`（屏，冷白）承担门牌与关于，联系只由 hero 的三枚图标入口承担，不设独立章节；作品一律在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。两页由静态 HTML + `css/site.css` + `js/home.js` 驱动（`js/shelf.js` 仅作品页加载）；作品页门牌的在跑数从 `data/home.json` 读取，正文与静态兜底写在 HTML 中；`files/` 下的旧文件保留，子页档案架引用 `data/portfolio.json`。
-- 首页 hero 的三个入口（GitHub / B 站 / 复制邮箱）是三枚内联 SVG 图标，**不用图标字体、不引图标库、不走 CDN**；图标直接写在 `index.html`，热区与玻璃样式在 `css/site.css` 的 `.icon-link` / `.glass`。第三枚是复制键（`<button data-copy>`），点按复制地址并在图标上方浮出「已复制」小签（`js/home.js` 的 `copyMail`）。
+- 首页 hero 的三个入口（GitHub / B 站 / 复制邮箱）是三枚内联 SVG 图标，**不用图标字体、不引图标库、不走 CDN**；图标直接写在 `index.html`，热区与铭牌配方在 `css/site.css` 的铭牌键一节（`.icon-link` / `.link` / `.rows__r a` 共用同一套面、斜棱、浮雕与掠射）。第三枚是复制键（`<button data-copy>`），点按复制地址并在图标上方浮出「已复制」小签（`js/home.js` 的 `copyMail`）。
 - **母题立方体**：屏上唯一的立体物，规格写在 `DESIGN.md §7`，只有一处——`works.html` 开头的水位陈列（`.shelf`），七枚 116px（≤767px 为 72px、一排横向滑动）排成一条地平线，**位置即状态**——坐在线上 = 在跑，悬空 = 在制，沉到线下 = 归档；地平线压在方块前面横过去，所以是「站在水里」而不是「浮在空中」；指一块，下面那行就读出那一块（`js/shelf.js`，无脚本时读出行显示首块、方块照常可点）。七枚都能按下拖动（松手带短惯性，再按下即刹车），拖动不触发跳转。**屏上不许再出现第二处立体物**，要加内容就加进那条水线。
 - **水线以下是一池水**：`js/water.js` 用 Canvas2D 高度场（96 列，弹簧回正 + 邻居耦合 + 阻尼）在 `.shelf__deck` 里画水面；只在指针划过、按下、方块抬起时起波，衰减到阈值就清空状态并停掉 rAF——**静止时不跑循环**。它只加载于作品页，无 JS 时不存在；面在方块下缘之前（沉到线下的方块在水面之下），颜色走中性灰蓝，不借用青。`prefers-reduced-motion` 下水面静止。
 - `js/vendor/`：运行时第三方代码的唯一落点，自托管、文件名带版本号、页面按需 `<script defer>`，**不得改用 CDN**。Motion 尚未 vendor，等第一个滚动动效落地时再放固定版本。
@@ -33,7 +33,7 @@
 - `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
 - `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（纸面 · 精修编年目录：左侧常驻年份索引轨 + 右侧编年曲目长流，天依碧印点缀）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成（`style.css` 与 `app.js` 是静态伴生文件，不随脚本生成）。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。
 - `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
-- `tools/`：本地调参对比台（`name-tuner.html`：主名浮雕反光与微动参数；`key-preview.html`：按键拟物方案对比页），纯静态单页、复用站点 CSS 的真组件；站内不设入口、不参与部署必需路径，参数存 localStorage（name-tuner），key-preview 为纯预览不存参数。
+- `tools/`：本地调参对比台（每件材质一个：`name-tuner.html` 主名浮雕、`key-preview.html` 按键方案、`plate-tuner.html` 铭牌材质、`palette-console.html` 配色；`glass-tuner.html` / `glass-preview.html` / `neumorph-preview.html` 等为一次性方案存档），纯静态单页、复用站点 CSS 的真组件；站内不设入口、不参与部署必需路径，参数存 localStorage。
 - `pages/`：纸风格子页面（画廊版 / 档案架 / 技术履历），在用；`data/portfolio.json` 是档案架子页的数据。`legacy/` 存档见上条，勿删。
 - 合规红线：首页 `<title>` 为「ZLOONG · Dragonzhi」，页脚备案号「闽ICP备20260330551号-1」不得删改。
 

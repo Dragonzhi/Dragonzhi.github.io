@@ -131,38 +131,114 @@ main, .bar, .foot { position: relative; z-index: 2; }
   text-align: right;
 }
 
-/* 铭牌键：行内 / 行末的入口，靠定向光棱而不是位移成立体 */
+/* 铭牌键：图标 / 行内 / 行末的入口，靠斜面、浮雕与掠射成立体。
+   参数自 tools/plate-tuner.html：圆角 1 / 棱 1.5 / 面 135° / 硬沿 2 / 柔影 5·8·3 / 浮雕凸起 1px。
+   银白芯的扫光带配 0.01 墨边——纯白叠冷白读不出，暗边给白芯一个参照。 */
+.icon-link,
 .link,
 .rows__r a {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
   color: var(--fg);
   text-decoration: none;
-  border-radius: 3px;
+  border-radius: 1px;
   background: linear-gradient(135deg, var(--plate-hi) 0%, var(--plate-lo) 100%);
   box-shadow:
-    inset 1px 1px 0 rgba(255, 255, 255, .9),
-    inset -1px -1px 0 rgba(18, 23, 26, .12),
+    inset 1.5px 1.5px 0 rgba(255, 255, 255, .90),
+    inset -1.5px -1.5px 0 rgba(18, 23, 26, .20),
     0 2px 0 rgba(18, 23, 26, .10),
-    0 4px 9px -3px rgba(18, 23, 26, .18);
-  padding: 5px 10px 4px;
-  margin: -3px -8px -3px 0;   /* 原下划线的行距感保留：外扩一半吃回行高 */
-  transition: transform var(--press) var(--ease),
-              box-shadow var(--press) var(--ease),
-              background var(--press) var(--ease),
-              color var(--press) var(--ease);
+    0 5px 8px -3px rgba(18, 23, 26, .18);
+  transition: color var(--press) var(--ease),
+              transform var(--press) var(--ease),
+              box-shadow var(--press) var(--ease);
 }
+/* 静止掠射：一道斜向弱高光停在面上 */
+.icon-link::before,
+.link::before,
+.rows__r a::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, .9) 50%, transparent 100%);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  background-position: 38% 0;
+  opacity: .10;
+}
+/* 悬停扫光：同一道白芯带从左扫到右（0.5s），离开倒放扫回并淡尽 */
+.icon-link::after,
+.link::after,
+.rows__r a::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: linear-gradient(105deg,
+    transparent 0%,
+    rgba(18, 23, 26, .01) 46%,
+    rgba(255, 255, 255, .85) 50%,
+    rgba(18, 23, 26, .01) 54%,
+    transparent 100%);
+  background-size: 40% 100%;
+  background-repeat: no-repeat;
+  background-position: 0% 0;
+  opacity: 0;
+  transition: background-position .5s var(--ease), opacity .5s var(--ease);
+}
+.icon-link:hover::after,
+.icon-link:focus-visible::after,
+.link:hover::after,
+.link:focus-visible::after,
+.rows__r a:hover::after,
+.rows__r a:focus-visible::after {
+  background-position: 100% 0;
+  opacity: 1;
+  transition: background-position .5s var(--ease), opacity .12s var(--ease);
+}
+/* 图标与字：浮雕（凸起：受光在左上、阴影在右下） */
+.icon-link > svg {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 26px;
+  height: 26px;
+  fill: currentColor;
+  filter: drop-shadow(-1px -1px 0 rgba(255, 255, 255, .75))
+          drop-shadow(1px 1px 0 rgba(18, 23, 26, .35));
+}
+.link,
+.rows__r a {
+  text-shadow: -1px -1px 0 rgba(255, 255, 255, .75), 1px 1px 0 rgba(18, 23, 26, .35);
+}
+.icon-link:hover,
+.icon-link:focus-visible,
 .link:hover,
-.rows__r a:hover { color: var(--live); }
+.link:focus-visible,
+.rows__r a:hover,
+.rows__r a:focus-visible { color: var(--live); }
+.icon-link:active,
 .link:active,
 .rows__r a:active {
   transform: translateY(1px);
   box-shadow:
-    inset 1px 1px 0 rgba(18, 23, 26, .14),
-    inset -1px -1px 0 rgba(255, 255, 255, .7),
-    0 3px 7px -3px rgba(18, 23, 26, .16);
+    inset -1.5px -1.5px 0 rgba(255, 255, 255, .90),
+    inset 1.5px 1.5px 0 rgba(18, 23, 26, .20),
+    0 1px 0 rgba(18, 23, 26, .10),
+    0 2px 6px -2px rgba(18, 23, 26, .18);
 }
+@media (prefers-reduced-motion: reduce) {
+  .icon-link::after,
+  .link::after,
+  .rows__r a::after { display: none; }
+}
+.link { padding: 5px 10px 4px; margin: -3px -8px -3px 0; }
 
 :focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
 
@@ -279,56 +355,47 @@ main, .bar, .foot { position: relative; z-index: 2; }
 }
 .tag b { color: var(--fg); font-weight: 600; }
 
-/* 首页 hero 的外部入口：三枚内联 SVG 图标，不引图标字体。
-   平贴时只是图标；hover / 键盘聚焦抬成凸起键，按下沉 2px（§6.1）。 */
+/* hero 的三枚入口：44×44 热区；面、棱、浮雕与掠射在铭牌键一节 */
 .links {
   display: flex;
   align-items: center;
   gap: var(--s1);
   margin-top: var(--s5);
 }
+.icon-link { width: 44px; height: 44px; }
 
-.icon-link {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 44px;
-  height: 44px;
-  border-radius: 2px;
+/* 第三枚是复制键，用 button 承载：清掉浏览器默认的面与边 */
+button.icon-link {
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 复制回执：图标上方一枚面板小签，1.6s 后淡出；不做阴影、不借青色 */
+.icon-link > .copy-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 3px 8px 4px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
   color: var(--fg);
-  text-decoration: none;
-  transition:
-    color var(--press) var(--ease),
-    background-color var(--press) var(--ease),
-    box-shadow var(--press) var(--ease),
-    transform var(--press) var(--ease);
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .1em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s var(--ease);
 }
-.icon-link svg { display: block; width: 26px; height: 26px; fill: currentColor; }
-.icon-link:hover,
-.icon-link:focus-visible {
-  color: var(--live);
-  background: linear-gradient(180deg, var(--key-face-hi) 0%, var(--key-face) 40%, var(--key-face-lo) 100%);
-  box-shadow:
-    inset 0 1.5px 0 rgba(255, 255, 255, 1),
-    inset 0 -1.5px 0 rgba(18, 23, 26, .10),
-    0 2px 0 var(--key-step),
-    0 3px 0 rgba(18, 23, 26, .18),
-    0 6px 12px -3px rgba(18, 23, 26, .22);
-}
-.icon-link:active {
-  transform: translateY(2px);
-  box-shadow:
-    inset 0 2px 4px rgba(18, 23, 26, .18),
-    inset 0 1px 0 rgba(255, 255, 255, .5),
-    0 1px 0 rgba(18, 23, 26, .14);
-}
-[data-theme="dark"] .icon-link:hover,
-[data-theme="dark"] .icon-link:focus-visible {
-  box-shadow: 0 2px 0 var(--key-step), 0 3px 0 rgba(0, 0, 0, .5), 0 6px 12px -3px rgba(0, 0, 0, .45);
-}
-[data-theme="warm"] .icon-link:hover,
-[data-theme="warm"] .icon-link:focus-visible {
-  box-shadow: 0 2px 0 var(--key-step), 0 3px 0 rgba(26, 23, 18, .16), 0 6px 12px -3px rgba(26, 23, 18, .18);
+.icon-link > .copy-hint.is-on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .icon-link > .copy-hint { transition: none; }
 }
 
 /* ---------- 水位陈列：母题唯一出现的地方 ----------
@@ -529,153 +596,6 @@ main, .bar, .foot { position: relative; z-index: 2; }
   box-shadow:
     inset 0 1px 0 rgba(255, 255, 255, .14),
     inset 0 -1px 0 rgba(0, 0, 0, .5);
-}
-
-/* ---------- 出站：液态玻璃片 ----------
-   只给离开主站的入口（关于区的 Hanako 箱庭、hero 三枚图标）。
-   配方照 yzrt/纯CSS液态玻璃的硬边路线：半透明白面、45° 双白高光、
-   四组对称内阴影做透镜棱、内壁弯月暗线、拖出的外投影。
-   液态感靠底下 55px 工程网格被玻璃透出（网格见 body::before）。 */
-.glass {
-  position: relative;
-  isolation: isolate;              /* 玻璃层垫在字/图标下面，不被祖先底色盖住 */
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--fg);
-  text-decoration: none;
-  border-radius: 9999px;
-  transition: color var(--press) var(--ease), transform var(--press) var(--ease);
-}
-.glass::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  border-radius: inherit;
-  pointer-events: none;
-  background:
-    linear-gradient(45deg,
-      rgba(255, 255, 255, .90) 0%, rgba(255, 255, 255, 0) 22%,
-      rgba(255, 255, 255, 0) 78%, rgba(255, 255, 255, .90) 100%),
-    rgba(255, 255, 255, .22);
-  box-shadow:
-    inset 2px -2px 1px -1px rgba(255, 255, 255, .95),   /* 透镜棱：左上亮 */
-    inset -2px 2px 1px -1px rgba(255, 255, 255, .95),
-    inset 6px -6px 1px -6px rgba(255, 255, 255, .60),    /* 棱后的一圈柔光 */
-    inset -6px 6px 1px -6px rgba(255, 255, 255, .60),
-    inset 0 0 3px rgba(18, 23, 26, .45),                 /* 内壁弯月暗线 */
-    inset 0 -10px 14px -10px rgba(18, 23, 26, .35),      /* 底缘内影 */
-    0 10px 22px -8px rgba(18, 23, 26, .30),              /* 外投影：拖出来的重力 */
-    0 3px 8px -3px rgba(18, 23, 26, .14);
-}
-/* 悬浮：一道反光带从左扫到右（0.5s），扫完停在右侧；离开时同一段路倒着走回去
-   ——光带从右扫回左，同步淡尽。白芯 .85、带宽 45%，玻璃底压到白 .22。 */
-.glass::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  border-radius: inherit;
-  pointer-events: none;
-  background-image: linear-gradient(105deg,
-    transparent 0%,
-    rgba(18, 23, 26, 0) 30%,
-    rgba(255, 255, 255, .85) 50%,
-    rgba(18, 23, 26, 0) 70%,
-    transparent 100%);
-  background-size: 45% 100%;
-  background-repeat: no-repeat;
-  background-position: 0% 0;
-  opacity: 0;
-  /* 离开：倒放 —— 位置从 100% 扫回 0%，透明度同步降下 */
-  transition: background-position .5s var(--ease), opacity .5s var(--ease);
-}
-.glass > span,
-.glass > svg { position: relative; z-index: 1; }   /* 字与图标压在光带上面 */
-.glass:hover::after,
-.glass:focus-visible::after {
-  background-position: 100% 0;
-  opacity: 1;
-  /* 进入：位置扫 .5s，透明度 .12s 亮起（对应动画版 12% 的亮帧） */
-  transition: background-position .5s var(--ease), opacity .12s var(--ease);
-}
-@media (prefers-reduced-motion: reduce) {
-  .glass::after { display: none; }   /* 少动效时不扫光，玻璃面照常成立 */
-}
-.glass:active { transform: translateY(1px); }
-.glass:active::before {
-  box-shadow:
-    inset 2px -2px 1px -1px rgba(255, 255, 255, .95),
-    inset -2px 2px 1px -1px rgba(255, 255, 255, .95),
-    inset 0 0 3px rgba(18, 23, 26, .45),
-    inset 0 -10px 14px -10px rgba(18, 23, 26, .35),
-    0 4px 10px -6px rgba(18, 23, 26, .26),
-    0 1px 3px -1px rgba(18, 23, 26, .12);
-}
-
-/* rows 表格里的出站片：去掉铭牌键的面与影，换成玻璃；高度压回行内节奏 */
-.rows__r a.glass,
-.rows__r a.glass:hover,
-.rows__r a.glass:active {
-  height: 32px;
-  padding: 0 14px;
-  margin: -6px -6px -6px 0;
-  align-self: center;
-  border-radius: 9999px;
-  background: none;
-  box-shadow: none;
-  color: var(--fg);
-}
-
-/* hero 的三枚图标：纽扣形玻璃，热区仍是 44×44 */
-.icon-link.glass {
-  border-radius: 9999px;
-  background: none;
-  box-shadow: none;
-  transform: none;
-}
-/* 第三枚是复制键，用 button 承载：清掉浏览器默认的面与边 */
-button.icon-link {
-  border: 0;
-  padding: 0;
-  font: inherit;
-  cursor: pointer;
-  -webkit-appearance: none;
-  appearance: none;
-}
-/* 复制回执：图标上方一枚面板小签，1.6s 后淡出；不做阴影、不借青色 */
-.glass > .copy-hint {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 10px);
-  transform: translateX(-50%);
-  z-index: 2;
-  padding: 3px 8px 4px;
-  border: 1px solid var(--line-strong);
-  background: var(--bg);
-  color: var(--fg);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .1em;
-  white-space: nowrap;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity .18s var(--ease);
-}
-.glass > .copy-hint.is-on { opacity: 1; }
-@media (prefers-reduced-motion: reduce) {
-  .glass > .copy-hint { transition: none; }
-}
-.icon-link.glass:hover,
-.icon-link.glass:focus-visible {
-  background: none;
-  box-shadow: none;
-  transform: none;
-}
-.icon-link.glass:active {
-  transform: none;
-  box-shadow: none;
 }
 
 /* ---------- 图：凹进去的一块 ---------- */
@@ -912,7 +832,7 @@ button.icon-link {
 .rows__r:last-child { padding-bottom: 0; }
 .rows__r span:first-child { color: var(--fg-faint); }
 .rows__r span:last-child { color: var(--fg); text-align: right; }
-.rows__r a, .rows__r a:hover, .rows__r a:active { padding: 1px 6px; margin: -1px -5px; }
+.rows__r a, .rows__r a:hover, .rows__r a:active { padding: 3px 8px; margin: -3px -6px; }
 
 /* ---------- 页脚 ---------- */
 

@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>铭牌材质调参台</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  body { background: var(--bg); }
+  .shell { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: var(--s7) var(--s6) var(--s10); }
+  h1 { font-size: var(--t2); font-weight: 900; letter-spacing: -.02em; margin: 0 0 var(--s1); }
+  .sub { color: var(--fg-dim); font-size: var(--t4); margin: 0 0 var(--s6); line-height: 1.85; max-width: 62em; }
+  .grid2 { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: var(--s6); align-items: start; }
+
+  /* ================= 预览 ================= */
+  .stage {
+    position: relative;
+    border-radius: 20px;
+    padding: var(--s6);
+    background: var(--bg);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, .9),
+      inset -1px -1px 0 rgba(18, 23, 26, .08),
+      0 2px 0 rgba(18, 23, 26, .08),
+      0 10px 24px -12px rgba(18, 23, 26, .22);
+  }
+  .stage + .stage { margin-top: var(--s5); }
+  .cap { font-family: var(--mono); font-size: var(--t5); letter-spacing: .14em; text-transform: uppercase; color: var(--fg-faint); margin: 0 0 var(--s4); }
+  .row { display: flex; align-items: center; gap: var(--s3); }
+  .row + .row { margin-top: var(--s5); }
+  .row .tag { width: 40px; flex: none; font-family: var(--mono); font-size: 11px; color: var(--fg-faint); letter-spacing: .08em; }
+  .zoom { overflow: hidden; width: 132px; height: 132px; }
+  .zoom .plate { transform: scale(3); transform-origin: top left; }
+
+  /* ================= 铭牌本体（全部参数化） ================= */
+  .plate {
+    --pw: 44px;
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--pw);
+    height: var(--pw);
+    border-radius: calc(var(--r) * 1px);
+    color: var(--fg);
+    background: linear-gradient(calc(var(--ang) * 1deg), var(--plate-hi) 0%, var(--plate-lo) 100%);
+    box-shadow:
+      inset calc(var(--bv) * 1px) calc(var(--bv) * 1px) 0 rgba(255, 255, 255, var(--hi-a)),
+      inset calc(var(--bv) * -1px) calc(var(--bv) * -1px) 0 rgba(18, 23, 26, var(--lo-a)),
+      0 calc(var(--edge) * 1px) 0 rgba(18, 23, 26, var(--edge-a)),
+      0 calc(var(--soft-y) * 1px) calc(var(--soft-b) * 1px) calc(var(--soft-s) * -1px) rgba(18, 23, 26, var(--soft-a));
+    overflow: hidden;
+    text-decoration: none;
+    transition: transform .12s cubic-bezier(.2, .7, .3, 1),
+                box-shadow .12s cubic-bezier(.2, .7, .3, 1),
+                color .12s cubic-bezier(.2, .7, .3, 1);
+  }
+
+  /* 静止掠射：一道斜向弱高光，停在固定位置 */
+  .plate::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: linear-gradient(calc(var(--sh-ang) * 1deg),
+      transparent 0%, rgba(255, 255, 255, .9) 50%, transparent 100%);
+    background-size: calc(var(--sh-w) * 1%) 100%;
+    background-repeat: no-repeat;
+    background-position: 38% 0;
+    opacity: var(--sh-static);
+  }
+  /* 悬停扫光：同一道带子从左扫到右，离开倒放。
+     白芯两侧各带一条可调的淡墨折射边——纯白叠冷白读不出，暗边给白芯一个参照。 */
+  .plate::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    background-image: linear-gradient(calc(var(--sh-ang) * 1deg),
+      transparent 0%,
+      rgba(18, 23, 26, var(--sh-edge)) 46%,
+      rgba(255, 255, 255, var(--sh-a)) 50%,
+      rgba(18, 23, 26, var(--sh-edge)) 54%,
+      transparent 100%);
+    background-size: calc(var(--sh-w) * 1%) 100%;
+    background-repeat: no-repeat;
+    background-position: 0% 0;
+    opacity: 0;
+    transition: background-position calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1),
+                opacity calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1);
+  }
+  .plate.is-hover::after,
+  .plate:hover::after,
+  .plate:focus-visible::after {
+    background-position: 100% 0;
+    opacity: 1;
+    transition: background-position calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1), opacity .12s ease;
+  }
+
+  /* 图标与字：浮雕（凹刻 / 凸起） */
+  .plate svg,
+  .plate .label {
+    position: relative;
+    z-index: 1;
+    filter:
+      drop-shadow(var(--em-fx) var(--em-fy) 0 rgba(255, 255, 255, var(--em-hi)))
+      drop-shadow(calc(var(--em-fx) * -1) calc(var(--em-fy) * -1) 0 rgba(18, 23, 26, var(--em-lo)));
+  }
+  .plate svg { display: block; width: 26px; height: 26px; fill: currentColor; }
+
+  .plate.is-hover { color: var(--live); }
+  .plate.is-press {
+    transform: translateY(1px);
+    box-shadow:
+      inset calc(var(--bv) * -1px) calc(var(--bv) * -1px) 0 rgba(255, 255, 255, var(--hi-a)),
+      inset calc(var(--bv) * 1px) calc(var(--bv) * 1px) 0 rgba(18, 23, 26, var(--lo-a)),
+      0 1px 0 rgba(18, 23, 26, var(--edge-a)),
+      0 2px 6px -2px rgba(18, 23, 26, var(--soft-a));
+  }
+
+  /* 文字入口形态 */
+  .plate.pill {
+    --pw: auto;
+    width: auto;
+    height: auto;
+    min-height: 30px;
+    padding: 7px 14px;
+    font-family: var(--mono);
+    font-size: var(--t5);
+    letter-spacing: .1em;
+  }
+
+  /* ================= 面板 ================= */
+  .panel {
+    position: sticky;
+    top: var(--s5);
+    padding: 18px;
+    border-radius: 16px;
+    background: var(--bg);
+    box-shadow:
+      inset 1px 1px 0 rgba(255, 255, 255, .9),
+      inset -1px -1px 0 rgba(18, 23, 26, .08),
+      0 2px 0 rgba(18, 23, 26, .08),
+      0 12px 28px -14px rgba(18, 23, 26, .25);
+  }
+  .grp { margin: 0 0 6px; font-family: var(--mono); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--fg-faint); }
+  .grp:not(:first-child) { margin-top: 18px; }
+  .ctl { margin: 10px 0 0; }
+  .ctl label { display: flex; justify-content: space-between; font-family: var(--mono); font-size: 12px; color: var(--fg-dim); margin-bottom: 3px; }
+  .ctl output { color: var(--fg); }
+  .ctl input[type="range"] { width: 100%; accent-color: var(--fg); }
+  .ctl select {
+    width: 100%; padding: 6px 8px; border: 0; border-radius: 6px;
+    font-family: var(--mono); font-size: 12px; color: var(--fg);
+    background: linear-gradient(180deg, var(--key-face-hi), var(--key-face-lo));
+    box-shadow: inset 0 1px 0 #fff, 0 1px 0 var(--key-step);
+  }
+  .btns { display: flex; gap: 8px; margin: 18px 0 0; }
+  .btns button {
+    flex: 1; padding: 9px 10px; border: 0; border-radius: 6px; cursor: pointer;
+    font-family: var(--mono); font-size: 12px; letter-spacing: .1em; color: var(--fg);
+    background: linear-gradient(180deg, var(--key-face-hi), var(--key-face) 30%, var(--key-face-lo));
+    box-shadow: inset 0 1.5px 0 #fff, inset 0 -1.5px 0 rgba(18, 23, 26, .1), 0 2px 0 var(--key-step), 0 3px 0 rgba(18, 23, 26, .15);
+    transition: transform .12s ease, box-shadow .12s ease;
+  }
+  .btns button:active { transform: translateY(2px); box-shadow: inset 0 2px 4px rgba(18, 23, 26, .18); }
+  pre#css {
+    margin: 14px 0 0; padding: 12px; border-radius: 8px; max-height: 280px; overflow: auto;
+    background: rgba(18, 23, 26, .04);
+    font-family: var(--mono); font-size: 11px; line-height: 1.65; color: var(--fg-dim);
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .tip { margin: var(--s3) 0 0; font-size: 12px; color: var(--fg-faint); line-height: 1.7; }
+
+  @media (max-width: 900px) {
+    .grid2 { grid-template-columns: 1fr; }
+    .panel { position: static; }
+  }
+</style>
+</head>
+<body>
+<main class="shell" id="shell">
+  <h1>铭牌材质 · 调参台</h1>
+  <p class="sub">C 路线的全部参数：斜面棱、面角、静止掠射、悬停扫光、浮雕（凹刻 / 凸起）、接触影。左边直接摸悬停与按下；定值后点「复制导出 CSS」发我，我按导出值收口、铺到图标与 rows 入口，并把玻璃从这两处撤下。</p>
+
+  <div class="grid2">
+    <div>
+      <section class="stage">
+        <p class="cap">图标 · 三态</p>
+        <div class="row">
+          <span class="tag">静止</span>
+          <span class="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
+          <span class="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg></span>
+          <span class="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        </div>
+        <div class="row">
+          <span class="tag">悬停</span>
+          <span class="plate is-hover"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></span>
+          <span class="plate is-hover"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg></span>
+          <span class="plate is-hover"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        </div>
+        <div class="row">
+          <span class="tag">按下</span>
+          <span class="plate is-press"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span>
+        </div>
+      </section>
+
+      <section class="stage">
+        <p class="cap">放大 3× · 看斜面与浮雕</p>
+        <div class="row">
+          <span class="zoom"><span class="plate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M1.5 8.67v8.58a3 3 0 0 0 3 3h15a3 3 0 0 0 3-3V8.67l-8.928 5.493a3 3 0 0 1-3.144 0L1.5 8.67Z"/><path d="M22.5 6.908V6.75a3 3 0 0 0-3-3h-15a3 3 0 0 0-3 3v.158l9.714 5.978a1.5 1.5 0 0 0 1.572 0L22.5 6.908Z"/></svg></span></span>
+        </div>
+      </section>
+
+      <section class="stage">
+        <p class="cap">文字入口 · 悬停自己摸</p>
+        <div class="row">
+          <span class="tag">静止</span>
+          <a class="plate pill" href="#" onclick="return false"><span class="label">HANAKO 箱庭&nbsp;↗</span></a>
+          <a class="plate pill" href="#" onclick="return false"><span class="label">洛天依歌单&nbsp;↗</span></a>
+        </div>
+      </section>
+    </div>
+
+    <aside class="panel">
+      <div class="grp">面与棱</div>
+      <div id="grp-face"></div>
+
+      <div class="grp">掠射高光</div>
+      <div id="grp-sheen"></div>
+
+      <div class="grp">浮雕</div>
+      <div id="grp-emboss"></div>
+
+      <div class="grp">接触影</div>
+      <div id="grp-shadow"></div>
+
+      <div class="btns">
+        <button id="reset" type="button">重置默认</button>
+        <button id="copy" type="button">复制导出 CSS</button>
+      </div>
+      <pre id="css"></pre>
+      <p class="tip">参数自动存 localStorage（zloong-plate-tuner-v1）。导出的 CSS 直接给我即可收口。</p>
+    </aside>
+  </div>
+</main>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'zloong-plate-tuner-v1';
+  var shell = document.getElementById('shell');
+
+  var DEFS = {
+    r: 3, bv: 1, hiA: .9, loA: .12, ang: 135,
+    shStatic: .10, shA: .85, shEdge: .05, shW: 45, shAng: 105, shDur: .5,
+    emMode: 'engraved', emX: 1, emHi: .85, emLo: .35,
+    edge: 2, edgeA: .10, softY: 4, softB: 9, softS: 3, softA: .18
+  };
+
+  var CTLS = [
+    { g: 'grp-face', k: 'r', label: '圆角', min: 0, max: 10, step: .5, unit: 'px' },
+    { g: 'grp-face', k: 'bv', label: '斜面棱宽', min: 0.5, max: 4, step: .25, unit: 'px' },
+    { g: 'grp-face', k: 'hiA', label: '受光棱白', min: 0, max: 1, step: .01 },
+    { g: 'grp-face', k: 'loA', label: '背光棱墨', min: 0, max: .6, step: .01 },
+    { g: 'grp-face', k: 'ang', label: '面渐变角度', min: 0, max: 180, step: 1, unit: '°' },
+    { g: 'grp-sheen', k: 'shStatic', label: '静止掠射', min: 0, max: .5, step: .01 },
+    { g: 'grp-sheen', k: 'shA', label: '扫光白度', min: 0, max: 1, step: .01 },
+    { g: 'grp-sheen', k: 'shEdge', label: '光带墨边', min: 0, max: .2, step: .01 },
+    { g: 'grp-sheen', k: 'shW', label: '光带宽度', min: 10, max: 90, step: 1, unit: '%' },
+    { g: 'grp-sheen', k: 'shAng', label: '光带角度', min: 45, max: 165, step: 1, unit: '°' },
+    { g: 'grp-sheen', k: 'shDur', label: '扫动时长', min: .2, max: 1.2, step: .05, unit: 's' },
+    { g: 'grp-emboss', k: 'emX', label: '浮雕位移', min: 0, max: 2, step: .25, unit: 'px' },
+    { g: 'grp-emboss', k: 'emHi', label: '浮雕受光', min: 0, max: 1, step: .01 },
+    { g: 'grp-emboss', k: 'emLo', label: '浮雕阴影', min: 0, max: .8, step: .01 },
+    { g: 'grp-shadow', k: 'edge', label: '硬沿高度', min: 0, max: 5, step: .5, unit: 'px' },
+    { g: 'grp-shadow', k: 'edgeA', label: '硬沿墨度', min: 0, max: .3, step: .01 },
+    { g: 'grp-shadow', k: 'softY', label: '柔影下移', min: 0, max: 12, step: .5, unit: 'px' },
+    { g: 'grp-shadow', k: 'softB', label: '柔影模糊', min: 0, max: 24, step: 1, unit: 'px' },
+    { g: 'grp-shadow', k: 'softS', label: '柔影收缩', min: 0, max: 10, step: .5, unit: 'px' },
+    { g: 'grp-shadow', k: 'softA', label: '柔影墨度', min: 0, max: .5, step: .01 }
+  ];
+
+  var P = Object.assign({}, DEFS);
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || 'null');
+    if (saved) { Object.assign(P, saved); }
+  } catch (e) {}
+
+  /* ---- 参数 → CSS 变量 ---- */
+  var VARS = {
+    r: '--r', bv: '--bv', hiA: '--hi-a', loA: '--lo-a', ang: '--ang',
+    shStatic: '--sh-static', shA: '--sh-a', shEdge: '--sh-edge', shW: '--sh-w', shAng: '--sh-ang', shDur: '--sh-dur',
+    emX: '--em-x', emHi: '--em-hi', emLo: '--em-lo',
+    edge: '--edge', edgeA: '--edge-a', softY: '--soft-y', softB: '--soft-b', softS: '--soft-s', softA: '--soft-a'
+  };
+
+  function apply() {
+    Object.keys(VARS).forEach(function (k) {
+      shell.style.setProperty(VARS[k], String(P[k]));
+    });
+    var sign = P.emMode === 'engraved' ? 1 : -1;
+    shell.style.setProperty('--em-fx', (sign * P.emX).toFixed(2) + 'px');
+    shell.style.setProperty('--em-fy', (sign * P.emX).toFixed(2) + 'px');
+    try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) {}
+    render();
+  }
+
+  /* ---- 控件 ---- */
+  var outs = {};
+
+  CTLS.forEach(function (c) {
+    var wrap = document.createElement('div');
+    wrap.className = 'ctl';
+    var lab = document.createElement('label');
+    lab.innerHTML = '<span>' + c.label + '</span>';
+    var out = document.createElement('output');
+    lab.appendChild(out);
+    var inp = document.createElement('input');
+    inp.type = 'range';
+    inp.min = c.min; inp.max = c.max; inp.step = c.step;
+    inp.value = P[c.k];
+    inp.addEventListener('input', function () {
+      P[c.k] = parseFloat(inp.value);
+      apply();
+    });
+    outs[c.k] = function () {
+      out.textContent = (Math.round(P[c.k] * 100) / 100) + (c.unit || '');
+    };
+    wrap.appendChild(lab);
+    wrap.appendChild(inp);
+    document.getElementById(c.g).appendChild(wrap);
+  });
+
+  /* 浮雕模式 */
+  var modeWrap = document.createElement('div');
+  modeWrap.className = 'ctl';
+  modeWrap.innerHTML =
+    '<label><span>浮雕模式</span></label>' +
+    '<select id="em-mode">' +
+    '<option value="engraved">凹刻（光在右下）</option>' +
+    '<option value="raised">凸起（光在左上）</option>' +
+    '</select>';
+  document.getElementById('grp-emboss').prepend(modeWrap);
+  var modeSel = modeWrap.querySelector('select');
+  modeSel.value = P.emMode;
+  modeSel.addEventListener('change', function () {
+    P.emMode = modeSel.value;
+    apply();
+  });
+
+  /* ---- 导出 ---- */
+  function n(x) { return String(Math.round(x * 100) / 100); }
+
+  function exportCss() {
+    var s = P.emMode === 'engraved' ? 1 : -1;
+    var ox = n(s * P.emX), oy = n(s * P.emX);
+    var nx = n(-s * P.emX), ny = n(-s * P.emX);
+    return [
+      '/* 铭牌键参数 · tools/plate-tuner.html 导出 */',
+      '  border-radius: ' + n(P.r) + 'px;',
+      '  background: linear-gradient(' + n(P.ang) + 'deg, var(--plate-hi) 0%, var(--plate-lo) 100%);',
+      '  box-shadow:',
+      '    inset ' + n(P.bv) + 'px ' + n(P.bv) + 'px 0 rgba(255,255,255,' + n(P.hiA) + '),',
+      '    inset ' + n(-P.bv) + 'px ' + n(-P.bv) + 'px 0 rgba(18,23,26,' + n(P.loA) + '),',
+      '    0 ' + n(P.edge) + 'px 0 rgba(18,23,26,' + n(P.edgeA) + '),',
+      '    0 ' + n(P.softY) + 'px ' + n(P.softB) + 'px ' + n(-P.softS) + 'px rgba(18,23,26,' + n(P.softA) + ');',
+      '',
+      '/* 静止掠射 */',
+      '  background-size: ' + n(P.shW) + '% 100%;',
+      '  opacity(::before): ' + n(P.shStatic) + ';',
+      '',
+      '/* 悬停扫光（白芯 + 墨边） */',
+      '  ::after { background-size: ' + n(P.shW) + '% 100%; transition: ' + n(P.shDur) + 's; }',
+      '  ::after 渐变：透明 → rgba(18,23,26,' + n(P.shEdge) + ') 46% → rgba(255,255,255,' + n(P.shA) + ') 50% → rgba(18,23,26,' + n(P.shEdge) + ') 54% → 透明',
+      '  ::after:hover { background-position: 100% 0; }',
+      '',
+      '/* 浮雕 */',
+      '  filter: drop-shadow(' + ox + 'px ' + oy + 'px 0 rgba(255,255,255,' + n(P.emHi) + '))',
+      '          drop-shadow(' + nx + 'px ' + ny + 'px 0 rgba(18,23,26,' + n(P.emLo) + '));'
+    ].join('\n');
+  }
+
+  var pre = document.getElementById('css');
+  function render() {
+    outs && Object.keys(outs).forEach(function (k) { if (outs[k]) { outs[k](); } });
+    modeSel.value = P.emMode;
+    pre.textContent = exportCss();
+  }
+
+  apply();
+
+  document.getElementById('reset').addEventListener('click', function () {
+    Object.assign(P, DEFS);
+    try { localStorage.removeItem(KEY); } catch (e) {}
+    document.querySelectorAll('.ctl input[type="range"]').forEach(function (inp, i) {
+      inp.value = P[CTLS[i].k];
+    });
+    modeSel.value = P.emMode;
+    apply();
+  });
+
+  document.getElementById('copy').addEventListener('click', function () {
+    var txt = exportCss();
+    var done = function () {
+      var b = document.getElementById('copy');
+      var old = b.textContent;
+      b.textContent = '已复制';
+      setTimeout(function () { b.textContent = old; }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(txt).then(done).catch(done);
+    } else {
+      var ta = document.createElement('textarea');
+      ta.value = txt; document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta); done();
+    }
+  });
+}());
+</script>
+</body>
+</html>
