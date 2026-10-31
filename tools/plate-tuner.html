@@ -59,7 +59,7 @@
                 color .12s cubic-bezier(.2, .7, .3, 1);
   }
 
-  /* 静止掠射：一道斜向弱高光，停在固定位置 */
+  /* 静止进光：左上角一束斜光，与顶栏亚克力片同一角度 */
   .plate::before {
     content: "";
     position: absolute;
@@ -67,15 +67,11 @@
     z-index: 0;
     border-radius: inherit;
     pointer-events: none;
-    background-image: linear-gradient(calc(var(--sh-ang) * 1deg),
-      transparent 0%, rgba(255, 255, 255, .9) 50%, transparent 100%);
-    background-size: calc(var(--sh-w) * 1%) 100%;
-    background-repeat: no-repeat;
-    background-position: 38% 0;
+    background: linear-gradient(118deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, .12) 26%, transparent 48%);
     opacity: var(--sh-static);
   }
-  /* 悬停扫光：同一道带子从左扫到右，离开倒放。
-     白芯两侧各带一条可调的淡墨折射边——纯白叠冷白读不出，暗边给白芯一个参照。 */
+  /* 悬停扫光：一道光带从左到右只扫一次、扫出即走。
+     白芯两侧各带一条可调的墨晕——纯白叠冷白读不出，暗晕给白芯一个参照。 */
   .plate::after {
     content: "";
     position: absolute;
@@ -84,24 +80,26 @@
     border-radius: inherit;
     pointer-events: none;
     background-image: linear-gradient(calc(var(--sh-ang) * 1deg),
-      transparent 0%,
-      rgba(18, 23, 26, var(--sh-edge)) 46%,
+      transparent calc(50% - var(--sh-w) * .5%),
+      rgba(18, 23, 26, var(--sh-edge)) calc(50% - var(--sh-w) * .25%),
       rgba(255, 255, 255, var(--sh-a)) 50%,
-      rgba(18, 23, 26, var(--sh-edge)) 54%,
-      transparent 100%);
-    background-size: calc(var(--sh-w) * 1%) 100%;
+      rgba(18, 23, 26, var(--sh-edge)) calc(50% + var(--sh-w) * .25%),
+      transparent calc(50% + var(--sh-w) * .5%));
+    background-size: 220% 100%;
     background-repeat: no-repeat;
-    background-position: 0% 0;
+    background-position: 100% 0;
     opacity: 0;
-    transition: background-position calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1),
-                opacity calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1);
   }
   .plate.is-hover::after,
   .plate:hover::after,
   .plate:focus-visible::after {
-    background-position: 100% 0;
-    opacity: 1;
-    transition: background-position calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1), opacity .12s ease;
+    animation: plate-sweep calc(var(--sh-dur) * 1s) cubic-bezier(.2, .7, .3, 1) forwards;
+  }
+  @keyframes plate-sweep {
+    0%   { opacity: 0; background-position: 100% 0; }
+    14%  { opacity: 1; }
+    80%  { opacity: 1; }
+    100% { opacity: 0; background-position: 0% 0; }
   }
 
   /* 图标与字：浮雕（凹刻 / 凸起） */
@@ -188,7 +186,7 @@
 <body>
 <main class="shell" id="shell">
   <h1>铭牌材质 · 调参台</h1>
-  <p class="sub">C 路线的全部参数：斜面棱、面角、静止掠射、悬停扫光、浮雕（凹刻 / 凸起）、接触影。左边直接摸悬停与按下；定值后点「复制导出 CSS」发我，我按导出值收口、铺到图标与 rows 入口，并把玻璃从这两处撤下。</p>
+  <p class="sub">C 路线的全部参数：斜面棱、面角、静止进光、悬停扫光（单次掠过）、浮雕（凹刻 / 凸起）、接触影。左边直接摸悬停与按下；定值后点「复制导出 CSS」发我，我按导出值收口、铺到图标与 rows 入口。</p>
 
   <div class="grid2">
     <div>
@@ -256,14 +254,14 @@
 (function () {
   'use strict';
 
-  var KEY = 'zloong-plate-tuner-v1';
+  var KEY = 'zloong-plate-tuner-v2';
   var shell = document.getElementById('shell');
 
   var DEFS = {
-    r: 3, bv: 1, hiA: .9, loA: .12, ang: 135,
-    shStatic: .10, shA: .85, shEdge: .05, shW: 45, shAng: 105, shDur: .5,
-    emMode: 'engraved', emX: 1, emHi: .85, emLo: .35,
-    edge: 2, edgeA: .10, softY: 4, softB: 9, softS: 3, softA: .18
+    r: 1, bv: 1.5, hiA: .9, loA: .2, ang: 135,
+    shStatic: .7, shA: .95, shEdge: .06, shW: 20, shAng: 105, shDur: .42,
+    emMode: 'raised', emX: 1, emHi: .75, emLo: .35,
+    edge: 2, edgeA: .10, softY: 5, softB: 8, softS: 3, softA: .18
   };
 
   var CTLS = [
@@ -272,10 +270,10 @@
     { g: 'grp-face', k: 'hiA', label: '受光棱白', min: 0, max: 1, step: .01 },
     { g: 'grp-face', k: 'loA', label: '背光棱墨', min: 0, max: .6, step: .01 },
     { g: 'grp-face', k: 'ang', label: '面渐变角度', min: 0, max: 180, step: 1, unit: '°' },
-    { g: 'grp-sheen', k: 'shStatic', label: '静止掠射', min: 0, max: .5, step: .01 },
+    { g: 'grp-sheen', k: 'shStatic', label: '静止进光', min: 0, max: 1, step: .01 },
     { g: 'grp-sheen', k: 'shA', label: '扫光白度', min: 0, max: 1, step: .01 },
-    { g: 'grp-sheen', k: 'shEdge', label: '光带墨边', min: 0, max: .2, step: .01 },
-    { g: 'grp-sheen', k: 'shW', label: '光带宽度', min: 10, max: 90, step: 1, unit: '%' },
+    { g: 'grp-sheen', k: 'shEdge', label: '光带墨晕', min: 0, max: .2, step: .01 },
+    { g: 'grp-sheen', k: 'shW', label: '光带宽度', min: 6, max: 60, step: 1, unit: '%' },
     { g: 'grp-sheen', k: 'shAng', label: '光带角度', min: 45, max: 165, step: 1, unit: '°' },
     { g: 'grp-sheen', k: 'shDur', label: '扫动时长', min: .2, max: 1.2, step: .05, unit: 's' },
     { g: 'grp-emboss', k: 'emX', label: '浮雕位移', min: 0, max: 2, step: .25, unit: 'px' },
@@ -374,14 +372,13 @@
       '    0 ' + n(P.edge) + 'px 0 rgba(18,23,26,' + n(P.edgeA) + '),',
       '    0 ' + n(P.softY) + 'px ' + n(P.softB) + 'px ' + n(-P.softS) + 'px rgba(18,23,26,' + n(P.softA) + ');',
       '',
-      '/* 静止掠射 */',
-      '  background-size: ' + n(P.shW) + '% 100%;',
+      '/* 静止进光（左上角，118°） */',
       '  opacity(::before): ' + n(P.shStatic) + ';',
       '',
-      '/* 悬停扫光（白芯 + 墨边） */',
-      '  ::after { background-size: ' + n(P.shW) + '% 100%; transition: ' + n(P.shDur) + 's; }',
-      '  ::after 渐变：透明 → rgba(18,23,26,' + n(P.shEdge) + ') 46% → rgba(255,255,255,' + n(P.shA) + ') 50% → rgba(18,23,26,' + n(P.shEdge) + ') 54% → 透明',
-      '  ::after:hover { background-position: 100% 0; }',
+      '/* 悬停扫光：220% 背景、从左到右只扫一次 */',
+      '  ::after { background-size: 220% 100%; animation: plate-sweep ' + n(P.shDur) + 's forwards; }',
+      '  ::after 渐变：透明 → rgba(18,23,26,' + n(P.shEdge) + ') ' + n(50 - P.shW / 4) + '% → rgba(255,255,255,' + n(P.shA) + ') 50% → rgba(18,23,26,' + n(P.shEdge) + ') ' + n(50 + P.shW / 4) + '% → 透明',
+      '  两端透明点：' + n(50 - P.shW / 2) + '% / ' + n(50 + P.shW / 2) + '%；扫完停在 0%，离开不抽回',
       '',
       '/* 浮雕 */',
       '  filter: drop-shadow(' + ox + 'px ' + oy + 'px 0 rgba(255,255,255,' + n(P.emHi) + '))',

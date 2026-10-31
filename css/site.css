@@ -156,41 +156,39 @@ main, .bar, .foot { position: relative; z-index: 2; }
               transform var(--press) var(--ease),
               box-shadow var(--press) var(--ease);
 }
-/* 静止掠射：一道斜向弱高光停在面上 */
+/* 静止时左上角一道进光，与顶栏亚克力片同一种光；垫在字与图标下面 */
 .icon-link::before,
 .link::before,
 .rows__r a::before {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: -1;
   border-radius: inherit;
   pointer-events: none;
-  background-image: linear-gradient(105deg, transparent 0%, rgba(255, 255, 255, .9) 50%, transparent 100%);
-  background-size: 40% 100%;
-  background-repeat: no-repeat;
-  background-position: 38% 0;
-  opacity: .10;
+  background: linear-gradient(118deg, rgba(255, 255, 255, .5) 0%, rgba(255, 255, 255, .12) 26%, transparent 48%);
+  opacity: .7;
 }
-/* 悬停扫光：同一道白芯带从左扫到右（0.5s），离开倒放扫回并淡尽 */
+/* 悬停扫光：一道窄光从左到右只扫一次，扫出即走，不在边上停下 */
 .icon-link::after,
 .link::after,
 .rows__r a::after {
   content: "";
   position: absolute;
   inset: 0;
+  z-index: -1;
   border-radius: inherit;
   pointer-events: none;
   background-image: linear-gradient(105deg,
-    transparent 0%,
-    rgba(18, 23, 26, .01) 46%,
-    rgba(255, 255, 255, .85) 50%,
-    rgba(18, 23, 26, .01) 54%,
-    transparent 100%);
-  background-size: 40% 100%;
+    transparent 40%,
+    rgba(18, 23, 26, .06) 45%,
+    rgba(255, 255, 255, .95) 50%,
+    rgba(18, 23, 26, .06) 55%,
+    transparent 60%);
+  background-size: 220% 100%;
   background-repeat: no-repeat;
-  background-position: 0% 0;
+  background-position: 100% 0;   /* 与扫光起点一致，扫完离场 */
   opacity: 0;
-  transition: background-position .5s var(--ease), opacity .5s var(--ease);
 }
 .icon-link:hover::after,
 .icon-link:focus-visible::after,
@@ -198,9 +196,13 @@ main, .bar, .foot { position: relative; z-index: 2; }
 .link:focus-visible::after,
 .rows__r a:hover::after,
 .rows__r a:focus-visible::after {
-  background-position: 100% 0;
-  opacity: 1;
-  transition: background-position .5s var(--ease), opacity .12s var(--ease);
+  animation: plate-sweep .42s var(--ease) forwards;
+}
+@keyframes plate-sweep {
+  0%   { opacity: 0; background-position: 100% 0; }
+  14%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; background-position: 0% 0; }
 }
 /* 图标与字：浮雕（凸起：受光在左上、阴影在右下） */
 .icon-link > svg {
