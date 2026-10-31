@@ -18,24 +18,18 @@
 
 ## 项目速览
 
-- 按材质分 token 源：`css/tokens-screen.css` 为屏（首页 / 作品）的 token 唯一来源（三套配色：玄黑/冷白/暖白，定稿冷白）；`css/tokens.css` 为纸（子页 / Hanako 箱庭）的设计 token 来源，两套不混用。
-- `js/date.js`：门牌日期注入脚本（`#today`，`data-date-format="dossier"` 走 2026.10.24 等宽格式，缺省走中文长格式），gallery / portfolio / resume 等子页共用，不要再复制内联日期代码。
-- 结构两页：`index.html`（屏，冷白）承担门牌与关于，联系只由 hero 的三枚图标入口承担，不设独立章节；作品一律在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。两页由静态 HTML + `css/site.css` + `js/home.js` 驱动（`js/shelf.js` 仅作品页加载）；作品页门牌的在跑数从 `data/home.json` 读取，正文与静态兜底写在 HTML 中；`files/` 下的旧文件保留，子页档案架引用 `data/portfolio.json`。
-- 首页 hero 的三个入口（GitHub / B 站 / 复制邮箱）是三枚内联 SVG 图标，**不用图标字体、不引图标库、不走 CDN**；图标直接写在 `index.html`，热区与铭牌配方在 `css/site.css` 的铭牌键一节（`.icon-link` / `.link` / `.rows__r a` 共用同一套面、斜棱、浮雕与掠射）。第三枚是复制键（`<button data-copy>`），点按复制地址并在图标上方浮出「已复制」小签（`js/home.js` 的 `copyMail`）。
-- **母题立方体**：屏上唯一的立体物，规格写在 `DESIGN.md §7`，只有一处——`works.html` 开头的水位陈列（`.shelf`），七枚 116px（≤767px 为 72px、一排横向滑动）排成一条地平线，**位置即状态**——坐在线上 = 在跑，悬空 = 在制，沉到线下 = 归档；地平线压在方块前面横过去，所以是「站在水里」而不是「浮在空中」；指一块，下面那行就读出那一块（`js/shelf.js`，无脚本时读出行显示首块、方块照常可点）。七枚都能按下拖动（松手带短惯性，再按下即刹车），拖动不触发跳转。**屏上不许再出现第二处立体物**，要加内容就加进那条水线。
-- **水线以下是一池水**：`js/water.js` 用 Canvas2D 高度场（96 列，弹簧回正 + 邻居耦合 + 阻尼）在 `.shelf__deck` 里画水面；只在指针划过、按下、方块抬起时起波，衰减到阈值就清空状态并停掉 rAF——**静止时不跑循环**。它只加载于作品页，无 JS 时不存在；面在方块下缘之前（沉到线下的方块在水面之下），颜色走中性灰蓝，不借用青。`prefers-reduced-motion` 下水面静止。
-- `js/vendor/`：运行时第三方代码的唯一落点，自托管、文件名带版本号、页面按需 `<script defer>`，**不得改用 CDN**。Motion 尚未 vendor，等第一个滚动动效落地时再放固定版本。
-- **立方体的画法**：`js/cube.js` 用裸 WebGL2 渲染（二十四顶点带法线、正交投影、等轴测 45° / 35.264°、单一方向光、Lambert 漫反射、哑光无高光），**不引 Three.js**。入场坠落只发生在作品页水线上的七枚：手写 2D 物理（重力 + 触线反弹 + 角度回正），落点即设计位、落定即停帧，坠落只搬方块本体（canvas / SVG），水线与接触影钉在地上不跟。`works.html` `<head>` 一行内联脚本加 `drop-ready` 钩子把七枚藏到坠落开始，无 JS 或脚本未跑时不生效、直接在位。低于 72px 不成立体，改用状态灯。无 JS 或无 WebGL 时降级为静态 SVG 三面块，布局不得塌；`prefers-reduced-motion` 下不播坠落、不自转、松手无惯性；冷白底上允许柔和接触影（浅底下影子是物理事实）。
-- **配色语义**（违背它比破坏视觉更严重）：青绿（`--live` / `--cube-live-*`）只给**现在就能玩**的东西；在制与归档一律走灰（`--cube-*` / `--cube-sunk-*`）。`#66CCFF` 全站只出现一次（关于页洛天依那一行），永不作控件色。
-- `css/seal.css` + `js/seal.js`：印章组件，**只服务纸材质子页**（从 Hanako 箱庭延续下来的元素，与屏上的立方体母题无关，不要把两者当成一套）。视口右下角一枚 three.js 印章，拖到纸卡上按下即盖章；印子存 localStorage（`zloong-seal-v1`，只记坐标与随机种子，最多 48 枚），清除键 `#seal-clear` 贴在印章上方；窄屏不出现、不加载 three.js，已存印子也不渲染；无 WebGL 退化为 2D 印章。**全站第三方依赖只许两处**：这里的 three.js，与 `js/vendor/` 的 Motion（见工作约定 5）。
-- `legacy/`：旧站存档，不得删除（退役博客 `blog.html` + `posts/`，仍 fetch 根 `data/posts.json`；旧主题首页快照与旧作品集 demo）。博客已于 2026-09-30 退役并整体迁入 `legacy/`，根目录 `posts/` 已删除。
-- `pages/resume.html` + `css/resume-workshop.css`：封存页，站内不设入口。信息架构是为「筛选者扫读」设计的；改文案直接改 `pages/resume.html`。**简历 PDF 一律不托管到站上**，只保留邮件索取通道，不要往仓库里放。
-- `images/画廊/`：画廊图片，索引由 `python scripts/generate_gallery_json.py` 生成，勿手改 `images/gallery-images.json`。
-- `luotianyi/` + `scripts/generate_luotianyi.py`：洛天依歌单独立页面（纸面 · 精修编年目录：左侧常驻年份索引轨 + 右侧编年曲目长流，天依碧印点缀）。**数据唯一来源是外部仓库 `Dragonzhi/luotianyi-song-list`（默认分支 master）**，改数据去那个仓库；页面由脚本从该仓库拉取后生成（`style.css` 与 `app.js` 是静态伴生文件，不随脚本生成）。`luotianyi/洛天依歌单.md` 是脚本写入的同步快照（兼作离线回退，线上可直接访问供引用），**不要手改**。
-- `scripts/`：本地生成脚本统一归档（manifest / 画廊索引），从仓库根或任意目录运行均可（脚本内按自身位置定位仓库根）。
-- `tools/`：本地调参对比台（每件材质一个：`name-tuner.html` 主名浮雕、`key-preview.html` 按键方案、`plate-tuner.html` 铭牌材质、`palette-console.html` 配色；`glass-tuner.html` / `glass-preview.html` / `neumorph-preview.html` 等为一次性方案存档），纯静态单页、复用站点 CSS 的真组件；站内不设入口、不参与部署必需路径，参数存 localStorage。
-- `pages/`：纸风格子页面（画廊版 / 档案架 / 技术履历），在用；`data/portfolio.json` 是档案架子页的数据。`legacy/` 存档见上条，勿删。
-- 合规红线：首页 `<title>` 为「ZLOONG · Dragonzhi」，页脚备案号「闽ICP备20260330551号-1」不得删改。
+只回答「东西在哪、改哪里」；设计规格一律以 `DESIGN.md` 为准，这里只留指针。
+
+- **token 两家**：屏（首页 / 作品）在 `css/tokens-screen.css`（冷白定稿）；纸（子页 / Hanako 箱庭）在 `css/tokens.css`。两套不混用。
+- **两页**：`index.html` 是门牌 + 关于，联系只由 hero 三枚图标入口承担；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，`js/shelf.js` 仅作品页；在跑数读 `data/home.json`。
+- **母题**：立方体只出现在作品页水线，规格（尺寸、坠落、拖动、水面）见 `DESIGN.md §7`，实现是 `js/cube.js` + `js/water.js`；首页不许出现第二处立体物。
+- **日期**：`js/date.js` 注入 `#today`，子页共用；不要再复制内联日期代码。
+- **第三方**：只许 `js/vendor/` 的自托管库与印章按需加载的 three.js；入口图标一律内联 SVG，不用图标字体、不引图标库、不走 CDN。
+- **纸面**：印章 `css/seal.css` + `js/seal.js` 只服务纸材质子页；`pages/resume.html` 是封存页，站内不设入口，简历 PDF 不托管。
+- **数据与生成**：画廊索引跑 `scripts/generate_gallery_json.py`（勿手改 JSON）；洛天依歌单由 `scripts/generate_luotianyi.py` 从外部仓库 `Dragonzhi/luotianyi-song-list` 生成，快照 `luotianyi/洛天依歌单.md` 勿手改；档案架读 `data/portfolio.json`。
+- **存档**：`legacy/` 不得删除或覆盖。
+- **本地工具**：`tools/` 是调参 / 对比页（每件材质一个），站内无入口、不参与部署必需路径。
+- **合规**：首页 `<title>` 为「ZLOONG · Dragonzhi」，页脚备案号「闽ICP备20260330551号-1」不得删改。
 
 ## 工作约定
 
