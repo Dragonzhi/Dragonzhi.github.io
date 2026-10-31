@@ -38,30 +38,31 @@
   .glass > span { position: relative; z-index: 1; }
 
   /* ============ 乙 · 扫光（本轮要调的东西） ============ */
-  /* 反光带：白芯 + 两侧淡墨边；尺寸、角度、浓淡全部走变量 */
+  /* 反光带：白芯 + 两侧淡墨边；尺寸、角度、浓淡全部走变量。
+     进场正扫、离开倒扫 —— 靠 transition 双向走，不用 keyframes。 */
   .gd::after {
     content: ""; position: absolute; inset: 0; z-index: 0;
     border-radius: inherit; pointer-events: none;
-    background-image: linear-gradient(var(--ang, 100deg),
+    background-image: linear-gradient(var(--ang, 105deg),
       transparent 0%,
-      rgba(18, 23, 26, var(--ink, .09)) var(--e1, 30%),
-      rgba(255, 255, 255, var(--core, 1)) 50%,
-      rgba(18, 23, 26, var(--ink, .09)) var(--e2, 70%),
+      rgba(18, 23, 26, var(--ink, 0)) var(--e1, 30%),
+      rgba(255, 255, 255, var(--core, .85)) 50%,
+      rgba(18, 23, 26, var(--ink, 0)) var(--e2, 70%),
       transparent 100%);
-    background-size: var(--bw, 34%) 100%;
+    background-size: var(--bw, 45%) 100%;
     background-repeat: no-repeat;
     background-position: 0% 0;
     opacity: 0;
+    /* 离开：倒放 —— 光带从右扫回左，同步淡尽 */
+    transition: background-position var(--dur, .5s) var(--ease), opacity var(--dur, .5s) var(--ease);
   }
   .gd:hover { color: var(--fg); }
   .gd:hover::after,
   .gd.is-run::after {
-    animation: gd-sweep var(--dur, .55s) var(--ease) forwards;
-  }
-  @keyframes gd-sweep {
-    0%   { opacity: 0; background-position: 0% 0; }
-    12%  { opacity: 1; }
-    100% { opacity: var(--end-op, 1); background-position: 100% 0; }
+    background-position: 100% 0;
+    opacity: 1;
+    /* 进入：位置扫一遍，透明度 .12s 亮起 */
+    transition: background-position var(--dur, .5s) var(--ease), opacity .12s var(--ease);
   }
 
   .panel {
@@ -81,12 +82,6 @@
     font-variant-numeric: tabular-nums;
   }
   .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--fg); height: 22px; }
-  .row--select { grid-template-columns: 1fr 96px; }
-  .row--select select {
-    grid-column: 1 / -1; width: 100%; padding: 8px 10px; margin-top: 2px;
-    font: inherit; font-size: 13px; color: var(--fg); background: var(--btn-bg);
-    border: 1px solid var(--line-strong); border-radius: 0;
-  }
 
   .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 16px; }
   .actions button {
@@ -119,7 +114,7 @@
 
 <div class="layout">
   <section class="stage">
-    <p class="stage__hint">把指针移到片子上 → 扫一次光；「重放」可再看一次</p>
+    <p class="stage__hint">把指针移到片子上 → 正扫一次；移开 → 光带倒扫回去；「重放」可再看一次</p>
     <div class="arm">
       <a class="glass gd chip js-gd" href="#" onclick="return false"><span>洛天依歌单 ↗</span></a>
       <a class="glass gd icon js-gd" href="#" onclick="return false" aria-label="图标"><span>＋</span></a>
@@ -146,7 +141,7 @@
     </div>
 
     <pre id="out"></pre>
-    <p class="note">导出的 CSS 落到 <code>css/site.css</code> 的 <code>.glass::after</code> 与 <code>.glass:hover::after</code>。白芯必须配两条淡墨边：纯白光在白色玻璃上读不出来。</p>
+    <p class="note">导出的 CSS 落到 <code>css/site.css</code> 的 <code>.glass::after</code> 与 <code>.glass:hover::after</code>。墨边靠的是淡墨当折射边；调到 0 就是纯白带，觉得读不出来可加回 .02–.05。</p>
   </aside>
 </div>
 
@@ -154,18 +149,18 @@
 (function () {
   'use strict';
 
-  var KEY = 'zloong-glass-tuner-v1';
+  var KEY = 'zloong-glass-tuner-v2';
 
   var DEFS = [
-    { k: 'bw',   label: '光带宽度',   min: 12,  max: 60,  step: 1,   def: 34,   unit: '%',   group: 'band' },
-    { k: 'ang',  label: '光带角度',   min: 80,  max: 120, step: 1,   def: 100,  unit: 'deg', group: 'band' },
-    { k: 'core', label: '白芯亮度',   min: .3,  max: 1,   step: .05, def: 1,    unit: '',    group: 'band' },
-    { k: 'ink',  label: '墨边强度',   min: 0,   max: .22, step: .01, def: .09,  unit: '',    group: 'band' },
+    { k: 'bw',   label: '光带宽度',   min: 12,  max: 60,  step: 1,   def: 45,   unit: '%',   group: 'band' },
+    { k: 'ang',  label: '光带角度',   min: 80,  max: 120, step: 1,   def: 105,  unit: 'deg', group: 'band' },
+    { k: 'core', label: '白芯亮度',   min: .3,  max: 1,   step: .05, def: .85,  unit: '',    group: 'band' },
+    { k: 'ink',  label: '墨边强度',   min: 0,   max: .22, step: .01, def: 0,    unit: '',    group: 'band' },
     { k: 'edge', label: '墨边位置',   min: 8,   max: 45,  step: 1,   def: 30,   unit: '%',   group: 'band' },
-    { k: 'dur',  label: '扫过时长',   min: .3,  max: 1,   step: .05, def: .55,  unit: 's',   group: 'sweep' }
+    { k: 'dur',  label: '扫过时长',   min: .3,  max: 1,   step: .05, def: .5,   unit: 's',   group: 'sweep' }
   ];
 
-  var p = { end: 'stay' };
+  var p = {};
   DEFS.forEach(function (d) { p[d.k] = d.def; });
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
@@ -173,7 +168,6 @@
       var v = parseFloat(saved[d.k]);
       if (isFinite(v)) { p[d.k] = Math.min(d.max, Math.max(d.min, v)); }
     });
-    if (saved.end === 'fade') { p.end = 'fade'; }
   } catch (e) { /* 坏数据就当没有 */ }
 
   var chips = Array.prototype.slice.call(document.querySelectorAll('.js-gd'));
@@ -201,15 +195,13 @@
       '  background-repeat: no-repeat;\n' +
       '  background-position: 0% 0;\n' +
       '  opacity: 0;\n' +
+      '  transition: background-position ' + p.dur + 's var(--ease), opacity ' + p.dur + 's var(--ease);\n' +
       '}\n' +
       '.glass > span { position: relative; z-index: 1; }\n' +
       '.glass:hover::after {\n' +
-      '  animation: glass-sweep ' + p.dur + 's var(--ease) forwards;\n' +
-      '}\n' +
-      '@keyframes glass-sweep {\n' +
-      '  0%   { opacity: 0; background-position: 0% 0; }\n' +
-      '  12%  { opacity: 1; }\n' +
-      '  100% { opacity: ' + (p.end === 'fade' ? 0 : 1) + '; background-position: 100% 0; }\n' +
+      '  background-position: 100% 0;\n' +
+      '  opacity: 1;\n' +
+      '  transition: background-position ' + p.dur + 's var(--ease), opacity .12s var(--ease);\n' +
       '}';
   }
 
@@ -222,7 +214,6 @@
       el.style.setProperty('--e1', p.edge + '%');
       el.style.setProperty('--e2', (100 - p.edge) + '%');
       el.style.setProperty('--dur', p.dur + 's');
-      el.style.setProperty('--end-op', p.end === 'fade' ? '0' : '1');
     });
     out.textContent = css(p);
     try { localStorage.setItem(KEY, JSON.stringify(p)); } catch (e) { /* 隐私模式 */ }
@@ -254,44 +245,14 @@
     box.appendChild(row);
   });
 
-  /* ---- 扫完的处理：停住 / 熄灭 ---- */
-  var endSel = null, endShow = null;
-  (function endControl() {
-    var box = document.getElementById('sliders-sweep');
-    var row = document.createElement('div');
-    row.className = 'row row--select';
-    var label = document.createElement('label');
-    label.textContent = '扫完的处理';
-    label.setAttribute('for', 'ctl-end');
-    var outEl = document.createElement('output');
-    endSel = document.createElement('select');
-    endSel.id = 'ctl-end';
-    [['stay', '停在右侧（常亮）'], ['fade', '扫完熄灭']].forEach(function (o) {
-      var opt = document.createElement('option');
-      opt.value = o[0];
-      opt.textContent = o[1];
-      endSel.appendChild(opt);
-    });
-    endShow = function () {
-      endSel.value = p.end;
-      outEl.textContent = p.end === 'fade' ? '熄灭' : '停住';
-    };
-    endSel.addEventListener('change', function () {
-      p.end = endSel.value;
-      endShow();
-      apply();
-    });
-    endShow();
-    row.appendChild(label); row.appendChild(outEl); row.appendChild(endSel);
-    box.insertBefore(row, box.firstChild);
-  }());
-
+  /* ---- 重放：先让它倒扫回去（就是离开时的退场），再正扫一遍 ---- */
+  var replayTimer = 0;
   function replay() {
-    chips.forEach(function (el) {
-      el.classList.remove('is-run');
-      void el.offsetWidth;          /* 强制重排，动画才会重头播 */
-      el.classList.add('is-run');
-    });
+    chips.forEach(function (el) { el.classList.remove('is-run'); });
+    clearTimeout(replayTimer);
+    replayTimer = setTimeout(function () {
+      chips.forEach(function (el) { el.classList.add('is-run'); });
+    }, p.dur * 1000 + 30);
   }
 
   replayBtn.addEventListener('click', replay);
@@ -302,8 +263,6 @@
       outputs[d.k].input.value = d.def;
       outputs[d.k].show();
     });
-    p.end = 'stay';
-    if (endShow) { endShow(); }
     apply();
   });
 

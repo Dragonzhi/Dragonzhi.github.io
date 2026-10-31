@@ -595,7 +595,7 @@ main, .bar, .foot { position: relative; z-index: 2; }
     linear-gradient(45deg,
       rgba(255, 255, 255, .90) 0%, rgba(255, 255, 255, 0) 22%,
       rgba(255, 255, 255, 0) 78%, rgba(255, 255, 255, .90) 100%),
-    rgba(255, 255, 255, .30);
+    rgba(255, 255, 255, .22);
   box-shadow:
     inset 2px -2px 1px -1px rgba(255, 255, 255, .95),   /* 透镜棱：左上亮 */
     inset -2px 2px 1px -1px rgba(255, 255, 255, .95),
@@ -606,8 +606,8 @@ main, .bar, .foot { position: relative; z-index: 2; }
     0 10px 22px -8px rgba(18, 23, 26, .30),              /* 外投影：拖出来的重力 */
     0 3px 8px -3px rgba(18, 23, 26, .14);
 }
-/* 悬浮：一道反光带从左扫到右（0.6s），扫完停在右侧常亮；文字不改色。
-   参数由 tools/glass-tuner.html 定：105°、带宽 48%、纯白芯、无墨边。 */
+/* 悬浮：一道反光带从左扫到右（0.5s），扫完停在右侧；离开时同一段路倒着走回去
+   ——光带从右扫回左，同步淡尽。白芯 .85、带宽 45%，玻璃底压到白 .22。 */
 .glass::after {
   content: "";
   position: absolute;
@@ -617,26 +617,25 @@ main, .bar, .foot { position: relative; z-index: 2; }
   pointer-events: none;
   background-image: linear-gradient(105deg,
     transparent 0%,
-    rgba(18, 23, 26, 0) 20%,
-    rgba(255, 255, 255, 1) 50%,
-    rgba(18, 23, 26, 0) 80%,
+    rgba(18, 23, 26, 0) 30%,
+    rgba(255, 255, 255, .85) 50%,
+    rgba(18, 23, 26, 0) 70%,
     transparent 100%);
-  background-size: 48% 100%;
+  background-size: 45% 100%;
   background-repeat: no-repeat;
-  background-position: 100% 0;      /* 与扫光终点一致，离开时不跳位 */
+  background-position: 0% 0;
   opacity: 0;
-  transition: opacity .18s var(--ease);   /* 离开时原地淡出，不抽回去 */
+  /* 离开：倒放 —— 位置从 100% 扫回 0%，透明度同步降下 */
+  transition: background-position .5s var(--ease), opacity .5s var(--ease);
 }
 .glass > span,
 .glass > svg { position: relative; z-index: 1; }   /* 字与图标压在光带上面 */
 .glass:hover::after,
 .glass:focus-visible::after {
-  animation: glass-sweep .6s var(--ease) forwards;
-}
-@keyframes glass-sweep {
-  0%   { opacity: 0; background-position: 0% 0; }
-  12%  { opacity: 1; }
-  100% { opacity: 1; background-position: 100% 0; }
+  background-position: 100% 0;
+  opacity: 1;
+  /* 进入：位置扫 .5s，透明度 .12s 亮起（对应动画版 12% 的亮帧） */
+  transition: background-position .5s var(--ease), opacity .12s var(--ease);
 }
 @media (prefers-reduced-motion: reduce) {
   .glass::after { display: none; }   /* 少动效时不扫光，玻璃面照常成立 */

@@ -1,8 +1,8 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 底板经控制台定稿冷白，软 UI 卡与去线已落；等实页验收与窄屏复查。
-updated: 2026-10-30
+next: 玻璃扫光定参 45% / 白芯 .85 / 墨边 0 / 0.5s，退场改倒放；等实页验收与窄屏复查。
+updated: 2026-10-31
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
 
@@ -20,6 +20,8 @@ updated: 2026-10-30
 暂无已开始但未完成的任务。
 
 ## 已完成
+
+- [x] 玻璃扫光定参并改倒放：参数取 105° / 带宽 45% / 白芯 `.85` / 墨边 0 / 0.5s；`.glass::after` 从 animation 改双向 transition，离开时光带从右扫回左、0.5s 同步淡尽；调参台同步默认值、删「扫完的处理」、KEY 升 v2（2026-10-31）
 
 - [x] 底板定稿冷白 #F2F5F7 + 软 UI：屏上分隔线与 `.rails` 全撤；刻度块与关于表改成 32px 圆角软卡（`#C3CED5 → #FFFFFF` 凸边 + `#284456` 内发光）；新增 `--soft-*` token；配色经 `tools/palette-console.html` 定稿（2026-10-30）
 
@@ -68,6 +70,8 @@ updated: 2026-10-30
 
 ## 工作留痕
 
+- 2026-10-31 · 光带倒放：用户判 0.18s 淡出「不明显」，提议照顶栏 `tab--on` 做倒放。把 `.glass::after` 改双向 transition：底态位置 0% / opacity 0，hover 态 100% / 1，进入 `opacity .12s`、离开 `opacity .5s` 与位置同步（光带从右扫回左、一路淡尽）。参数取用户导出的 45% / 105° / 白芯 .85 / 墨边 0 / 0.5s；调参台删「扫完的处理」、KEY 升 v2。验证：hover 态 100%/1；离开后 transition 事件日志显示 ::after 的 background-position 与 opacity 各跑满 0.5s。
+- 2026-10-31 · 光带加强：用户判「效果不明显」，算了下纯白对白玻璃只有 13 级灰阶，加宽提亮都无效。给光带补两条 `.05` 淡墨边（折射边）、带宽 52%、玻璃面白度 `.22`；调参台默认值同步。实页复核：白芯与面分明、暗边可见、图标不发灰。
 - 2026-10-30 · 光带退场：用户报「离开时倒放」。实测玻璃片是瞬间归位（无过渡），顶栏亚克力片才是真抽回（`transition: background-position .4s`）。按「原地淡出」改：两处底态位置与动画终点对齐（玻璃 100% / 顶栏 0%），hover 跑一遍 `forwards`，离开只让 opacity 0.18s 淡到 0。复验：离开后 position 恒定、opacity 1→0，无中间位移。
 - 2026-10-30 · 配色控制台：用户嫌 #E1E9F1 不称心，改做 `tools/palette-console.html`——iframe 载真实首页/作品页，面板把 `--bg / --surface / --frame / --line / --line-strong / --soft-* / --grid-line` 写进 iframe 的 `:root`，四个预设 + 导出 CSS + localStorage。用户选「旧冷白」并导出，tokens 回写 `#F2F5F7 / #FFFFFF / #C3CED5 / #284456`。落站后实测：软卡在冷白上仍靠凸边立住，玻璃折射弱一档。
 - 2026-10-30 · 抄 Gemini UI：先复刻 `tools/neumorph-preview.html`（A 原底 / B 冷白底 / C 磨砂下拉），链路里发现两件事——预览页内容层压在网格下面（补 `.page { z-index:2 }`），以及旧底只比白暗 4% 导致软 UI 与磨砂全部失效。用户定 #E1E9F1 + 首页铺卡。落站时改 token 五组、删线七处、删 `.rails` 元素两页、新增 `.scale/.rows` 软卡；作品页水线与接触影保留。窄屏 1023 断点里 `.scale` 原有的 bordertop 与 padding 覆盖一并清掉，改成卡内双列。
