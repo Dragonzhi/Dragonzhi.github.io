@@ -2,6 +2,7 @@
    wall.js —— 格子墙 + 指针色块（lab）
    墙：一次画完，3200 个字形不进循环。
    色块：指针附近加一团热，按帧衰减；热降到阈值以下就停帧。
+   色相跟热度走：刚碰到的格子是朱砂，凉下来变青绿——红是「刚发生」，青绿是「已经冷掉的介质」。
    prefers-reduced-motion：只画墙，不挂指针。
    ============================================================ */
 (function () {
@@ -17,9 +18,11 @@
   var CELL = 18;                 /* 格子边长 */
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK = '18, 23, 26';
-  var FILL = '#00827F';
+  var FILL = '#00827F';          /* 凉下来的青绿 */
+  var HOT = '#8B2C1F';           /* 刚被碰到的朱砂 */
   var DECAY = 0.94;              /* 每帧余热；越小尾巴越短 */
   var CUT = 0.12;                /* 出块阈值 */
+  var HOT_CUT = 0.6;             /* 高于它才是红的；越小红的拖头越长 */
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -95,22 +98,27 @@
 
   function paint() {
     ictx.clearRect(0, 0, W, H);
-    ictx.fillStyle = FILL;
-    var left = 0;
-    for (var y = 0; y < rows; y++) {
-      var row = y * cols;
-      for (var x = 0; x < cols; x++) {
-        var h = heat[row + x];
-        if (h > CUT) {
+    var painted = 0;
+    /* 两遍：先青绿，再朱砂盖上去。红的格子不先铺底，否则红里会透青。 */
+    for (var pass = 0; pass < 2; pass++) {
+      var hot = pass === 1;
+      var min = hot ? HOT_CUT : CUT;
+      ictx.fillStyle = hot ? HOT : FILL;
+      for (var y = 0; y < rows; y++) {
+        var row = y * cols;
+        for (var x = 0; x < cols; x++) {
+          var h = heat[row + x];
+          if (h <= min) { continue; }
+          if (!hot && h > HOT_CUT) { continue; }
           /* 单次掠过就要读成实心，只有最外一圈半透明 */
           ictx.globalAlpha = Math.min(0.96, 0.18 + h * 1.15);
           ictx.fillRect(x * CELL + 0.5, y * CELL + 0.5, CELL - 1, CELL - 1);
-          left++;
+          painted++;
         }
       }
     }
     ictx.globalAlpha = 1;
-    return left;
+    return painted;
   }
 
   function frame() {
