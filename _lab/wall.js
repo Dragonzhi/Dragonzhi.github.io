@@ -15,7 +15,14 @@
   var wctx = wall.getContext('2d');
   var ictx = ink.getContext('2d');
 
-  var CELL = 18;                 /* 格子边长 */
+  var FULL_CELL = 18;            /* 桌面格宽 */
+  var NARROW_CELL = 12;          /* < 600px 用 */
+  var CELL = FULL_CELL;          /* 当前格宽，resize 时按视口定 */
+  var GLYPH = 0.56;              /* 字形 / 格宽 */
+  var WALL_BASE = 0.04;          /* 墙面最淡处 */
+  var WALL_BAND = 0.09;          /* 低频起伏的幅度 */
+  var INJECT = 0.75;             /* 每帧注入的热 */
+  var RADIUS = 3.2;              /* 热团半径（格） */
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK = '18, 23, 26';
   var COOL = [0, 130, 127];      /* 凉下来的青绿 #00827F */
@@ -54,7 +61,7 @@
 
   function drawWall() {
     wctx.clearRect(0, 0, W, H);
-    wctx.font = Math.round(CELL * 0.56) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
+    wctx.font = Math.round(CELL * GLYPH) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
     wctx.textAlign = 'center';
     wctx.textBaseline = 'middle';
     for (var y = 0; y < rows; y++) {
@@ -62,7 +69,7 @@
         var h = hash(x, y);
         /* 低频明暗：墙面有薄有厚，不是均匀噪点 */
         var band = 0.5 + 0.5 * Math.sin(x * 0.09) * Math.cos(y * 0.11);
-        var a = 0.04 + band * 0.09 * (0.4 + h * 0.6);
+        var a = WALL_BASE + band * WALL_BAND * (0.4 + h * 0.6);
         wctx.fillStyle = 'rgba(' + INK + ',' + a.toFixed(3) + ')';
         wctx.fillText(GLYPHS.charAt(Math.floor(h * GLYPHS.length)), x * CELL + CELL / 2, y * CELL + CELL / 2);
       }
@@ -73,7 +80,7 @@
     var r = wall.getBoundingClientRect();
     W = r.width;
     H = r.height;
-    CELL = W < 600 ? 12 : 18;      /* 窄屏用小格，否则一块盖住半个字 */
+    CELL = W < 600 ? NARROW_CELL : FULL_CELL;
     cols = Math.ceil(W / CELL);
     rows = Math.ceil(H / CELL);
 
@@ -92,7 +99,7 @@
   }
 
   function poke() {
-    var R = 3.2;
+    var R = RADIUS;
     var cx = px / CELL, cy = py / CELL;
     var x0 = Math.max(0, Math.floor(cx - R - 1));
     var x1 = Math.min(cols - 1, Math.ceil(cx + R + 1));
@@ -106,7 +113,7 @@
         var v = 1 - d / (R + hash(x, y) * 1.6);
         if (v > 0) {
           var i = y * cols + x;
-          heat[i] = Math.min(1, heat[i] + v * 0.75);
+          heat[i] = Math.min(1, heat[i] + v * INJECT);
         }
       }
     }

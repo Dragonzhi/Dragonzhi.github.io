@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>格子墙调参台 · ZLOONG（本地工具）</title>
+<link rel="icon" href="../images/avatar.png">
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  /* 工具页自己的排版：屏的 token，哑光面，不引入新材质 */
+  html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); font-size: 15px; }
+  .bar {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding: 14px 24px; border-bottom: 1px solid var(--line-strong);
+    font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  }
+  .bar b { font-weight: 700; }
+  .bar span { color: var(--fg-faint); }
+
+  .layout { display: grid; grid-template-columns: 1fr 380px; min-height: calc(100vh - 49px); }
+
+  .stage { padding: 28px 24px 44px; }
+  .stage__hint {
+    font-family: var(--mono); font-size: 13px; letter-spacing: .1em;
+    color: var(--fg-faint); text-transform: uppercase; margin: 0 0 12px;
+  }
+
+  /* 预览就是纸面：冷白底，两层画布 */
+  .preview {
+    position: relative; width: 100%; aspect-ratio: 16 / 10;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    overflow: hidden;
+  }
+  .preview--narrow { width: 320px; max-width: 100%; aspect-ratio: 3 / 4; }
+  .preview canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .preview canvas + canvas { z-index: 1; }
+  .preview + .stage__hint { margin-top: 32px; }
+
+  .panel {
+    border-left: 1px solid var(--line-strong);
+    padding: 20px 22px 32px;
+    display: flex; flex-direction: column; gap: 4px;
+    background: var(--surface);
+  }
+  .panel h2 {
+    margin: 12px 0 4px; font-family: var(--mono); font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--fg-dim);
+  }
+  .row { display: grid; grid-template-columns: 1fr 64px; gap: 4px 12px; align-items: center; margin: 6px 0; }
+  .row label { font-size: 14px; color: var(--fg); }
+  .row output {
+    font-family: var(--mono); font-size: 13px; text-align: right; color: var(--fg);
+    font-variant-numeric: tabular-nums;
+  }
+  .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--fg); height: 22px; }
+
+  .actions { display: flex; gap: 8px; margin-top: 16px; }
+  .actions button {
+    font-family: var(--mono); font-size: 13px; letter-spacing: .1em; text-transform: uppercase;
+    padding: 10px 16px; border: 0; cursor: pointer;
+    background: var(--btn-bg); color: var(--fg);
+    box-shadow: inset 0 -1px 0 rgba(0,0,0,.12), 0 1px 0 rgba(0,0,0,.12), 0 3px 10px rgba(18,23,26,.18);
+  }
+  .actions button:active { transform: translateY(2px); box-shadow: inset 0 2px 5px rgba(18,23,26,.14); }
+  pre#out {
+    margin: 16px 0 0; padding: 14px; overflow: auto; max-height: 340px;
+    font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    background: var(--frame); color: var(--fg);
+    white-space: pre-wrap; word-break: break-all;
+  }
+  .note { color: var(--fg-faint); font-size: 13px; line-height: 1.7; margin-top: 14px; }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; }
+    .panel { border-left: 0; border-top: 1px solid var(--line-strong); }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <b>格子墙调参台</b>
+  <span>本地工具 · 站内无入口 · 参数存 localStorage</span>
+</div>
+
+<div class="layout">
+  <section class="stage">
+    <p class="stage__hint">桌面档 · 在面板上移动指针 → 朱砂拖头、青绿尾巴</p>
+    <div class="preview" id="preview-full"></div>
+
+    <p class="stage__hint">窄屏档 · 同一组参数，只换格宽</p>
+    <div class="preview preview--narrow" id="preview-narrow"></div>
+  </section>
+
+  <aside class="panel">
+    <h2>墙</h2>
+    <div id="sliders-wall"></div>
+
+    <h2>热与色</h2>
+    <div id="sliders-ink"></div>
+
+    <div class="actions">
+      <button type="button" id="copy">复制导出</button>
+      <button type="button" id="reset">重置</button>
+    </div>
+
+    <pre id="out"></pre>
+    <p class="note">导出的常量粘回 <code>_lab/wall.js</code> 顶部。墙与色块是两层画布：墙一次画完，色块按热衰减。<code>COOL_CUT</code> 与 <code>HOT_CUT</code> 决定渐变带有多宽——收窄到 0.58–0.80 时尾巴大部分是纯青绿，放宽会发土。青绿 <code>#00827F</code>、朱砂 <code>#8B2C1F</code> 是定值，不在这里改。</p>
+  </aside>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'zloong-wall-tuner-v1';
+  var TEAL = [0, 130, 127];
+  var RED = [139, 44, 31];
+  var GLYPHS = '<>/\\.,:;=+-*';
+  var INK_RGB = '18, 23, 26';
+
+  var DEFS = [
+    { k: 'wallBase',  group: 'wall', label: '墙面最淡',    min: 0,    max: 0.14, step: 0.005, def: 0.04, dp: 3 },
+    { k: 'wallBand',  group: 'wall', label: '起伏幅度',    min: 0,    max: 0.20, step: 0.005, def: 0.09, dp: 3 },
+    { k: 'glyph',     group: 'wall', label: '字形 / 格宽', min: 0.40, max: 0.80, step: 0.02,  def: 0.56, dp: 2 },
+    { k: 'fullCell',  group: 'wall', label: '桌面格宽',    min: 10,   max: 30,   step: 1,     def: 18,   dp: 0 },
+    { k: 'narrowCell',group: 'wall', label: '窄屏格宽',    min: 8,    max: 20,   step: 1,     def: 12,   dp: 0 },
+
+    { k: 'inject',    group: 'ink',  label: '每帧注入热',  min: 0.20, max: 1.20, step: 0.05,  def: 0.75, dp: 2 },
+    { k: 'radius',    group: 'ink',  label: '热团半径',    min: 1.5,  max: 6,    step: 0.1,   def: 3.2,  dp: 1 },
+    { k: 'decay',     group: 'ink',  label: '每帧余热',    min: 0.86, max: 0.985,step: 0.005, def: 0.94, dp: 3 },
+    { k: 'cut',       group: 'ink',  label: '出块阈值',    min: 0.04, max: 0.30, step: 0.01,  def: 0.12, dp: 2 },
+    { k: 'coolCut',   group: 'ink',  label: '全青绿上限',  min: 0.20, max: 0.90, step: 0.01,  def: 0.58, dp: 2 },
+    { k: 'hotCut',    group: 'ink',  label: '全朱砂下限',  min: 0.20, max: 1.00, step: 0.01,  def: 0.80, dp: 2 },
+    { k: 'steps',     group: 'ink',  label: '色带档数',    min: 2,    max: 20,   step: 1,     def: 12,   dp: 0 }
+  ];
+
+  var P = {};
+  DEFS.forEach(function (d) { P[d.k] = d.def; });
+
+  try {
+    var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
+    DEFS.forEach(function (d) { if (typeof saved[d.k] === 'number') { P[d.k] = saved[d.k]; } });
+  } catch (e) { /* 隐私模式 */ }
+
+  function hash(x, y) {
+    var n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+    return n - Math.floor(n);
+  }
+
+  /* ---------------- 预览实例：一套墙 + 一层色块 ---------------- */
+  function makeField(host, cellKey) {
+    var wall = document.createElement('canvas');
+    var ink = document.createElement('canvas');
+    host.appendChild(wall);
+    host.appendChild(ink);
+
+    var wc = wall.getContext('2d');
+    var ic = ink.getContext('2d');
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var W = 0, H = 0, cols = 0, rows = 0, cell = 18;
+    var heat = null, pal = [], buckets = [];
+    var raf = 0, moved = false, inside = false, px = -999, py = -999;
+
+    function buildPalette() {
+      pal.length = 0;
+      for (var i = 0; i < P.steps; i++) {
+        var t = i / Math.max(1, P.steps - 1);
+        pal.push('rgb(' +
+          Math.round(TEAL[0] + (RED[0] - TEAL[0]) * t) + ',' +
+          Math.round(TEAL[1] + (RED[1] - TEAL[1]) * t) + ',' +
+          Math.round(TEAL[2] + (RED[2] - TEAL[2]) * t) + ')');
+      }
+      buckets.length = 0;
+      for (var b = 0; b < P.steps; b++) { buckets.push([]); }
+    }
+
+    function drawWall() {
+      wc.clearRect(0, 0, W, H);
+      wc.font = Math.round(cell * P.glyph) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
+      wc.textAlign = 'center';
+      wc.textBaseline = 'middle';
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          var h = hash(x, y);
+          var band = 0.5 + 0.5 * Math.sin(x * 0.09) * Math.cos(y * 0.11);
+          var a = P.wallBase + band * P.wallBand * (0.4 + h * 0.6);
+          wc.fillStyle = 'rgba(' + INK_RGB + ',' + a.toFixed(3) + ')';
+          wc.fillText(GLYPHS.charAt(Math.floor(h * GLYPHS.length)), x * cell + cell / 2, y * cell + cell / 2);
+        }
+      }
+    }
+
+    function size() {
+      var r = host.getBoundingClientRect();
+      W = r.width;
+      H = r.height;
+      cell = cellKey === 'narrow' ? P.narrowCell : P.fullCell;
+      cols = Math.ceil(W / cell);
+      rows = Math.ceil(H / cell);
+
+      [wall, ink].forEach(function (c) {
+        c.width = Math.round(W * dpr);
+        c.height = Math.round(H * dpr);
+        c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
+      });
+
+      heat = new Float32Array(cols * rows);
+      drawWall();
+      ic.clearRect(0, 0, W, H);
+    }
+
+    function poke() {
+      var R = P.radius;
+      var cx = px / cell, cy = py / cell;
+      var x0 = Math.max(0, Math.floor(cx - R - 1));
+      var x1 = Math.min(cols - 1, Math.ceil(cx + R + 1));
+      var y0 = Math.max(0, Math.floor(cy - R - 1));
+      var y1 = Math.min(rows - 1, Math.ceil(cy + R + 1));
+      for (var y = y0; y <= y1; y++) {
+        for (var x = x0; x <= x1; x++) {
+          var dx = x - cx, dy = y - cy;
+          var d = Math.sqrt(dx * dx + dy * dy);
+          var v = 1 - d / (R + hash(x, y) * 1.6);
+          if (v > 0) {
+            var i = y * cols + x;
+            heat[i] = Math.min(1, heat[i] + v * P.inject);
+          }
+        }
+      }
+    }
+
+    function paint() {
+      ic.clearRect(0, 0, W, H);
+      for (var b = 0; b < P.steps; b++) { buckets[b].length = 0; }
+      var painted = 0;
+      var span = Math.max(0.02, P.hotCut - P.coolCut);
+      for (var y = 0; y < rows; y++) {
+        var row = y * cols;
+        for (var x = 0; x < cols; x++) {
+          var h = heat[row + x];
+          if (h <= P.cut) { continue; }
+          var t = (h - P.coolCut) / span;
+          var step = t <= 0 ? 0 : t >= 1 ? P.steps - 1 : Math.round(t * (P.steps - 1));
+          buckets[step].push(x, y, h);
+          painted++;
+        }
+      }
+      for (var b2 = 0; b2 < P.steps; b2++) {
+        var list = buckets[b2];
+        if (!list.length) { continue; }
+        ic.fillStyle = pal[b2];
+        for (var k = 0; k < list.length; k += 3) {
+          ic.globalAlpha = Math.min(0.96, 0.18 + list[k + 2] * 1.15);
+          ic.fillRect(list[k] * cell + 0.5, list[k + 1] * cell + 0.5, cell - 1, cell - 1);
+        }
+      }
+      ic.globalAlpha = 1;
+      return painted;
+    }
+
+    function frame() {
+      raf = 0;
+      var alive = 0;
+      for (var i = 0; i < heat.length; i++) {
+        heat[i] *= P.decay;
+        if (heat[i] < 0.02) { heat[i] = 0; } else if (heat[i] > P.cut) { alive++; }
+      }
+      if (moved) { poke(); moved = false; }
+      var painted = paint();
+      if (painted > 0 || alive > 0) { raf = requestAnimationFrame(frame); }
+    }
+
+    function start() {
+      if (raf) { return; }
+      raf = requestAnimationFrame(frame);
+    }
+
+    host.addEventListener('pointermove', function (e) {
+      var r = wall.getBoundingClientRect();
+      px = e.clientX - r.left;
+      py = e.clientY - r.top;
+      inside = px >= 0 && py >= 0 && px <= W && py <= H;
+      if (inside) { moved = true; start(); }
+    }, { passive: true });
+
+    var ro = new ResizeObserver(function () { size(); });
+    ro.observe(host);
+
+    buildPalette();
+    size();
+
+    return {
+      redraw: function (wallChanged) {
+        buildPalette();
+        if (wallChanged) { size(); }
+      }
+    };
+  }
+
+  var fields = [
+    makeField(document.getElementById('preview-full'), 'full'),
+    makeField(document.getElementById('preview-narrow'), 'narrow')
+  ];
+
+  /* ---------------- 控件 ---------------- */
+  var inputs = {};
+  var outputs = {};
+
+  DEFS.forEach(function (d) {
+    var row = document.createElement('div');
+    row.className = 'row';
+
+    var label = document.createElement('label');
+    label.htmlFor = d.k;
+    label.textContent = d.label;
+
+    var out = document.createElement('output');
+    out.id = d.k + '-v';
+    out.textContent = P[d.k].toFixed(d.dp);
+
+    var input = document.createElement('input');
+    input.type = 'range';
+    input.id = d.k;
+    input.min = d.min;
+    input.max = d.max;
+    input.step = d.step;
+    input.value = P[d.k];
+
+    row.appendChild(label);
+    row.appendChild(out);
+    row.appendChild(input);
+    document.getElementById(d.group === 'wall' ? 'sliders-wall' : 'sliders-ink').appendChild(row);
+
+    inputs[d.k] = input;
+    outputs[d.k] = { el: out, d: d };
+
+    input.addEventListener('input', function () {
+      P[d.k] = parseFloat(input.value);
+      out.textContent = P[d.k].toFixed(d.dp);
+
+      /* 两个阈值不能交叉 */
+      if (d.k === 'coolCut' && P.hotCut <= P.coolCut) {
+        P.hotCut = Math.min(1, +(P.coolCut + 0.02).toFixed(2));
+        inputs.hotCut.value = P.hotCut;
+        outputs.hotCut.el.textContent = P.hotCut.toFixed(2);
+      }
+      if (d.k === 'hotCut' && P.hotCut <= P.coolCut) {
+        P.coolCut = Math.max(0.2, +(P.hotCut - 0.02).toFixed(2));
+        inputs.coolCut.value = P.coolCut;
+        outputs.coolCut.el.textContent = P.coolCut.toFixed(2);
+      }
+
+      save();
+      render(!!WALL_KEYS[d.k]);
+    });
+  });
+
+  var WALL_KEYS = { wallBase: 1, wallBand: 1, glyph: 1, fullCell: 1, narrowCell: 1 };
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) { /* 隐私模式 */ }
+  }
+
+  function exportText() {
+    return '/* _lab/wall.js（由 tools/wall-tuner.html 导出） */\n' +
+      'var FULL_CELL = ' + P.fullCell + ';\n' +
+      'var NARROW_CELL = ' + P.narrowCell + ';\n' +
+      'var GLYPH = ' + P.glyph.toFixed(2) + ';\n' +
+      'var WALL_BASE = ' + P.wallBase.toFixed(3) + ';\n' +
+      'var WALL_BAND = ' + P.wallBand.toFixed(3) + ';\n' +
+      'var INJECT = ' + P.inject.toFixed(2) + ';\n' +
+      'var RADIUS = ' + P.radius.toFixed(1) + ';\n' +
+      'var DECAY = ' + P.decay.toFixed(3) + ';\n' +
+      'var CUT = ' + P.cut.toFixed(2) + ';\n' +
+      'var COOL_CUT = ' + P.coolCut.toFixed(2) + ';\n' +
+      'var HOT_CUT = ' + P.hotCut.toFixed(2) + ';\n' +
+      'var STEPS = ' + P.steps + ';\n';
+  }
+
+  function render() {
+    document.getElementById('out').textContent = exportText();
+    var wallChanged = arguments.length ? arguments[0] : true;
+    fields.forEach(function (f) { f.redraw(wallChanged); });
+  }
+
+  var copyBtn = document.getElementById('copy');
+  var resetBtn = document.getElementById('reset');
+  var timer = 0;
+
+  function flash(text) {
+    copyBtn.textContent = text;
+    clearTimeout(timer);
+    timer = setTimeout(function () { copyBtn.textContent = '复制导出'; }, 1400);
+  }
+
+  copyBtn.addEventListener('click', function () {
+    var text = exportText();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { flash('已复制'); }, function () { flash('复制失败'); });
+    } else {
+      flash('复制失败');
+    }
+  });
+
+  resetBtn.addEventListener('click', function () {
+    DEFS.forEach(function (d) {
+      P[d.k] = d.def;
+      inputs[d.k].value = d.def;
+      outputs[d.k].el.textContent = d.def.toFixed(d.dp);
+    });
+    save();
+    render(true);
+  });
+
+  render(true);
+}());
+</script>
+</body>
+</html>
