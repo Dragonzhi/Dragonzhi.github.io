@@ -78,20 +78,14 @@
     gap: 16px;
     padding: var(--s3) 0;
   }
-  /* 左上不再是字标，而是一枚亚克力小牌里的头像；头像裁自 favicon，96px 供 2 倍屏 */
+  /* 左上是一枚裸头像：不托底板、不描边，人像直接浮在纸面上。裁自 favicon，96px 供 2 倍屏 */
   .mark {
-    display: grid;
-    place-items: center;
+    display: block;
     width: 30px;
     height: 30px;
-    border-radius: 4px;
-    background: linear-gradient(118deg, #FFFFFF 0%, #E7EDF0 100%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, .95),
-      inset 0 0 0 1px rgba(18, 23, 26, .08),
-      0 1px 2px rgba(18, 23, 26, .06);
+    line-height: 0;
   }
-  .mark img { display: block; width: 24px; height: 24px; }
+  .mark img { display: block; width: 100%; height: 100%; }
   .mark:focus-visible { outline: 1px solid var(--mark); outline-offset: 3px; }
   .chips { display: flex; align-items: center; gap: 6px; }
   .chip {
@@ -155,7 +149,7 @@
 
   <div class="sheet">
     <header class="topbar">
-      <a class="mark" href="reboot.html" aria-label="ZLOONG · 首页"><img src="../images/avatar.png" alt="" width="24" height="24"></a>
+      <a class="mark" href="reboot.html" aria-label="ZLOONG · 首页"><img src="../images/avatar.png" alt="" width="30" height="30"></a>
       <nav class="chips" aria-label="页面切换">
         <a class="chip chip--on" href="reboot.html" aria-current="page">首页</a>
         <a class="chip" href="../works.html">作品</a>
