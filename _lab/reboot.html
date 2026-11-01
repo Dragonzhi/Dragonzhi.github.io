@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ZLOONG · 从零</title>
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  /* 第一块砖：全站只剩一块浮雕，居中。其余一律不进门。 */
+  html, body { height: 100%; }
+  body.reboot {
+    margin: 0;
+    background: var(--bg);
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    padding: 0 var(--pad) calc(var(--s4)) ;
+  }
+  .reboot__stage { display: grid; place-items: center; }
+  .reboot .name {
+    margin: 0;
+    font-size: clamp(84px, 16.5vw, 230px);
+    line-height: .9;
+  }
+  .reboot .name em { display: none; }
+  .reboot__foot {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 16px;
+    font-family: var(--mono);
+    font-size: var(--t5);
+    letter-spacing: .34em;
+    text-transform: uppercase;
+    color: var(--fg-faint);
+  }
+  .reboot__foot span:last-child { letter-spacing: .08em; text-transform: none; }
+</style>
+</head>
+<body class="reboot">
+  <div class="reboot__stage">
+    <h1 class="name"><span class="name-plate"><span class="name-deep" aria-hidden="true">ZLOONG</span><span class="name-solid" data-name-solid>ZLOONG</span></span></h1>
+  </div>
+  <footer class="reboot__foot">
+    <span>Dragonzhi</span>
+    <span>闽ICP备20260330551号-1</span>
+  </footer>
+</body>
+</html>
