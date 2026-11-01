@@ -44,6 +44,9 @@
     padding: 20px 22px 32px;
     display: flex; flex-direction: column; gap: 4px;
     background: var(--surface);
+    /* 控件多了要独立滚动，否则底部按钮够不着 */
+    position: sticky; top: 0; align-self: start;
+    max-height: 100vh; overflow-y: auto;
   }
   .panel h2 {
     margin: 12px 0 4px; font-family: var(--mono); font-size: 13px; font-weight: 700;
@@ -56,6 +59,10 @@
     font-variant-numeric: tabular-nums;
   }
   .row input[type="range"] { grid-column: 1 / -1; width: 100%; accent-color: var(--fg); height: 22px; }
+  .row input[type="color"] {
+    grid-column: 1 / -1; width: 100%; height: 28px; padding: 0;
+    border: 1px solid var(--line-strong); background: var(--surface); cursor: pointer;
+  }
 
   .actions { display: flex; gap: 8px; margin-top: 16px; }
   .actions button {
@@ -99,8 +106,11 @@
     <h2>墙</h2>
     <div id="sliders-wall"></div>
 
-    <h2>热与色</h2>
+    <h2>热</h2>
     <div id="sliders-ink"></div>
+
+    <h2>色带</h2>
+    <div id="sliders-ramp"></div>
 
     <div class="actions">
       <button type="button" id="copy">复制导出</button>
@@ -108,7 +118,7 @@
     </div>
 
     <pre id="out"></pre>
-    <p class="note">导出的常量粘回 <code>_lab/wall.js</code> 顶部。墙与色块是两层画布：墙一次画完，色块按热衰减。<code>COOL_CUT</code> 与 <code>HOT_CUT</code> 决定渐变带有多宽——收窄到 0.58–0.80 时尾巴大部分是纯青绿，放宽会发土。青绿 <code>#00827F</code>、朱砂 <code>#8B2C1F</code> 是定值，不在这里改。</p>
+    <p class="note">导出的常量粘回 <code>_lab/wall.js</code> 顶部。墙与色块是两层画布：墙一次画完，色块按热衰减。<code>COOL_CUT</code> 与 <code>HOT_CUT</code> 决定渐变带有多宽——收窄到 0.58–0.80 时尾巴大部分是纯青绿，放宽会发土。色带在两色之间按 sRGB 直混，<b>色带偏向</b> &gt;1 时中间色偏凉、&lt;1 偏热。</p>
   </aside>
 </div>
 
@@ -117,10 +127,14 @@
   'use strict';
 
   var KEY = 'zloong-wall-tuner-v1';
-  var TEAL = [0, 130, 127];
-  var RED = [139, 44, 31];
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK_RGB = '18, 23, 26';
+  var GROUPS = { wall: 'sliders-wall', ink: 'sliders-ink', ramp: 'sliders-ramp' };
+
+  function hexToRgb(hex) {
+    var h = String(hex).replace('#', '');
+    return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
+  }
 
   var DEFS = [
     { k: 'wallBase',  group: 'wall', label: '墙面最淡',    min: 0,    max: 0.14, step: 0.005, def: 0.04, dp: 3 },
@@ -135,7 +149,11 @@
     { k: 'cut',       group: 'ink',  label: '出块阈值',    min: 0.04, max: 0.30, step: 0.01,  def: 0.12, dp: 2 },
     { k: 'coolCut',   group: 'ink',  label: '全青绿上限',  min: 0.20, max: 0.90, step: 0.01,  def: 0.58, dp: 2 },
     { k: 'hotCut',    group: 'ink',  label: '全朱砂下限',  min: 0.20, max: 1.00, step: 0.01,  def: 0.80, dp: 2 },
-    { k: 'steps',     group: 'ink',  label: '色带档数',    min: 2,    max: 20,   step: 1,     def: 12,   dp: 0 }
+    { k: 'steps',     group: 'ink',  label: '色带档数',    min: 2,    max: 20,   step: 1,     def: 12,   dp: 0 },
+
+    { k: 'coolHex',   group: 'ramp', type: 'color', label: '凉色（尾巴）', def: '#00827F' },
+    { k: 'hotHex',    group: 'ramp', type: 'color', label: '热色（拖头）', def: '#8B2C1F' },
+    { k: 'gamma',     group: 'ramp', label: '色带偏向',    min: 0.40, max: 2.50, step: 0.05,  def: 1.00, dp: 2 }
   ];
 
   var P = {};
@@ -143,7 +161,10 @@
 
   try {
     var saved = JSON.parse(localStorage.getItem(KEY) || '{}');
-    DEFS.forEach(function (d) { if (typeof saved[d.k] === 'number') { P[d.k] = saved[d.k]; } });
+    DEFS.forEach(function (d) {
+      var v = saved[d.k];
+      if (typeof v === 'number' || (d.type === 'color' && typeof v === 'string')) { P[d.k] = v; }
+    });
   } catch (e) { /* 隐私模式 */ }
 
   function hash(x, y) {
@@ -166,13 +187,15 @@
     var raf = 0, moved = false, inside = false, px = -999, py = -999;
 
     function buildPalette() {
+      var cool = hexToRgb(P.coolHex);
+      var hot = hexToRgb(P.hotHex);
       pal.length = 0;
       for (var i = 0; i < P.steps; i++) {
         var t = i / Math.max(1, P.steps - 1);
         pal.push('rgb(' +
-          Math.round(TEAL[0] + (RED[0] - TEAL[0]) * t) + ',' +
-          Math.round(TEAL[1] + (RED[1] - TEAL[1]) * t) + ',' +
-          Math.round(TEAL[2] + (RED[2] - TEAL[2]) * t) + ')');
+          Math.round(cool[0] + (hot[0] - cool[0]) * t) + ',' +
+          Math.round(cool[1] + (hot[1] - cool[1]) * t) + ',' +
+          Math.round(cool[2] + (hot[2] - cool[2]) * t) + ')');
       }
       buckets.length = 0;
       for (var b = 0; b < P.steps; b++) { buckets.push([]); }
@@ -244,7 +267,8 @@
           var h = heat[row + x];
           if (h <= P.cut) { continue; }
           var t = (h - P.coolCut) / span;
-          var step = t <= 0 ? 0 : t >= 1 ? P.steps - 1 : Math.round(t * (P.steps - 1));
+          t = t <= 0 ? 0 : t >= 1 ? 1 : Math.pow(t, P.gamma);
+          var step = Math.round(t * (P.steps - 1));
           buckets[step].push(x, y, h);
           painted++;
         }
@@ -318,29 +342,36 @@
     label.htmlFor = d.k;
     label.textContent = d.label;
 
+    var isColor = d.type === 'color';
+    var fmt = function (v) { return isColor ? v : v.toFixed(d.dp); };
+
     var out = document.createElement('output');
     out.id = d.k + '-v';
-    out.textContent = P[d.k].toFixed(d.dp);
+    out.textContent = fmt(P[d.k]);
 
     var input = document.createElement('input');
-    input.type = 'range';
     input.id = d.k;
-    input.min = d.min;
-    input.max = d.max;
-    input.step = d.step;
+    if (isColor) {
+      input.type = 'color';
+    } else {
+      input.type = 'range';
+      input.min = d.min;
+      input.max = d.max;
+      input.step = d.step;
+    }
     input.value = P[d.k];
 
     row.appendChild(label);
     row.appendChild(out);
     row.appendChild(input);
-    document.getElementById(d.group === 'wall' ? 'sliders-wall' : 'sliders-ink').appendChild(row);
+    document.getElementById(GROUPS[d.group]).appendChild(row);
 
     inputs[d.k] = input;
-    outputs[d.k] = { el: out, d: d };
+    outputs[d.k] = { el: out, d: d, isColor: isColor };
 
     input.addEventListener('input', function () {
-      P[d.k] = parseFloat(input.value);
-      out.textContent = P[d.k].toFixed(d.dp);
+      P[d.k] = isColor ? input.value : parseFloat(input.value);
+      out.textContent = fmt(P[d.k]);
 
       /* 两个阈值不能交叉 */
       if (d.k === 'coolCut' && P.hotCut <= P.coolCut) {
@@ -366,6 +397,8 @@
   }
 
   function exportText() {
+    var cool = hexToRgb(P.coolHex);
+    var hot = hexToRgb(P.hotHex);
     return '/* _lab/wall.js（由 tools/wall-tuner.html 导出） */\n' +
       'var FULL_CELL = ' + P.fullCell + ';\n' +
       'var NARROW_CELL = ' + P.narrowCell + ';\n' +
@@ -378,7 +411,10 @@
       'var CUT = ' + P.cut.toFixed(2) + ';\n' +
       'var COOL_CUT = ' + P.coolCut.toFixed(2) + ';\n' +
       'var HOT_CUT = ' + P.hotCut.toFixed(2) + ';\n' +
-      'var STEPS = ' + P.steps + ';\n';
+      'var GAMMA = ' + P.gamma.toFixed(2) + ';\n' +
+      'var STEPS = ' + P.steps + ';\n' +
+      'var COOL = [' + cool.join(', ') + '];   /* ' + P.coolHex.toUpperCase() + ' */\n' +
+      'var HOT = [' + hot.join(', ') + '];    /* ' + P.hotHex.toUpperCase() + ' */\n';
   }
 
   function render() {
@@ -410,7 +446,7 @@
     DEFS.forEach(function (d) {
       P[d.k] = d.def;
       inputs[d.k].value = d.def;
-      outputs[d.k].el.textContent = d.def.toFixed(d.dp);
+      outputs[d.k].el.textContent = outputs[d.k].isColor ? d.def : d.def.toFixed(d.dp);
     });
     save();
     render(true);

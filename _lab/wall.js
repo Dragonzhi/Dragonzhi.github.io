@@ -27,6 +27,7 @@
   var INK = '18, 23, 26';
   var COOL = [0, 130, 127];      /* 凉下来的青绿 #00827F */
   var HOT = [139, 44, 31];       /* 刚被碰到的朱砂 #8B2C1F */
+  var GAMMA = 1;                 /* 色带偏向：>1 中间色偏凉，<1 偏热 */
   var STEPS = 12;                /* 色带档数：档太少会看见台阶 */
   var DECAY = 0.94;              /* 每帧余热；越小尾巴越短 */
   var CUT = 0.12;                /* 出块阈值 */
@@ -131,7 +132,8 @@
         var h = heat[row + x];
         if (h <= CUT) { continue; }
         var t = (h - COOL_CUT) / (HOT_CUT - COOL_CUT);
-        var step = t <= 0 ? 0 : t >= 1 ? STEPS - 1 : Math.round(t * (STEPS - 1));
+        t = t <= 0 ? 0 : t >= 1 ? 1 : Math.pow(t, GAMMA);
+        var step = Math.round(t * (STEPS - 1));
         BUCKETS[step].push(x, y, h);
         painted++;
       }
