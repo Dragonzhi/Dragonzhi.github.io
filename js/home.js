@@ -22,6 +22,7 @@
   /* ---- 统计：读 data/home.json ---- */
   (function loadStats() {
     if (typeof fetch !== 'function') { return; }
+    if (!document.querySelector('[data-stat]')) { return; }   /* 页面上没有要填的统计，不发请求 */
     fetch('data/home.json', { cache: 'no-cache' })
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (data) {

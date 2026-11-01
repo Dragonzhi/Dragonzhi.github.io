@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ZLOONG · 从零</title>
+<link rel="icon" href="../images/favicon.png">
 <link rel="stylesheet" href="../css/tokens-screen.css">
 <link rel="stylesheet" href="../css/site.css">
 <style>
@@ -20,7 +21,8 @@
   .reboot__stage { display: grid; place-items: center; }
   .reboot .name {
     margin: 0;
-    font-size: clamp(84px, 16.5vw, 230px);
+    /* 词宽约为字号的 4.43 倍，320 宽下可用 280px，下限必须低于 63px 才不切字 */
+    font-size: clamp(40px, 16.5vw, 230px);
     line-height: .9;
   }
   .reboot .name em { display: none; }
@@ -46,5 +48,6 @@
     <span>Dragonzhi</span>
     <span>闽ICP备20260330551号-1</span>
   </footer>
+  <script src="../js/home.js"></script>
 </body>
 </html>
