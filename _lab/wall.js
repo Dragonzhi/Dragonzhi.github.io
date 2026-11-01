@@ -18,11 +18,27 @@
   var CELL = 18;                 /* 格子边长 */
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK = '18, 23, 26';
-  var FILL = '#00827F';          /* 凉下来的青绿 */
-  var HOT = '#8B2C1F';           /* 刚被碰到的朱砂 */
+  var COOL = [0, 130, 127];      /* 凉下来的青绿 #00827F */
+  var HOT = [139, 44, 31];       /* 刚被碰到的朱砂 #8B2C1F */
+  var STEPS = 12;                /* 色带档数：档太少会看见台阶 */
   var DECAY = 0.94;              /* 每帧余热；越小尾巴越短 */
   var CUT = 0.12;                /* 出块阈值 */
-  var HOT_CUT = 0.6;             /* 高于它才是红的；越小红的拖头越长 */
+  var COOL_CUT = 0.58;           /* 低于它全是青绿：尾巴大部分是纯青绿，不泡在中间色里 */
+  var HOT_CUT = 0.80;            /* 高于它全是朱砂 */
+
+  /* 青绿 → 朱砂的色带，一次算好 */
+  var PAL = [];
+  (function () {
+    for (var i = 0; i < STEPS; i++) {
+      var t = i / (STEPS - 1);
+      PAL.push('rgb(' +
+        Math.round(COOL[0] + (HOT[0] - COOL[0]) * t) + ',' +
+        Math.round(COOL[1] + (HOT[1] - COOL[1]) * t) + ',' +
+        Math.round(COOL[2] + (HOT[2] - COOL[2]) * t) + ')');
+    }
+  }());
+  var BUCKETS = [];
+  for (var b = 0; b < STEPS; b++) { BUCKETS.push([]); }
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   var dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -98,23 +114,31 @@
 
   function paint() {
     ictx.clearRect(0, 0, W, H);
+
+    /* 一格一格按热度归到色带上的某一档：x, y, 热度 三个一组塞进对应桶 */
+    for (var b = 0; b < STEPS; b++) { BUCKETS[b].length = 0; }
     var painted = 0;
-    /* 两遍：先青绿，再朱砂盖上去。红的格子不先铺底，否则红里会透青。 */
-    for (var pass = 0; pass < 2; pass++) {
-      var hot = pass === 1;
-      var min = hot ? HOT_CUT : CUT;
-      ictx.fillStyle = hot ? HOT : FILL;
-      for (var y = 0; y < rows; y++) {
-        var row = y * cols;
-        for (var x = 0; x < cols; x++) {
-          var h = heat[row + x];
-          if (h <= min) { continue; }
-          if (!hot && h > HOT_CUT) { continue; }
-          /* 单次掠过就要读成实心，只有最外一圈半透明 */
-          ictx.globalAlpha = Math.min(0.96, 0.18 + h * 1.15);
-          ictx.fillRect(x * CELL + 0.5, y * CELL + 0.5, CELL - 1, CELL - 1);
-          painted++;
-        }
+    for (var y = 0; y < rows; y++) {
+      var row = y * cols;
+      for (var x = 0; x < cols; x++) {
+        var h = heat[row + x];
+        if (h <= CUT) { continue; }
+        var t = (h - COOL_CUT) / (HOT_CUT - COOL_CUT);
+        var step = t <= 0 ? 0 : t >= 1 ? STEPS - 1 : Math.round(t * (STEPS - 1));
+        BUCKETS[step].push(x, y, h);
+        painted++;
+      }
+    }
+
+    /* 每档只换一次 fillStyle，档内逐格画 */
+    for (var b2 = 0; b2 < STEPS; b2++) {
+      var list = BUCKETS[b2];
+      if (!list.length) { continue; }
+      ictx.fillStyle = PAL[b2];
+      for (var k = 0; k < list.length; k += 3) {
+        /* 单次掠过就要读成实心，只有最外一圈半透明 */
+        ictx.globalAlpha = Math.min(0.96, 0.18 + list[k + 2] * 1.15);
+        ictx.fillRect(list[k] * CELL + 0.5, list[k + 1] * CELL + 0.5, CELL - 1, CELL - 1);
       }
     }
     ictx.globalAlpha = 1;
