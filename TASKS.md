@@ -1,8 +1,8 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 铭牌反馈定为 C 纯行程（hover 不加光不转色），已落站；等你下一条逐条指导。
-updated: 2026-10-31
+next: 重启线已开：`_lab/reboot.html` 只剩主名浮雕与页脚，主名已接指针微动；等你点下一块砖。
+updated: 2026-11-01
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
 
@@ -16,7 +16,7 @@ updated: 2026-10-31
 
 ## 进行中
 
-暂无已开始但未完成的任务。
+- 重启线：在 `_lab/reboot.html` 上从一块主名浮雕重建首页，逐块往上加（不部署、站内无入口）。旧 `index.html` 保持原样作参照，新页超过它再整体替换。已加：主名指针微动（复用 `js/home.js`，窄屏字号按 `16.5vw` 收）。
 
 ## 已完成
 
