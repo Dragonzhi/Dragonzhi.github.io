@@ -25,26 +25,17 @@
   var RADIUS = 3.2;              /* 热团半径（格） */
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK = '18, 23, 26';
-  var COOL = [0, 130, 127];      /* 凉下来的青绿 #00827F */
-  var HOT = [139, 44, 31];       /* 刚被碰到的朱砂 #8B2C1F */
-  var GAMMA = 1;                 /* 色带偏向：>1 中间色偏凉，<1 偏热 */
-  var STEPS = 12;                /* 色带档数：档太少会看见台阶 */
+  /* 色带由 tools/wall-tuner.html 导出：青绿 #00827F → 朱砂 #8B2C1F · RGB 直混 · 12 档 */
+  var PALETTE = [
+    '#00827F', '#0D7A76', '#19726E', '#266B65', '#33635C', '#3F5B53',
+    '#4C534B', '#584B42', '#654339', '#723C30', '#7E3428', '#8B2C1F'
+  ];
+  var STEPS = PALETTE.length;
   var DECAY = 0.94;              /* 每帧余热；越小尾巴越短 */
   var CUT = 0.12;                /* 出块阈值 */
   var COOL_CUT = 0.58;           /* 低于它全是青绿：尾巴大部分是纯青绿，不泡在中间色里 */
   var HOT_CUT = 0.80;            /* 高于它全是朱砂 */
 
-  /* 青绿 → 朱砂的色带，一次算好 */
-  var PAL = [];
-  (function () {
-    for (var i = 0; i < STEPS; i++) {
-      var t = i / (STEPS - 1);
-      PAL.push('rgb(' +
-        Math.round(COOL[0] + (HOT[0] - COOL[0]) * t) + ',' +
-        Math.round(COOL[1] + (HOT[1] - COOL[1]) * t) + ',' +
-        Math.round(COOL[2] + (HOT[2] - COOL[2]) * t) + ')');
-    }
-  }());
   var BUCKETS = [];
   for (var b = 0; b < STEPS; b++) { BUCKETS.push([]); }
   var REDUCED = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -132,8 +123,7 @@
         var h = heat[row + x];
         if (h <= CUT) { continue; }
         var t = (h - COOL_CUT) / (HOT_CUT - COOL_CUT);
-        t = t <= 0 ? 0 : t >= 1 ? 1 : Math.pow(t, GAMMA);
-        var step = Math.round(t * (STEPS - 1));
+        var step = t <= 0 ? 0 : t >= 1 ? STEPS - 1 : Math.round(t * (STEPS - 1));
         BUCKETS[step].push(x, y, h);
         painted++;
       }
@@ -143,7 +133,7 @@
     for (var b2 = 0; b2 < STEPS; b2++) {
       var list = BUCKETS[b2];
       if (!list.length) { continue; }
-      ictx.fillStyle = PAL[b2];
+      ictx.fillStyle = PALETTE[b2];
       for (var k = 0; k < list.length; k += 3) {
         /* 单次掠过就要读成实心，只有最外一圈半透明 */
         ictx.globalAlpha = Math.min(0.96, 0.18 + list[k + 2] * 1.15);
