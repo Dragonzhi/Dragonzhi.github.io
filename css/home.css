@@ -8,14 +8,14 @@
 html, body { height: 100%; }
 html { background: #12171A; }
 
-body.reboot {
+body.home {
   --bezel: clamp(8px, 1.4vw, 20px);
   margin: 0;
   padding: var(--bezel);
   background: linear-gradient(118deg, #20262B 0%, #12171A 52%, #0B0F12 100%);
   min-height: 100svh;
 }
-.reboot::before { display: none; }
+.home::before { display: none; }
 
 /* 外框是一块墨色亚克力：左上受光、右下背光，与主名同一束 118° 光。
    padding + mask 挖出中间，内圆角 = 外圆角 24 − 框宽。 */
@@ -135,13 +135,13 @@ body.reboot {
 
 .stage { display: grid; place-items: center; min-height: 0; }
 
-.reboot .name {
+.home .name {
   margin: 0;
   /* 词宽约为字号的 4.43 倍；320 宽下可用 264px，下限必须低于 59px 才不切字 */
   font-size: clamp(36px, 16.2vw, 230px);
   line-height: .9;
 }
-.reboot .name em { display: none; }
+.home .name em { display: none; }
 
 /* 向下提示：裸雪佛龙 + 它上方的一小片「漏字」 */
 .leak {
@@ -196,7 +196,7 @@ body.reboot {
 .about .links { margin-top: var(--s5); }
 .about .sec-head { margin-top: var(--s9); }
 
-.reboot__foot {
+.home__foot {
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -210,9 +210,9 @@ body.reboot {
   line-height: 2;
   color: var(--fg-faint);
 }
-.reboot__foot span:last-child { letter-spacing: .08em; }
+.home__foot span:last-child { letter-spacing: .08em; }
 
 @media (max-width: 480px) {
   /* 窄屏两行并排会各自折行，改成上下两行 */
-  .reboot__foot { flex-direction: column; align-items: flex-start; gap: 2px; }
+  .home__foot { flex-direction: column; align-items: flex-start; gap: 2px; }
 }
