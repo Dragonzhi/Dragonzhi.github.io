@@ -1,8 +1,8 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 重启线已开：`_lab/reboot.html` 只剩主名浮雕与页脚，主名已接指针微动；等你点下一块砖。
-updated: 2026-11-01
+next: 首页已转正为 `index.html`（整屏 hero + 关于区）；是否合并 main / 部署由你决定。
+updated: 2026-11-02
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
 
@@ -16,9 +16,11 @@ updated: 2026-11-01
 
 ## 进行中
 
-- 重启线：在 `_lab/reboot.html` 上从一块主名浮雕重建首页，逐块往上加（不部署、站内无入口）。旧 `index.html` 保持原样作参照，新页超过它再整体替换。已加：主名指针微动（复用 `js/home.js`，窄屏字号按 `16.5vw` 收）。
+暂无已开始但未完成的任务。
 
 ## 已完成
+
+- [x] 首页转正：`_lab/reboot.html` → `index.html`，`_lab/wall.js` → `js/wall.js`；路径回根目录、title 回「ZLOONG · Dragonzhi」；首页为整屏 hero + 关于区，另附向下提示（裸雪佛龙 + 漏字）与调参台 / 对比页（2026-11-02）
 
 - [x] 文档解绑：`DESIGN.md` 重写为「已落地事实 + 8 条硬约束」，旧版的判据 / 反模式 / 验收清单移入 `archive/DESIGN-v2.md`；`AGENTS.md` 撤掉动效与立体物上的审美禁令；`DECISIONS.md` 标注为历史记录（2026-11-01）
 

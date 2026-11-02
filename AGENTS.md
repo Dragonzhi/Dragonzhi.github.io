@@ -21,7 +21,7 @@
 只回答「东西在哪、改哪里」；设计规格一律以 `DESIGN.md` 为准，这里只留指针。
 
 - **token 两家**：屏（首页 / 作品）在 `css/tokens-screen.css`（冷白定稿）；纸（子页 / Hanako 箱庭）在 `css/tokens.css`。两套不混用。
-- **两页**：`index.html` 是门牌 + 关于，联系入口在 hero；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，`js/shelf.js` 仅作品页；在跑数读 `data/home.json`。重建主线在 `_lab/reboot.html`，不部署、站内无入口。
+- **两页**：`index.html` 是整屏 hero（主名 + 字符墙 + 指针痕迹）+ 下滑的关于区，联系入口在关于区；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，`js/wall.js` 仅首页，`js/shelf.js` 仅作品页；在跑数读 `data/home.json`。
 - **母题**：立方体在作品页水线，实现是 `js/cube.js` + `js/water.js`。
 - **日期**：`js/date.js` 注入 `#today`，子页共用；不要再复制内联日期代码。
 - **第三方**：只许 `js/vendor/` 的自托管库与印章按需加载的 three.js；入口图标一律内联 SVG，不用图标字体、不引图标库、不走 CDN。
@@ -45,3 +45,9 @@
 - **不要自行合并到 `main`**（直接 `git merge`、`git push origin main`、`gh pr merge` 都算）。除此之外的 git 操作由你自行判断执行：`develop` 等非 main 分支上的 `git add` / `git commit` / `git push` / `git tag` / `git stash` 无需再逐条征询。**提交按功能收口，不按次数收口**：同一个元素、同一项展示效果的多轮调整，攒到这一项做完再提交一次，中途不逐次提交；不同功能之间才拆开。提交后把 commit hash 与 message 报给用户。
 - 不要删除或覆盖 `legacy/` 存档目录。
 - 不要修改 `LICENSE`、备案号相关内容。
+
+<!-- isle:begin -->
+## 案屿（Isle）项目交接
+
+本项目用案屿管理任务与交接记录。开工或收工前，先读取 `.agents/skills/isle/SKILL.md` 并按其规范执行；任务、交接摘要与工作留痕在项目根目录的 `TASKS.md`。
+<!-- isle:end -->
