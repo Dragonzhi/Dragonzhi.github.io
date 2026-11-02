@@ -80,7 +80,7 @@
   .wall, .ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
   .wall { z-index: 0; }
   .ink { z-index: 1; }
-  .topbar, .stage, .hint { position: relative; z-index: 2; }
+  .topbar, .stage, .hint { position: relative; z-index: 3; }
 
   /* 首屏底部渐隐：墙在折线处化进纸面，不硬切 */
   .hero::after {
@@ -149,50 +149,50 @@
   }
   .reboot .name em { display: none; }
 
-  /* 向下提示：墨色亚克力圆钮 + 两枚依次下行的雪佛龙 */
+  /* 向下提示：裸雪佛龙 + 它上方的一小片「漏字」 */
+  .leak {
+    position: absolute;
+    left: 50%;
+    bottom: 54px;
+    width: 200px;
+    height: 170px;
+    transform: translateX(-50%);
+    z-index: 2;
+    pointer-events: none;
+  }
+  .leak span {
+    position: absolute;
+    top: 0;
+    font-family: var(--mono);
+    font-size: 10px;
+    line-height: 1;
+    color: rgba(18, 23, 26, .42);
+    animation: leak 2.4s linear infinite;
+  }
+  @keyframes leak {
+    0%   { transform: translateY(0); opacity: 0; }
+    14%  { opacity: 1; }
+    86%  { opacity: .55; }
+    100% { transform: translateY(170px); opacity: 0; }
+  }
+
   .hint {
     justify-self: center;
     display: block;
     padding: var(--s5) 0;
+    color: var(--fg-dim);
     text-decoration: none;
-    color: inherit;
   }
-  .hint__btn {
-    display: grid;
-    place-items: center;
-    width: 42px;
-    height: 42px;
-    border-radius: 999px;
-    color: #EDF2F4;
-    background: linear-gradient(118deg, #20262B 0%, #0B0F12 100%);
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, .20),
-      0 1px 2px rgba(18, 23, 26, .20),
-      0 6px 14px -6px rgba(18, 23, 26, .35);
-    transition: box-shadow .18s, transform .18s;
-  }
-  .hint:hover .hint__btn {
-    box-shadow:
-      inset 0 1px 0 rgba(255, 255, 255, .30),
-      0 1px 2px rgba(18, 23, 26, .22),
-      0 9px 20px -6px rgba(18, 23, 26, .45);
-  }
-  .hint:active .hint__btn { transform: translateY(1px); }
-  .hint:focus-visible .hint__btn { outline: 1px solid var(--mark); outline-offset: 3px; }
-
-  .hint svg path {
-    transform-box: fill-box;
-    transform-origin: center;
-    animation: chev 1.6s ease-in-out infinite;
-  }
-  .hint svg path:nth-child(2) { animation-delay: -.8s; }
-  @keyframes chev {
-    0%        { opacity: 0; transform: translateY(-1.5px); }
-    35%       { opacity: 1; }
-    75%, 100% { opacity: 0; transform: translateY(1.5px); }
+  .hint svg { display: block; animation: bob 1.8s ease-in-out infinite; }
+  .hint:hover { color: var(--fg); }
+  .hint:focus-visible { outline: 1px solid var(--mark); outline-offset: 4px; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(-2px); opacity: .55; }
+    50%      { transform: translateY(2px); opacity: 1; }
   }
   @media (prefers-reduced-motion: reduce) {
-    .hint svg path { animation: none; opacity: 1; }
+    .leak { display: none; }
+    .hint svg { animation: none; opacity: 1; }
   }
 
   /* ---------- 第二屏：关于 ---------- */
@@ -243,13 +243,21 @@
         <h1 class="name"><span class="name-plate"><span class="name-deep" aria-hidden="true">ZLOONG</span><span class="name-solid" data-name-solid>ZLOONG</span></span></h1>
       </main>
 
+      <div class="leak" aria-hidden="true">
+        <span style="left:42%; animation-delay:0s">#</span>
+        <span style="left:50%; animation-delay:.6s">*</span>
+        <span style="left:57%; animation-delay:1.2s">+</span>
+        <span style="left:45%; animation-delay:1.7s">=</span>
+        <span style="left:53%; animation-delay:.9s">:</span>
+        <span style="left:38%; animation-delay:1.4s">%</span>
+        <span style="left:60%; animation-delay:.3s">-</span>
+        <span style="left:48%; animation-delay:2.0s">.</span>
+      </div>
+
       <a class="hint" href="#about" aria-label="向下滚动到关于">
-        <span class="hint__btn" aria-hidden="true">
-          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-            <path d="M6 8.5l6 6 6-6"/>
-            <path d="M6 13.5l6 6 6-6"/>
-          </svg>
-        </span>
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
       </a>
     </section>
 
