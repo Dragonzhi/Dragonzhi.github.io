@@ -1,8 +1,10 @@
 /* ============================================================
-   wall.js —— 格子墙 + 指针色块（lab）
+   wall.js —— 格子墙 + 指针痕迹（lab）
    墙：一次画完，3200 个字形不进循环。
-   色块：指针附近加一团热，按帧衰减；热降到阈值以下就停帧。
-   色相跟热度走：刚碰到的格子是朱砂，凉下来变青绿——红是「刚发生」，青绿是「已经冷掉的介质」。
+   痕迹：指针附近加一团热，按帧衰减；热降到阈值以下就停帧。
+   两种表现方式，INK_MODE 切换：
+     glyph —— 单色密度：热区的字从「.」一路换到「@」，墨色同时加深，最热一档整格实心；
+     block —— 色块：热区按色带取色（色相短弧的调色板），保留作对比。
    prefers-reduced-motion：只画墙，不挂指针。
    ============================================================ */
 (function () {
@@ -35,6 +37,16 @@
   var CUT = 0.12;                /* 出块阈值 */
   var COOL_CUT = 0.58;           /* 低于它全是青绿：尾巴大部分是纯青绿，不泡在中间色里 */
   var HOT_CUT = 0.80;            /* 高于它全是朱砂 */
+
+  /* ---- 表现方式 ---- */
+  var INK_MODE = 'glyph';        /* 'glyph' 字符密度 / 'block' 色块 */
+  var GLYPH_RAMP = '.:-=+*#%@';  /* 由淡到密，档数 = 长度 */
+  var GLYPH_MIN = 0.24;          /* 最淡一档的字 */
+  var GLYPH_MAX = 0.95;          /* 最密一档的字 */
+  var SOLID_CUT = 0.97;          /* 高于它进实心档 */
+  var SOLID_SCALE = 1.6;         /* 实心档把最密的字放大到接近整格 */
+  var INK_SOLID = '#12171A';
+  var PAPER = (getComputedStyle(document.documentElement).getPropertyValue('--bg') || '').trim() || '#F2F5F7';
 
   var BUCKETS = [];
   for (var b = 0; b < STEPS; b++) { BUCKETS.push([]); }
@@ -113,7 +125,66 @@
 
   function paint() {
     ictx.clearRect(0, 0, W, H);
+    return INK_MODE === 'glyph' ? paintGlyph() : paintBlock();
+  }
 
+  /* 单色密度：热区的字逐档变密、变深；最热一档把最密的字放大，读完是「凝结」而不是贴黑块 */
+  function paintGlyph() {
+    var n = GLYPH_RAMP.length;
+    var cx, cy, h, t, lv;
+    var painted = 0;
+
+    ictx.textAlign = 'center';
+    ictx.textBaseline = 'middle';
+    ictx.fillStyle = PAPER;
+    ictx.globalAlpha = 1;
+
+    /* 普通档 */
+    ictx.font = Math.round(CELL * GLYPH) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
+    for (var y = 0; y < rows; y++) {
+      var row = y * cols;
+      for (var x = 0; x < cols; x++) {
+        h = heat[row + x];
+        if (h <= CUT || h >= SOLID_CUT) { continue; }
+        cx = x * CELL;
+        cy = y * CELL;
+        /* 先盖掉墙上的原字，否则新旧字形叠成双影 */
+        ictx.fillRect(cx, cy, CELL, CELL);
+        t = (h - CUT) / (1 - CUT);
+        lv = Math.floor(t * n);
+        if (lv > n - 1) { lv = n - 1; }
+        ictx.globalAlpha = GLYPH_MIN + t * (GLYPH_MAX - GLYPH_MIN);
+        ictx.fillStyle = INK_SOLID;
+        ictx.fillText(GLYPH_RAMP.charAt(lv), cx + CELL / 2, cy + CELL / 2);
+        ictx.globalAlpha = 1;
+        ictx.fillStyle = PAPER;
+        painted++;
+      }
+    }
+
+    /* 实心档：最密的字放大到接近整格 */
+    ictx.font = Math.round(CELL * GLYPH * SOLID_SCALE) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
+    for (var y2 = 0; y2 < rows; y2++) {
+      var row2 = y2 * cols;
+      for (var x2 = 0; x2 < cols; x2++) {
+        h = heat[row2 + x2];
+        if (h < SOLID_CUT) { continue; }
+        cx = x2 * CELL;
+        cy = y2 * CELL;
+        ictx.fillRect(cx, cy, CELL, CELL);
+        ictx.fillStyle = INK_SOLID;
+        ictx.fillText(GLYPH_RAMP.charAt(n - 1), cx + CELL / 2, cy + CELL / 2);
+        ictx.fillStyle = PAPER;
+        painted++;
+      }
+    }
+
+    ictx.globalAlpha = 1;
+    return painted;
+  }
+
+  /* 色块：按色带取档，保留作对比 */
+  function paintBlock() {
     /* 一格一格按热度归到色带上的某一档：x, y, 热度 三个一组塞进对应桶 */
     for (var b = 0; b < STEPS; b++) { BUCKETS[b].length = 0; }
     var painted = 0;
