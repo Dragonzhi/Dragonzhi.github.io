@@ -1,0 +1,218 @@
+/* ============================================================
+ home.css —— 首页
+ 外框 / 顶栏 / 首屏 hero / 向下提示 / 关于区 / 页脚。
+ 依赖 css/tokens-screen.css 与 css/site.css。
+ ============================================================ */
+
+/* 首屏是墙，第二屏是字。外框与纸面不变。 */
+html, body { height: 100%; }
+html { background: #12171A; }
+
+body.reboot {
+  --bezel: clamp(8px, 1.4vw, 20px);
+  margin: 0;
+  padding: var(--bezel);
+  background: linear-gradient(118deg, #20262B 0%, #12171A 52%, #0B0F12 100%);
+  min-height: 100svh;
+}
+.reboot::before { display: none; }
+
+/* 外框是一块墨色亚克力：左上受光、右下背光，与主名同一束 118° 光。
+   padding + mask 挖出中间，内圆角 = 外圆角 24 − 框宽。 */
+.bezel {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  pointer-events: none;
+  border-radius: 24px;
+  border: var(--bezel) solid #12171A;
+}
+@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+  .bezel {
+    border: 0;
+    padding: var(--bezel);
+    background:
+      linear-gradient(118deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 24%),
+      linear-gradient(118deg, #20262B 0%, #12171A 52%, #0B0F12 100%);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+  }
+}
+.bezel::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 4px;
+  border: 1px solid rgba(255,255,255,.22);
+}
+@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
+  .bezel::after { inset: var(--bezel); }
+}
+
+.sheet {
+  position: relative;
+  background: var(--bg);
+  border-radius: 4px;
+  box-shadow:
+    inset 0 0 0 1px rgba(255,255,255,.55),
+    inset 0 2px 10px rgba(18,23,26,.07);
+  overflow: hidden;
+}
+
+/* ---------- 第一屏：整屏，墙只活在这里 ---------- */
+.hero {
+  position: relative;
+  min-height: calc(100svh - var(--bezel) * 2);
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  padding: 0 var(--pad);
+  overflow: hidden;
+}
+
+/* canvas 是替换元素，inset:0 不会把它拉伸，必须显式给 100% */
+.wall, .ink { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.wall { z-index: 0; }
+.ink { z-index: 1; }
+.topbar, .stage, .hint { position: relative; z-index: 3; }
+
+/* 首屏底部渐隐：墙在折线处化进纸面，不硬切 */
+.hero::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 1;
+  height: 140px;
+  background: linear-gradient(to bottom, rgba(242, 245, 247, 0), var(--bg));
+  pointer-events: none;
+}
+
+/* 顶栏：只有右边两枚亚克力药丸 */
+.topbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: var(--s3) 0;
+}
+.chips { display: flex; align-items: center; gap: 6px; }
+.chip {
+  padding: 5px 13px 6px;
+  border-radius: 999px;
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .08em;
+  text-decoration: none;
+  color: var(--fg-dim);
+  background: linear-gradient(118deg, #FFFFFF 0%, #E7EDF0 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .95),
+    inset 0 0 0 1px rgba(18, 23, 26, .08),
+    0 1px 2px rgba(18, 23, 26, .06);
+  transition: color .18s, box-shadow .18s;
+}
+.chip:hover {
+  color: var(--fg);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 1),
+    inset 0 0 0 1px rgba(18, 23, 26, .14),
+    0 1px 3px rgba(18, 23, 26, .10);
+}
+.chip:active { transform: translateY(1px); }
+.chip--on {
+  color: #EDF2F4;
+  background: linear-gradient(118deg, #20262B 0%, #0B0F12 100%);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, .16),
+    0 1px 2px rgba(18, 23, 26, .20);
+}
+.chip--on:hover { color: #FFFFFF; }
+
+.stage { display: grid; place-items: center; min-height: 0; }
+
+.reboot .name {
+  margin: 0;
+  /* 词宽约为字号的 4.43 倍；320 宽下可用 264px，下限必须低于 59px 才不切字 */
+  font-size: clamp(36px, 16.2vw, 230px);
+  line-height: .9;
+}
+.reboot .name em { display: none; }
+
+/* 向下提示：裸雪佛龙 + 它上方的一小片「漏字」 */
+.leak {
+  position: absolute;
+  left: 50%;
+  bottom: 46px;
+  width: 150px;
+  height: 80px;
+  transform: translateX(-50%);
+  z-index: 2;
+  pointer-events: none;
+}
+.leak span {
+  position: absolute;
+  top: 0;
+  font-family: var(--mono);
+  font-size: 10px;
+  line-height: 1;
+  color: rgba(18, 23, 26, .42);
+  animation: leak 1.6s linear infinite;
+}
+@keyframes leak {
+  0%   { transform: translateY(0); opacity: 0; }
+  14%  { opacity: 1; }
+  86%  { opacity: .55; }
+  100% { transform: translateY(80px); opacity: 0; }
+}
+
+.hint {
+  justify-self: center;
+  display: block;
+  padding: var(--s5) 0;
+  color: var(--fg-dim);
+  text-decoration: none;
+}
+.hint svg { display: block; animation: bob 1.8s ease-in-out infinite; }
+.hint:hover { color: var(--fg); }
+.hint:focus-visible { outline: 1px solid var(--mark); outline-offset: 4px; }
+@keyframes bob {
+  0%, 100% { transform: translateY(-2px); opacity: .55; }
+  50%      { transform: translateY(2px); opacity: 1; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .leak { display: none; }
+  .hint svg { animation: none; opacity: 1; }
+}
+
+/* ---------- 第二屏：关于 ---------- */
+.about { padding: var(--s9) 0 var(--s6); }
+.about__wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
+.about .tag { margin: 0; }
+.about .links { margin-top: var(--s5); }
+.about .sec-head { margin-top: var(--s9); }
+
+.reboot__foot {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  max-width: var(--wrap);
+  margin: 0 auto;
+  padding: 0 var(--pad) var(--s7);
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .11em;
+  line-height: 2;
+  color: var(--fg-faint);
+}
+.reboot__foot span:last-child { letter-spacing: .08em; }
+
+@media (max-width: 480px) {
+  /* 窄屏两行并排会各自折行，改成上下两行 */
+  .reboot__foot { flex-direction: column; align-items: flex-start; gap: 2px; }
+}

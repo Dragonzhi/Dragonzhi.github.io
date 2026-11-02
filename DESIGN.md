@@ -89,6 +89,7 @@
 |---|---|
 | `css/tokens-screen.css` | 屏：语义 token、六档字号、主题 |
 | `css/site.css` | 首页 / 作品页共用 |
+| `css/home.css` | 首页的面：外框、顶栏、hero、向下提示、关于区、页脚 |
 | `js/home.js` | 日期、统计注入、复制邮箱、主名指针微动 |
 | `js/wall.js` | 首页的字符墙与指针痕迹 |
 | `js/shelf.js` | 水位陈列读数 |
