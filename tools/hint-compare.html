@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="cool">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>向下提示对比 · ZLOONG（本地工具）</title>
+<link rel="icon" href="../images/avatar.png">
+<link rel="stylesheet" href="../css/tokens-screen.css">
+<link rel="stylesheet" href="../css/site.css">
+<style>
+  html, body { margin: 0; background: var(--bg); color: var(--fg); font-family: var(--sans); }
+  .bar {
+    display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+    padding: 14px 24px; border-bottom: 1px solid var(--line-strong);
+    font-family: var(--mono); font-size: 13px; letter-spacing: .12em; text-transform: uppercase;
+  }
+  .bar b { font-weight: 700; }
+  .bar span { color: var(--fg-faint); }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 28px 24px;
+    max-width: 1240px;
+    margin: 0 auto;
+    padding: 28px 24px 64px;
+  }
+  .card h2 {
+    margin: 0 0 4px;
+    font-family: var(--mono); font-size: 13px; font-weight: 700;
+    letter-spacing: .14em; text-transform: uppercase; color: var(--fg-dim);
+  }
+  .card p { margin: 0 0 10px; font-size: 13px; line-height: 1.7; color: var(--fg-faint); }
+
+  /* 每块面板就是首屏的底部：墙 + 底部渐隐，只有提示不同 */
+  .stage {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    background: var(--bg);
+    box-shadow: inset 0 0 0 1px var(--line-strong);
+    overflow: hidden;
+  }
+  .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .fade {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 34%;
+    background: linear-gradient(to bottom, rgba(242,245,247,0), var(--bg));
+    pointer-events: none;
+  }
+
+  /* 一、露出下一屏 */
+  .stage--peek .herozone { position: absolute; inset: 0 0 26% 0; overflow: hidden; }
+  .stage--peek .peek {
+    position: absolute; left: 0; right: 0; bottom: 0; height: 26%;
+    background: var(--bg); overflow: hidden;
+  }
+  .stage--peek .peek b {
+    display: block; margin: 16px 0 0 12%;
+    font-size: 40px; font-weight: 900; letter-spacing: -.025em; line-height: 1;
+  }
+
+  /* 三、墙在漏字 */
+  .leak { position: absolute; inset: 0; pointer-events: none; }
+  .leak span {
+    position: absolute; bottom: 26%;
+    font-family: var(--mono); font-size: 11px; line-height: 1;
+    color: rgba(18,23,26,.62);
+    animation: leak 2.8s linear infinite;
+  }
+  @keyframes leak {
+    0%   { transform: translateY(0); opacity: 0; }
+    18%  { opacity: 1; }
+    100% { transform: translateY(110px); opacity: 0; }
+  }
+
+  /* 提示本体：绝对定位在面板底部居中 */
+  .hint {
+    position: absolute; left: 50%; bottom: 16px;
+    transform: translateX(-50%);
+    text-decoration: none;
+  }
+
+  /* 四、白面键 */
+  .hint--key .btn {
+    display: grid; place-items: center;
+    width: 42px; height: 42px; border-radius: 4px;
+    color: var(--fg-dim);
+    background: linear-gradient(118deg, #FFFFFF 0%, #E7EDF0 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.95),
+      inset 0 0 0 1px rgba(18,23,26,.09),
+      0 2px 4px rgba(18,23,26,.10);
+  }
+  .hint--key:hover .btn { color: var(--fg); }
+
+  /* 五、裸雪佛龙 */
+  .hint--bare svg { display: block; color: var(--fg-dim); animation: bob 1.8s ease-in-out infinite; }
+  @keyframes bob {
+    0%, 100% { transform: translateY(-2px); opacity: .55; }
+    50%      { transform: translateY(2px); opacity: 1; }
+  }
+
+  /* 参考：现在的黑圆钮，放在最后一格做对照 */
+  .hint--disc .btn {
+    display: grid; place-items: center;
+    width: 42px; height: 42px; border-radius: 999px;
+    color: #EDF2F4;
+    background: linear-gradient(118deg, #20262B 0%, #0B0F12 100%);
+    box-shadow:
+      inset 0 1px 0 rgba(255,255,255,.20),
+      0 1px 2px rgba(18,23,26,.20),
+      0 6px 14px -6px rgba(18,23,26,.35);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .leak span, .hint--bare svg { animation: none; opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bar">
+  <b>向下提示对比</b>
+  <span>本地工具 · 站内无入口 · 同一块纸，只有底部不同</span>
+</div>
+
+<div class="grid" id="grid">
+
+  <div class="card">
+    <h2>一 · 露出下一屏</h2>
+    <p>不加任何提示，让「关于」的顶部先探出来。真实页面要把关于的顶部留白从 112 调小，否则露出的是空白。</p>
+    <div class="stage stage--peek">
+      <div class="herozone"><canvas class="wall-canvas"></canvas><div class="fade"></div></div>
+      <div class="peek"><b>关于</b></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>二 · 墙里的箭头</h2>
+    <p>没有 DOM 元素：箭头是墙面里更密的字符，一条亮带沿箭头向下走。静止时几乎看不见。</p>
+    <div class="stage">
+      <canvas class="wall-canvas"></canvas>
+      <canvas class="arrow-canvas"></canvas>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>三 · 墙在漏字</h2>
+    <p>不加图标，让少量字符从底部坠落淡出。语义最隐晦，而且是常驻动画。</p>
+    <div class="stage">
+      <canvas class="wall-canvas"></canvas>
+      <div class="leak" aria-hidden="true">
+        <span style="left:32%; animation-delay:0s">#</span>
+        <span style="left:38%; animation-delay:.9s">*</span>
+        <span style="left:44%; animation-delay:1.7s">+</span>
+        <span style="left:49%; animation-delay:.4s">=</span>
+        <span style="left:54%; animation-delay:1.2s">:</span>
+        <span style="left:60%; animation-delay:2.1s">-</span>
+        <span style="left:66%; animation-delay:1.5s">%</span>
+        <span style="left:42%; animation-delay:2.5s">%</span>
+        <span style="left:51%; animation-delay:2.3s">.</span>
+        <span style="left:57%; animation-delay:.2s">*</span>
+        <span style="left:35%; animation-delay:1.9s">+</span>
+        <span style="left:63%; animation-delay:.7s">#</span>
+      </div>
+      <div class="fade"></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>四 · 白面小键</h2>
+    <p>和顶栏药丸同一套白面 + 墨棱，不再是第三块黑色。里面一枚墨色雪佛龙。</p>
+    <div class="stage">
+      <canvas class="wall-canvas"></canvas>
+      <div class="fade"></div>
+      <a class="hint hint--key" href="#" aria-label="向下滚动到关于">
+        <span class="btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 9l6 6 6-6"/>
+          </svg>
+        </span>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>五 · 裸雪佛龙</h2>
+    <p>完全去掉底板，只留一个墨色箭头，压在渐隐带上。最轻，但可能又回到「寒碜」那一档。</p>
+    <div class="stage">
+      <canvas class="wall-canvas"></canvas>
+      <div class="fade"></div>
+      <a class="hint hint--bare" href="#" aria-label="向下滚动到关于">
+        <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M6 9l6 6 6-6"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>对照 · 现在的黑圆钮</h2>
+    <p>当前实现。放进来做参照。</p>
+    <div class="stage">
+      <canvas class="wall-canvas"></canvas>
+      <div class="fade"></div>
+      <a class="hint" href="#" aria-label="向下滚动到关于">
+        <span class="hint--disc"><span class="btn">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M6 8.5l6 6 6-6"/>
+            <path d="M6 13.5l6 6 6-6"/>
+          </svg>
+        </span></span>
+      </a>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var GLYPHS = '<>/\\.,:;=+-*';
+  var CELL = 16;
+  var GLYPH = 0.5;
+  var PAPER = (getComputedStyle(document.documentElement).getPropertyValue('--bg') || '').trim() || '#F2F5F7';
+
+  function hash(x, y) {
+    var n = Math.sin(x * 12.9898 + y * 78.233) * 43758.5453;
+    return n - Math.floor(n);
+  }
+
+  function setup(cv) {
+    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    var r = cv.getBoundingClientRect();
+    var W = Math.max(1, r.width);
+    var H = Math.max(1, r.height);
+    cv.width = Math.round(W * dpr);
+    cv.height = Math.round(H * dpr);
+    var ctx = cv.getContext('2d');
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.font = Math.round(CELL * GLYPH) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    return { ctx: ctx, W: W, H: H, cols: Math.ceil(W / CELL), rows: Math.ceil(H / CELL) };
+  }
+
+  function drawWall(cv) {
+    var s = setup(cv);
+    var ctx = s.ctx;
+    for (var y = 0; y < s.rows; y++) {
+      for (var x = 0; x < s.cols; x++) {
+        var h = hash(x, y);
+        var band = 0.5 + 0.5 * Math.sin(x * 0.09) * Math.cos(y * 0.11);
+        var a = 0.125 + band * 0.125 * (0.4 + h * 0.6);
+        ctx.fillStyle = 'rgba(18,23,26,' + a.toFixed(3) + ')';
+        ctx.fillText(GLYPHS.charAt(Math.floor(h * GLYPHS.length)), x * CELL + CELL / 2, y * CELL + CELL / 2);
+      }
+    }
+  }
+
+  /* 墙面里画一个向下的箭头：箭头轮廓内的字更密，一条亮带向下走 */
+  function runArrow(cv) {
+    var s = setup(cv);
+    var ctx = s.ctx;
+    var cols = s.cols;
+    var rows = s.rows;
+    var top = Math.max(0, rows - 15);
+    var mid = top + 5;
+    var tip = top + 11;
+    var cx = Math.floor(cols / 2);
+    var DENSE = '#%@&';
+
+    function inside(x, y) {
+      if (y < top || y > tip) { return false; }
+      if (y <= mid) { return x === cx; }
+      return Math.abs(x - cx) <= (tip - y);
+    }
+
+    var t0 = performance.now();
+    function frame(now) {
+      var phase = ((now - t0) / 1800) % 1;
+      var bandRow = top + phase * (tip - top);
+      ctx.clearRect(0, 0, s.W, s.H);
+
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          if (!inside(x, y)) { continue; }
+          var px = x * CELL;
+          var py = y * CELL;
+          /* 盖掉墙上的原字 */
+          ctx.fillStyle = PAPER;
+          ctx.fillRect(px, py, CELL, CELL);
+
+          var near = Math.abs(y - bandRow);
+          var a = near < 0.9 ? 1 : 0.5;
+          ctx.fillStyle = 'rgba(18,23,26,' + a + ')';
+          ctx.fillText(DENSE.charAt(Math.floor(hash(x, y) * DENSE.length)), px + CELL / 2, py + CELL / 2);
+        }
+      }
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  }
+
+  var walls = [].slice.call(document.querySelectorAll('.wall-canvas'));
+  function paintAll() {
+    walls.forEach(function (cv) {
+      var r = cv.getBoundingClientRect();
+      if (r.width && r.height) { drawWall(cv); }
+    });
+  }
+
+  paintAll();
+  window.addEventListener('resize', paintAll);
+  runArrow(document.querySelector('.arrow-canvas'));
+}());
+</script>
+</body>
+</html>
