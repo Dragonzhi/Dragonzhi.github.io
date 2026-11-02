@@ -153,9 +153,9 @@
   .leak {
     position: absolute;
     left: 50%;
-    bottom: 54px;
-    width: 200px;
-    height: 170px;
+    bottom: 46px;
+    width: 150px;
+    height: 80px;
     transform: translateX(-50%);
     z-index: 2;
     pointer-events: none;
@@ -167,13 +167,13 @@
     font-size: 10px;
     line-height: 1;
     color: rgba(18, 23, 26, .42);
-    animation: leak 2.4s linear infinite;
+    animation: leak 1.6s linear infinite;
   }
   @keyframes leak {
     0%   { transform: translateY(0); opacity: 0; }
     14%  { opacity: 1; }
     86%  { opacity: .55; }
-    100% { transform: translateY(170px); opacity: 0; }
+    100% { transform: translateY(80px); opacity: 0; }
   }
 
   .hint {
@@ -244,14 +244,14 @@
       </main>
 
       <div class="leak" aria-hidden="true">
-        <span style="left:42%; animation-delay:0s">#</span>
-        <span style="left:50%; animation-delay:.6s">*</span>
-        <span style="left:57%; animation-delay:1.2s">+</span>
-        <span style="left:45%; animation-delay:1.7s">=</span>
-        <span style="left:53%; animation-delay:.9s">:</span>
-        <span style="left:38%; animation-delay:1.4s">%</span>
-        <span style="left:60%; animation-delay:.3s">-</span>
-        <span style="left:48%; animation-delay:2.0s">.</span>
+        <span style="left:30%; animation-delay:0s">#</span>
+        <span style="left:44%; animation-delay:.2s">*</span>
+        <span style="left:58%; animation-delay:.4s">+</span>
+        <span style="left:36%; animation-delay:.6s">=</span>
+        <span style="left:52%; animation-delay:.8s">:</span>
+        <span style="left:66%; animation-delay:1.0s">%</span>
+        <span style="left:40%; animation-delay:1.2s">-</span>
+        <span style="left:62%; animation-delay:1.4s">.</span>
       </div>
 
       <a class="hint" href="#about" aria-label="向下滚动到关于">
