@@ -783,7 +783,7 @@ button.icon-link {
 }
 .rows__r:first-child { padding-top: 0; }
 .rows__r:last-child { padding-bottom: 0; }
-.rows__r span:first-child { color: var(--fg-faint); }
+.rows__r span:first-child { color: var(--fg-faint); white-space: nowrap; }
 .rows__r span:last-child { color: var(--fg); text-align: right; }
 .rows__r a, .rows__r a:hover, .rows__r a:active { padding: 3px 8px; margin: -3px -6px; }
 

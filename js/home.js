@@ -22,7 +22,8 @@
   /* ---- 统计：读 data/home.json ---- */
   (function loadStats() {
     if (typeof fetch !== 'function') { return; }
-    if (!document.querySelector('[data-stat]')) { return; }   /* 页面上没有要填的统计，不发请求 */
+    /* 年份是本地算的；只有出现别的统计才值得拉 JSON */
+    if (!document.querySelector('[data-stat]:not([data-stat="year"])')) { return; }
     fetch('data/home.json', { cache: 'no-cache' })
       .then(function (res) { return res.ok ? res.json() : null; })
       .then(function (data) {
