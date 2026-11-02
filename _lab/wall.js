@@ -3,7 +3,7 @@
    墙：一次画完，3200 个字形不进循环。
    痕迹：指针附近加一团热，按帧衰减；热降到阈值以下就停帧。
    两种表现方式，INK_MODE 切换：
-     glyph —— 单色密度：热区的字从「.」一路换到「@」，墨色同时加深，最热一档整格实心；
+     glyph —— 单色密度：热区的字从「:」一路换到「@」，墨色同时加深，最热一档把字放大到接近整格；
      block —— 色块：热区按色带取色（色相短弧的调色板），保留作对比。
    prefers-reduced-motion：只画墙，不挂指针。
    ============================================================ */
@@ -17,34 +17,36 @@
   var wctx = wall.getContext('2d');
   var ictx = ink.getContext('2d');
 
-  var FULL_CELL = 18;            /* 桌面格宽 */
-  var NARROW_CELL = 12;          /* < 600px 用 */
+  var FULL_CELL = 16;            /* 桌面格宽 */
+  var NARROW_CELL = 16;          /* < 600px 用 */
   var CELL = FULL_CELL;          /* 当前格宽，resize 时按视口定 */
-  var GLYPH = 0.56;              /* 字形 / 格宽 */
-  var WALL_BASE = 0.04;          /* 墙面最淡处 */
-  var WALL_BAND = 0.09;          /* 低频起伏的幅度 */
-  var INJECT = 0.75;             /* 每帧注入的热 */
-  var RADIUS = 3.2;              /* 热团半径（格） */
+  var GLYPH = 0.50;              /* 字形 / 格宽 */
+  var WALL_BASE = 0.125;         /* 墙面最淡处 */
+  var WALL_BAND = 0.125;         /* 低频起伏的幅度 */
+  var INJECT = 0.60;             /* 每帧注入的热 */
+  var RADIUS = 2.5;              /* 热团半径（格） */
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK = '18, 23, 26';
-  /* 色带由 tools/wall-tuner.html 导出：青绿 #00827F → 朱砂 #8B2C1F · RGB 直混 · 12 档 */
+  /* 色带由 tools/wall-tuner.html 导出：#206564 → #9D5F58 · 色相长弧 · 20 档（当前走 glyph，留着备切） */
   var PALETTE = [
-    '#00827F', '#0D7A76', '#19726E', '#266B65', '#33635C', '#3F5B53',
-    '#4C534B', '#584B42', '#654339', '#723C30', '#7E3428', '#8B2C1F'
+    '#206564', '#206564', '#206565', '#206566', '#216366', '#226167',
+    '#225E69', '#24596B', '#25546D', '#274E6F', '#294672', '#2C3C76',
+    '#2F317A', '#41337E', '#583782', '#713C87', '#8C418B', '#924878',
+    '#974F64', '#9D5F58'
   ];
   var STEPS = PALETTE.length;
-  var DECAY = 0.94;              /* 每帧余热；越小尾巴越短 */
-  var CUT = 0.12;                /* 出块阈值 */
-  var COOL_CUT = 0.58;           /* 低于它全是青绿：尾巴大部分是纯青绿，不泡在中间色里 */
-  var HOT_CUT = 0.80;            /* 高于它全是朱砂 */
+  var DECAY = 0.950;             /* 每帧余热；越小尾巴越短 */
+  var CUT = 0.10;                /* 出块阈值 */
+  var COOL_CUT = 0.67;           /* 色块模式下低于它全是冷端 */
+  var HOT_CUT = 0.91;            /* 色块模式下高于它全是热端 */
 
   /* ---- 表现方式 ---- */
   var INK_MODE = 'glyph';        /* 'glyph' 字符密度 / 'block' 色块 */
-  var GLYPH_RAMP = '.:-=+*#%@';  /* 由淡到密，档数 = 长度 */
+  var GLYPH_RAMP = ':-=+*#%@';   /* 由淡到密，档数 = 长度 */
   var GLYPH_MIN = 0.24;          /* 最淡一档的字 */
   var GLYPH_MAX = 0.95;          /* 最密一档的字 */
   var SOLID_CUT = 0.97;          /* 高于它进实心档 */
-  var SOLID_SCALE = 1.6;         /* 实心档把最密的字放大到接近整格 */
+  var SOLID_SCALE = 1.60;        /* 实心档把最密的字放大到接近整格 */
   var INK_SOLID = '#12171A';
   var PAPER = (getComputedStyle(document.documentElement).getPropertyValue('--bg') || '').trim() || '#F2F5F7';
 
