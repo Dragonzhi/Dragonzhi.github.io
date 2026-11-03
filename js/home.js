@@ -84,57 +84,57 @@
     window.addEventListener('blur', idle);
   }());
 
-  /* ---- 关于铭牌：指针靠近时轻微倾斜，三块按深浅错开；离开归位即停帧 ---- */
+  /* ---- 关于铭牌：每枚各自跟随指针，离开归位即停帧 ---- */
   (function badgeTilt() {
-    var wrap = document.querySelector('.badges');
-    if (!wrap || !window.matchMedia) { return; }
+    var items = [].slice.call(document.querySelectorAll('.board .badge'));
+    if (!items.length || !window.matchMedia) { return; }
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
     if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) { return; }
 
-    var items = [].slice.call(wrap.querySelectorAll('.badge'));
-    if (!items.length) { return; }
+    var MAX = 7;        /* 单枚最大转动角（度） */
+    var EASE = 0.18;
+    var resets = [];
 
-    var MAX = 6;                     /* 最大转动角（度） */
-    var EASE = 0.14;
-    var DEPTH = [0.66, 0.88, 1.1];   /* 越往下幅度略大，形成前后层次 */
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    items.forEach(function (el) {
+      var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
 
-    var write = function () {
-      for (var i = 0; i < items.length; i++) {
-        var d = DEPTH[i] || 1;
-        items[i].style.transform =
-          'rotateX(' + (cx * d).toFixed(2) + 'deg) rotateY(' + (cy * d).toFixed(2) + 'deg)';
-      }
-    };
+      var write = function () {
+        el.style.transform = 'rotateX(' + cx.toFixed(2) + 'deg) rotateY(' + cy.toFixed(2) + 'deg)';
+      };
 
-    var tick = function () {
-      cx += (tx - cx) * EASE;
-      cy += (ty - cy) * EASE;
-      if (Math.abs(tx - cx) < 0.02 && Math.abs(ty - cy) < 0.02) {
-        cx = tx; cy = ty; write(); raf = 0; return;
-      }
-      write();
-      raf = requestAnimationFrame(tick);
-    };
+      var tick = function () {
+        cx += (tx - cx) * EASE;
+        cy += (ty - cy) * EASE;
+        if (Math.abs(tx - cx) < 0.02 && Math.abs(ty - cy) < 0.02) {
+          cx = tx; cy = ty; write(); raf = 0; return;
+        }
+        write();
+        raf = requestAnimationFrame(tick);
+      };
 
-    var aim = function (e) {
-      var r = wrap.getBoundingClientRect();
-      if (!r.width || !r.height) { return; }
-      var nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
-      var ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
-      tx = ny * MAX * 0.7;
-      ty = -nx * MAX;
-      if (!raf) { raf = requestAnimationFrame(tick); }
-    };
+      var aim = function (e) {
+        var r = el.getBoundingClientRect();
+        if (!r.width || !r.height) { return; }
+        var nx = ((e.clientX - r.left) / r.width - 0.5) * 2;
+        var ny = ((e.clientY - r.top) / r.height - 0.5) * 2;
+        tx = ny * MAX * 0.7;
+        ty = -nx * MAX;
+        if (!raf) { raf = requestAnimationFrame(tick); }
+      };
 
-    var idle = function () {
-      tx = 0; ty = 0;
-      if (!raf) { raf = requestAnimationFrame(tick); }
-    };
+      var reset = function () {
+        tx = 0; ty = 0;
+        if (!raf) { raf = requestAnimationFrame(tick); }
+      };
 
-    wrap.addEventListener('pointermove', aim, { passive: true });
-    wrap.addEventListener('pointerleave', idle);
-    window.addEventListener('blur', idle);
+      resets.push(reset);
+      el.addEventListener('pointermove', aim, { passive: true });
+      el.addEventListener('pointerleave', reset);
+    });
+
+    window.addEventListener('blur', function () {
+      for (var i = 0; i < resets.length; i++) { resets[i](); }
+    });
   }());
 
   /* ---- 复制邮箱：成功 / 失败都在图标上方的小签里给回执 ---- */

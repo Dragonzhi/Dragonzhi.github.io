@@ -190,38 +190,67 @@ body.home {
 }
 
 /* ---------- 第二屏：关于 ---------- */
-.about { padding: var(--s9) 0 var(--s6); }
+.about { padding: var(--s9) 0 var(--s6); text-align: center; }
 .about__wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
-.about .tag { margin: 0; }
-.about .links { margin-top: var(--s5); }
-.about .sec-head { margin-top: var(--s9); }
+.about .tag { margin: 0 auto; }
+.about .links { margin-top: var(--s5); justify-content: center; }
+.about .sec-head { margin-top: var(--s9); justify-content: center; }
 
-/* ---------- 自述铭牌：Shields flat-square 形态 ---------- */
-.badges {
+/* ---------- 关于铭牌：Shields flat-square 形态，散贴在案板上 ---------- */
+.board {
   list-style: none;
-  margin: 0;
-  padding: 0;
+  margin: var(--s8) auto 0;
+  padding: clamp(40px, 5vw, 64px) clamp(16px, 4vw, 56px);
+  max-width: 1080px;
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  width: fit-content;
-  max-width: 100%;
-  gap: 8px;
-  perspective: 700px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 30px 18px;
+  position: relative;
+  border-radius: 32px;
+  background: linear-gradient(118deg, var(--soft-dark), var(--soft-light));
 }
-.badges:hover .badge { will-change: transform; }
-.badge {
-  display: grid;
-  grid-template-columns: 72px minmax(0, 1fr);
-  width: 240px;
+.board::before {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  z-index: 0;
+  border-radius: 28px;
+  background: var(--bg);
+  box-shadow:
+    inset 0 0 12px var(--soft-inset),
+    inset -6px -6px 5px rgba(255, 255, 255, .62),
+    inset 4px 4px 4px rgba(154, 169, 184, .55);
+}
+.board > .sticker { position: relative; z-index: 1; }
+
+.sticker {
+  display: inline-block;
   max-width: 100%;
-  height: 26px;
+  perspective: 600px;
+  transform: rotate(var(--rot, 0deg)) translateY(var(--dy, 0px));
+  transition: transform .18s var(--ease);
+}
+.sticker:hover {
+  z-index: 2;
+  transform: rotate(var(--rot, 0deg)) translateY(calc(var(--dy, 0px) - 3px));
+}
+
+.badge {
+  display: inline-grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  width: max-content;
+  max-width: 100%;
+  min-height: 26px;
   border-radius: 2px;
   overflow: hidden;
   font-family: var(--mono);
   font-size: 11px;
   line-height: 1;
   letter-spacing: .02em;
+  text-align: left;
+  text-decoration: none;
   transform-origin: 50% 50%;
   box-shadow:
     0 1px 2px rgba(18, 23, 26, .14),
@@ -230,7 +259,7 @@ body.home {
 .badge__k {
   display: flex;
   align-items: center;
-  padding: 0 8px;
+  padding: 5px 8px;
   background: linear-gradient(118deg, #232B37 0%, #161D28 100%);
   color: #C3CED9;
   letter-spacing: .08em;
@@ -238,7 +267,7 @@ body.home {
 .badge__v {
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  padding: 5px 10px;
   background:
     linear-gradient(118deg, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 58%),
     var(--badge-c);
@@ -246,12 +275,34 @@ body.home {
   font-family: var(--sans);
   font-size: 12px;
   font-weight: 600;
-  white-space: nowrap;
+  line-height: 1.3;
+  white-space: normal;
 }
-.badge--blue  { --badge-c: #86B7FF; }
-.badge--lime  { --badge-c: #B7F47B; }
-.badge--cream { --badge-c: #E6CEAA; }
-.badges + .fav { margin-top: var(--s6); }
+.badge__v b { color: #0F5E7A; font-weight: 600; }
+.badge__v b::before {
+  content: "";
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 4px;
+  border-radius: 50%;
+  background: #66CCFF;
+  box-shadow: 0 0 0 1px rgba(18, 23, 26, .12);
+  vertical-align: middle;
+}
+.badge__v i { font-style: normal; margin-left: 4px; opacity: .55; }
+.badge--qing  { --badge-c: #CFE3E0; }
+.badge--zhu   { --badge-c: #E8D3CE; }
+.badge--steel { --badge-c: #D7E0E5; }
+.badge--sky   { --badge-c: #D3E8F5; }
+.badge--sand  { --badge-c: #E7DDCB; }
+
+@media (max-width: 767px) {
+  .board { padding: 28px 16px; gap: 14px 10px; border-radius: 24px; }
+  .board::before { border-radius: 20px; }
+  .sticker { transform: rotate(calc(var(--rot, 0deg) * .6)) translateY(calc(var(--dy, 0px) * .6)); }
+  .sticker:hover { transform: rotate(calc(var(--rot, 0deg) * .6)) translateY(calc(var(--dy, 0px) * .6 - 2px)); }
+}
 
 .home__foot {
   display: flex;

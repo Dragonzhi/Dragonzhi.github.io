@@ -12,7 +12,7 @@ updated: 2026-11-03
 - [ ] 核实像素火影与 TriHorny4Link 的素材和链接；旧资料记录了封面文字及共用短链的问题。
 - [ ] 评估 `images/projects/morel.jpg` 的压缩空间；`秽土.avif` 暂时保留。
 - [ ] 合并 `main` / 部署腾讯云：等用户授权（主站从 `main` 取源码，GitHub Pages 留镜像）。
-- [ ] 把 `css/site.css` 里残留的首页门牌块（`.hero` 死规则、`.name` 基础、`.name-deep` / `.name-solid`、`.links` / `.icon-link` 与复制回执）迁到 `css/home.css`，让文件归属名副其实。
+- [ ] 把 `css/site.css` 里残留的首页门牌块（`.hero` 死规则、`.name` 基础、`.name-deep` / `.name-solid`、`.links` / `.icon-link` 与复制回执）迁到 `css/home.css`，并清掉旧关于区的 `.about-grid` / `.fav` / `.about p strong`；让文件归属名副其实。
 - [ ] 第一个滚动动效落地时：把 Motion 固定版本 vendor 进 `js/vendor/`（自托管、不走 CDN），按页按需加载，并实测体积。
 
 ## 进行中
@@ -21,7 +21,7 @@ updated: 2026-11-03
 
 ## 已完成
 
-- [x] 关于区自述改 Shields 式铭牌（`status` / `craft` / `focus`，240×26，墨键 + 粉彩值），指针进入时整组微倾、离开归位（2026-11-03）
+- [x] 关于区改居中铭牌案板：13 枚 Shields 式贴纸（status / craft / focus / fav / engine×2 / lang×5 / daily / playlist），墨键 + 站点淡彩，手贴角度与错位；每枚各自跟随指针、离开归位（2026-11-03）
 - [x] 文档一致性清理：`README` 撤掉「首页刻度」与 `recentShip`；`DESIGN` 更正 `t0` 与组件清单；`AGENTS` 的 p5 条目去掉已不存在的 `_lab/`；`TASKS` 只留近期完成；删空的 `docs/`（2026-11-03）
 - [x] 更正文档里的 three.js 加载方式（`js/seal.js` 按需从 jsDelivr 取 r159，失败退回 2D），并把 p5.js 的试用边界写进 `AGENTS.md`（2026-11-03）
 - [x] 首页转正：`_lab/reboot.html` → `index.html`，`_lab/wall.js` → `js/wall.js`；路径回根目录、title 回「ZLOONG · Dragonzhi」；首页为整屏 hero + 关于区，另附向下提示（裸雪佛龙 + 漏字）与调参台 / 对比页（2026-11-02）
