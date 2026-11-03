@@ -21,7 +21,7 @@
 只回答「东西在哪、改哪里」；设计规格一律以 `DESIGN.md` 为准，这里只留指针。
 
 - **token 两家**：屏（首页 / 作品）在 `css/tokens-screen.css`（冷白定稿）；纸（子页 / Hanako 箱庭）在 `css/tokens.css`。两套不混用。
-- **两页**：`index.html` 是整屏 hero（主名 + 字符墙 + 指针痕迹）+ 下滑的关于区，联系入口在关于区；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，首页样式另有 `css/home.css`，`js/wall.js` 仅首页，`js/shelf.js` 仅作品页；在跑数读 `data/home.json`。
+- **两页**：`index.html` 是整屏 hero（主名 + 字符墙 + 指针痕迹）+ 下滑的关于区，联系入口在关于区；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，首页样式另有 `css/home.css`，`js/wall.js` 仅首页，`js/shelf.js` 仅作品页；作品页门牌的在跑数读 `data/home.json`。
 - **母题**：立方体在作品页水线，实现是 `js/cube.js` + `js/water.js`。
 - **日期**：`js/date.js` 注入 `#today`，子页共用；不要再复制内联日期代码。
 - **第三方**：运行时第三方只有 three.js r159 UMD——`js/seal.js` 只在 >1080px 的纸张页懒加载（固定版本，jsDelivr），失败 / 无 WebGL / 窄屏退回 2D 印章；`js/vendor/` 目前为空，新增依赖先征得同意。其余一律原生，入口图标内联 SVG，不用图标字体、不引图标库。
@@ -38,7 +38,7 @@
 3. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
 4. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。动效用原生 CSS 优先；需要编排（滚动进出场、视差）时可用 Motion（motion.dev），自托管固定版本于 `js/vendor/`、不走 CDN，`prefers-reduced-motion` 下直接落终态。常驻动画、循环、指针跟随都可以用——只要不劫持原生滚动，并且能一句话说清它在表达什么。canvas 空转时停帧是为了省电，不是规矩。
 5. 无构建工具，**首页与作品页保持原生实现**（不引框架、不引打包器、不用 npm 安装链）。这里的「无构建」指**源码即产物**：编辑后刷新即生效，部署不需要 npm install 或编译步骤；`scripts/` 的离线生成脚本与 `js/vendor/` 的预构建库不算构建。运行时第三方目前只有一个：纸材质印章按需加载的 three.js r159 UMD（`js/seal.js`，固定版本、失败退化为 2D）。`js/vendor/` 目录还没建，Motion 等第一个滚动动效落地时再 vendor 进去。新增其他依赖前必须先征得同意并同步更新本条。
-   - **p5.js 的试用边界**：以后遇到需要快速探索生成图形的时候（粒子、场、噪声、生成图案、矢量草图），可以先在 `tools/` 或 `_lab/` 里用 p5.js 画原型——它省掉 DPR / resize / 状态机这些样板。但 p5 是 1.03 MB（min，v1.11.3）的框架，自带 60fps 的 `draw()` 常转循环，**不进首页与作品页的运行时**；要让 p5 进部署必需路径，先说明原生 Canvas 2D 为什么不够，再征得同意。
+   - **p5.js 的试用边界**：以后遇到需要快速探索生成图形的时候（粒子、场、噪声、生成图案、矢量草图），可以先在 `tools/`（或另开临时目录）里用 p5.js 画原型——它省掉 DPR / resize / 状态机这些样板。但 p5 是 1.03 MB（min，v1.11.3）的框架，自带 60fps 的 `draw()` 常转循环，**不进首页与作品页的运行时**；要让 p5 进部署必需路径，先说明原生 Canvas 2D 为什么不够，再征得同意。
 6. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。该服务器不发缓存头，改过 CSS / JS 后浏览器可能仍读旧文件：验证前硬刷新（Ctrl+F5），或用 `fetch(url, { cache: 'no-store' })` 取回源码注入再测。
 
 ## 硬性约束
