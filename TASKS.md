@@ -21,7 +21,7 @@ updated: 2026-11-03
 
 ## 已完成
 
-- [x] 关于区改居中铭牌案板：13 枚 Shields 式贴纸（status / craft / focus / fav / engine×2 / lang×5 / daily / playlist），墨键 + 站点淡彩，手贴角度与错位；每枚各自跟随指针、离开归位（2026-11-03）
+- [x] 关于区改居中铭牌案板：12 枚 Shields 式贴纸（status / craft / focus / fav / engine×2 / lang×5 / daily），墨键 + 站点淡彩，手贴角度与错位；每枚各自跟随指针、离开归位；歌单藏进 fav 铭牌作点击彩蛋（2026-11-03）
 - [x] 文档一致性清理：`README` 撤掉「首页刻度」与 `recentShip`；`DESIGN` 更正 `t0` 与组件清单；`AGENTS` 的 p5 条目去掉已不存在的 `_lab/`；`TASKS` 只留近期完成；删空的 `docs/`（2026-11-03）
 - [x] 更正文档里的 three.js 加载方式（`js/seal.js` 按需从 jsDelivr 取 r159，失败退回 2D），并把 p5.js 的试用边界写进 `AGENTS.md`（2026-11-03）
 - [x] 首页转正：`_lab/reboot.html` → `index.html`，`_lab/wall.js` → `js/wall.js`；路径回根目录、title 回「ZLOONG · Dragonzhi」；首页为整屏 hero + 关于区，另附向下提示（裸雪佛龙 + 漏字）与调参台 / 对比页（2026-11-02）
