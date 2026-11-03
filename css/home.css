@@ -196,6 +196,63 @@ body.home {
 .about .links { margin-top: var(--s5); }
 .about .sec-head { margin-top: var(--s9); }
 
+/* ---------- 自述铭牌：Shields flat-square 形态 ---------- */
+.badges {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: fit-content;
+  max-width: 100%;
+  gap: 8px;
+  perspective: 700px;
+}
+.badges:hover .badge { will-change: transform; }
+.badge {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  width: 240px;
+  max-width: 100%;
+  height: 26px;
+  border-radius: 2px;
+  overflow: hidden;
+  font-family: var(--mono);
+  font-size: 11px;
+  line-height: 1;
+  letter-spacing: .02em;
+  transform-origin: 50% 50%;
+  box-shadow:
+    0 1px 2px rgba(18, 23, 26, .14),
+    inset 0 1px 0 rgba(255, 255, 255, .14);
+}
+.badge__k {
+  display: flex;
+  align-items: center;
+  padding: 0 8px;
+  background: linear-gradient(118deg, #232B37 0%, #161D28 100%);
+  color: #C3CED9;
+  letter-spacing: .08em;
+}
+.badge__v {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  background:
+    linear-gradient(118deg, rgba(255, 255, 255, .22) 0%, rgba(255, 255, 255, 0) 58%),
+    var(--badge-c);
+  color: #12171A;
+  font-family: var(--sans);
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.badge--blue  { --badge-c: #86B7FF; }
+.badge--lime  { --badge-c: #B7F47B; }
+.badge--cream { --badge-c: #E6CEAA; }
+.badges + .fav { margin-top: var(--s6); }
+
 .home__foot {
   display: flex;
   justify-content: space-between;
