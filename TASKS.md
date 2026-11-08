@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 作品页已统一到主页外壳（同壳 + 页首矮浪带）；合并 main / 部署等你拍板。
+next: 作品页重构「板与灯」方案已批，等用户过目 WORKS-CONTENT.md 项目清单后动工；合并 main / 部署等你拍板。
 updated: 2026-11-08
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -9,17 +9,18 @@ updated: 2026-11-08
 ## 待办
 
 - [ ] 复查 390 / 320 窄屏：关于卡内边距、作品页去线后的行距是否够。
-- [ ] 核实像素火影与 TriHorny4Link 的素材和链接；旧资料记录了封面文字及共用短链的问题。
+- [ ] 核实像素火影与 TriHorny4Link 的素材和链接（共用短链 b23.tv/EZKZQSl、06 的 GitHub 是主页不是仓库、封面文字残留）；问题已汇总在 `WORKS-CONTENT.md` §五。
 - [ ] 评估 `images/projects/morel.jpg` 的压缩空间；`秽土.avif` 暂时保留。
 - [ ] 合并 `main` / 部署腾讯云：等用户授权（主站从 `main` 取源码，GitHub Pages 留镜像）。
 - [ ] 第一个滚动动效落地时：把 Motion 固定版本 vendor 进 `js/vendor/`（自托管、不走 CDN），按页按需加载，并实测体积。
 
 ## 进行中
 
-暂无已开始但未完成的任务。
+- 作品页重构「板与灯」：方案已批（凸/凹/平三态面板 + 三态仪表行，取消分章，立方体与水退役）；等用户过目 `WORKS-CONTENT.md` 的项目清单（含两件候选要不要上）后动工。
 
 ## 已完成
 
+- [x] 作品页内容底稿 `WORKS-CONTENT.md`：现役七件 + 候选两件（菌智鉴熟 / 智能优化中）的图片路径与文案，问题清单汇总；顺手修 `data/portfolio.json` 风织雨封面路径 `.jpg` → `.png`（2026-11-08）
 - [x] 作品页统一到主页外壳：bezel / sheet / 药丸顶栏 / 居中章头 / 页脚与首页同款，页首矮浪带（`data-amp` 调淡）；仪表条与 `.tabs` 退场，在跑数并入 §01 章节头；`site.css` 门牌块迁 `home.css`、`.about-grid` / `.fav` / `.about p strong` 等死规则清理（2026-11-08）
 - [x] 首页字符墙改浪潮：sin 场驱动墨色与字形随时间起伏，浪沿 118° 光向推进，浪头泛青换密字、波谷换字；撤掉指针热度与 `#ink` 层，`tools/wall-tuner.html` 同步改浪潮参数（2026-11-08）
 - [x] 关于区改居中铭牌案板：12 枚 Shields 式贴纸（status / craft / focus / fav / engine×2 / lang×5 / daily），墨键 + 站点淡彩，手贴角度与错位；每枚各自跟随指针、离开归位；歌单藏进 fav 铭牌作点击彩蛋（2026-11-03）
