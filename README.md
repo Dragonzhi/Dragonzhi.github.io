@@ -11,7 +11,7 @@
 
 ## 日常维护
 
-- 首页结构在 `index.html`，样式在 `css/home.css`，字符墙与指针痕迹在 `js/wall.js`；作品页内容在 `works.html`。
+- 首页结构在 `index.html`，样式在 `css/home.css`，字符浪潮在 `js/wall.js`；作品页内容在 `works.html`。
 - 作品页门牌的「在跑」数改 `data/home.json` 的 `stats.running`；fetch 失败时页面用 HTML 里的静态兜底值，涉及同一事实时两边一并核对。
 - 档案架数据改 `data/portfolio.json`；封存的履历页文字改 `pages/resume.html`。
 - 画廊索引运行 `python scripts/generate_gallery_json.py` 生成；洛天依歌单从外部数据仓库由 `scripts/generate_luotianyi.py` 同步，详见 AGENTS.md。

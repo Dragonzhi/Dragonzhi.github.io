@@ -27,7 +27,7 @@
     color: var(--fg-faint); text-transform: uppercase; margin: 0 0 12px;
   }
 
-  /* 预览就是纸面：冷白底，两层画布 */
+  /* 预览就是纸面：冷白底，一面墙自己走浪 */
   .preview {
     position: relative; width: 100%; aspect-ratio: 16 / 10;
     background: var(--bg);
@@ -36,7 +36,6 @@
   }
   .preview--narrow { width: 320px; max-width: 100%; aspect-ratio: 3 / 4; }
   .preview canvas { position: absolute; inset: 0; width: 100%; height: 100%; }
-  .preview canvas + canvas { z-index: 1; }
   .preview + .stage__hint { margin-top: 32px; }
 
   .panel {
@@ -102,7 +101,7 @@
 
 <div class="layout">
   <section class="stage">
-    <p class="stage__hint">桌面档 · 在面板上移动指针 → 朱砂拖头、青绿尾巴</p>
+    <p class="stage__hint">桌面档 · 浪沿 118° 光向从左上推向右下</p>
     <div class="preview" id="preview-full"></div>
 
     <p class="stage__hint">窄屏档 · 同一组参数，只换格宽</p>
@@ -113,14 +112,11 @@
     <h2>墙</h2>
     <div id="sliders-wall"></div>
 
-    <h2>热与痕迹</h2>
-    <div id="sliders-ink"></div>
+    <h2>浪潮</h2>
+    <div id="sliders-tide"></div>
 
-    <h2>字符（单色密度）</h2>
+    <h2>字符（浪头）</h2>
     <div id="sliders-glyph"></div>
-
-    <h2>色带（色块模式）</h2>
-    <div id="sliders-ramp"></div>
 
     <div class="actions">
       <button type="button" id="copy">复制导出</button>
@@ -128,7 +124,7 @@
     </div>
 
     <pre id="out"></pre>
-    <p class="note">导出的常量粘回 <code>_lab/wall.js</code> 顶部。<b>字符密度</b>模式下热区的字沿阶梯逐档变密、墨色加深，到「实心阈值」整格填墨；色带那组会置灰。<b>色块</b>模式下按 <code>PALETTE</code> 取档，色带已按插值方式、提亮与提饱和算好，<code>wall.js</code> 不再做颜色运算。两种模式共用同一套热模型（注入、半径、余热、出块阈值）。</p>
+    <p class="note">导出的常量粘回 <code>js/wall.js</code> 顶部。墙的墨色深浅与字形由 sin 场驱动，不与指针互动：透明度 = 底墨 + 浪幅 + 静态薄厚；高于「浪头阈值」的格子换密字并泛青，低于「换字阈值」的格子趁最暗换字。方向、波长、薄厚与格宽的改动会重建整面墙，其余参数下一帧即生效。</p>
   </aside>
 </div>
 
@@ -136,150 +132,40 @@
 (function () {
   'use strict';
 
-  var KEY = 'zloong-wall-tuner-v1';
+  var KEY = 'zloong-wall-tuner-v2';
   var GLYPHS = '<>/\\.,:;=+-*';
   var INK_RGB = '18, 23, 26';
-  var INK_SOLID = '#12171A';
-  var PAPER = (getComputedStyle(document.documentElement).getPropertyValue('--bg') || '').trim() || '#F2F5F7';
-  var GROUPS = { wall: 'sliders-wall', ink: 'sliders-ink', glyph: 'sliders-glyph', ramp: 'sliders-ramp' };
+  var GROUPS = { wall: 'sliders-wall', tide: 'sliders-tide', glyph: 'sliders-glyph' };
 
   function hexToRgb(hex) {
     var h = String(hex).replace('#', '');
     return [parseInt(h.slice(0, 2), 16), parseInt(h.slice(2, 4), 16), parseInt(h.slice(4, 6), 16)];
   }
 
-  function rgbToHex(c) {
-    return '#' + c.map(function (v) {
-      return Math.max(0, Math.min(255, Math.round(v))).toString(16).padStart(2, '0');
-    }).join('').toUpperCase();
-  }
-
-  function rgbToHsl(c) {
-    var r = c[0] / 255, g = c[1] / 255, b = c[2] / 255;
-    var mx = Math.max(r, g, b), mn = Math.min(r, g, b);
-    var h = 0, s = 0, l = (mx + mn) / 2, d = mx - mn;
-    if (d) {
-      s = l > 0.5 ? d / (2 - mx - mn) : d / (mx + mn);
-      if (mx === r) { h = (g - b) / d + (g < b ? 6 : 0); }
-      else if (mx === g) { h = (b - r) / d + 2; }
-      else { h = (r - g) / d + 4; }
-      h *= 60;
-    }
-    return [h, s, l];
-  }
-
-  function hslToRgb(hsl) {
-    var h = hsl[0], s = hsl[1], l = hsl[2];
-    var c = (1 - Math.abs(2 * l - 1)) * s;
-    var x = c * (1 - Math.abs((h / 60) % 2 - 1));
-    var m = l - c / 2;
-    var r = 0, g = 0, b = 0;
-    if (h < 60) { r = c; g = x; }
-    else if (h < 120) { r = x; g = c; }
-    else if (h < 180) { g = c; b = x; }
-    else if (h < 240) { g = x; b = c; }
-    else if (h < 300) { r = x; b = c; }
-    else { r = c; b = x; }
-    return [(r + m) * 255, (g + m) * 255, (b + m) * 255];
-  }
-
-  function mixRgb(a, b, t) {
-    return [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t];
-  }
-
-  /* 色相绕行：短弧走绿黄，长弧走蓝紫 */
-  function mixHue(a, b, t, long) {
-    var A = rgbToHsl(a), B = rgbToHsl(b);
-    var dh = B[0] - A[0];
-    if (long) {
-      if (dh >= 0) { dh -= 360; } else { dh += 360; }
-    } else if (dh > 180) {
-      dh -= 360;
-    } else if (dh < -180) {
-      dh += 360;
-    }
-    return hslToRgb([(A[0] + dh * t + 360) % 360,
-                     A[1] + (B[1] - A[1]) * t,
-                     A[2] + (B[2] - A[2]) * t]);
-  }
-
-  function lift(c, dl, ds) {
-    var h = rgbToHsl(c);
-    h[1] = Math.min(1, Math.max(0, h[1] + ds));
-    h[2] = Math.min(1, Math.max(0, h[2] + dl));
-    return hslToRgb(h);
-  }
-
-  var RAMP = [];
-
-  function buildRamp() {
-    var cool = hexToRgb(P.coolHex);
-    var hot = hexToRgb(P.hotHex);
-    var tri = hexToRgb(P.triHex);
-    var out = [];
-    for (var i = 0; i < P.steps; i++) {
-      var u = i / Math.max(1, P.steps - 1);
-      var t = Math.pow(u, P.gamma);
-      var c;
-      if (P.rampMode === 'tri') {
-        c = t < P.triPos
-          ? mixRgb(cool, tri, t / Math.max(0.001, P.triPos))
-          : mixRgb(tri, hot, (t - P.triPos) / Math.max(0.001, 1 - P.triPos));
-      } else if (P.rampMode === 'hueShort' || P.rampMode === 'hueLong') {
-        c = mixHue(cool, hot, t, P.rampMode === 'hueLong');
-      } else {
-        c = mixRgb(cool, hot, t);
-      }
-      var w = Math.sin(Math.PI * t);       /* 中段权重，两端为 0 */
-      if (P.lBoost > 0 || P.satBoost > 0) { c = lift(c, w * P.lBoost, w * P.satBoost); }
-      out.push(rgbToHex(c));
-    }
-    RAMP = out;
-  }
-
   var DEFS = [
-    { k: 'wallBase',  group: 'wall', label: '墙面最淡',    min: 0,    max: 0.14, step: 0.005, def: 0.04, dp: 3 },
-    { k: 'wallBand',  group: 'wall', label: '起伏幅度',    min: 0,    max: 0.20, step: 0.005, def: 0.09, dp: 3 },
-    { k: 'glyph',     group: 'wall', label: '字形 / 格宽', min: 0.40, max: 0.80, step: 0.02,  def: 0.56, dp: 2 },
-    { k: 'fullCell',  group: 'wall', label: '桌面格宽',    min: 10,   max: 30,   step: 1,     def: 18,   dp: 0 },
-    { k: 'narrowCell',group: 'wall', label: '窄屏格宽',    min: 8,    max: 20,   step: 1,     def: 12,   dp: 0 },
+    { k: 'base',      group: 'wall', label: '底墨（波谷）', min: 0,    max: 0.20, step: 0.005, def: 0.10, dp: 3 },
+    { k: 'band',      group: 'wall', label: '静态薄厚',     min: 0,    max: 0.25, step: 0.005, def: 0.10, dp: 3 },
+    { k: 'glyph',     group: 'wall', label: '字形 / 格宽',  min: 0.40, max: 0.80, step: 0.02,  def: 0.50, dp: 2 },
+    { k: 'fullCell',  group: 'wall', label: '桌面格宽',     min: 10,   max: 30,   step: 1,     def: 16,   dp: 0 },
+    { k: 'narrowCell',group: 'wall', label: '窄屏格宽',     min: 8,    max: 20,   step: 1,     def: 16,   dp: 0 },
 
-    { k: 'inkMode',   group: 'ink',  type: 'select', label: '表现方式', def: 'glyph',
-      options: [['glyph', '字符密度（单色）'], ['block', '色块（色带）']] },
-    { k: 'inject',    group: 'ink',  label: '每帧注入热',  min: 0.20, max: 1.20, step: 0.05,  def: 0.75, dp: 2 },
-    { k: 'radius',    group: 'ink',  label: '热团半径',    min: 1.5,  max: 6,    step: 0.1,   def: 3.2,  dp: 1 },
-    { k: 'decay',     group: 'ink',  label: '每帧余热',    min: 0.86, max: 0.985,step: 0.005, def: 0.94, dp: 3 },
-    { k: 'cut',       group: 'ink',  label: '出块阈值',    min: 0.04, max: 0.30, step: 0.01,  def: 0.12, dp: 2 },
-    { k: 'coolCut',   group: 'ink',  label: '全青绿上限',  min: 0.20, max: 0.90, step: 0.01,  def: 0.58, dp: 2 },
-    { k: 'hotCut',    group: 'ink',  label: '全朱砂下限',  min: 0.20, max: 1.00, step: 0.01,  def: 0.80, dp: 2 },
+    { k: 'angle',     group: 'tide', label: '推进方向（°）', min: 0,    max: 360,  step: 2,    def: 118,  dp: 0 },
+    { k: 'wavelen',   group: 'tide', label: '波长（px）',   min: 200,  max: 1400, step: 20,   def: 680,  dp: 0 },
+    { k: 'speed',     group: 'tide', label: '相速（rad/s）', min: 0.05, max: 2,    step: 0.05, def: 0.55, dp: 2 },
+    { k: 'cross',     group: 'tide', label: '横向慢涌',     min: 0,    max: 1,    step: 0.02, def: 0.38, dp: 2 },
+    { k: 'amp',       group: 'tide', label: '浪幅',         min: 0,    max: 0.70, step: 0.01, def: 0.34, dp: 2 },
+    { k: 'crestCut',  group: 'tide', label: '浪头阈值',     min: 0.30, max: 0.95, step: 0.01, def: 0.74, dp: 2 },
+    { k: 'crestMax',  group: 'tide', label: '浪头最深',     min: 0.60, max: 1.00, step: 0.01, def: 0.92, dp: 2 },
+    { k: 'trough',    group: 'tide', label: '换字阈值',     min: 0,    max: 0.40, step: 0.02, def: 0.16, dp: 2 },
 
-    { k: 'glyphRamp', group: 'glyph', type: 'select', label: '字符阶梯', def: '.:-=+*#%@',
+    { k: 'glyphRamp', group: 'glyph', type: 'select', label: '浪头字阶', def: ':-=+*#%@',
       options: [
         [':-=+*#%@', '经典 9 档'],
         [' .:-=+*#%@', '带空档 10 档'],
         ['0123456789ABCDEF', '十六进制 16 档'],
         ['/\\|-_=+*#%@', '符号堆积 11 档']
       ] },
-    { k: 'glyphMin',  group: 'glyph', label: '最淡一档', min: 0.05, max: 0.60, step: 0.01, def: 0.24, dp: 2 },
-    { k: 'glyphMax',  group: 'glyph', label: '最密一档', min: 0.40, max: 1.00, step: 0.01, def: 0.95, dp: 2 },
-    { k: 'solidCut',  group: 'glyph', label: '实心阈值', min: 0.80, max: 1.00, step: 0.01, def: 0.97, dp: 2 },
-    { k: 'solidScale',group: 'glyph', label: '实心档放大', min: 1.00, max: 2.00, step: 0.05, def: 1.60, dp: 2 },
-
-    { k: 'coolHex',   group: 'ramp', type: 'color', label: '凉色（尾巴）', def: '#00827F' },
-    { k: 'hotHex',    group: 'ramp', type: 'color', label: '热色（拖头）', def: '#8B2C1F' },
-    { k: 'rampMode',  group: 'ramp', type: 'select', label: '插值方式', def: 'rgb',
-      options: [
-        ['rgb', 'RGB 直混（会过灰）'],
-        ['hueShort', '色相短弧（经绿黄）'],
-        ['hueLong', '色相长弧（经蓝紫）'],
-        ['tri', '三色标（自定义中间色）']
-      ] },
-    { k: 'triHex',    group: 'ramp', type: 'color', label: '中间色', def: '#8A7716' },
-    { k: 'triPos',    group: 'ramp', label: '中间色位置', min: 0.10, max: 0.90, step: 0.05, def: 0.50, dp: 2 },
-    { k: 'lBoost',    group: 'ramp', label: '中段提亮',   min: 0,    max: 0.60, step: 0.02, def: 0.00, dp: 2 },
-    { k: 'satBoost',  group: 'ramp', label: '中段提饱和', min: 0,    max: 0.60, step: 0.02, def: 0.00, dp: 2 },
-    { k: 'gamma',     group: 'ramp', label: '色带偏向',   min: 0.40, max: 2.50, step: 0.05, def: 1.00, dp: 2 },
-    { k: 'steps',     group: 'ramp', label: '色带档数',   min: 2,    max: 20,   step: 1,    def: 12,   dp: 0 }
+    { k: 'crestHex',  group: 'glyph', type: 'color', label: '浪头色', def: '#206564' }
   ];
 
   var P = {};
@@ -299,199 +185,115 @@
     return n - Math.floor(n);
   }
 
-  /* ---------------- 预览实例：一套墙 + 一层色块 ---------------- */
+  /* ---------------- 预览实例：一面自己走浪的墙 ---------------- */
   function makeField(host, cellKey) {
     var wall = document.createElement('canvas');
-    var ink = document.createElement('canvas');
     host.appendChild(wall);
-    host.appendChild(ink);
-
-    var wc = wall.getContext('2d');
-    var ic = ink.getContext('2d');
+    var c = wall.getContext('2d');
     var dpr = Math.min(window.devicePixelRatio || 1, 2);
-    var W = 0, H = 0, cols = 0, rows = 0, cell = 18;
-    var heat = null, buckets = [];
-    var raf = 0, moved = false, inside = false, px = -999, py = -999;
-
-    function drawWall() {
-      wc.clearRect(0, 0, W, H);
-      wc.font = Math.round(cell * P.glyph) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
-      wc.textAlign = 'center';
-      wc.textBaseline = 'middle';
-      for (var y = 0; y < rows; y++) {
-        for (var x = 0; x < cols; x++) {
-          var h = hash(x, y);
-          var band = 0.5 + 0.5 * Math.sin(x * 0.09) * Math.cos(y * 0.11);
-          var a = P.wallBase + band * P.wallBand * (0.4 + h * 0.6);
-          wc.fillStyle = 'rgba(' + INK_RGB + ',' + a.toFixed(3) + ')';
-          wc.fillText(GLYPHS.charAt(Math.floor(h * GLYPHS.length)), x * cell + cell / 2, y * cell + cell / 2);
-        }
-      }
-    }
+    var W = 0, H = 0, cols = 0, rows = 0, cell = 16;
+    var jit = null, band = null, glyphIdx = null, lastK = null, clock = null;
+    var colU = null, colC = null, rowP = null;
+    var raf = 0, lastPaint = 0;
 
     function size() {
       var r = host.getBoundingClientRect();
       W = r.width;
       H = r.height;
       cell = cellKey === 'narrow' ? P.narrowCell : P.fullCell;
-      cols = Math.ceil(W / cell);
-      rows = Math.ceil(H / cell);
+      cols = Math.max(1, Math.ceil(W / cell));
+      rows = Math.max(1, Math.ceil(H / cell));
+      wall.width = Math.round(W * dpr);
+      wall.height = Math.round(H * dpr);
+      c.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-      [wall, ink].forEach(function (c) {
-        c.width = Math.round(W * dpr);
-        c.height = Math.round(H * dpr);
-        c.getContext('2d').setTransform(dpr, 0, 0, dpr, 0, 0);
-      });
+      var n = cols * rows;
+      jit = new Float32Array(n);
+      band = new Float32Array(n);
+      glyphIdx = new Uint8Array(n);
+      lastK = new Int32Array(n);
+      clock = new Float32Array(n);
+      for (var y = 0; y < rows; y++) {
+        for (var x = 0; x < cols; x++) {
+          var i = y * cols + x;
+          var h = hash(x, y);
+          jit[i] = h * 1.9;
+          band[i] = P.band * (0.5 + 0.5 * Math.sin(x * 0.09) * Math.cos(y * 0.11)) * (0.4 + h * 0.6);
+          glyphIdx[i] = Math.floor(h * GLYPHS.length) % GLYPHS.length;
+          clock[i] = h * 9.7;
+        }
+      }
+      var rad = P.angle * Math.PI / 180;
+      var ux = Math.sin(rad), uy = -Math.cos(rad);
+      var K = Math.PI * 2 / Math.max(120, P.wavelen);
+      colU = new Float32Array(cols);
+      colC = new Float32Array(cols);
+      for (var x2 = 0; x2 < cols; x2++) {
+        colU[x2] = x2 * cell * ux * K;
+        colC[x2] = x2 * cell * 0.004;
+      }
+      rowP = new Float32Array(rows);
+      for (var y2 = 0; y2 < rows; y2++) {
+        rowP[y2] = y2 * cell * uy * K;
+      }
 
-      heat = new Float32Array(cols * rows);
-      drawWall();
-      ic.clearRect(0, 0, W, H);
+      c.font = Math.round(cell * P.glyph) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
+      c.textAlign = 'center';
+      c.textBaseline = 'middle';
     }
 
-    function poke() {
-      var R = P.radius;
-      var cx = px / cell, cy = py / cell;
-      var x0 = Math.max(0, Math.floor(cx - R - 1));
-      var x1 = Math.min(cols - 1, Math.ceil(cx + R + 1));
-      var y0 = Math.max(0, Math.floor(cy - R - 1));
-      var y1 = Math.min(rows - 1, Math.ceil(cy + R + 1));
-      for (var y = y0; y <= y1; y++) {
-        for (var x = x0; x <= x1; x++) {
-          var dx = x - cx, dy = y - cy;
-          var d = Math.sqrt(dx * dx + dy * dy);
-          var v = 1 - d / (R + hash(x, y) * 1.6);
-          if (v > 0) {
-            var i = y * cols + x;
-            heat[i] = Math.min(1, heat[i] + v * P.inject);
+    function paint(t) {
+      c.clearRect(0, 0, W, H);
+      var phase = P.speed * t;
+      var span = 1 - P.crestCut;
+      var ramp = P.glyphRamp;
+      var rc = ramp.length;
+      var crest = hexToRgb(P.crestHex).join(', ');
+      for (var y = 0; y < rows; y++) {
+        var dy = y * cell;
+        var rp = rowP[y];
+        var rw = dy * 0.006 + phase * 0.37;
+        var rowBase = y * cols;
+        for (var x = 0; x < cols; x++) {
+          var i = rowBase + x;
+          var v = 0.5 + 0.5 * Math.sin(
+            colU[x] + rp - phase +
+            P.cross * Math.sin(rw + colC[x]) +
+            jit[i] * 0.35
+          );
+          if (v < P.trough) {
+            /* 波谷换字：钟走到整点才换，藏在最暗处 */
+            var ck = (phase * 0.12 + clock[i]) | 0;
+            if (ck !== lastK[i]) {
+              lastK[i] = ck;
+              glyphIdx[i] = ((clock[i] * 12.9 + ck * 78.2) % 1) * GLYPHS.length | 0;
+            }
+          }
+          var a = P.base + P.amp * v + band[i];
+          if (v > P.crestCut) {
+            var ct2 = (v - P.crestCut) / span;
+            a += ct2 * (P.crestMax - a);
+            if (a > 1) { a = 1; }
+            c.fillStyle = 'rgba(' + crest + ',' + a.toFixed(3) + ')';
+            c.fillText(ramp.charAt(Math.min(rc - 1, (ct2 * rc) | 0)), x * cell + cell / 2, dy + cell / 2);
+          } else {
+            c.fillStyle = 'rgba(' + INK_RGB + ',' + a.toFixed(3) + ')';
+            c.fillText(GLYPHS.charAt(glyphIdx[i]), x * cell + cell / 2, dy + cell / 2);
           }
         }
       }
     }
 
-    function paint() {
-      ic.clearRect(0, 0, W, H);
-      return P.inkMode === 'glyph' ? paintGlyph() : paintBlock();
-    }
-
-    /* 单色密度：热区的字逐档变密、变深，最热一档整格实心 */
-    function paintGlyph() {
-      var ramp = P.glyphRamp;
-      var n = ramp.length;
-      var cx, cy, h, t, lv;
-      var painted = 0;
-
-      ic.textAlign = 'center';
-      ic.textBaseline = 'middle';
-      ic.fillStyle = PAPER;
-      ic.globalAlpha = 1;
-
-      /* 普通档 */
-      ic.font = Math.round(cell * P.glyph) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
-      for (var y = 0; y < rows; y++) {
-        var row = y * cols;
-        for (var x = 0; x < cols; x++) {
-          h = heat[row + x];
-          if (h <= P.cut || h >= P.solidCut) { continue; }
-          cx = x * cell;
-          cy = y * cell;
-          /* 先盖掉墙上的原字，否则新旧字形叠成双影 */
-          ic.fillRect(cx, cy, cell, cell);
-          t = (h - P.cut) / (1 - P.cut);
-          lv = Math.floor(t * n);
-          if (lv > n - 1) { lv = n - 1; }
-          ic.globalAlpha = P.glyphMin + t * (P.glyphMax - P.glyphMin);
-          ic.fillStyle = INK_SOLID;
-          ic.fillText(ramp.charAt(lv), cx + cell / 2, cy + cell / 2);
-          ic.globalAlpha = 1;
-          ic.fillStyle = PAPER;
-          painted++;
-        }
-      }
-
-      /* 实心档：最密的字放大到接近整格 */
-      ic.font = Math.round(cell * P.glyph * P.solidScale) + 'px "Cascadia Code", Consolas, ui-monospace, monospace';
-      for (var y2 = 0; y2 < rows; y2++) {
-        var row2 = y2 * cols;
-        for (var x2 = 0; x2 < cols; x2++) {
-          h = heat[row2 + x2];
-          if (h < P.solidCut) { continue; }
-          cx = x2 * cell;
-          cy = y2 * cell;
-          ic.fillRect(cx, cy, cell, cell);
-          ic.fillStyle = INK_SOLID;
-          ic.fillText(ramp.charAt(n - 1), cx + cell / 2, cy + cell / 2);
-          ic.fillStyle = PAPER;
-          painted++;
-        }
-      }
-
-      ic.globalAlpha = 1;
-      return painted;
-    }
-
-    /* 色块：按色带取档 */
-    function paintBlock() {
-      var n = RAMP.length;
-      while (buckets.length < n) { buckets.push([]); }
-      buckets.length = n;
-      for (var b = 0; b < n; b++) { buckets[b].length = 0; }
-
-      var painted = 0;
-      var span = Math.max(0.02, P.hotCut - P.coolCut);
-      for (var y = 0; y < rows; y++) {
-        var row = y * cols;
-        for (var x = 0; x < cols; x++) {
-          var h = heat[row + x];
-          if (h <= P.cut) { continue; }
-          var t = (h - P.coolCut) / span;
-          t = t <= 0 ? 0 : t >= 1 ? 1 : t;
-          var step = Math.round(t * (n - 1));
-          buckets[step].push(x, y, h);
-          painted++;
-        }
-      }
-      for (var b2 = 0; b2 < n; b2++) {
-        var list = buckets[b2];
-        if (!list.length) { continue; }
-        ic.fillStyle = RAMP[b2];
-        for (var k = 0; k < list.length; k += 3) {
-          ic.globalAlpha = Math.min(0.96, 0.18 + list[k + 2] * 1.15);
-          ic.fillRect(list[k] * cell + 0.5, list[k + 1] * cell + 0.5, cell - 1, cell - 1);
-        }
-      }
-      ic.globalAlpha = 1;
-      return painted;
-    }
-
-    function frame() {
+    function frame(now) {
       raf = 0;
-      var alive = 0;
-      for (var i = 0; i < heat.length; i++) {
-        heat[i] *= P.decay;
-        if (heat[i] < 0.02) { heat[i] = 0; } else if (heat[i] > P.cut) { alive++; }
-      }
-      if (moved) { poke(); moved = false; }
-      var painted = paint();
-      if (painted > 0 || alive > 0) { raf = requestAnimationFrame(frame); }
-    }
-
-    function start() {
-      if (raf) { return; }
+      if (now - lastPaint >= 31) { lastPaint = now; paint(now / 1000); }
       raf = requestAnimationFrame(frame);
     }
 
-    host.addEventListener('pointermove', function (e) {
-      var r = wall.getBoundingClientRect();
-      px = e.clientX - r.left;
-      py = e.clientY - r.top;
-      inside = px >= 0 && py >= 0 && px <= W && py <= H;
-      if (inside) { moved = true; start(); }
-    }, { passive: true });
-
     var ro = new ResizeObserver(function () { size(); });
     ro.observe(host);
-
     size();
+    raf = requestAnimationFrame(frame);
 
     return {
       redraw: function (wallChanged) {
@@ -508,6 +310,9 @@
   /* ---------------- 控件 ---------------- */
   var inputs = {};
   var outputs = {};
+
+  /* 这些参数烙在每格常量与行/列相位里，改了要重建 */
+  var WALL_KEYS = { band: 1, glyph: 1, fullCell: 1, narrowCell: 1, angle: 1, wavelen: 1 };
 
   DEFS.forEach(function (d) {
     var row = document.createElement('div');
@@ -564,49 +369,13 @@
     input.addEventListener('input', function () {
       P[d.k] = (isColor || isSelect) ? input.value : parseFloat(input.value);
       out.textContent = fmt(P[d.k]);
-
-      /* 两个阈值不能交叉 */
-      if (d.k === 'coolCut' && P.hotCut <= P.coolCut) {
-        P.hotCut = Math.min(1, +(P.coolCut + 0.02).toFixed(2));
-        inputs.hotCut.value = P.hotCut;
-        outputs.hotCut.el.textContent = P.hotCut.toFixed(2);
-      }
-      if (d.k === 'hotCut' && P.hotCut <= P.coolCut) {
-        P.coolCut = Math.max(0.2, +(P.hotCut - 0.02).toFixed(2));
-        inputs.coolCut.value = P.coolCut;
-        outputs.coolCut.el.textContent = P.coolCut.toFixed(2);
-      }
-
       save();
       render(!!WALL_KEYS[d.k]);
     });
   });
 
-  var WALL_KEYS = { wallBase: 1, wallBand: 1, glyph: 1, fullCell: 1, narrowCell: 1 };
-
   function save() {
     try { localStorage.setItem(KEY, JSON.stringify(P)); } catch (e) { /* 隐私模式 */ }
-  }
-
-  var MODE_LABEL = { rgb: 'RGB 直混', hueShort: '色相短弧', hueLong: '色相长弧', tri: '三色标' };
-
-  var GLYPH_ONLY = { glyphRamp: 1, glyphMin: 1, glyphMax: 1, solidCut: 1, solidScale: 1 };
-  var BLOCK_ONLY = {
-    coolCut: 1, hotCut: 1, coolHex: 1, hotHex: 1, rampMode: 1,
-    triHex: 1, triPos: 1, lBoost: 1, satBoost: 1, gamma: 1, steps: 1
-  };
-
-  function syncEnabled() {
-    var glyph = P.inkMode === 'glyph';
-    DEFS.forEach(function (d) {
-      if (!inputs[d.k]) { return; }
-      inputs[d.k].disabled = !!(glyph ? BLOCK_ONLY[d.k] : GLYPH_ONLY[d.k]);
-    });
-    if (!glyph) {
-      var tri = P.rampMode === 'tri';
-      if (inputs.triHex) { inputs.triHex.disabled = !tri; }
-      if (inputs.triPos) { inputs.triPos.disabled = !tri; }
-    }
   }
 
   function jsStr(s) {
@@ -614,37 +383,29 @@
   }
 
   function exportText() {
-    return '/* _lab/wall.js（由 tools/wall-tuner.html 导出） */\n' +
+    var crest = hexToRgb(P.crestHex);
+    return '/* js/wall.js（由 tools/wall-tuner.html 导出） */\n' +
       'var FULL_CELL = ' + P.fullCell + ';\n' +
       'var NARROW_CELL = ' + P.narrowCell + ';\n' +
       'var GLYPH = ' + P.glyph.toFixed(2) + ';\n' +
-      'var WALL_BASE = ' + P.wallBase.toFixed(3) + ';\n' +
-      'var WALL_BAND = ' + P.wallBand.toFixed(3) + ';\n' +
-      'var INJECT = ' + P.inject.toFixed(2) + ';\n' +
-      'var RADIUS = ' + P.radius.toFixed(1) + ';\n' +
-      'var DECAY = ' + P.decay.toFixed(3) + ';\n' +
-      'var CUT = ' + P.cut.toFixed(2) + ';\n' +
-      'var COOL_CUT = ' + P.coolCut.toFixed(2) + ';\n' +
-      'var HOT_CUT = ' + P.hotCut.toFixed(2) + ';\n' +
+      'var BASE = ' + P.base.toFixed(3) + ';\n' +
+      'var BAND = ' + P.band.toFixed(3) + ';\n' +
       '\n' +
-      "/* 表现方式：glyph 单色密度 / block 色块 */\n" +
-      "var INK_MODE = '" + jsStr(P.inkMode) + "';\n" +
+      '/* 浪：沿 ANGLE 光向推进，横向慢涌把浪头揉弯 */\n' +
+      'var ANGLE = ' + P.angle + ';\n' +
+      'var WAVELEN = ' + P.wavelen + ';\n' +
+      'var SPEED = ' + P.speed.toFixed(2) + ';\n' +
+      'var CROSS = ' + P.cross.toFixed(2) + ';\n' +
+      'var AMP = ' + P.amp.toFixed(2) + ';\n' +
+      'var CREST_CUT = ' + P.crestCut.toFixed(2) + ';\n' +
+      'var CREST_MAX = ' + P.crestMax.toFixed(2) + ';\n' +
+      'var TROUGH = ' + P.trough.toFixed(2) + ';\n' +
       "var GLYPH_RAMP = '" + jsStr(P.glyphRamp) + "';\n" +
-      'var GLYPH_MIN = ' + P.glyphMin.toFixed(2) + ';\n' +
-      'var GLYPH_MAX = ' + P.glyphMax.toFixed(2) + ';\n' +
-      'var SOLID_CUT = ' + P.solidCut.toFixed(2) + ';\n' +
-      'var SOLID_SCALE = ' + P.solidScale.toFixed(2) + ';\n' +
-      '\n' +
-      '/* 色带：' + P.coolHex.toUpperCase() + ' → ' + P.hotHex.toUpperCase() +
-      ' · ' + MODE_LABEL[P.rampMode] + ' · ' + P.steps + ' 档 */\n' +
-      'var PALETTE = [\n  ' + RAMP.map(function (c) { return "'" + c + "'"; }).join(', ') + '\n];\n' +
-      'var STEPS = PALETTE.length;\n';
+      "var CREST = '" + crest.join(', ') + "';   /* " + P.crestHex.toUpperCase() + " */\n";
   }
 
   function render(wallChanged) {
     if (wallChanged === undefined) { wallChanged = true; }
-    buildRamp();
-    syncEnabled();
     document.getElementById('out').textContent = exportText();
     fields.forEach(function (f) { f.redraw(wallChanged); });
   }

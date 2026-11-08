@@ -21,7 +21,7 @@
 只回答「东西在哪、改哪里」；设计规格一律以 `DESIGN.md` 为准，这里只留指针。
 
 - **token 两家**：屏（首页 / 作品）在 `css/tokens-screen.css`（冷白定稿）；纸（子页 / Hanako 箱庭）在 `css/tokens.css`。两套不混用。
-- **两页**：`index.html` 是整屏 hero（主名 + 字符墙 + 指针痕迹）+ 下滑的关于区，联系入口在关于区；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，首页样式另有 `css/home.css`，`js/wall.js` 仅首页，`js/shelf.js` 仅作品页；作品页门牌的在跑数读 `data/home.json`。
+- **两页**：`index.html` 是整屏 hero（主名 + 字符浪潮）+ 下滑的关于区，联系入口在关于区；作品在 `works.html`（§01 在跑 / §02 在制 / §03 归档）。共用 `css/site.css` + `js/home.js`，首页样式另有 `css/home.css`，`js/wall.js` 仅首页，`js/shelf.js` 仅作品页；作品页门牌的在跑数读 `data/home.json`。
 - **母题**：立方体在作品页水线，实现是 `js/cube.js` + `js/water.js`。
 - **日期**：`js/date.js` 注入 `#today`，子页共用；不要再复制内联日期代码。
 - **第三方**：运行时第三方只有 three.js r159 UMD——`js/seal.js` 只在 >1080px 的纸张页懒加载（固定版本，jsDelivr），失败 / 无 WebGL / 窄屏退回 2D 印章；`js/vendor/` 目前为空，新增依赖先征得同意。其余一律原生，入口图标内联 SVG，不用图标字体、不引图标库。
