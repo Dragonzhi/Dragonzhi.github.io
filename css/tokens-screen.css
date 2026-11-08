@@ -69,20 +69,7 @@
 
   /* 立方体三面：顶 / 左 / 右，光恒从左上来。
      live = 现在就能玩（青）；缺省 = 在制（墨）；sunk = 归档（沉）。 */
-  --cube-top: #DFE6EA;
-  --cube-left: #98A2A9;
-  --cube-right: #5F686E;
-  --cube-live-top: var(--qing-1);
-  --cube-live-left: var(--qing-2);
-  --cube-live-right: var(--qing-4);
-  --cube-sunk-top: #5B6469;
-  --cube-sunk-left: #3C4448;
-  --cube-sunk-right: #272C2F;
 
-  /* WebGL 基色：初值取各组的 --cube-left */
-  --cube-base: #98A2A9;
-  --cube-live-base: var(--qing-2);
-  --cube-sunk-base: #3C4448;
 
   --btn-bg: #191920;
   --btn-bg-hi: #1F1F28;
@@ -127,20 +114,7 @@
   --surface-light: linear-gradient(118deg, rgba(255,255,255,.75) 0%, rgba(255,255,255,.30) 26%, rgba(255,255,255,.06) 48%, rgba(18,23,26,.030) 82%, rgba(18,23,26,.050) 100%);
   --noise-op: .06;
 
-  --cube-top: #E6EDF0;
-  --cube-left: #BDC9D0;
-  --cube-right: #74818A;
-  --cube-live-top: var(--qing-2);
-  --cube-live-left: var(--qing-3);
-  --cube-live-right: var(--qing-5);
-  --cube-sunk-top: #D5DEE3;
-  --cube-sunk-left: #B9C5CC;
-  --cube-sunk-right: #97A3AB;
 
-  /* WebGL 基色：初值取各组的 --cube-left */
-  --cube-base: #BDC9D0;
-  --cube-live-base: var(--qing-3);
-  --cube-sunk-base: #B9C5CC;
 
   --btn-bg: #FFFFFF;
   --btn-bg-hi: #FFFFFF;
@@ -185,20 +159,7 @@
   --surface-light: linear-gradient(118deg, rgba(255,255,255,.70) 0%, rgba(255,255,255,.26) 28%, rgba(255,255,255,.05) 48%, rgba(26,23,18,.028) 82%, rgba(26,23,18,.046) 100%);
   --noise-op: .06;
 
-  --cube-top: #FFFDF8;
-  --cube-left: #D8CFBC;
-  --cube-right: #A89C86;
-  --cube-live-top: var(--qing-2);
-  --cube-live-left: var(--qing-3);
-  --cube-live-right: var(--qing-5);
-  --cube-sunk-top: #E5DFD2;
-  --cube-sunk-left: #CFC7B6;
-  --cube-sunk-right: #B9B0A0;
 
-  /* WebGL 基色：初值取各组的 --cube-left */
-  --cube-base: #D8CFBC;
-  --cube-live-base: var(--qing-3);
-  --cube-sunk-base: #CFC7B6;
 
   --btn-bg: #FFFDF8;
   --btn-bg-hi: #FFFFFF;

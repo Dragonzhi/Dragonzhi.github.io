@@ -1,8 +1,9 @@
 /* ============================================================
    site.css —— ZLOONG 个人主站（屏）
-   首页 / 作品页共用：页面壳（亚克力外框 + 纸面 + 药丸顶栏）、
-   章头、铭牌键、状态灯、作品组件与页脚。依赖 css/tokens-screen.css。
+   首页（及未来页面）共用：页面壳（亚克力外框 + 纸面 + 药丸顶栏）、
+   章头、铭牌键与页脚。依赖 css/tokens-screen.css。
    首页专属的 hero / 主名浮雕 / 关于案板在 css/home.css。
+   作品页已清空待重开：内容底稿在 WORKS-CONTENT.md。
    ============================================================ */
 
 *, *::before, *::after { box-sizing: border-box; }
@@ -12,9 +13,8 @@ html {
   scroll-behavior: smooth;
   background: var(--bg);
 }
-/* 套壳的两页：外框外是墨色，圆角纸面坐在上面 */
-html:has(> body.home),
-html:has(> body.works) { background: #12171A; }
+/* 套壳页：外框外是墨色，圆角纸面坐在上面 */
+html:has(> body.home) { background: #12171A; }
 
 body {
   position: relative;
@@ -68,8 +68,7 @@ main, .topbar, .foot { position: relative; z-index: 2; }
 
 /* ---------- 页面壳：墨色亚克力外框 + 冷白纸面（两页同款） ---------- */
 
-body.home,
-body.works {
+body.home {
   --bezel: clamp(8px, 1.4vw, 20px);
   margin: 0;
   padding: var(--bezel);
@@ -77,8 +76,7 @@ body.works {
   min-height: 100svh;
 }
 /* 渐变底自己就是氛围，光面让位 */
-body.home::before,
-body.works::before { display: none; }
+body.home::before { display: none; }
 
 /* 外框是一块墨色亚克力：左上受光、右下背光，与主名同一束 118° 光。
    padding + mask 挖出中间，内圆角 = 外圆角 24 − 框宽。 */
@@ -132,12 +130,7 @@ body.works::before { display: none; }
   gap: 16px;
   width: 100%;
 }
-/* 作品页的顶栏自己定宽；首页的在 home.css（坐在 hero 网格里） */
-.works .topbar {
-  max-width: var(--wrap);
-  margin: 0 auto;
-  padding: var(--s3) var(--pad);
-}
+/* 顶栏的定位：首页的在 home.css（坐在 hero 网格里）；其他页面各自定 */
 .chips { display: flex; align-items: center; gap: 6px; }
 .chip {
   padding: 5px 13px 6px;
@@ -170,37 +163,6 @@ body.works::before { display: none; }
     0 1px 2px rgba(18, 23, 26, .20);
 }
 .chip--on:hover { color: #FFFFFF; }
-
-/* ---------- 状态灯 ---------- */
-
-.state {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--s2);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  white-space: nowrap;
-}
-.state::before {
-  content: "";
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  flex: none;
-}
-.state--live { color: var(--live); }
-.state--wip  { color: var(--fg-dim); }
-.state--arch { color: var(--fg-faint); }
-
-.mono {
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .13em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-}
 
 /* ---------- 章头 ---------- */
 
@@ -299,135 +261,6 @@ body.works::before { display: none; }
 
 :focus-visible { outline: 2px solid var(--mark); outline-offset: 3px; }
 
-/* ---------- 立方体 ---------- */
-
-.cube { display: block; width: var(--cw, 30px); height: var(--cw, 30px); }
-.cube .t { fill: var(--cube-top); }
-.cube .l { fill: var(--cube-left); }
-.cube .r { fill: var(--cube-right); }
-.cube--live .t { fill: var(--cube-live-top); }
-.cube--live .l { fill: var(--cube-live-left); }
-.cube--live .r { fill: var(--cube-live-right); }
-.cube--sunk .t { fill: var(--cube-sunk-top); }
-.cube--sunk .l { fill: var(--cube-sunk-left); }
-.cube--sunk .r { fill: var(--cube-sunk-right); }
-
-/* ---------- 水位陈列：母题唯一出现的地方 ----------
-   首页与作品页共用同一个组件，只是台面高度不同。
-   线上 = 已出（在跑，青）；悬空 = 在制（墨）；线下 = 归档（沉，淡）。
-   位置就是状态，不画投影。 */
-
-.shelf {
-  margin: var(--s6) 0 0;
-  --h: 296px;      /* 台面高度 */
-  --line: 164px;   /* 地平线离台面顶的距离 */
-  --cw: 116px;     /* 立方体边长 */
-  --lift: 22px;    /* 在制悬空多高 */
-  --dip: 12px;     /* 在跑的那排往水里坐进去多少 */
-  position: relative;
-}
-
-.shelf__deck {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  gap: var(--s5);
-  height: var(--h);
-  /* 坠落阶段压在台面外：方块从顶缘之外落进来，不越过章名 */
-  overflow: hidden;
-}
-
-/* 七枚的轨道：桌面透明，仍由 deck 等分七列；窄屏才变成可横向滑动的一排 */
-.shelf__track { display: contents; }
-
-/* 线下的暗面：沉下去的东西在一片更深的水里 */
-.shelf__deck::after {
-  content: "";
-  position: absolute;
-  left: 0; right: 0;
-  top: var(--line);
-  bottom: 0;
-  z-index: 0;
-  pointer-events: none;
-  background: linear-gradient(180deg, var(--frame) 0%, transparent 92%);
-}
-
-/* 地平线本身：入场时从左往右画出来 */
-.shelf__rule {
-  position: absolute;
-  left: 0; right: 0;
-  top: var(--line);
-  z-index: 3;            /* 压过方块：水面从物体前面横过去 */
-  height: 1px;
-  background: var(--line-strong);
-  transform-origin: left center;
-  animation: rule-in .9s var(--ease) .1s both;
-}
-
-.shelf__cell {
-  position: relative;
-  z-index: 2;
-  display: block;
-  text-decoration: none;
-  color: inherit;
-}
-.shelf__cell:focus-visible { outline: none; }
-
-.shelf__cube {
-  position: absolute;
-  left: 50%;
-  translate: -50% 0;
-  transition: translate .2s var(--ease), opacity .2s linear;
-}
-.shelf__cell[data-s="on"]   .shelf__cube { bottom: calc(var(--h) - var(--line) - var(--dip)); }
-.shelf__cell[data-s="air"]  .shelf__cube { bottom: calc(var(--h) - var(--line) + var(--lift)); }
-.shelf__cell[data-s="sunk"] .shelf__cube { top: calc(var(--line) + 8px); opacity: .8; }
-
-/* 入场：手写物理坠落，由 js/cube.js 驱动。只藏作品页水线上那七枚（有坠落可看）；
-   首页签名不播坠落，直接在位。无 JS 时 .drop-ready 藏不出效果，全部在位。 */
-.drop-ready [data-shelf] [data-cube-host] .cube { opacity: 0; }
-.shelf__obj { display: block; }
-
-/* 抬起 = 你指到了它 */
-.shelf__cell:hover .shelf__cube,
-.shelf__cell:focus-visible .shelf__cube { translate: -50% -14px; }
-.shelf__cell:focus-visible .shelf__obj {
-  outline: 2px solid var(--mark);
-  outline-offset: 6px;
-}
-.shelf__cell[data-s="sunk"]:hover .shelf__cube,
-.shelf__cell[data-s="sunk"]:focus-visible .shelf__cube { translate: -50% 10px; opacity: 1; }
-
-/* 读出一行：指针停在哪块，这里就报哪块 */
-.shelf__read {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: baseline;
-  gap: var(--s2) var(--s4);
-  margin-top: var(--s4);
-  padding-top: var(--s3);
-  border-top: 0;
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .12em;
-  text-transform: uppercase;
-}
-.shelf__read-no { color: var(--mark); }
-.shelf__read-name {
-  font-family: var(--sans);
-  font-size: var(--t3);
-  font-weight: 600;
-  letter-spacing: 0;
-  text-transform: none;
-  color: var(--fg);
-}
-.shelf__read-meta { color: var(--fg-faint); text-transform: none; letter-spacing: .06em; }
-
-@keyframes rule-in {
-  from { transform: scaleX(0); }
-  to   { transform: scaleX(1); }
-}
-
 /* ---------- 软 UI 卡：一圈凸边 + 一层内凹的面 ----------
    配方取自 yzrt/Gemini UI：外圈渐变当凸边，方向与全站 118° 同向（左上暗、右下亮）；
    内面沿用底板色，靠 inset 深色内发光 + 右下内壁反光 + 左上内壁暗影，读成一块压进底板的面板。 */
@@ -450,210 +283,6 @@ body.works::before { display: none; }
     inset 4px 4px 4px rgba(154, 169, 184, .55);    /* 左上内壁背光 */
 }
 .rows > * { position: relative; z-index: 1; }
-
-/* ---------- 图：凹进去的一块 ---------- */
-
-.figure {
-  position: relative;
-  display: block;
-  margin: 0;
-  background: var(--frame);
-  line-height: 0;
-}
-.figure img {
-  display: block;
-  width: 100%;
-  height: auto;
-  color: transparent;
-}
-.figure::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  box-shadow:
-    inset 0 0 0 1px rgba(0, 0, 0, .35),
-    inset 0 2px 8px rgba(0, 0, 0, .28);
-}
-[data-theme="cool"] .figure::after {
-  box-shadow:
-    inset 0 0 0 1px rgba(18, 23, 26, .26),
-    inset 0 2px 8px rgba(18, 23, 26, .22);
-}
-[data-theme="warm"] .figure::after {
-  box-shadow:
-    inset 0 0 0 1px rgba(18, 23, 26, .18),
-    inset 0 2px 8px rgba(18, 23, 26, .12);
-}
-.figure .badge {
-  position: absolute;
-  z-index: 2;
-  top: 20px; left: 20px;
-  padding: var(--s2) var(--s3);
-  background: rgba(8, 8, 10, .88);
-}
-/* 浅色主题里状态字是深青，压在深色块上会读不清，角标跟着变浅底 */
-[data-theme="cool"] .figure .badge,
-[data-theme="warm"] .figure .badge {
-  background: rgba(242, 245, 247, .88);
-}
-
-/* ---------- 作品名/机器行（作品页首件复用） ---------- */
-
-.now__meta {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--s4) var(--s5);
-  padding-top: var(--s5);
-}
-.now__meta h3 {
-  margin: 0;
-  font-size: var(--t2);
-  font-weight: 800;
-  letter-spacing: -.015em;
-}
-.now__meta .type {
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--fg-faint);
-}
-.now__meta { margin-top: var(--s5); }
-
-/* ---------- 作品页 ---------- */
-
-/* 页首矮浪带：首页浪潮墙的余波，浪幅由 canvas 的 data-amp 调淡；
-   底部一道渐隐，浪化进纸面再接陈列架 */
-.band { position: relative; height: clamp(120px, 16vw, 200px); }
-.band canvas { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
-.band::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  height: 64px;
-  background: linear-gradient(to bottom, rgba(242, 245, 247, 0), var(--bg));
-  pointer-events: none;
-}
-
-.works { padding: var(--s6) 0 var(--s8); }
-.works .sec-head { margin-bottom: var(--s2); }
-
-.sec-works {
-  padding-top: var(--s9);
-}
-.sec-works:first-of-type {
-  padding-top: var(--s7);
-}
-.sec-works .sec-head {
-  margin-bottom: var(--s2);
-}
-
-.item {
-  display: grid;
-  grid-template-columns: 1.18fr 1fr;
-  gap: var(--s7);
-  align-items: start;
-  padding: var(--s7) 0;
-  border-bottom: 0;
-  scroll-margin-top: 96px;
-}
-.item:nth-of-type(even) .item__fig { order: 2; }
-.item--bare { grid-template-columns: 1fr; }
-.item--bare .item__body { max-width: 44em; }
-
-/* §02 §03 故意轻：在制 / 归档收成一行字的密度，与上面四件的重量成对比 */
-.sec-works--wip .item,
-.sec-works--arch .item { padding: var(--s4) 0; }
-
-/* §01 在跑：大图 1.25fr 1fr */
-.sec-works--live .item:not(.item--hero):not(.item--bare) {
-  grid-template-columns: 1.25fr 1fr;
-}
-/* §03 归档：小图 0.9fr 1fr */
-.sec-works--arch .item:not(.item--bare) {
-  grid-template-columns: 0.9fr 1fr;
-}
-
-/* 第一件整幅铺开 */
-.item--hero {
-  display: block;
-  padding: var(--s7) 0;
-  border-bottom: 0;
-}
-.item--hero .figure {
-  width: 100%;
-}
-.item--hero .now__meta {
-  display: flex;
-  align-items: baseline;
-  flex-wrap: wrap;
-  gap: var(--s4) var(--s5);
-  padding-top: var(--s5);
-}
-.item--hero .now__meta h3 {
-  margin: 0;
-  font-size: var(--t2);
-  font-weight: 800;
-  letter-spacing: -.015em;
-}
-.item--hero .item__desc {
-  margin-top: var(--s3);
-  max-width: 44em;
-}
-.item--hero .item__ent {
-  margin-top: var(--s4);
-}
-
-.item__body h3 {
-  margin: 0 0 var(--s3);
-  font-size: var(--t2);
-  font-weight: 800;
-  letter-spacing: -.015em;
-  line-height: 1.25;
-}
-.item__state {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s3);
-  margin-bottom: var(--s4);
-  padding-bottom: var(--s3);
-  border-bottom: 0;
-}
-.item__desc {
-  margin: 0;
-  max-width: 32em;
-  color: var(--fg-dim);
-  font-size: var(--t4);
-  line-height: 1.85;
-  text-wrap: pretty;
-}
-.item__ent {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: var(--s4) var(--s5);
-  margin-top: var(--s5);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .1em;
-  text-transform: uppercase;
-}
-
-.item__no {
-  display: block;
-  margin-bottom: var(--s2);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .18em;
-  text-transform: uppercase;
-  color: var(--mark);
-}
-
 
 /* ---------- 软卡行：tools 预览页在用 ---------- */
 
@@ -698,36 +327,10 @@ body.works::before { display: none; }
 
 /* ---------- 响应式 ---------- */
 
-@media (max-width: 1023px) {
-  .shelf { --h: 250px; --line: 140px; --cw: 84px; --lift: 18px; --dip: 9px; }
-  .shelf__deck { gap: var(--s4); }
-  .item { grid-template-columns: 1fr; gap: var(--s5); }
-  .item:nth-of-type(even) .item__fig { order: 0; }
-}
-
 @media (max-width: 767px) {
   :root { --pad: 24px; }
-  .sec-works--wip .item,
-  .sec-works--arch .item { padding: var(--s5) 0; }
-  .works { padding-top: var(--s7); }
   .sec-head { flex-wrap: wrap; gap: var(--s2) var(--s4); }
   .sec-head .meta { width: 100%; text-align: center; padding-bottom: 0; }
-  .item { padding: var(--s6) 0; }
-  .figure .badge { top: 12px; left: 12px; }
-  /* 七枚保住 72px 立体门槛，改成一排横向滑动；线上/悬空/线下的位置语义不变 */
-  .shelf { --h: 176px; --line: 96px; --cw: 72px; --lift: 14px; --dip: 6px; }
-  .shelf__deck { grid-template-columns: 1fr; gap: 0; }
-  .shelf__track {
-    display: flex;
-    gap: var(--s2);
-    height: 100%;
-    overflow-x: auto;
-    overflow-y: hidden;
-    scrollbar-width: none;
-    overscroll-behavior-x: contain;
-  }
-  .shelf__track::-webkit-scrollbar { display: none; }
-  .shelf__cell { flex: 0 0 var(--cw); }
 }
 
 @media (max-width: 400px) {
@@ -741,49 +344,4 @@ body.works::before { display: none; }
     animation-duration: .01ms !important;
     animation-delay: 0ms !important;
   }
-}
-
-/* ---------- WebGL 升级后顶替 SVG 的画布 ---------- */
-
-.shelf__obj > canvas.cube {
-  display: block;
-  width: var(--cw, 30px);
-  height: var(--cw, 30px);
-}
-
-/* 冷白底上的接触影：浅底下影子是物理事实，不是装饰 */
-.shelf__obj { position: relative; }
-.shelf__obj::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  bottom: -0.04em;
-  width: 66%;
-  height: 9%;
-  transform: translateX(-50%);
-  background: radial-gradient(ellipse at center, rgba(18,23,26,.18), transparent 70%);
-  filter: blur(2px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* ---------- 水位下沿的一池水 ---------- */
-
-.shelf__water {
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: calc(var(--line) - 14px);
-  width: 100%;
-  height: calc(100% - var(--line) + 14px);
-  display: block;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* 池壁：顶缘与底缘的内阴影，让这块不只是渐变板 */
-.shelf__deck::after {
-  box-shadow:
-    inset 0 12px 16px -14px rgba(18,23,26,.38),
-    inset 0 -20px 26px -22px rgba(18,23,26,.20);
 }

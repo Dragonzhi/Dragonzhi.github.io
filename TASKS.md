@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 作品页重构「板与灯」方案已批，等用户过目 WORKS-CONTENT.md 项目清单后动工；合并 main / 部署等你拍板。
+next: 作品页已在本分支（ref/work.html）清空，设计待新对话重开，内容底稿 WORKS-CONTENT.md；合并 main / 部署等你拍板。
 updated: 2026-11-08
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -16,10 +16,11 @@ updated: 2026-11-08
 
 ## 进行中
 
-- 作品页重构「板与灯」：方案已批（凸/凹/平三态面板 + 三态仪表行，取消分章，立方体与水退役）；等用户过目 `WORKS-CONTENT.md` 的项目清单（含两件候选要不要上）后动工。
+暂无已开始但未完成的任务。
 
 ## 已完成
 
+- [x] 清空作品页旧设计（分支 ref/work.html）：删 `works.html` 与 `js/shelf.js` / `js/cube.js` / `js/water.js`，site.css 的全部作品组件（水位陈列 / 立方体 / 作品行 / 状态灯 / 图凹面 / 矮浪带）与 `body.works` 作用域删除，tokens 删立方体色；壳共用件保留、首页不受影响；`WORKS-CONTENT.md` 留作新设计的内容源（2026-11-08）
 - [x] 作品页内容底稿 `WORKS-CONTENT.md`：现役七件 + 候选两件（菌智鉴熟 / 智能优化中）的图片路径与文案，问题清单汇总；顺手修 `data/portfolio.json` 风织雨封面路径 `.jpg` → `.png`（2026-11-08）
 - [x] 作品页统一到主页外壳：bezel / sheet / 药丸顶栏 / 居中章头 / 页脚与首页同款，页首矮浪带（`data-amp` 调淡）；仪表条与 `.tabs` 退场，在跑数并入 §01 章节头；`site.css` 门牌块迁 `home.css`、`.about-grid` / `.fav` / `.about p strong` 等死规则清理（2026-11-08）
 - [x] 首页字符墙改浪潮：sin 场驱动墨色与字形随时间起伏，浪沿 118° 光向推进，浪头泛青换密字、波谷换字；撤掉指针热度与 `#ink` 层，`tools/wall-tuner.html` 同步改浪潮参数（2026-11-08）

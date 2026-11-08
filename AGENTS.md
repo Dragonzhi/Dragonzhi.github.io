@@ -21,8 +21,8 @@
 只回答「东西在哪、改哪里」；设计规格一律以 `DESIGN.md` 为准，这里只留指针。
 
 - **token 两家**：屏（首页 / 作品）在 `css/tokens-screen.css`（冷白定稿）；纸（子页 / Hanako 箱庭）在 `css/tokens.css`。两套不混用。
-- **两页**：同壳（亚克力外框 + 纸面 + 药丸顶栏，样式在 `css/site.css`）。`index.html` 是整屏 hero（主名 + 字符浪潮）+ 下滑的关于区，联系入口在关于区；`works.html` 是页首矮浪带 + 水位陈列 + 三章作品（§01 在跑 / §02 在制 / §03 归档）。首页专属样式在 `css/home.css`；`js/wall.js` 管首页浪潮与作品页矮浪带，`js/shelf.js` 仅作品页；在跑数读 `data/home.json`，注入作品页 §01 章节头。
-- **母题**：立方体在作品页水线，实现是 `js/cube.js` + `js/water.js`。
+- **两页**：同壳（亚克力外框 + 纸面 + 药丸顶栏，样式在 `css/site.css`）。`index.html` 是整屏 hero（主名 + 字符浪潮）+ 下滑的关于区，联系入口在关于区。`works.html` 已删除，设计在分支 `ref/work.html` 重开中（内容底稿 `WORKS-CONTENT.md`）；首页专属样式在 `css/home.css`，`js/wall.js` 管首页浪潮。
+- **母题**：待作品页重开时确立；旧的「立方体与水」已退役（2026-11-08，见 DECISIONS）。
 - **日期**：`js/date.js` 注入 `#today`，子页共用；不要再复制内联日期代码。
 - **第三方**：运行时第三方只有 three.js r159 UMD——`js/seal.js` 只在 >1080px 的纸张页懒加载（固定版本，jsDelivr），失败 / 无 WebGL / 窄屏退回 2D 印章；`js/vendor/` 目前为空，新增依赖先征得同意。其余一律原生，入口图标内联 SVG，不用图标字体、不引图标库。
 - **纸面**：印章 `css/seal.css` + `js/seal.js` 只服务纸材质子页；`pages/resume.html` 是封存页，站内不设入口，简历 PDF 不托管。

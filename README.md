@@ -11,8 +11,8 @@
 
 ## 日常维护
 
-- 首页结构在 `index.html`，样式在 `css/home.css`，字符浪潮在 `js/wall.js`（作品页页首矮浪带同用）；作品页内容在 `works.html`，两页共用的壳与作品组件在 `css/site.css`。
-- 作品页 §01 章节头的「在跑」数改 `data/home.json` 的 `stats.running`；fetch 失败时页面用 HTML 里的静态兜底值，涉及同一事实时两边一并核对。
+- 首页结构在 `index.html`，样式在 `css/home.css`，字符浪潮在 `js/wall.js`；两页共用的壳在 `css/site.css`。作品页已删除待重开（分支 `ref/work.html`），内容底稿在 `WORKS-CONTENT.md`。
+- `data/home.json` 的 `stats.running` 是「在跑」数的唯一数据源，作品页重开时接线；fetch 失败回退 HTML 静态兜底。
 - 档案架数据改 `data/portfolio.json`；封存的履历页文字改 `pages/resume.html`。
 - 画廊索引运行 `python scripts/generate_gallery_json.py` 生成；洛天依歌单从外部数据仓库由 `scripts/generate_luotianyi.py` 同步，详见 AGENTS.md。
 - 在仓库根目录运行 `python -m http.server 8000`，通过 `http://localhost:8000/` 检查页面。
