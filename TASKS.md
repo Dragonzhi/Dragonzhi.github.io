@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 首页字符墙已改成 sin 浪潮（不再跟指针）；合并 main / 部署等你拍板。
+next: 作品页已统一到主页外壳（同壳 + 页首矮浪带）；合并 main / 部署等你拍板。
 updated: 2026-11-08
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
@@ -12,7 +12,6 @@ updated: 2026-11-08
 - [ ] 核实像素火影与 TriHorny4Link 的素材和链接；旧资料记录了封面文字及共用短链的问题。
 - [ ] 评估 `images/projects/morel.jpg` 的压缩空间；`秽土.avif` 暂时保留。
 - [ ] 合并 `main` / 部署腾讯云：等用户授权（主站从 `main` 取源码，GitHub Pages 留镜像）。
-- [ ] 把 `css/site.css` 里残留的首页门牌块（`.hero` 死规则、`.name` 基础、`.name-deep` / `.name-solid`、`.links` / `.icon-link` 与复制回执）迁到 `css/home.css`，并清掉旧关于区的 `.about-grid` / `.fav` / `.about p strong`；让文件归属名副其实。
 - [ ] 第一个滚动动效落地时：把 Motion 固定版本 vendor 进 `js/vendor/`（自托管、不走 CDN），按页按需加载，并实测体积。
 
 ## 进行中
@@ -21,6 +20,7 @@ updated: 2026-11-08
 
 ## 已完成
 
+- [x] 作品页统一到主页外壳：bezel / sheet / 药丸顶栏 / 居中章头 / 页脚与首页同款，页首矮浪带（`data-amp` 调淡）；仪表条与 `.tabs` 退场，在跑数并入 §01 章节头；`site.css` 门牌块迁 `home.css`、`.about-grid` / `.fav` / `.about p strong` 等死规则清理（2026-11-08）
 - [x] 首页字符墙改浪潮：sin 场驱动墨色与字形随时间起伏，浪沿 118° 光向推进，浪头泛青换密字、波谷换字；撤掉指针热度与 `#ink` 层，`tools/wall-tuner.html` 同步改浪潮参数（2026-11-08）
 - [x] 关于区改居中铭牌案板：12 枚 Shields 式贴纸（status / craft / focus / fav / engine×2 / lang×5 / daily），墨键 + 站点淡彩，手贴角度与错位；每枚各自跟随指针、离开归位；歌单藏进 fav 铭牌作点击彩蛋（2026-11-03）
 - [x] 文档一致性清理：`README` 撤掉「首页刻度」与 `recentShip`；`DESIGN` 更正 `t0` 与组件清单；`AGENTS` 的 p5 条目去掉已不存在的 `_lab/`；`TASKS` 只留近期完成；删空的 `docs/`（2026-11-03）

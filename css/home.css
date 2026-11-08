@@ -1,64 +1,11 @@
 /* ============================================================
  home.css —— 首页
- 外框 / 顶栏 / 首屏 hero / 向下提示 / 关于区 / 页脚。
+ 首屏 hero（主名浮雕 + 浪潮墙 + 向下提示）与关于区（铭牌案板）。
+ 页面壳（外框 / 纸面 / 顶栏药丸 / 页脚）在 css/site.css 两页共用。
  依赖 css/tokens-screen.css 与 css/site.css。
  ============================================================ */
 
-/* 首屏是墙，第二屏是字。外框与纸面不变。 */
 html, body { height: 100%; }
-html { background: #12171A; }
-
-body.home {
-  --bezel: clamp(8px, 1.4vw, 20px);
-  margin: 0;
-  padding: var(--bezel);
-  background: linear-gradient(118deg, #20262B 0%, #12171A 52%, #0B0F12 100%);
-  min-height: 100svh;
-}
-.home::before { display: none; }
-
-/* 外框是一块墨色亚克力：左上受光、右下背光，与主名同一束 118° 光。
-   padding + mask 挖出中间，内圆角 = 外圆角 24 − 框宽。 */
-.bezel {
-  position: fixed;
-  inset: 0;
-  z-index: 60;
-  pointer-events: none;
-  border-radius: 24px;
-  border: var(--bezel) solid #12171A;
-}
-@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
-  .bezel {
-    border: 0;
-    padding: var(--bezel);
-    background:
-      linear-gradient(118deg, rgba(255,255,255,.12) 0%, rgba(255,255,255,0) 24%),
-      linear-gradient(118deg, #20262B 0%, #12171A 52%, #0B0F12 100%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-            mask-composite: exclude;
-  }
-}
-.bezel::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: 4px;
-  border: 1px solid rgba(255,255,255,.22);
-}
-@supports (mask-composite: exclude) or (-webkit-mask-composite: xor) {
-  .bezel::after { inset: var(--bezel); }
-}
-
-.sheet {
-  position: relative;
-  background: var(--bg);
-  border-radius: 4px;
-  box-shadow:
-    inset 0 0 0 1px rgba(255,255,255,.55),
-    inset 0 2px 10px rgba(18,23,26,.07);
-  overflow: hidden;
-}
 
 /* ---------- 第一屏：整屏，墙只活在这里 ---------- */
 .hero {
@@ -87,59 +34,79 @@ body.home {
   pointer-events: none;
 }
 
-/* 顶栏：只有右边两枚亚克力药丸 */
+/* 顶栏：药丸的样式在 site.css；这里只定首页顶栏的宽与位置 */
 .topbar {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 16px;
-  width: 100%;
   max-width: var(--wrap);
   margin: 0 auto;
   padding: var(--s3) 0;
 }
-.chips { display: flex; align-items: center; gap: 6px; }
-.chip {
-  padding: 5px 13px 6px;
-  border-radius: 999px;
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .08em;
-  text-decoration: none;
-  color: var(--fg-dim);
-  background: linear-gradient(118deg, #FFFFFF 0%, #E7EDF0 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .95),
-    inset 0 0 0 1px rgba(18, 23, 26, .08),
-    0 1px 2px rgba(18, 23, 26, .06);
-  transition: color .18s, box-shadow .18s;
-}
-.chip:hover {
-  color: var(--fg);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 0 0 1px rgba(18, 23, 26, .14),
-    0 1px 3px rgba(18, 23, 26, .10);
-}
-.chip:active { transform: translateY(1px); }
-.chip--on {
-  color: #EDF2F4;
-  background: linear-gradient(118deg, #20262B 0%, #0B0F12 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .16),
-    0 1px 2px rgba(18, 23, 26, .20);
-}
-.chip--on:hover { color: #FFFFFF; }
 
 .stage { display: grid; place-items: center; min-height: 0; }
 
-.home .name {
+/* 主名浮雕：字母是一块厚板。底层（.name-deep）专做挤出厚度和左上受光棱，
+   面层（.name-solid）只留反光带——text-shadow 会盖住 background-clip 的填充，
+   所以挤出与面色必须分层。静态即成立体，不依赖脚本；指针微动由 js/home.js 叠加。 */
+.name {
   margin: 0;
+  font-family: var(--black);
+  font-weight: 900;
+  letter-spacing: -.045em;
+  perspective: 900px;
+  perspective-origin: 30% 30%;
   /* 词宽约为字号的 4.43 倍；320 宽下可用 264px，下限必须低于 59px 才不切字 */
   font-size: clamp(36px, 16.2vw, 230px);
   line-height: .9;
 }
-.home .name em { display: none; }
+.name-plate {
+  position: relative;
+  display: inline-block;
+  transform-origin: 50% 60%;
+  will-change: transform;
+}
+.name-deep {
+  position: absolute;
+  left: 0;
+  top: 0;
+  color: #333C42;
+  pointer-events: none;
+  user-select: none;
+  text-shadow:
+    -.004em -.005em 0 #D8E2E7,      /* 左上受光棱：冷白光从背后擦过 */
+    .006em .006em 0 #3B444A,
+    .012em .012em 0 #444D53,
+    .018em .018em 0 #4C565C,
+    .024em .024em 0 #555F65,
+    .030em .030em 0 #5E686E,
+    .036em .036em 0 #687278,
+    .042em .042em 0 #727C82,
+    .048em .048em 0 #7D878D,
+    .054em .054em 0 #889298,
+    .060em .060em 0 #949EA4,
+    .066em .066em .08em rgba(18, 23, 26, .18);
+}
+.name-solid {
+  position: relative;
+  display: inline-block;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  /* 单层渐变，不用叠层：text-fill-color 透明 + background-clip:text 下，
+     多层背景的 alpha 合成在 Chromium 会把下层当成伪透明，白带会凭空消失。
+     420% 拉伸下，元素可见的只是背景坐标 38.1%–61.9% 这一窗，所以把受光端与
+     背光端直接钉在窗口两端，整块字母才刚好走完一次从亮到暗。
+     色差边用深档（#00827F / #8B2C1F）：亮档对称夹白会读成抖音式霓虹故障，深档是玻璃厚边的折射。 */
+  background-image: linear-gradient(118deg,
+    #20262B 0%, #1A2025 38.1%,
+    #12171A 48.83%,
+    #00827F 48.93%, #00827F 49.03%,
+    #EDF2F4 49.13%, #EDF2F4 50.88%,
+    #8B2C1F 50.98%, #8B2C1F 51.08%,
+    #12171A 51.18%,
+    #0B0F12 61.9%, #0B0F12 100%);
+  background-size: 420% 100%;
+  background-position: 50% 50%;
+  -webkit-background-clip: text;
+  background-clip: text;
+}
 
 /* 向下提示：裸雪佛龙 + 它上方的一小片「漏字」 */
 .leak {
@@ -190,9 +157,63 @@ body.home {
 /* ---------- 第二屏：关于 ---------- */
 .about { padding: var(--s9) 0 var(--s6); text-align: center; }
 .about__wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
+
+/* tagline 与三枚图标入口（首页形态；面、棱在 site.css 的铭牌键一节） */
+.tag {
+  margin: var(--s5) 0 0;
+  max-width: 30em;
+  color: var(--fg-dim);
+  font-size: var(--t3);
+  line-height: 1.95;
+  text-wrap: pretty;
+}
+.tag b { color: var(--fg); font-weight: 600; }
 .about .tag { margin: 0 auto; }
-.about .links { margin-top: var(--s5); justify-content: center; }
-.about .sec-head { margin-top: var(--s9); justify-content: center; }
+
+.links {
+  display: flex;
+  align-items: center;
+  gap: var(--s1);
+  margin-top: var(--s5);
+}
+.about .links { justify-content: center; }
+
+/* 图标入口 44×44 热区；第三枚是复制键，用 button 承载，清掉默认面与边 */
+.icon-link { width: 44px; height: 44px; }
+button.icon-link {
+  border: 0;
+  padding: 0;
+  font: inherit;
+  cursor: pointer;
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* 复制回执：图标上方一枚面板小签，1.6s 后淡出；不做阴影、不借青色 */
+.icon-link > .copy-hint {
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  transform: translateX(-50%);
+  z-index: 2;
+  padding: 3px 8px 4px;
+  border: 1px solid var(--line-strong);
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .1em;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .18s var(--ease);
+}
+.icon-link > .copy-hint.is-on { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .icon-link > .copy-hint { transition: none; }
+}
+
+.about .sec-head { margin-top: var(--s9); }
 
 /* ---------- 关于铭牌：Shields flat-square 形态，散贴在案板上 ---------- */
 .board {
@@ -291,23 +312,7 @@ body.home {
   .sticker:hover { transform: rotate(calc(var(--rot, 0deg) * .6)) translateY(calc(var(--dy, 0px) * .6 - 2px)); }
 }
 
-.home__foot {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 16px;
-  max-width: var(--wrap);
-  margin: 0 auto;
-  padding: 0 var(--pad) var(--s7);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .11em;
-  line-height: 2;
-  color: var(--fg-faint);
-}
-.home__foot span:last-child { letter-spacing: .08em; }
-
-@media (max-width: 480px) {
-  /* 窄屏两行并排会各自折行，改成上下两行 */
-  .home__foot { flex-direction: column; align-items: flex-start; gap: 2px; }
+@media (max-width: 400px) {
+  /* 窄屏三枚图标收紧，贴成一组 */
+  .links { gap: 0; }
 }

@@ -31,7 +31,8 @@
   var WAVELEN = 680;             /* 波长（px） */
   var SPEED = 0.55;              /* 相速（rad/s），浪头约 59px/s */
   var CROSS = 0.38;              /* 横向慢涌：把直浪揉出水面感 */
-  var AMP = 0.34;                /* 浪的透明度幅度 */
+  var AMP = parseFloat(wall.getAttribute('data-amp')) || 0.34;
+  /* 浪的透明度幅度；作品页页首矮带用 data-amp 调淡，首页不写属性走默认 */
   var BASE = 0.10;               /* 波谷还剩的墨 */
   var BAND = 0.10;               /* 静态低频薄厚（墙面的旧地色） */
   var CREST_CUT = 0.74;          /* 高于它换密字、泛青 */
