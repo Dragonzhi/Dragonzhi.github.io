@@ -1,7 +1,7 @@
 # TASKS · ZLOONG 个人主站
 
 status: 进行中
-next: 作品页已在本分支（ref/work.html）清空，设计待新对话重开，内容底稿 WORKS-CONTENT.md；合并 main / 部署等你拍板。
+next: 作品页设计在新对话重开——策略「页面效果先出来，作品逐件按想要的效果上」，内容以 WORKS-CONTENT.md 为摘录、以简历素材总库（仓库外）为母本；合并 main / 部署等你拍板。
 updated: 2026-11-08
 
 现行规则见 `AGENTS.md` 和 `DESIGN.md`；历史决策见 `DECISIONS.md`。
