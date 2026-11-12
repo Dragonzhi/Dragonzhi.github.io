@@ -1,6 +1,6 @@
 /* ============================================================
    home.js —— 屏脚本（首页 / 作品页共用）
-   只做四件事：填日期、读 data/home.json 填统计、复制邮箱并给回执、主名与关于铭牌的指针微动。
+   只做四件事：填日期、读 data/home.json 填统计、复制邮箱并给回执、主名与关于铭牌的漂浮 / 微动。
    全部失败都要容忍：静态 HTML 里的值就是兜底。
    ============================================================ */
 (function () {
@@ -39,49 +39,66 @@
       .catch(function () { /* 断网 / file:// 下静默退回 HTML 静态值 */ });
   }());
 
-  /* ---- 主名浮雕：随整页指针的时差微动。停下衰减归位，归位即停帧 ---- */
-  (function nameLift() {
+  /* ---- 主名浮雕：随墙上的浪自己浮。不接指针，不归位，一直在很慢地漂 ----
+     位移量按字号走（em），换屏宽时幅度跟着字走，不会在小屏上显得乱晃。
+     反光带跟着转动挪窗口：板面倾了，光源与板面的相对角度就变了。
+     30fps、离开视口停帧；prefers-reduced-motion 下不挂。 */
+  (function nameFloat() {
     var plate = document.querySelector('.name-plate');
     var face = document.querySelector('[data-name-solid]');
-    if (!plate || !face || !window.matchMedia) { return; }
-    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
+    if (!plate || !face || !window.requestAnimationFrame) { return; }
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) { return; }
 
-    var MAX = 9;        /* 最大转动角（度） */
-    var EASE = 0.125;   /* 跟随系数：越小，时差越长 */
-    var tx = 0, ty = 0, cx = 0, cy = 0, raf = 0;
+    var FPS = 30;
+    var raf = 0, last = 0, inView = true;
 
-    var write = function () {
-      plate.style.transform = 'rotateX(' + cx.toFixed(2) + 'deg) rotateY(' + cy.toFixed(2) + 'deg)';
+    var paint = function (t) {
+      /* 三组互不同步的慢正弦：浮沉、横向漂移、三轴转动 */
+      var by = (Math.sin(t * 0.62) * 0.030 + Math.sin(t * 0.41 + 1.3) * 0.013);
+      var bx = (Math.sin(t * 0.29 + 2.1) * 0.034 + Math.sin(t * 0.19) * 0.013);
+      var rz = Math.sin(t * 0.47 + 0.7) * 0.75;
+      var rx = Math.sin(t * 0.53 + 1.1) * 2.1;
+      var ry = Math.sin(t * 0.37 + 2.4) * 2.1;
+
+      plate.style.transform =
+        'translate3d(' + bx.toFixed(3) + 'em,' + by.toFixed(3) + 'em,0) ' +
+        'rotateZ(' + rz.toFixed(3) + 'deg) ' +
+        'rotateX(' + rx.toFixed(2) + 'deg) ' +
+        'rotateY(' + ry.toFixed(2) + 'deg)';
+
       face.style.backgroundPosition =
-        (50 - cy * 3).toFixed(1) + '% ' + (50 - cx * 2.25).toFixed(1) + '%';
+        (50 - ry * 1.45).toFixed(2) + '% ' + (50 - rx * 1.05).toFixed(2) + '%';
     };
 
-    var tick = function () {
-      cx += (tx - cx) * EASE;
-      cy += (ty - cy) * EASE;
-      if (Math.abs(tx - cx) < 0.02 && Math.abs(ty - cy) < 0.02) {
-        cx = tx; cy = ty; write(); raf = 0; return;   /* 归位即停帧 */
+    var tick = function (now) {
+      raf = 0;
+      if (now - last >= 1000 / FPS - 1) {
+        last = now;
+        paint(now / 1000);
       }
-      write();
+      if (inView) { raf = requestAnimationFrame(tick); }
+    };
+
+    var start = function () {
+      if (raf || !inView) { return; }
+      last = 0;
       raf = requestAnimationFrame(tick);
     };
 
-    var aim = function (e) {
-      var nx = (e.clientX / window.innerWidth - 0.5) * 2;
-      var ny = (e.clientY / window.innerHeight - 0.5) * 2;
-      tx = ny * MAX * 0.7;      /* 指针在下方 → 下沿朝观者 */
-      ty = -nx * MAX;           /* 指针在右侧 → 右沿朝观者 */
-      if (!raf) { raf = requestAnimationFrame(tick); }
-    };
+    paint(0);
 
-    var idle = function () {
-      tx = 0; ty = 0;
-      if (!raf) { raf = requestAnimationFrame(tick); }
-    };
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) {
+        inView = es[0].isIntersecting;
+        if (inView) { start(); }
+      }, { threshold: 0 }).observe(plate);
+    }
+    start();
 
-    window.addEventListener('pointermove', aim, { passive: true });
-    document.documentElement.addEventListener('mouseleave', idle);
-    window.addEventListener('blur', idle);
+    document.addEventListener('visibilitychange', function () {
+      inView = !document.hidden;
+      if (inView) { start(); }
+    });
   }());
 
   /* ---- 关于铭牌：每枚各自跟随指针，离开归位即停帧 ---- */

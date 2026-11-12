@@ -45,7 +45,8 @@ html, body { height: 100%; }
 
 /* 主名浮雕：字母是一块厚板。底层（.name-deep）专做挤出厚度和左上受光棱，
    面层（.name-solid）只留反光带——text-shadow 会盖住 background-clip 的填充，
-   所以挤出与面色必须分层。静态即成立体，不依赖脚本；指针微动由 js/home.js 叠加。 */
+   所以挤出与面色必须分层。静态即成立体，不依赖脚本。
+   漂浮由 js/home.js 叠加：板子跟着墙上的浪自己浮，不接指针。 */
 .name {
   margin: 0;
   font-family: var(--black);

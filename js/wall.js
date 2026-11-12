@@ -17,8 +17,8 @@
   if (!ctx) { return; }
 
   /* ---- 墙 ---- */
-  var FULL_CELL = 16;            /* 桌面格宽 */
-  var NARROW_CELL = 16;          /* < 600px 用 */
+  var FULL_CELL = 24;            /* 桌面格宽 */
+  var NARROW_CELL = 20;          /* < 600px 用 */
   var CELL = FULL_CELL;          /* 当前格宽，resize 时按视口定 */
   var GLYPH = 0.50;              /* 字形 / 格宽 */
   var GLYPHS = '<>/\\.,:;=+-*';
@@ -28,7 +28,7 @@
 
   /* ---- 浪 ---- */
   var ANGLE = 118;               /* 推进方向 = 全站那束光 */
-  var WAVELEN = 680;             /* 波长（px） */
+  var WAVELEN = 780;             /* 波长（px） */
   var SPEED = 0.55;              /* 相速（rad/s），浪头约 59px/s */
   var CROSS = 0.38;              /* 横向慢涌：把直浪揉出水面感 */
   var AMP = parseFloat(wall.getAttribute('data-amp')) || 0.34;
