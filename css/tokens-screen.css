@@ -95,7 +95,10 @@
 }
 
 /* ============ 白底黑字 · 冷白 ============ */
-[data-theme="cool"] {
+/* light 是兜底：某些浏览器 / 扩展会自己往 html 写 data-theme="light"，
+   只认 cool 的话整站会掉回上面的 dark 默认值。 */
+[data-theme="cool"],
+[data-theme="light"] {
   --bg: #F2F5F7;
   --surface: #FFFFFF;           /* 软卡内面：比底亮一档，卡才浮得起来 */
   --frame: #D6DEE3;             /* 图框比底再深一档，水面的暗面也靠它 */

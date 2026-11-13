@@ -248,6 +248,153 @@ button.icon-link {
 /* 关于我 → 三枚入口 → 案板；标题在最上，间距交给 .about 的 padding */
 .about .sec-head { margin-top: 0; }
 
+/* ---------- 第三屏：作品 ---------- */
+.works { padding: var(--s7) 0; }
+.works__wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
+
+/* 作品卡按分量排：一件时独占整行，多起来自动分两列 */
+.works__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+  gap: var(--s5);
+  margin-top: var(--s8);
+}
+
+/* 大卡不套案板那副软卡：外圈凸边 + 4px 内缩 + 内发光是给一枚小物件的凹槽，
+   放大到整张卡会变成压着重影的旧面板。这里只要一张白纸——
+   比底亮一档、一道极细的边、几乎没有影子。 */
+.work {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding: 28px 30px;
+  border-radius: 28px;
+  background: var(--surface);
+  border: 1px solid var(--line);
+  transition: transform .18s var(--ease), border-color .18s var(--ease);
+}
+
+/* 封面：嵌在卡里的一块屏，四周留白，不贴卡边。
+   内影用 ::after 压在图上，直接写在容器上会被图片盖掉。 */
+.work__cover {
+  display: block;
+  position: relative;
+  margin-bottom: var(--s5);
+  border-radius: 20px;
+  overflow: hidden;
+  background: var(--frame);
+}
+.work__cover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 1px rgba(18, 23, 26, .12);
+  pointer-events: none;
+}
+.work__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform .4s var(--ease);
+}
+
+@media (hover: hover) {
+  .work:hover {
+    transform: translateY(-2px);
+    border-color: var(--line-strong);
+  }
+  .work:hover .work__cover img { transform: scale(1.04); }
+}
+
+/* 代表作跨满整行，但收在 880：比后面那些大一档，又不至于把首屏叙事撑断 */
+.work--lead {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 100%;
+  max-width: 880px;
+}
+.work--lead .work__cover img { aspect-ratio: 21 / 9; }
+
+.work__head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--s4);
+}
+.work__name {
+  margin: 0;
+  font-size: var(--t2);
+  font-weight: 900;
+  letter-spacing: -.025em;
+  line-height: 1.2;
+}
+/* 标题是主入口：静止时不画线，hover 才落一道墨线 */
+.work__name a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: .1em;
+  transition: text-decoration-color .18s var(--ease);
+}
+.work__name a:hover { text-decoration-color: var(--line-strong); }
+.work__state { flex: none; margin-top: 4px; }
+
+.work__desc {
+  margin: var(--s3) 0 0;
+  color: var(--fg-dim);
+  font-size: var(--t3);
+  line-height: 1.8;
+  text-wrap: pretty;
+}
+
+/* 元信息贴底，文案长短不一时六张卡的脚也对得齐 */
+.work__foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s4);
+  margin-top: auto;
+  padding-top: var(--s5);
+}
+.work__meta {
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .06em;
+  color: var(--fg-faint);
+}
+.work__acts {
+  display: flex;
+  align-items: center;
+  gap: var(--s2);
+}
+/* 入口键换成描边胶囊：铭牌那套拟物是给图标的，
+   压在文字链接上会读成 2010 年的拟物按钮。 */
+.work .link {
+  flex: none;
+  padding: 4px 13px 5px;
+  margin: 0;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  background: none;
+  box-shadow: none;
+  color: var(--fg-dim);
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .06em;
+  transition: color .18s var(--ease), border-color .18s var(--ease);
+}
+.work .link::before { display: none; }
+.work .link:hover { color: var(--fg); border-color: var(--fg); }
+.work .link:active {
+  transform: none;
+  box-shadow: none;
+  color: var(--fg);
+}
+
 /* ---------- 关于铭牌：Shields flat-square 形态，散贴在案板上 ---------- */
 .board {
   list-style: none;
@@ -343,6 +490,19 @@ button.icon-link {
   .board::before { border-radius: 20px; }
   .sticker { transform: rotate(calc(var(--rot, 0deg) * .6)) translateY(calc(var(--dy, 0px) * .6)); }
   .sticker:hover { transform: rotate(calc(var(--rot, 0deg) * .6)) translateY(calc(var(--dy, 0px) * .6 - 2px)); }
+
+  .works__grid { grid-template-columns: 1fr; gap: var(--s4); }
+  .work { padding: 22px 24px; border-radius: 24px; }
+  .work::before { border-radius: 20px; }
+  .work__cover { border-radius: 12px; }
+  /* 21:9 在窄屏太扁，代表作退回 16:9 */
+  .work--lead .work__cover img { aspect-ratio: 16 / 9; }
+}
+
+@media (max-width: 520px) {
+  /* 窄屏标题与状态徽标竖排，别互相挤 */
+  .work__head { flex-direction: column; gap: var(--s2); }
+  .work__state { margin-top: 0; }
 }
 
 @media (max-width: 400px) {

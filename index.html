@@ -21,7 +21,7 @@
       <header class="topbar">
         <nav class="chips" aria-label="页面切换">
           <a class="chip chip--on" href="index.html" aria-current="page">首页</a>
-          <a class="chip" href="works.html">作品</a>
+          <a class="chip" href="#works">作品</a>
         </nav>
       </header>
 
@@ -108,6 +108,40 @@
             </a>
           </li>
         </ul>
+      </div>
+    </section>
+
+    <section class="works" id="works">
+      <div class="works__wrap">
+        <div class="sec-head">
+          <h2>作品</h2>
+        </div>
+
+        <div class="works__grid">
+          <article class="work work--lead">
+            <a class="work__cover" href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer" aria-label="风织雨 · 到 TapTap 试玩">
+              <img
+                src="images/projects/weaving-rain-gameplay-1600.webp"
+                srcset="images/projects/weaving-rain-gameplay-800.webp 800w, images/projects/weaving-rain-gameplay-1600.webp 1600w"
+                sizes="(max-width: 767px) 100vw, min(1180px, 92vw)"
+                width="1600" height="900"
+                alt="风织雨实机画面：风把湿空气推上岛屿山坡成云，云雨落在农田与水库上"
+                loading="lazy" decoding="async">
+            </a>
+            <header class="work__head">
+              <h3 class="work__name"><a href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer">风织雨</a></h3>
+              <span class="badge badge--qing work__state"><span class="badge__k">status</span><span class="badge__v">可试玩</span></span>
+            </header>
+            <p class="work__desc">拨动空气，把雨送到群岛上需要它的地方。含水库教学与九张关卡。</p>
+            <footer class="work__foot">
+              <span class="work__meta">2026.10 · 单人 13 天</span>
+              <div class="work__acts">
+                <a class="link" href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer">试玩 ↗</a>
+                <a class="link" href="https://github.com/Dragonzhi/Weaving-Rain" target="_blank" rel="noreferrer">源码 ↗</a>
+              </div>
+            </footer>
+          </article>
+        </div>
       </div>
     </section>
 
