@@ -7,6 +7,14 @@
 
 html, body { height: 100%; }
 
+/* 首页不要外圈墨框：整页直接铺在冷白纸上，--bezel 归零让 hero 吃满整屏 */
+body.home {
+  --bezel: 0px;
+  padding: 0;
+  background: var(--bg);
+}
+body.home .bezel { display: none; }
+
 /* ---------- 第一屏：整屏，墙只活在这里 ---------- */
 .hero {
   position: relative;
@@ -180,6 +188,28 @@ html, body { height: 100%; }
 }
 .about .links { justify-content: center; }
 
+/* 首页三个入口：无框，只留图标。44px 热区不变，hover 只把墨色加深一层 */
+.about .icon-link {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  color: var(--fg-faint);
+  transition: color var(--press) var(--ease);
+}
+.about .icon-link::before { display: none; }
+.about .icon-link > svg {
+  width: 24px;
+  height: 24px;
+  filter: none;
+}
+.about .icon-link:hover { color: var(--fg); }
+.about .icon-link:active {
+  transform: none;
+  box-shadow: none;
+  color: var(--fg);
+}
+
 /* 图标入口 44×44 热区；第三枚是复制键，用 button 承载，清掉默认面与边 */
 .icon-link { width: 44px; height: 44px; }
 button.icon-link {
@@ -215,7 +245,8 @@ button.icon-link {
   .icon-link > .copy-hint { transition: none; }
 }
 
-.about .sec-head { margin-top: var(--s9); }
+/* 关于我 → 三枚入口 → 案板；标题在最上，间距交给 .about 的 padding */
+.about .sec-head { margin-top: 0; }
 
 /* ---------- 关于铭牌：Shields flat-square 形态，散贴在案板上 ---------- */
 .board {
