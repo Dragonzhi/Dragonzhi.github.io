@@ -1,6 +1,6 @@
 /* ============================================================
    site.css —— ZLOONG 个人主站（屏）
-   首页与子页共用：页面壳、药丸顶栏、章头、铭牌键与页脚。
+   首页与子页共用：页面壳、平面主导航、章头、铭牌键与页脚。
    依赖 css/tokens-screen.css；首页专属结构见 css/home.css / css/works.css。
    ============================================================ */
 
@@ -62,7 +62,7 @@ body::after {
   padding: 0 var(--pad);
 }
 
-main, .topbar, .foot { position: relative; z-index: 2; }
+main, .foot { position: relative; z-index: 2; }
 
 /* ---------- 页面壳：墨色亚克力外框 + 冷白纸面（两页同款） ---------- */
 
@@ -119,48 +119,80 @@ body.home::before { display: none; }
   overflow: hidden;
 }
 
-/* ---------- 顶栏：右上的亚克力药丸（两页同款） ---------- */
+/* ---------- 主导航：平面文字，不做药丸或按钮面 ---------- */
 
-.topbar {
-  display: flex;
-  justify-content: flex-end;
+.site-nav {
+  position: relative;
+  z-index: 4;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  gap: 16px;
   width: 100%;
+  padding: var(--s3) var(--pad) 0;
+  pointer-events: none;
 }
-/* 顶栏的定位：首页的在 home.css（坐在 hero 网格里）；其他页面各自定 */
-.chips { display: flex; align-items: center; gap: 6px; }
-.chip {
-  padding: 5px 13px 6px;
-  border-radius: 999px;
+.site-nav > * { pointer-events: auto; }
+
+.site-nav__brand {
+  justify-self: start;
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  color: var(--fg);
   font-family: var(--mono);
   font-size: var(--t5);
-  letter-spacing: .08em;
+  letter-spacing: .16em;
+  line-height: 1;
   text-decoration: none;
-  color: var(--fg-dim);
-  background: linear-gradient(118deg, #FFFFFF 0%, #E7EDF0 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .95),
-    inset 0 0 0 1px rgba(18, 23, 26, .08),
-    0 1px 2px rgba(18, 23, 26, .06);
-  transition: color .18s, box-shadow .18s;
 }
-.chip:hover {
-  color: var(--fg);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, 1),
-    inset 0 0 0 1px rgba(18, 23, 26, .14),
-    0 1px 3px rgba(18, 23, 26, .10);
+.site-nav__brand:hover { color: var(--mark); }
+
+.site-nav__links {
+  grid-column: 2;
+  justify-self: center;
+  display: flex;
+  align-items: center;
+  gap: clamp(var(--s4), 2.4vw, var(--s5));
 }
-.chip:active { transform: translateY(1px); }
-.chip--on {
-  color: #EDF2F4;
-  background: linear-gradient(118deg, #20262B 0%, #0B0F12 100%);
-  box-shadow:
-    inset 0 1px 0 rgba(255, 255, 255, .16),
-    0 1px 2px rgba(18, 23, 26, .20);
+
+.site-nav__link {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0 var(--s1);
+  color: var(--fg-faint);
+  font-size: var(--t4);
+  line-height: 1;
+  letter-spacing: .12em;
+  text-decoration: none;
 }
-.chip--on:hover { color: #FFFFFF; }
+.site-nav__link:hover { color: var(--fg); }
+.site-nav__link::after {
+  content: "";
+  position: absolute;
+  left: var(--s1);
+  right: var(--s1);
+  bottom: 6px;
+  height: 2px;
+  background: var(--mark);
+  transform: scaleX(0);
+  transform-origin: 0 50%;
+  transition: transform var(--press) var(--ease);
+}
+.site-nav__link[aria-current="page"] { color: var(--fg); }
+.site-nav__link[aria-current="page"]::after { transform: scaleX(1); }
+
+@media (max-width: 600px) {
+  .site-nav {
+    grid-template-columns: 1fr;
+    padding-top: var(--s2);
+  }
+  .site-nav__brand { display: none; }
+  .site-nav__links { grid-column: 1; }
+}
 
 /* ---------- 章头 ---------- */
 
@@ -219,7 +251,7 @@ body.home::before { display: none; }
   transition: transform var(--press) var(--ease),
               box-shadow var(--press) var(--ease);
 }
-/* 静止时左上角一道进光，与顶栏亚克力片同一种光；hover 不再加任何光 */
+/* 静止时左上角一道进光，与铭牌同一种光；hover 不再加任何光 */
 .icon-link::before,
 .link::before,
 .rows__r a::before {

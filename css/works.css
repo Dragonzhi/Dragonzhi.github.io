@@ -1,7 +1,7 @@
 /* ============================================================
-   works.css — 首页作品区
-   B 的首页节奏 × D 的空间舞台；主卡 + 两件真实次级作品。
-   依赖 tokens-screen.css / site.css / home.css。
+   works.css — 独立作品集页
+   B 的内容节奏 × D 的空间舞台；主卡 + 两件真实次级作品。
+   依赖 tokens-screen.css / site.css / works-page.css。
    ============================================================ */
 
 .works {
@@ -237,7 +237,7 @@
 }
 
 .merged-work__heading { margin-top: var(--s4); }
-.merged-work__heading h3 {
+.merged-work__heading :is(h2, h3) {
   margin: 0;
   color: var(--fg);
   font-size: var(--t2);
@@ -355,7 +355,7 @@
   border-bottom: 1px solid var(--line);
 }
 
-.works-more__head h3 {
+.works-more__head :is(h2, h3) {
   margin: 0;
   color: var(--fg);
   font-size: var(--t3);
@@ -446,7 +446,7 @@
   background: currentColor;
 }
 
-.work-card h4 {
+.work-card :is(h3, h4) {
   margin: var(--s2) 0 0;
   color: var(--fg);
   font-size: var(--t3);
@@ -455,7 +455,7 @@
   line-height: 1.35;
 }
 
-.work-card h4 a {
+.work-card :is(h3, h4) a {
   color: inherit;
   text-decoration: underline;
   text-decoration-color: transparent;
@@ -464,7 +464,7 @@
   transition: text-decoration-color var(--press) var(--ease);
 }
 
-.work-card h4 a:hover { text-decoration-color: var(--line-strong); }
+.work-card :is(h3, h4) a:hover { text-decoration-color: var(--line-strong); }
 
 .work-card__desc {
   margin: var(--s2) 0 0;

@@ -1,0 +1,95 @@
+/* ============================================================
+   works-page.css —— 独立作品集页
+   与首页共用冷白纸、118° 光与平面主导航；只负责页头与页面级节奏。
+   ============================================================ */
+
+body.works-page { background: var(--bg); }
+
+.works-page .sheet { min-height: 100svh; }
+
+.works-head {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  place-items: center;
+  min-height: clamp(280px, 46svh, 430px);
+  padding: calc(var(--s8) + 44px) var(--pad) var(--s7);
+  overflow: hidden;
+  border-bottom: 1px solid var(--line);
+  text-align: center;
+}
+
+.works-head::before,
+.works-head::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+}
+
+.works-head::before {
+  inset: 0;
+  z-index: -2;
+  background-image:
+    linear-gradient(90deg, color-mix(in srgb, var(--line) 58%, transparent) 1px, transparent 1px),
+    linear-gradient(color-mix(in srgb, var(--line) 58%, transparent) 1px, transparent 1px);
+  background-size: 56px 56px;
+  opacity: .32;
+  -webkit-mask-image: radial-gradient(ellipse 72% 82% at 50% 48%, var(--bg) 0 18%, transparent 82%);
+          mask-image: radial-gradient(ellipse 72% 82% at 50% 48%, var(--bg) 0 18%, transparent 82%);
+}
+
+.works-head::after {
+  z-index: -1;
+  width: min(68vw, 760px);
+  aspect-ratio: 2.05;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  opacity: .55;
+  transform: translate(-50%, -50%) rotate(-5deg);
+  box-shadow: inset 0 0 34px color-mix(in srgb, var(--surface) 36%, transparent);
+}
+
+.works-head > .site-nav {
+  position: absolute;
+  inset: 0 0 auto;
+}
+
+.works-head__copy {
+  position: relative;
+  z-index: 1;
+}
+
+.works-head h1 {
+  margin: 0;
+  color: var(--fg);
+  font-family: var(--black);
+  font-size: var(--t0);
+  font-weight: 900;
+  letter-spacing: -.045em;
+  line-height: .9;
+}
+
+.works-page .works {
+  padding: var(--s8) 0 var(--s9);
+  text-align: left;
+}
+
+.works-page .merged-work { margin-top: 0; }
+
+@media (max-width: 767px) {
+  .works-head {
+    min-height: 320px;
+    padding: 104px var(--pad) var(--s7);
+  }
+
+  .works-head::before { background-size: 40px 40px; }
+  .works-head::after { width: 92vw; }
+
+  .works-page .works {
+    padding: var(--s7) 0 var(--s8);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .works-head::after { transform: translate(-50%, -50%); }
+}

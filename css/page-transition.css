@@ -1,0 +1,45 @@
+/* ============================================================
+   page-transition.css —— 同源 HTML 页面之间的跨文档转场
+   不支持 View Transitions 的浏览器直接普通导航；减少动效时不做过渡。
+   ============================================================ */
+
+@view-transition {
+  navigation: auto;
+}
+
+.site-nav { view-transition-name: site-nav; }
+
+::view-transition-group(site-nav) {
+  animation-duration: .28s;
+  animation-timing-function: var(--ease);
+}
+
+::view-transition-old(root) {
+  animation: page-leave .24s var(--ease) both;
+}
+
+::view-transition-new(root) {
+  animation: page-enter .36s var(--ease) both;
+}
+
+@keyframes page-leave {
+  to {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(site-nav),
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none !important;
+  }
+}

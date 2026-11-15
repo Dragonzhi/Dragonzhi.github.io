@@ -10,13 +10,21 @@
 <link rel="stylesheet" href="css/tokens-screen.css">
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/home.css">
-<link rel="stylesheet" href="css/works.css">
+<link rel="stylesheet" href="css/page-transition.css">
 </head>
 <body class="home">
   <div class="bezel" aria-hidden="true"></div>
 
   <div class="sheet">
-    <section class="hero">
+    <section class="hero" id="top">
+      <header class="site-nav">
+        <a class="site-nav__brand" href="#top" aria-label="ZLOONG 首页">ZLOONG</a>
+        <nav class="site-nav__links" aria-label="主导航">
+          <a class="site-nav__link" href="#top" aria-current="page">首页</a>
+          <a class="site-nav__link" href="works/index.html">作品</a>
+        </nav>
+      </header>
+
       <canvas id="wall" class="wall" aria-hidden="true"></canvas>
 
       <main class="stage">
@@ -100,128 +108,6 @@
       </div>
     </section>
 
-    <section class="works works--spatial" id="works" aria-labelledby="works-title">
-      <div class="works__wrap">
-        <div class="sec-head">
-          <h2 id="works-title">作品</h2>
-        </div>
-
-        <article class="merged-work" aria-labelledby="weaving-rain-title">
-          <div class="merged-work__visual">
-            <div class="spatial-stage" data-spatial-stage>
-              <div class="spatial-stage__frame">
-                <div class="spatial-stage__inner">
-                  <div class="spatial-grid" aria-hidden="true"></div>
-                  <div class="spatial-axis spatial-axis--x" aria-hidden="true"></div>
-                  <div class="spatial-axis spatial-axis--y" aria-hidden="true"></div>
-                  <div class="spatial-orbit spatial-orbit--outer" aria-hidden="true"></div>
-                  <div class="spatial-orbit spatial-orbit--inner" aria-hidden="true"></div>
-
-                  <div class="spatial-scene">
-                    <figure class="spatial-cover">
-                      <div class="spatial-cover__frame">
-                        <img
-                          src="images/projects/weaving-rain-gameplay-1600.webp"
-                          srcset="images/projects/weaving-rain-gameplay-800.webp 800w, images/projects/weaving-rain-gameplay-1600.webp 1600w"
-                          sizes="(max-width: 767px) calc(100vw - 84px), (max-width: 960px) calc(100vw - 120px), 540px"
-                          width="1600" height="900" loading="lazy" decoding="async"
-                          alt="《风织雨》游戏画面：青绿色海面上有一座小岛，云层正向圆形水库与农田降雨">
-                      </div>
-                    </figure>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="merged-work__body">
-            <div class="merged-work__topline">
-              <span class="work-status">
-                <span class="work-status__dot" aria-hidden="true"></span>可试玩
-              </span>
-            </div>
-
-            <div class="merged-work__heading">
-              <h3 id="weaving-rain-title">风织雨</h3>
-            </div>
-
-            <p class="merged-work__desc">拨动空气，把雨送到群岛上需要它的地方。含水库教学与九张关卡。</p>
-
-            <dl class="merged-meta">
-              <div><dt>发布</dt><dd>2026.10</dd></div>
-              <div><dt>制作</dt><dd>单人</dd></div>
-              <div><dt>周期</dt><dd>13 天</dd></div>
-            </dl>
-
-            <div class="merged-actions">
-              <a class="flat-action flat-action--primary" href="https://www.taptap.cn/app/981551" target="_blank" rel="noopener noreferrer">
-                <span>试玩</span>
-                <span class="flat-action__arrow" aria-hidden="true">↗</span>
-              </a>
-              <a class="flat-action" href="https://github.com/Dragonzhi/Weaving-Rain" target="_blank" rel="noopener noreferrer">
-                <span>查看源码</span>
-                <span class="flat-action__arrow" aria-hidden="true">↗</span>
-              </a>
-            </div>
-          </div>
-        </article>
-
-        <section class="works-more" aria-labelledby="works-more-title">
-          <div class="works-more__head">
-            <h3 id="works-more-title">更多作品</h3>
-          </div>
-
-          <div class="works-grid">
-            <article class="work-card" aria-labelledby="itertrip-title">
-              <div class="work-card__cover">
-                <img
-                  src="images/projects/itertrip.png"
-                  width="1920" height="1080" loading="lazy" decoding="async"
-                  alt="IterTrip 实机界面：AI 对话生成路线，右侧三步行程卡片">
-              </div>
-              <div class="work-card__body">
-                <p class="work-card__status">已上线</p>
-                <h4 id="itertrip-title"><a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noopener noreferrer">IterTrip</a></h4>
-                <p class="work-card__desc">把旅行攻略变成能点的地图。从模型到页面一个人走完。</p>
-                <p class="work-card__meta"><span>AI 应用</span><span>2026.08 起</span></p>
-                <div class="work-card__actions">
-                  <a class="flat-action flat-action--primary" href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noopener noreferrer">
-                    <span>在线体验</span>
-                    <span class="flat-action__arrow" aria-hidden="true">↗</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-
-            <article class="work-card" aria-labelledby="immune-link-title">
-              <div class="work-card__cover">
-                <img
-                  src="images/projects/immune-link.png"
-                  width="1548" height="814" loading="lazy" decoding="async"
-                  alt="免疫联结 ImmuneLink 实机画面：2D 桥梁网络塔防">
-              </div>
-              <div class="work-card__body">
-                <p class="work-card__status">已上线</p>
-                <h4 id="immune-link-title"><a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noopener noreferrer">免疫联结</a></h4>
-                <p class="work-card__desc">主题是「桥」的 2D 塔防。设计、程序、像素美术独自完成，关卡可导入导出。</p>
-                <p class="work-card__meta"><span>游戏</span><span>2025.11–12</span><span>单人</span></p>
-                <div class="work-card__actions">
-                  <a class="flat-action flat-action--primary" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noopener noreferrer">
-                    <span>在线试玩</span>
-                    <span class="flat-action__arrow" aria-hidden="true">↗</span>
-                  </a>
-                  <a class="flat-action" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noopener noreferrer">
-                    <span>查看源码</span>
-                    <span class="flat-action__arrow" aria-hidden="true">↗</span>
-                  </a>
-                </div>
-              </div>
-            </article>
-          </div>
-        </section>
-      </div>
-    </section>
-
     <footer class="foot">
       <span>© <span data-stat="year">2026</span> ZLOONG · Dragonzhi</span>
       <span>闽ICP备20260330551号-1</span>
@@ -230,6 +116,5 @@
 
   <script src="js/terrain.js"></script>
   <script src="js/home.js"></script>
-  <script src="js/works.js"></script>
 </body>
 </html>

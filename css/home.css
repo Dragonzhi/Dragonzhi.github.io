@@ -1,6 +1,6 @@
 /* ============================================================
  home.css —— 首页
- 首屏 hero（主名浮雕 + 浪潮墙 + 向下提示）与关于区（铭牌案板）。
+ 首屏 hero（平面主导航 + 主名浮雕 + 浪潮墙 + 向下提示）与关于区（铭牌案板）。
  作品区在 css/works.css；页面壳与子页共用件在 css/site.css。
  ============================================================ */
 
@@ -22,6 +22,12 @@ body.home .bezel { display: none; }
   grid-template-rows: minmax(0, 1fr) auto;
   padding: 0 var(--pad);
   overflow: hidden;
+}
+
+/* 主导航只在首屏顶部出现，绝对定位不参与主名的垂直居中 */
+.hero > .site-nav {
+  position: absolute;
+  inset: 0 0 auto;
 }
 
 /* canvas 是替换元素，inset:0 不会把它拉伸，必须显式给 100% */
@@ -146,7 +152,7 @@ body.home .bezel { display: none; }
 }
 .hint svg { display: block; animation: bob 1.8s ease-in-out infinite; }
 .hint:hover { color: var(--fg); }
-.hint:focus-visible { outline: 1px solid var(--mark); outline-offset: 4px; }
+.hint:focus-visible { outline: 2px solid var(--mark); outline-offset: 4px; }
 @keyframes bob {
   0%, 100% { transform: translateY(-2px); opacity: .55; }
   50%      { transform: translateY(2px); opacity: 1; }

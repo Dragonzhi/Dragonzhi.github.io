@@ -8,24 +8,27 @@
 - 现行设计与约束：`DESIGN.md`
 - 历史取舍：`DECISIONS.md`
 - 待办与交接：`TASKS.md`
-- 首页作品内容源：`WORKS-CONTENT.md`
+- 作品内容源：`WORKS-CONTENT.md`
 
 同一规则只保留一处。新增规则先查这些文件，不要另开新文档。
 
 ## 文件地图
 
-- `index.html`：首页 hero → 关于 → 作品 → 页脚；首页不挂顶栏。
-- `css/tokens-screen.css`：屏（首页）token，冷白定稿。
-- `css/site.css`：页面壳、子页顶栏、章头、铭牌键、页脚等共用件。
+- `index.html`：首页 hero → 关于 → 页脚；首屏顶部有“首页 / 作品”平面导航，不吸顶。首页不再放作品卡。
+- `works/index.html`：独立作品集页，承载风织雨、IterTrip、免疫联结与后续真实作品。
+- `css/tokens-screen.css`：屏（首页与作品集页）token，冷白定稿。
+- `css/site.css`：页面壳、平面主导航、章头、铭牌键、页脚等共用件。
 - `css/home.css`：hero、主名浮雕、关于区与铭牌案板。
-- `css/works.css`：首页作品区、空间舞台、作品卡与平面按钮。
+- `css/works.css`：作品集页的空间舞台、作品卡与平面按钮。
+- `css/works-page.css`：作品集页页头与页面级节奏。
+- `css/page-transition.css`：首页与作品集页之间的跨文档 View Transition。
 - `js/terrain.js`：首页程序化黑洞字符背景。
 - `js/home.js`：年份、复制邮箱、主名与铭牌微动。
-- `js/works.js`：风织雨主卡的精细指针视差。
+- `js/works.js`：作品集页风织雨主卡的精细指针视差。
 - `css/tokens.css` / `css/workshop.css`：纸材质子页与洛天依页共用的 token / 基础样式。
 - `pages/gallery.html`、`pages/portfolio.html`、`pages/resume.html`：画廊、档案架、封存履历。
 - `luotianyi/`：洛天依歌单与画廊入口。
-- `data/portfolio.json`：档案架作品数据；与首页同一事实要同步。
+- `data/portfolio.json`：档案架作品数据；与作品集页同一事实要同步。
 - `data/posts.json`：只服务受保护的 `legacy/`，不要据它恢复旧博客。
 - `scripts/`：只保留画廊 JSON 与洛天依歌单的离线生成脚本。
 - `legacy/`：历史存档，不得删除、覆盖或顺手修复。
@@ -33,7 +36,7 @@
 ## 不能破坏
 
 1. **无构建**：源码即产物，刷新即生效；部署不跑 npm、不编译。
-2. **两套材质**：首页用 `tokens-screen.css` 的屏；子页与洛天依用 `tokens.css` 的纸。不要混用。
+2. **两套材质**：首页与作品集页用 `tokens-screen.css` 的屏；画廊等纸材质子页与洛天依用 `tokens.css`。不要混用。
 3. **静态可读**：核心内容必须在 HTML 中有静态兜底；所有 fetch 必须容错，失败不能白屏。
 4. **响应式与无障碍**：移动端可用，无横向溢出；尊重 `prefers-reduced-motion`；无文字图标必须有 `aria-label`，可交互热区不低于 44×44。
 5. **视觉语言**：冷白纸、单一 118° 光源、青绿状态、朱砂强调；颜色、字号、间距优先复用现有 token。
@@ -43,7 +46,7 @@
 
 ## 工作方式
 
-- 改首页先读 `index.html`、`css/tokens-screen.css`、`css/home.css`、`css/works.css`，不要凭记忆改。
+- 改首页先读 `index.html`、`css/tokens-screen.css`、`css/home.css`；改作品集先读 `works/index.html`、`css/works.css`、`css/works-page.css`，不要凭记忆改。
 - 改子页先确认它使用的 token 与样式链，保持纸材质，不把首页组件直接搬过去。
 - 动效优先 CSS；需要编排时再用原生 JS。所有循环、视差和常驻动画都必须可暂停，并支持减少动效。
 - 不劫持原生滚动；不用 canvas 空转维持画面。
