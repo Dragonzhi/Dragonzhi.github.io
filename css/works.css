@@ -18,12 +18,19 @@
 
 .works .sec-head { margin: 0 auto; }
 
+/* 作品卡共用外壳：118° 亮暗边 + 内缩冷白面，主次卡只缩放量级。 */
+.merged-work,
+.work-card {
+  --e-shadow: color-mix(in srgb, var(--fg) 13%, transparent);
+  --e-line: color-mix(in srgb, var(--line) 72%, transparent);
+  --work-shell-edge: color-mix(in srgb, var(--line) 72%, transparent);
+}
+
 /* ---------- 合并主卡：保留 B 的软卡外壳 ---------- */
 
 .merged-work {
-  --e-shadow: color-mix(in srgb, var(--fg) 13%, transparent);
-  --e-line: color-mix(in srgb, var(--line) 72%, transparent);
   position: relative;
+  isolation: isolate;
   display: grid;
   grid-template-columns: minmax(0, 1.16fr) minmax(300px, .84fr);
   align-items: stretch;
@@ -31,17 +38,18 @@
   max-width: 1120px;
   margin: var(--s7) auto 0;
   padding: clamp(var(--s4), 2.2vw, var(--s5));
+  border: 1px solid var(--work-shell-edge);
   border-radius: 32px;
   background: linear-gradient(118deg, var(--soft-dark), var(--soft-light));
   text-align: left;
 }
 
-.merged-work::before {
+.merged-work::before,
+.work-card::before {
   content: "";
   position: absolute;
   inset: 4px;
   z-index: 0;
-  border-radius: 28px;
   background: var(--bg);
   box-shadow:
     inset 0 0 12px var(--soft-inset),
@@ -49,7 +57,10 @@
     inset 4px 4px 4px color-mix(in srgb, var(--soft-dark) 55%, transparent);
 }
 
-.merged-work > * {
+.merged-work::before { border-radius: 28px; }
+
+.merged-work > *,
+.work-card > * {
   position: relative;
   z-index: 1;
   min-width: 0;
@@ -361,21 +372,31 @@
 }
 
 .work-card {
+  position: relative;
+  isolation: isolate;
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--line);
-  border-radius: 22px;
-  background: var(--bg);
+  padding: var(--s1);
+  border: 1px solid var(--work-shell-edge);
+  border-radius: 26px;
+  background: linear-gradient(118deg, var(--soft-dark), var(--soft-light));
   box-shadow: none;
+  transition: transform var(--press) var(--ease);
 }
+
+.work-card::before { border-radius: 22px; }
 
 .work-card__cover {
   position: relative;
-  margin: 4px;
+  margin: var(--s1);
+  padding: var(--s2);
   overflow: hidden;
-  border: 1px solid var(--line);
+  border: 1px solid var(--e-line);
   border-radius: 18px;
-  background: var(--frame);
+  background: var(--surface);
+  box-shadow:
+    0 20px 32px -35px var(--e-shadow),
+    inset 1px 1px 0 color-mix(in srgb, var(--surface) 96%, transparent);
 }
 
 .work-card__cover img {
@@ -384,12 +405,23 @@
   height: auto;
   aspect-ratio: 16 / 9;
   object-fit: cover;
+  border: 1px solid var(--e-line);
+  border-radius: 12px;
+  background: var(--frame);
   transition: transform .35s var(--ease);
 }
 
 @media (hover: hover) {
+  .work-card:hover {
+    border-color: var(--line-strong);
+    transform: translateY(-2px);
+  }
+
+  .work-card:hover .work-card__cover { border-color: var(--line-strong); }
   .work-card:hover .work-card__cover img { transform: scale(1.02); }
 }
+
+.work-card:focus-within { border-color: var(--line-strong); }
 
 .work-card__body { padding: var(--s4) var(--s5) var(--s5); }
 
@@ -541,8 +573,13 @@
     margin-top: var(--s4);
   }
 
-  .work-card { border-radius: 20px; }
-  .work-card__cover { border-radius: 16px; }
+  .work-card { border-radius: 24px; }
+  .work-card::before { border-radius: 20px; }
+  .work-card__cover {
+    padding: var(--s1);
+    border-radius: 16px;
+  }
+  .work-card__cover img { border-radius: 11px; }
   .work-card__body { padding: var(--s4) var(--s4) var(--s5); }
 }
 
@@ -553,6 +590,7 @@
 
 @media (prefers-reduced-motion: reduce) {
   .spatial-scene,
+  .work-card,
   .flat-action,
   .flat-action__arrow,
   .work-card__cover img {
@@ -567,6 +605,7 @@
   .flat-action:hover,
   .flat-action:active,
   .flat-action:hover .flat-action__arrow,
+  .work-card:hover,
   .work-card:hover .work-card__cover img {
     transform: none;
   }
