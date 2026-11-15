@@ -1,54 +1,69 @@
 # AGENTS.md
 
-本文件约束所有在本仓库工作的 AI 代理（Codex / Claude Code / OpenCode / DSH 等）。
-项目是 ZLOONG 个人主站：纯静态 HTML + CSS + 原生 JavaScript，无框架、无构建工具；主站部署在腾讯云（nginx 静态托管，从 `main` 分支取源码），GitHub Pages 保留为镜像。
+本文件约束所有在本仓库工作的 AI 代理（Codex / Claude Code / OpenCode / ZCode 等）。
+项目是 ZLOONG 个人主站：纯静态 HTML + CSS + 原生 JavaScript，无框架、无构建；腾讯云静态托管从 `main` 部署，GitHub Pages 保留镜像。当前开发分支是 `develop`。
 
-## 文档结构
+## 先看哪里
 
-四层，职责不重叠，动笔前先认门：
+- 现行设计与约束：`DESIGN.md`
+- 历史取舍：`DECISIONS.md`
+- 待办与交接：`TASKS.md`
+- 首页作品内容源：`WORKS-CONTENT.md`
 
-| 文件 | 管什么 | 纪律 |
-|---|---|---|
-| `DESIGN.md` | 已经落地的事实 + 硬约束 | 重建期只写现状和不能动的东西，不写禁令；方向没定就不写 |
-| `DECISIONS.md` | 为什么变成这样 | 按主题分组，组内时间倒序。**历史记录，不是现在的约束**，「否掉」只说明当时为什么没走那条路 |
-| `TASKS.md` | 还没做完的事 | 只放待办 / 进行中 / 最近完成，老记录不再往上堆 |
-| `archive/` | 一次性产物的归档 | BRIEF / HANDOFF / IMPLEMENT 已移入，只作考古，不再作为约束 |
+同一规则只保留一处。新增规则先查这些文件，不要另开新文档。
 
-新增设计规则改 `DESIGN.md`，**不要新开一份文档**。技术判断与仓库约定改本文件。
+## 文件地图
 
-## 项目速览
+- `index.html`：首页 hero → 关于 → 作品 → 页脚；首页不挂顶栏。
+- `css/tokens-screen.css`：屏（首页）token，冷白定稿。
+- `css/site.css`：页面壳、子页顶栏、章头、铭牌键、页脚等共用件。
+- `css/home.css`：hero、主名浮雕、关于区与铭牌案板。
+- `css/works.css`：首页作品区、空间舞台、作品卡与平面按钮。
+- `js/terrain.js`：首页程序化黑洞字符背景。
+- `js/home.js`：年份、复制邮箱、主名与铭牌微动。
+- `js/works.js`：风织雨主卡的精细指针视差。
+- `css/tokens.css` / `css/workshop.css`：纸材质子页与洛天依页共用的 token / 基础样式。
+- `pages/gallery.html`、`pages/portfolio.html`、`pages/resume.html`：画廊、档案架、封存履历。
+- `luotianyi/`：洛天依歌单与画廊入口。
+- `data/portfolio.json`：档案架作品数据；与首页同一事实要同步。
+- `data/posts.json`：只服务受保护的 `legacy/`，不要据它恢复旧博客。
+- `scripts/`：只保留画廊 JSON 与洛天依歌单的离线生成脚本。
+- `legacy/`：历史存档，不得删除、覆盖或顺手修复。
 
-只回答「东西在哪、改哪里」；设计规格一律以 `DESIGN.md` 为准，这里只留指针。
+## 不能破坏
 
-- **token 两家**：屏（首页）在 `css/tokens-screen.css`（冷白定稿）；纸（子页 / Hanako 箱庭）在 `css/tokens.css`。两套不混用。
-- **单页**：壳是纸面，首页不挂顶栏。`index.html` 三段：整屏 hero（主名 + 程序化黑洞背景）→ 关于区（联系入口 + 铭牌案板）→ 作品区 `#works`（风织雨主卡 + IterTrip / 免疫联结双列）。作品不单开页，内容底稿在 `WORKS-CONTENT.md`；首页样式在 `css/home.css`，作品区在 `css/works.css` + `js/works.js`，`js/terrain.js` 管首页背景；`js/wall.js` 是字符浪潮备用实现，首页暂不引用。
-- **母题**：作品区使用空间档案舞台——悬浮封面、轻网格与精细指针视差；旧的「立方体与水」已退役（2026-11-08，见 DECISIONS）。
-- **日期**：`js/date.js` 注入 `#today`，子页共用；不要再复制内联日期代码。
-- **第三方**：运行时第三方只有 three.js r159 UMD——`js/seal.js` 只在 >1080px 的纸张页懒加载（固定版本，jsDelivr），失败 / 无 WebGL / 窄屏退回 2D 印章；`js/vendor/` 目前为空，新增依赖先征得同意。其余一律原生，入口图标内联 SVG，不用图标字体、不引图标库。
-- **纸面**：印章 `css/seal.css` + `js/seal.js` 只服务纸材质子页；`pages/resume.html` 是封存页，站内不设入口，简历 PDF 不托管。
-- **数据与生成**：画廊索引跑 `scripts/generate_gallery_json.py`（勿手改 JSON）；洛天依歌单由 `scripts/generate_luotianyi.py` 从外部仓库 `Dragonzhi/luotianyi-song-list` 生成，快照 `luotianyi/洛天依歌单.md` 勿手改；档案架读 `data/portfolio.json`。
-- **存档**：`legacy/` 不得删除或覆盖。
-- **本地工具**：`tools/` 是调参 / 对比页（每件材质一个），站内无入口、不参与部署必需路径。
-- **合规**：首页 `<title>` 为「ZLOONG · Dragonzhi」，页脚备案号「闽ICP备20260330551号-1」不得删改。
+1. **无构建**：源码即产物，刷新即生效；部署不跑 npm、不编译。
+2. **两套材质**：首页用 `tokens-screen.css` 的屏；子页与洛天依用 `tokens.css` 的纸。不要混用。
+3. **静态可读**：核心内容必须在 HTML 中有静态兜底；所有 fetch 必须容错，失败不能白屏。
+4. **响应式与无障碍**：移动端可用，无横向溢出；尊重 `prefers-reduced-motion`；无文字图标必须有 `aria-label`，可交互热区不低于 44×44。
+5. **视觉语言**：冷白纸、单一 118° 光源、青绿状态、朱砂强调；颜色、字号、间距优先复用现有 token。
+6. **作品文案**：先改 `WORKS-CONTENT.md`；没有真实的项目、截图和链接就不要造卡片。
+7. **依赖**：新增运行时依赖先征得同意。现有唯一 CDN 例外是纸面印章使用的固定版本 three.js r159；失败时退回 2D。
+8. **法务**：`LICENSE` 与页脚备案号不得删改。
 
-## 工作约定
+## 工作方式
 
-1. 两套材质：屏（首页，冷白）与纸（子页 / Hanako 箱庭）。首页遵循 `DESIGN.md` 的屏幕设计规范，子页仍保留纸感。
-2. 改内容：首页正文和作品卡直接改 `index.html`，作品事实先对齐 `WORKS-CONTENT.md`；同一事实出现在档案架时同步改 `data/portfolio.json`。核心内容必须在 HTML 里有静态兜底。
-3. 核心内容必须纯静态可显示；所有 fetch 必须容忍失败，绝不白屏。
-4. 保持响应式与无障碍：窄屏单列退化，尊重 `prefers-reduced-motion`。动效用原生 CSS 优先；需要编排（滚动进出场、视差）时可用 Motion（motion.dev），自托管固定版本于 `js/vendor/`、不走 CDN，`prefers-reduced-motion` 下直接落终态。常驻动画、循环、指针跟随都可以用——只要不劫持原生滚动，并且能一句话说清它在表达什么。canvas 空转时停帧是为了省电，不是规矩。
-5. 无构建工具，**首页保持原生实现**（不引框架、不引打包器、不用 npm 安装链）。这里的「无构建」指**源码即产物**：编辑后刷新即生效，部署不需要 npm install 或编译步骤；`scripts/` 的离线生成脚本与 `js/vendor/` 的预构建库不算构建。运行时第三方目前只有一个：纸材质印章按需加载的 three.js r159 UMD（`js/seal.js`，固定版本、失败退化为 2D）。`js/vendor/` 目录还没建，Motion 等第一个滚动动效落地时再 vendor 进去。新增其他依赖前必须先征得同意并同步更新本条。
-   - **p5.js 的试用边界**：以后遇到需要快速探索生成图形的时候（粒子、场、噪声、生成图案、矢量草图），可以先在 `tools/`（或另开临时目录）里用 p5.js 画原型——它省掉 DPR / resize / 状态机这些样板。但 p5 是 1.03 MB（min，v1.11.3）的框架，自带 60fps 的 `draw()` 常转循环，**不进首页的运行时**；要让 p5 进部署必需路径，先说明原生 Canvas 2D 为什么不够，再征得同意。
-6. 本地验证用 `python -m http.server 8000`，不要用 file:// 协议判断 fetch 是否正常。该服务器不发缓存头，改过 CSS / JS 后浏览器可能仍读旧文件：验证前硬刷新（Ctrl+F5），或用 `fetch(url, { cache: 'no-store' })` 取回源码注入再测。
+- 改首页先读 `index.html`、`css/tokens-screen.css`、`css/home.css`、`css/works.css`，不要凭记忆改。
+- 改子页先确认它使用的 token 与样式链，保持纸材质，不把首页组件直接搬过去。
+- 动效优先 CSS；需要编排时再用原生 JS。所有循环、视差和常驻动画都必须可暂停，并支持减少动效。
+- 不劫持原生滚动；不用 canvas 空转维持画面。
+- 新代码先搜现有实现；能复用旧组件就不要复制一套。
+- 删除前先搜索引用；一次性文件、旧计划、已停用的数据链直接清理，历史交给 Git。
 
-## 硬性约束
+## 本地验证
 
-- **不要自行合并到 `main`**（直接 `git merge`、`git push origin main`、`gh pr merge` 都算）。除此之外的 git 操作由你自行判断执行：`develop` 等非 main 分支上的 `git add` / `git commit` / `git push` / `git tag` / `git stash` 无需再逐条征询。**提交按功能收口，不按次数收口**：同一个元素、同一项展示效果的多轮调整，攒到这一项做完再提交一次，中途不逐次提交；不同功能之间才拆开。提交后把 commit hash 与 message 报给用户。
-- 不要删除或覆盖 `legacy/` 存档目录。
-- 不要修改 `LICENSE`、备案号相关内容。
+- 在仓库根目录运行 `python -m http.server 8000`，通过 `http://localhost:8000/` 检查，不要用 `file://` 判断 fetch。
+- 改过 CSS / JS 后硬刷新，或给资源加查询参数，避免读到浏览器缓存。
+- 涉及布局时至少检查 1440×900、768×1024、390×844；同时看 Console、404、横向溢出和 Tab 焦点。
+
+## Git
+
+- 不自行合并或推送 `main`；`develop` 及其他非 main 分支的常规提交与推送可直接执行。
+- 按功能收口提交，不按每轮微调提交；提交后把 commit hash 与 message 报给用户。
+- 不执行破坏性历史改写；需要回滚时说明风险并先征得同意。
 
 <!-- isle:begin -->
 ## 案屿（Isle）项目交接
 
-本项目用案屿管理任务与交接记录。开工或收工前，先读取 `.agents/skills/isle/SKILL.md` 并按其规范执行；任务、交接摘要与工作留痕在项目根目录的 `TASKS.md`。
+本项目用案屿管理任务与交接记录。开工或收工前，先读取 `.agents/skills/isle/SKILL.md` 并按规范维护根目录 `TASKS.md`。
 <!-- isle:end -->

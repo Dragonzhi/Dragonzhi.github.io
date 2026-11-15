@@ -9,7 +9,7 @@
     "image": "images/projects/tri.png",
     "imageAlt": "TriHorny4Link 游戏截图",
     "type": "Godot 塔防游戏 · Gameplay Programming",
-    "summary": "这是一次塔防玩法练习。我主要实现了动态路径重规划、敌人对象池和事件驱动系统，并针对单位较多时的运行情况做了一些优化。",
+    "summary": "034 GameJam 期间完成的连接与颜色融合塔防。我主要负责动态路径重规划、敌人对象池与事件驱动系统，并针对单位较多时的运行情况做了优化。",
     "responsibility": [
       "核心玩法",
       "系统架构",
@@ -23,12 +23,8 @@
     ],
     "links": [
       {
-        "label": "观看演示",
-        "url": "https://b23.tv/EZKZQSl"
-      },
-      {
-        "label": "GitHub",
-        "url": "https://github.com/Dragonzhi"
+        "label": "查看源码",
+        "url": "https://github.com/ThePiSquad/034-TriHorny4Link"
       }
     ],
     "published": true
@@ -92,12 +88,7 @@
       "FSM",
       "Hit Detection"
     ],
-    "links": [
-      {
-        "label": "观看演示",
-        "url": "https://b23.tv/EZKZQSl"
-      }
-    ],
+    "links": [],
     "published": true
   },
   {
@@ -137,7 +128,7 @@
     "badge": "GAME JAM",
     "date": "2026-10-20",
     "theme": "blue",
-    "image": "images/projects/weaving-rain-gameplay.png",
+    "image": "images/projects/weaving-rain-gameplay-1600.webp",
     "imageAlt": "风织雨实机画面：风带推送云层降雨，水库与菜田分布岛上",
     "type": "Godot 天气操控解谜游戏 · 单人开发",
     "summary": "拨动空气，把雨送到群岛上需要它的地方。13 天做出可试玩的 Demo，含水库教学与九张关卡：湿空气迎着山坡抬升成云，再借风把云雨送到农田与水库，风停后云仍会走，雨也不会立刻停。仓库里另写了一个关卡编辑器插件，可以在编辑器里摆山体、水汽与目标。",

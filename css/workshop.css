@@ -7,15 +7,11 @@
 @import url("tokens.css");
 
 :root {
-  /* ===== 台面拖拽配置（仅首页台面用，非全局 token） =====
-     改下面这些即可，JS 会自动读取，无需动脚本。
-     悬浮只保留动效、不抬升层级；仅点按拖拽才压入栈顶。
-     层级顺序：基础 3~7 < 拖拽栈 ≥10 < 拖拽中恒顶 1000 */
-  /* 台面范围：数值由 data/desk-config.js 决定，此处是无 JS/初始渲染的兜底。
-     想调长宽范围 → 改 data/desk-config.js（minHeight / minWidth / padding / padBottom / padRight），
-     不要改这里的两行——JS 以配置文件为准，改这里会被覆盖（无 JS 时才生效）。 */
-  --desk-height: 1180px;   /* 兜底最小高度（desk-config.js 的 minHeight 覆盖） */
-  --desk-padding: 24px;    /* 兜底边界留白（desk-config.js 的 padding 覆盖） */
+  /* ===== 旧台面兜底变量（非全局 token） =====
+     子页共用本文件的基础排版；当前页面不再加载台面拖拽脚本。 */
+  /* 台面范围保留为无 JS / 初始渲染的兜底。 */
+  --desk-height: 1180px;
+  --desk-padding: 24px;
   --desk-z-stack: 10;      /* 拖拽栈起点：拖一张 +1，最后拖过的贴贴保持在最上 */
   --desk-z-drag: 1000;     /* 拖拽中的层级：恒顶（压到栈顶） */
   --prose: 65ch;
@@ -1006,8 +1002,7 @@ a:focus-visible, button:focus-visible, input:focus-visible, summary:focus-visibl
 .signal-console p a { color: #4fe0c4; border-bottom: 1px solid rgba(79,224,196,.4); }
 
 /* ===== 响应式 ===== */
-/* 散点拼贴断点：≥1081px 才是桌面散点；以下走单列堆叠。
-   与 js/workshop.js 内 3 处的 1081px 保持一致。 */
+/* 散点拼贴断点：≥1081px 才是桌面散点；以下走单列堆叠。 */
 @media (max-width: 1080px) {
   .wrap {
     max-width: 100%;

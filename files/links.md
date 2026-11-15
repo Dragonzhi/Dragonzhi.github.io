@@ -1,6 +1,0 @@
-- [gallery / 洛天依画廊 ↗](pages/gallery.html)
-- [luotianyi / 洛天依歌单 ↗](/luotianyi/)
-- [portfolio / 作品集 ↗](pages/portfolio.html)
-- [resume / 技术履历 ↗](pages/resume.html)
-- [GitHub / @Dragonzhi ↗](https://github.com/Dragonzhi)
-- dzloong@foxmail.com {copy}
