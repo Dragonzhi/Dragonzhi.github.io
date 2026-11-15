@@ -1,6 +1,6 @@
 /* ============================================================
-   e-merged.css — E · B 的首页同页排版 × D 的空间舞台
-   只负责 about 与 footer 之间的作品章节与新的平面按钮。
+   works.css — 首页作品区
+   B 的首页节奏 × D 的空间舞台；主卡 + 两件真实次级作品。
    依赖 tokens-screen.css / site.css / home.css。
    ============================================================ */
 
@@ -353,15 +353,6 @@
   line-height: 1.4;
 }
 
-.works-more__note {
-  margin: 0;
-  color: var(--mark);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .08em;
-  line-height: 1.5;
-}
-
 .works-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -370,72 +361,34 @@
 }
 
 .work-card {
-  --e-shadow: color-mix(in srgb, var(--fg) 13%, transparent);
   min-width: 0;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 22px;
   background: var(--bg);
-  box-shadow: 0 24px 40px -38px var(--e-shadow);
+  box-shadow: none;
 }
 
 .work-card__cover {
   position: relative;
-  display: grid;
-  place-items: center;
-  aspect-ratio: 16 / 9;
   margin: 4px;
   overflow: hidden;
   border: 1px solid var(--line);
   border-radius: 18px;
-  background-image:
-    linear-gradient(90deg, color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
-    linear-gradient(color-mix(in srgb, var(--line) 55%, transparent) 1px, transparent 1px),
-    linear-gradient(118deg, var(--surface), var(--bg));
-  background-size: 32px 32px, 32px 32px, auto;
+  background: var(--frame);
 }
 
-.work-card__cover::before {
-  content: "";
-  position: absolute;
-  width: 44%;
-  aspect-ratio: 1;
-  border: 1px dashed var(--line-strong);
-  border-radius: 50%;
-  opacity: .72;
-  transform: rotate(-11deg);
+.work-card__cover img {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  transition: transform .35s var(--ease);
 }
 
-.work-card__cover::after {
-  content: "";
-  position: absolute;
-  width: 64%;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, var(--line-strong), transparent);
-  opacity: .62;
-  transform: rotate(-20deg);
-}
-
-.work-card--alt .work-card__cover::before {
-  width: 52%;
-  border-style: solid;
-  border-radius: 4px;
-  transform: rotate(8deg);
-}
-
-.work-card--alt .work-card__cover::after { transform: rotate(12deg); }
-
-.work-card__cover-label {
-  position: relative;
-  z-index: 1;
-  padding: var(--s1) var(--s2);
-  border: 1px solid var(--line-strong);
-  background: color-mix(in srgb, var(--bg) 88%, transparent);
-  color: var(--fg-faint);
-  font-family: var(--mono);
-  font-size: var(--t5);
-  letter-spacing: .08em;
-  line-height: 1.4;
+@media (hover: hover) {
+  .work-card:hover .work-card__cover img { transform: scale(1.02); }
 }
 
 .work-card__body { padding: var(--s4) var(--s5) var(--s5); }
@@ -445,7 +398,7 @@
   align-items: center;
   gap: var(--s1);
   margin: 0;
-  color: var(--mark);
+  color: var(--live);
   font-family: var(--mono);
   font-size: var(--t5);
   letter-spacing: .08em;
@@ -470,11 +423,56 @@
   line-height: 1.35;
 }
 
+.work-card h4 a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+  text-decoration-thickness: 2px;
+  text-underline-offset: .12em;
+  transition: text-decoration-color var(--press) var(--ease);
+}
+
+.work-card h4 a:hover { text-decoration-color: var(--line-strong); }
+
 .work-card__desc {
   margin: var(--s2) 0 0;
   color: var(--fg-faint);
   font-size: var(--t4);
   line-height: 1.7;
+  text-wrap: pretty;
+}
+
+.work-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s1);
+  margin: var(--s3) 0 0;
+  color: var(--fg-faint);
+  font-family: var(--mono);
+  font-size: var(--t5);
+  letter-spacing: .06em;
+  line-height: 1.5;
+}
+
+.work-card__meta span + span::before {
+  content: "·";
+  margin-right: var(--s1);
+  color: var(--line-strong);
+}
+
+.work-card__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s2);
+  margin-top: var(--s4);
+}
+
+.work-card__actions .flat-action {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 44px;
+  padding-inline: var(--s3);
 }
 
 /* ---------- 响应式 ---------- */
@@ -550,12 +548,14 @@
 
 @media (max-width: 380px) {
   .merged-actions { grid-template-columns: 1fr; }
+  .work-card__actions .flat-action { flex-basis: 100%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .spatial-scene,
   .flat-action,
-  .flat-action__arrow {
+  .flat-action__arrow,
+  .work-card__cover img {
     transition: none !important;
   }
 
@@ -566,7 +566,8 @@
 
   .flat-action:hover,
   .flat-action:active,
-  .flat-action:hover .flat-action__arrow {
+  .flat-action:hover .flat-action__arrow,
+  .work-card:hover .work-card__cover img {
     transform: none;
   }
 }

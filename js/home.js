@@ -1,6 +1,6 @@
 /* ============================================================
-   home.js —— 屏脚本（首页 / 作品页共用）
-   只做四件事：填日期、读 data/home.json 填统计、复制邮箱并给回执、主名与关于铭牌的漂浮 / 微动。
+   home.js —— 首页脚本
+   只做四件事：填日期 / 年份、复制邮箱并给回执、主名漂浮、关于铭牌微动。
    全部失败都要容忍：静态 HTML 里的值就是兜底。
    ============================================================ */
 (function () {
@@ -18,26 +18,6 @@
     var yearEl = document.querySelector('[data-stat="year"]');
     if (yearEl) { yearEl.textContent = String(now.getFullYear()); }
   } catch (e) { /* 保持 HTML 里的静态值 */ }
-
-  /* ---- 统计：读 data/home.json ---- */
-  (function loadStats() {
-    if (typeof fetch !== 'function') { return; }
-    /* 年份是本地算的；只有出现别的统计才值得拉 JSON */
-    if (!document.querySelector('[data-stat]:not([data-stat="year"])')) { return; }
-    fetch('data/home.json', { cache: 'no-cache' })
-      .then(function (res) { return res.ok ? res.json() : null; })
-      .then(function (data) {
-        if (!data) { return; }
-        var set = function (key, value) {
-          if (value === undefined || value === null) { return; }
-          var nodes = document.querySelectorAll('[data-stat="' + key + '"]');
-          for (var i = 0; i < nodes.length; i++) { nodes[i].textContent = value; }
-        };
-        var stats = data.stats || {};
-        Object.keys(stats).forEach(function (k) { set(k, stats[k]); });
-      })
-      .catch(function () { /* 断网 / file:// 下静默退回 HTML 静态值 */ });
-  }());
 
   /* ---- 主名浮雕：随墙上的浪自己浮。不接指针，不归位，一直在很慢地漂 ----
      位移量按字号走（em），换屏宽时幅度跟着字走，不会在小屏上显得乱晃。

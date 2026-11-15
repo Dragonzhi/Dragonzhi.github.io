@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="css/tokens-screen.css">
 <link rel="stylesheet" href="css/site.css">
 <link rel="stylesheet" href="css/home.css">
+<link rel="stylesheet" href="css/works.css">
 </head>
 <body class="home">
   <div class="bezel" aria-hidden="true"></div>
@@ -17,13 +18,6 @@
   <div class="sheet">
     <section class="hero">
       <canvas id="wall" class="wall" aria-hidden="true"></canvas>
-
-      <header class="topbar">
-        <nav class="chips" aria-label="页面切换">
-          <a class="chip chip--on" href="index.html" aria-current="page">首页</a>
-          <a class="chip" href="#works">作品</a>
-        </nav>
-      </header>
 
       <main class="stage">
         <h1 class="name"><span class="name-plate"><span class="name-deep" aria-hidden="true">ZLOONG</span><span class="name-solid" data-name-solid>ZLOONG</span></span></h1>
@@ -54,10 +48,10 @@
         </div>
 
         <nav class="links" aria-label="外部入口">
-          <a class="icon-link" href="https://github.com/Dragonzhi" target="_blank" rel="noreferrer" aria-label="GitHub · Dragonzhi" title="GitHub · Dragonzhi">
+          <a class="icon-link" href="https://github.com/Dragonzhi" target="_blank" rel="noopener noreferrer" aria-label="GitHub · Dragonzhi" title="GitHub · Dragonzhi">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
           </a>
-          <a class="icon-link" href="https://space.bilibili.com/304097408" target="_blank" rel="noreferrer" aria-label="B 站 · 智LONZ" title="B 站 · 智LONZ">
+          <a class="icon-link" href="https://space.bilibili.com/304097408" target="_blank" rel="noopener noreferrer" aria-label="B 站 · 智LONZ" title="B 站 · 智LONZ">
             <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M17.813 4.653h.854c1.51.054 2.769.578 3.773 1.574 1.004.995 1.524 2.249 1.56 3.76v7.36c-.036 1.51-.556 2.769-1.56 3.773s-2.262 1.524-3.773 1.56H5.333c-1.51-.036-2.769-.556-3.773-1.56S.036 18.858 0 17.347v-7.36c.036-1.511.556-2.765 1.56-3.76 1.004-.996 2.262-1.52 3.773-1.574h.774l-1.174-1.12a1.234 1.234 0 0 1-.373-.906c0-.356.124-.658.373-.907l.027-.027c.267-.249.573-.373.92-.373.347 0 .653.124.92.373L9.653 4.44c.071.071.134.142.187.213h4.267a.836.836 0 0 1 .16-.213l2.853-2.747c.267-.249.573-.373.92-.373.347 0 .662.151.929.4.267.249.391.551.391.907 0 .355-.124.657-.373.906zM5.333 7.24c-.746.018-1.373.276-1.88.773-.506.498-.769 1.13-.786 1.894v7.52c.017.764.28 1.395.786 1.893.507.498 1.134.756 1.88.773h13.334c.746-.017 1.373-.275 1.88-.773.506-.498.769-1.129.786-1.893v-7.52c-.017-.765-.28-1.396-.786-1.894-.507-.497-1.134-.755-1.88-.773zM8 11.107c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c0-.373.129-.689.386-.947.258-.257.574-.386.947-.386zm8 0c.373 0 .684.124.933.373.25.249.383.569.4.96v1.173c-.017.391-.15.711-.4.96-.249.25-.56.374-.933.374s-.684-.125-.933-.374c-.25-.249-.383-.569-.4-.96V12.44c.017-.391.15-.711.4-.96.249-.249.56-.373.933-.373z"/></svg>
           </a>
           <button class="icon-link" type="button" data-copy="dzloong@foxmail.com" aria-label="复制邮箱地址" title="dzloong@foxmail.com">
@@ -75,11 +69,6 @@
           </li>
           <li class="sticker" style="--rot:-2.2deg;--dy:14px">
             <span class="badge badge--steel"><span class="badge__k">focus</span><span class="badge__v">AI 应用</span></span>
-          </li>
-          <li class="sticker" style="--rot:3.4deg;--dy:-8px">
-            <a class="badge badge--sky" href="luotianyi/" aria-label="洛天依歌单">
-              <span class="badge__k">fav</span><span class="badge__v">洛天依 <b>66CCFF</b></span>
-            </a>
           </li>
           <li class="sticker" style="--rot:-3deg;--dy:11px">
             <span class="badge badge--sand"><span class="badge__k">engine</span><span class="badge__v">Godot 4</span></span>
@@ -103,7 +92,7 @@
             <span class="badge badge--qing"><span class="badge__k">lang</span><span class="badge__v">TS</span></span>
           </li>
           <li class="sticker" style="--rot:-3.8deg;--dy:13px">
-            <a class="badge badge--zhu" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noreferrer">
+            <a class="badge badge--zhu" href="https://dragonzhi.xyz/hanako/" target="_blank" rel="noopener noreferrer">
               <span class="badge__k">daily</span><span class="badge__v">Hanako 箱庭 <i aria-hidden="true">↗</i></span>
             </a>
           </li>
@@ -111,37 +100,125 @@
       </div>
     </section>
 
-    <section class="works" id="works">
+    <section class="works works--spatial" id="works" aria-labelledby="works-title">
       <div class="works__wrap">
         <div class="sec-head">
-          <h2>作品</h2>
+          <h2 id="works-title">作品</h2>
         </div>
 
-        <div class="works__grid">
-          <article class="work work--lead">
-            <a class="work__cover" href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer" aria-label="风织雨 · 到 TapTap 试玩">
-              <img
-                src="images/projects/weaving-rain-gameplay-1600.webp"
-                srcset="images/projects/weaving-rain-gameplay-800.webp 800w, images/projects/weaving-rain-gameplay-1600.webp 1600w"
-                sizes="(max-width: 767px) 100vw, min(1180px, 92vw)"
-                width="1600" height="900"
-                alt="风织雨实机画面：风把湿空气推上岛屿山坡成云，云雨落在农田与水库上"
-                loading="lazy" decoding="async">
-            </a>
-            <header class="work__head">
-              <h3 class="work__name"><a href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer">风织雨</a></h3>
-              <span class="badge badge--qing work__state"><span class="badge__k">status</span><span class="badge__v">可试玩</span></span>
-            </header>
-            <p class="work__desc">拨动空气，把雨送到群岛上需要它的地方。含水库教学与九张关卡。</p>
-            <footer class="work__foot">
-              <span class="work__meta">2026.10 · 单人 13 天</span>
-              <div class="work__acts">
-                <a class="link" href="https://www.taptap.cn/app/981551" target="_blank" rel="noreferrer">试玩 ↗</a>
-                <a class="link" href="https://github.com/Dragonzhi/Weaving-Rain" target="_blank" rel="noreferrer">源码 ↗</a>
+        <article class="merged-work" aria-labelledby="weaving-rain-title">
+          <div class="merged-work__visual">
+            <div class="spatial-stage" data-spatial-stage>
+              <div class="spatial-stage__frame">
+                <div class="spatial-stage__inner">
+                  <div class="spatial-grid" aria-hidden="true"></div>
+                  <div class="spatial-axis spatial-axis--x" aria-hidden="true"></div>
+                  <div class="spatial-axis spatial-axis--y" aria-hidden="true"></div>
+                  <div class="spatial-orbit spatial-orbit--outer" aria-hidden="true"></div>
+                  <div class="spatial-orbit spatial-orbit--inner" aria-hidden="true"></div>
+
+                  <div class="spatial-scene">
+                    <figure class="spatial-cover">
+                      <div class="spatial-cover__frame">
+                        <img
+                          src="images/projects/weaving-rain-gameplay-1600.webp"
+                          srcset="images/projects/weaving-rain-gameplay-800.webp 800w, images/projects/weaving-rain-gameplay-1600.webp 1600w"
+                          sizes="(max-width: 767px) calc(100vw - 84px), (max-width: 960px) calc(100vw - 120px), 540px"
+                          width="1600" height="900" loading="lazy" decoding="async"
+                          alt="《风织雨》游戏画面：青绿色海面上有一座小岛，云层正向圆形水库与农田降雨">
+                      </div>
+                    </figure>
+                  </div>
+                </div>
               </div>
-            </footer>
-          </article>
-        </div>
+            </div>
+          </div>
+
+          <div class="merged-work__body">
+            <div class="merged-work__topline">
+              <span class="work-status">
+                <span class="work-status__dot" aria-hidden="true"></span>可试玩
+              </span>
+            </div>
+
+            <div class="merged-work__heading">
+              <h3 id="weaving-rain-title">风织雨</h3>
+            </div>
+
+            <p class="merged-work__desc">拨动空气，把雨送到群岛上需要它的地方。含水库教学与九张关卡。</p>
+
+            <dl class="merged-meta">
+              <div><dt>发布</dt><dd>2026.10</dd></div>
+              <div><dt>制作</dt><dd>单人</dd></div>
+              <div><dt>周期</dt><dd>13 天</dd></div>
+            </dl>
+
+            <div class="merged-actions">
+              <a class="flat-action flat-action--primary" href="https://www.taptap.cn/app/981551" target="_blank" rel="noopener noreferrer">
+                <span>试玩</span>
+                <span class="flat-action__arrow" aria-hidden="true">↗</span>
+              </a>
+              <a class="flat-action" href="https://github.com/Dragonzhi/Weaving-Rain" target="_blank" rel="noopener noreferrer">
+                <span>查看源码</span>
+                <span class="flat-action__arrow" aria-hidden="true">↗</span>
+              </a>
+            </div>
+          </div>
+        </article>
+
+        <section class="works-more" aria-labelledby="works-more-title">
+          <div class="works-more__head">
+            <h3 id="works-more-title">更多作品</h3>
+          </div>
+
+          <div class="works-grid">
+            <article class="work-card" aria-labelledby="itertrip-title">
+              <div class="work-card__cover">
+                <img
+                  src="images/projects/itertrip.png"
+                  width="1920" height="1080" loading="lazy" decoding="async"
+                  alt="IterTrip 实机界面：AI 对话生成路线，右侧三步行程卡片">
+              </div>
+              <div class="work-card__body">
+                <p class="work-card__status">已上线</p>
+                <h4 id="itertrip-title"><a href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noopener noreferrer">IterTrip</a></h4>
+                <p class="work-card__desc">把旅行攻略变成能点的地图。从模型到页面一个人走完。</p>
+                <p class="work-card__meta"><span>AI 应用</span><span>2026.08 起</span></p>
+                <div class="work-card__actions">
+                  <a class="flat-action flat-action--primary" href="https://dragonzhi.xyz/itertrip/" target="_blank" rel="noopener noreferrer">
+                    <span>在线体验</span>
+                    <span class="flat-action__arrow" aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+
+            <article class="work-card" aria-labelledby="immune-link-title">
+              <div class="work-card__cover">
+                <img
+                  src="images/projects/immune-link.png"
+                  width="1548" height="814" loading="lazy" decoding="async"
+                  alt="免疫联结 ImmuneLink 实机画面：2D 桥梁网络塔防">
+              </div>
+              <div class="work-card__body">
+                <p class="work-card__status">已上线</p>
+                <h4 id="immune-link-title"><a href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noopener noreferrer">免疫联结</a></h4>
+                <p class="work-card__desc">主题是「桥」的 2D 塔防。设计、程序、像素美术独自完成，关卡可导入导出。</p>
+                <p class="work-card__meta"><span>游戏</span><span>2025.11–12</span><span>单人</span></p>
+                <div class="work-card__actions">
+                  <a class="flat-action flat-action--primary" href="https://dragonzhi.github.io/ImmuneLink/" target="_blank" rel="noopener noreferrer">
+                    <span>在线试玩</span>
+                    <span class="flat-action__arrow" aria-hidden="true">↗</span>
+                  </a>
+                  <a class="flat-action" href="https://github.com/Dragonzhi/ImmuneLink" target="_blank" rel="noopener noreferrer">
+                    <span>查看源码</span>
+                    <span class="flat-action__arrow" aria-hidden="true">↗</span>
+                  </a>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
       </div>
     </section>
 
@@ -153,5 +230,6 @@
 
   <script src="js/terrain.js"></script>
   <script src="js/home.js"></script>
+  <script src="js/works.js"></script>
 </body>
 </html>

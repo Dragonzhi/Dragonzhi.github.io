@@ -10,8 +10,17 @@
     "imageAlt": "TriHorny4Link 游戏截图",
     "type": "Godot 塔防游戏 · Gameplay Programming",
     "summary": "这是一次塔防玩法练习。我主要实现了动态路径重规划、敌人对象池和事件驱动系统，并针对单位较多时的运行情况做了一些优化。",
-    "responsibility": ["核心玩法", "系统架构", "性能优化"],
-    "tech": ["Godot", "GDScript", "A*", "Object Pool"],
+    "responsibility": [
+      "核心玩法",
+      "系统架构",
+      "性能优化"
+    ],
+    "tech": [
+      "Godot",
+      "GDScript",
+      "A*",
+      "Object Pool"
+    ],
     "links": [
       {
         "label": "观看演示",
@@ -35,8 +44,17 @@
     "imageAlt": "免疫联结游戏标题画面",
     "type": "Godot 4 · 2D Tower Defense",
     "summary": "这是为 2025 卡赢杯公益游戏开发大赛制作的 2D 塔防游戏，主题是“桥”。玩法围绕绘制桥梁网络、连接资源节点和升级防御设施展开，也加入了自定义关卡的导入与导出。",
-    "responsibility": ["游戏设计", "编程", "美术"],
-    "tech": ["Godot 4", "GDScript", "Pixel Art", "JSON"],
+    "responsibility": [
+      "游戏设计",
+      "编程",
+      "美术"
+    ],
+    "tech": [
+      "Godot 4",
+      "GDScript",
+      "Pixel Art",
+      "JSON"
+    ],
     "links": [
       {
         "label": "在线游玩",
@@ -59,12 +77,21 @@
     "title": "像素火影 · 秽土柱间",
     "badge": "COMBAT",
     "theme": "red",
-    "image": "images/projects/秽土.avif",
+    "image": "images/projects/秽土.png",
     "imageAlt": "像素火影秽土柱间角色画面",
     "type": "Unity 2D 同人项目 · Combat System",
     "summary": "这是一个 Unity 2D 角色练习。我主要负责技能、动画状态切换、攻击判定和伤害逻辑，也尝试调整动作与命中反馈。",
-    "responsibility": ["角色技能", "动画状态机", "战斗判定"],
-    "tech": ["Unity", "C#", "FSM", "Hit Detection"],
+    "responsibility": [
+      "角色技能",
+      "动画状态机",
+      "战斗判定"
+    ],
+    "tech": [
+      "Unity",
+      "C#",
+      "FSM",
+      "Hit Detection"
+    ],
     "links": [
       {
         "label": "观看演示",
@@ -84,8 +111,17 @@
     "imageAlt": "CounterStrikeGrenades Minecraft 模组画面",
     "type": "Minecraft Forge Mod · Systems & Integration",
     "summary": "这是一个 Minecraft Forge 模组项目，尝试还原 CS2 的投掷物机制。工作包括行为逻辑、简单的 3D 资产，以及与 TACZ 枪械模组的兼容。",
-    "responsibility": ["投掷物机制", "3D 资产", "跨模组兼容"],
-    "tech": ["Forge", "Kotlin", "Blockbench", "TACZ"],
+    "responsibility": [
+      "投掷物机制",
+      "3D 资产",
+      "跨模组兼容"
+    ],
+    "tech": [
+      "Forge",
+      "Kotlin",
+      "Blockbench",
+      "TACZ"
+    ],
     "links": [
       {
         "label": "查看源码",
@@ -105,8 +141,18 @@
     "imageAlt": "风织雨实机画面：风带推送云层降雨，水库与菜田分布岛上",
     "type": "Godot 天气操控解谜游戏 · 单人开发",
     "summary": "拨动空气，把雨送到群岛上需要它的地方。13 天做出可试玩的 Demo，含水库教学与九张关卡：湿空气迎着山坡抬升成云，再借风把云雨送到农田与水库，风停后云仍会走，雨也不会立刻停。仓库里另写了一个关卡编辑器插件，可以在编辑器里摆山体、水汽与目标。",
-    "responsibility": ["玩法与关卡设计", "天气模拟系统", "自研关卡编辑器插件", "程序化画风体系"],
-    "tech": ["Godot 4.7.2", "GDScript", "EditorPlugin", "3D 程序化视觉"],
+    "responsibility": [
+      "玩法与关卡设计",
+      "天气模拟系统",
+      "自研关卡编辑器插件",
+      "程序化画风体系"
+    ],
+    "tech": [
+      "Godot 4.7.2",
+      "GDScript",
+      "EditorPlugin",
+      "3D 程序化视觉"
+    ],
     "links": [
       {
         "label": "TapTap 试玩",
@@ -115,6 +161,34 @@
       {
         "label": "GitHub",
         "url": "https://github.com/Dragonzhi/Weaving-Rain"
+      }
+    ],
+    "published": true
+  },
+  {
+    "id": "itertrip",
+    "order": 6,
+    "title": "IterTrip",
+    "badge": "LIVE",
+    "date": "2026-08-31",
+    "theme": "blue",
+    "image": "images/projects/itertrip.png",
+    "imageAlt": "IterTrip 实机界面：AI 对话生成路线，右侧三步行程卡片",
+    "type": "AI 旅行规划应用 · 全栈开发",
+    "summary": "把旅行攻略变成能点的地图。从模型到页面一个人走完。",
+    "responsibility": [
+      "模型接入",
+      "行程生成",
+      "页面实现"
+    ],
+    "tech": [
+      "AI 应用",
+      "Web 前端"
+    ],
+    "links": [
+      {
+        "label": "在线体验",
+        "url": "https://dragonzhi.xyz/itertrip/"
       }
     ],
     "published": true

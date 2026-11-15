@@ -5,14 +5,14 @@
 ## 从哪里开始
 
 - [AGENTS.md](AGENTS.md)：仓库约定、文件归属与硬性约束。
-- [DESIGN.md](DESIGN.md)：首页和作品页的现行设计规则。
+- [DESIGN.md](DESIGN.md)：首页与作品区的现行设计规则。
 - [TASKS.md](TASKS.md)：待办和已知的设计与实现差异。
 - [DECISIONS.md](DECISIONS.md)：历史设计决策；`archive/` 里的过程稿仅供追溯。
 
 ## 日常维护
 
-- 首页结构在 `index.html`，样式在 `css/home.css`，字符浪潮在 `js/wall.js`；两页共用的壳在 `css/site.css`。作品页已删除待重开（分支 `ref/work.html`），内容底稿在 `WORKS-CONTENT.md`。
-- `data/home.json` 的 `stats.running` 是「在跑」数的唯一数据源，作品页重开时接线；fetch 失败回退 HTML 静态兜底。
-- 档案架数据改 `data/portfolio.json`；封存的履历页文字改 `pages/resume.html`。
+- 首页结构在 `index.html`：hero 与关于区样式在 `css/home.css`，作品区在 `css/works.css` + `js/works.js`，背景在 `js/terrain.js`；子页共用壳在 `css/site.css`。
+- 作品内容先把 `WORKS-CONTENT.md` 对齐，再改首页静态卡片；档案架数据同步改 `data/portfolio.json`。
+- 封存的履历页文字改 `pages/resume.html`。
 - 画廊索引运行 `python scripts/generate_gallery_json.py` 生成；洛天依歌单从外部数据仓库由 `scripts/generate_luotianyi.py` 同步，详见 AGENTS.md。
 - 在仓库根目录运行 `python -m http.server 8000`，通过 `http://localhost:8000/` 检查页面。
